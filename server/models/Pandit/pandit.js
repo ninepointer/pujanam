@@ -92,16 +92,26 @@ const Pandit = new mongoose.Schema({
         default: 'Active',
         required: true
     },
-    createdOn: {
+    created_on: {
         type: Date,
         default: function() {
           return Date.now();
         }
     },
-    createdBy:{
+    created_by:{
         type: Schema.Types.ObjectId,
         ref: 'user'
     },
+    last_modified_on:{
+        type: Date,
+        default: function() {
+          return Date.now();
+        }
+    },
+    last_modified_by:{
+        type: Schema.Types.ObjectId,
+        ref: 'user'
+    }
 });
 const PanditSchema = mongoose.model('pandit', Pandit);
 module.exports = PanditSchema;

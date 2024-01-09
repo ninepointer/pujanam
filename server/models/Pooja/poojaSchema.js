@@ -11,40 +11,40 @@ const Pooja = new mongoose.Schema({
             type: String,
         }
     ],
-    poojaIncludes: {
+    pooja_includes: {
         type: String,
         required: true,
     },
-    purposeOfPooja: [
+    purpose_of_pooja: [
         {
             type: String,
         }
     ],
-    benefitsOfPooja: [
+    benefits_of_pooja: [
         {
             type: String,
         }
     ],
-    poojaImage: {
+    pooja_image: {
         url: {type: String},
         name: {type: String}
     },
-    poojaItems: [
+    pooja_items: [
         {
             type: String,
         }
     ],
-    poojaDuration: {
-
+    pooja_duration: {
+        type: Number
     },
-    poojaPackages: {
+    pooja_packages: {
         tier: {
             type: Schema.Types.ObjectId,
             ref: "tier"
         },
         price: {type: Number}
     },
-    poojaType: {
+    pooja_type: {
         type: String,
         enum: ['Home', 'Online'],
         required: true
@@ -59,23 +59,23 @@ const Pooja = new mongoose.Schema({
         question: {type: String},
         answer: {type: String}
     }],
-    createdOn: {
+    created_on: {
         type: Date,
         default: function() {
           return Date.now();
         }
     },
-    createdBy:{
+    created_by:{
         type: Schema.Types.ObjectId,
         ref: 'user'
     },
-    lastModifiedOn: {
+    last_modified_on: {
         type: Date,
         default: function() {
             return Date.now();
         }
     },
-    lastModifiedBy:{
+    last_modified_by:{
         type: Schema.Types.ObjectId,
         ref: 'user'
     },
