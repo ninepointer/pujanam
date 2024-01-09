@@ -82,22 +82,22 @@ const userSchema = new mongoose.Schema({
     last_login_date: {
         type: Date
     },
-    createdOn:{
+    created_on:{
         type: Date,
         default: ()=>new Date(),
         // required : true
     },
-    lastModified:{
+    last_modified_on:{
         type: Date,
         default: ()=>new Date(),
         required : true
     },
-    createdBy:{
+    created_by:{
         type: Schema.Types.ObjectId,
         ref: 'user',
         // required : true
     },
-    maritalStatus:{
+    marital_status:{
         type: String,
         // required: true
     },
@@ -116,22 +116,22 @@ const userSchema = new mongoose.Schema({
         type: String,
         enum: ['Auto SignUp']
     },
-    profilePhoto:{url:String,name:String},
-    lastLoggedInDevice:{
-        deviceType: String,
-        deviceDetails: String
+    profile_photo:{url:String,name:String},
+    last_logged_in_device:{
+        device_type: String,
+        device_details: String
     },
-    fcmTokens:[{
+    fcm_tokens:[{
         token: String,
         brand: String,
         model: String,
         platform: String,
-        osVersion: String,
-        createdAt: {
+        os_version: String,
+        created_at: {
             type: Date,
             default: ()=>new Date()
         },
-        lastUsedAt:{
+        last_used_at:{
             type: Date,
         },
         tags: [{type: String}],

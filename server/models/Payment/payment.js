@@ -16,13 +16,23 @@ const Payment = new mongoose.Schema({
         enum: ["COD", "Online"],
         required: true
     },
-    createdOn: {
+    created_on: {
         type: Date,
         default: function() {
           return Date.now();
         }
     },
-    createdBy:{
+    created_by:{
+        type: Schema.Types.ObjectId,
+        ref: 'user'
+    },
+    last_modified_on:{
+        type: Date,
+        default: function() {
+          return Date.now();
+        }
+    },
+    last_modified_by:{
         type: Schema.Types.ObjectId,
         ref: 'user'
     }

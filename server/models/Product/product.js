@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 
 const Product = new mongoose.Schema({
     product_name: {
-        type: Date,
+        type: String,
         required: true,
     },
     status: {
@@ -12,6 +12,26 @@ const Product = new mongoose.Schema({
         default: 'Active',
         required: true
     },
+    created_on:{
+        type: Date,
+        default: function() {
+          return Date.now();
+        }
+    },
+    created_by:{
+        type: Schema.Types.ObjectId,
+        ref: 'user'
+    },
+    last_modified_on:{
+        type: Date,
+        default: function() {
+          return Date.now();
+        }
+    },
+    last_modified_by:{
+        type: Schema.Types.ObjectId,
+        ref: 'user'
+    }
 });
 const ProductSchema = mongoose.model('product', Product);
 module.exports = ProductSchema;

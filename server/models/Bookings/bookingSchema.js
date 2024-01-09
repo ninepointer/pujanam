@@ -83,16 +83,26 @@ const Booking = new mongoose.Schema({
         default: 'Success',
         required: true
     },
-    createdOn: {
+    created_on: {
         type: Date,
         default: function() {
           return Date.now();
         }
     },
-    createdBy:{
+    created_by:{
         type: Schema.Types.ObjectId,
         ref: 'user'
     },
+    last_modified_on:{
+        type: Date,
+        default: function() {
+          return Date.now();
+        }
+    },
+    last_modified_by:{
+        type: Schema.Types.ObjectId,
+        ref: 'user'
+    }
 });
 const BookingSchema = mongoose.model('booking', Booking);
 module.exports = BookingSchema;

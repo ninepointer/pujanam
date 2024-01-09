@@ -43,23 +43,23 @@ const Tier = new mongoose.Schema({
         default: 'Active',
         required: true
     },
-    createdOn: {
+    created_on: {
         type: Date,
         default: function() {
           return Date.now();
         }
     },
-    createdBy:{
+    created_by:{
         type: Schema.Types.ObjectId,
         ref: 'user'
     },
-    lastModifiedOn: {
+    last_modified_on: {
         type: Date,
         default: function() {
             return Date.now();
         }
     },
-    lastModifiedBy:{
+    last_modified_by:{
         type: Schema.Types.ObjectId,
         ref: 'user'
     },
