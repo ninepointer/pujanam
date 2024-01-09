@@ -158,7 +158,7 @@ export default function LabTabs({socket}) {
                                                     size="small"
                                                     component={Link}
                                                     to={{
-                                                        pathname: `/contestdashboard/infinitycontest`,
+                                                        pathname: `/dashboard/infinitycontest`,
                                                     }}
                                                     state={{ elem: elem }}
                                                 >

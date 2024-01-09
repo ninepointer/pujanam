@@ -251,7 +251,7 @@ const [buttonClicked, setButtonClicked] = useState(false);
       setShowConfirmation(false);
       const userData = await userDetail();
       if(userData?.role?.roleName === adminRole){
-        const from = location.state?.from || "/contestdashboard";
+        const from = location.state?.from || "/dashboard";
         navigate(from);
       }
      
@@ -367,7 +367,7 @@ const [buttonClicked, setButtonClicked] = useState(false);
           }else{
             let userData = await userDetail();
             if(userData?.role?.roleName === adminRole){
-              const from = location.state?.from || "/contestdashboard";
+              const from = location.state?.from || "/dashboard";
               navigate(from);
             }
          

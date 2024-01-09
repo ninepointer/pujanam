@@ -55,16 +55,16 @@ const userSchema = new mongoose.Schema({
     },
     dob: {
         type: Date,
-        required: true,
+        // required: true,
     },
     gender: {
         type: String,
-        required: true,
+        // required: true,
         enum: ['Male', 'Female', 'Other']
     },
     language: {
         type: String,
-        required: true,
+        // required: true,
     },
     bookings: [{
         bookingTime: {type: Date}
@@ -72,7 +72,8 @@ const userSchema = new mongoose.Schema({
     status: {
         type: String,
         required: true,
-        enum: ["Active", "Inactive"]
+        enum: ["Active", "Inactive"],
+        default: "Active"
     },
     joining_date: {
         type: Date,

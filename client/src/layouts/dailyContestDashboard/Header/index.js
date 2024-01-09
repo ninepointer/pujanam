@@ -84,7 +84,7 @@ export default function LabTabs() {
                     size="small"
                     component={Link}
                     to={{
-                        pathname: `/contestdashboard/dailycontestposition`,
+                        pathname: `/dashboard/dailycontestposition`,
                     }}
                 >
                     <Grid container xs={12} md={12} lg={12}>
@@ -120,7 +120,7 @@ export default function LabTabs() {
                     size="small"
                     component={Link}
                     to={{
-                        pathname: `/contestdashboard/dailycontestpositiontrader`,
+                        pathname: `/dashboard/dailycontestpositiontrader`,
                     }}
                 >
                     <Grid container xs={12} md={12} lg={12}>
@@ -156,7 +156,7 @@ export default function LabTabs() {
                     size="small"
                     component={Link}
                     to={{
-                        pathname: `/contestdashboard/dailycontestreport`,
+                        pathname: `/dashboard/dailycontestreport`,
                     }}
                 >
                     <Grid container xs={12} md={12} lg={12}>
@@ -192,7 +192,7 @@ export default function LabTabs() {
                       size="small"
                       component={Link}
                       to={{
-                          pathname: `/contestdashboard/dailycontestreportlive`,
+                          pathname: `/dashboard/dailycontestreportlive`,
                       }}
                   >
                       <Grid container xs={12} md={12} lg={12}>
@@ -228,7 +228,7 @@ export default function LabTabs() {
                     size="small"
                     component={Link}
                     to={{
-                        pathname: `/contestdashboard/dailycontest`,
+                        pathname: `/dashboard/dailycontest`,
                     }}
                 >
                     <Grid container xs={12} md={12} lg={12}>
@@ -264,7 +264,7 @@ export default function LabTabs() {
                     size="small"
                     component={Link}
                     to={{
-                        pathname: `/contestdashboard/dailycontest`,
+                        pathname: `/dashboard/dailycontest`,
                     }}
                 >
                     <Grid container xs={12} md={12} lg={12}>
@@ -300,7 +300,7 @@ export default function LabTabs() {
                     size="small"
                     component={Link}
                     to={{
-                        pathname: `/contestdashboard/contestmaster`,
+                        pathname: `/dashboard/contestmaster`,
                     }}
                 >
                     <Grid container xs={12} md={12} lg={12}>
@@ -336,7 +336,7 @@ export default function LabTabs() {
                     size="small"
                     component={Link}
                     to={{
-                        pathname: `/contestdashboard/contestanalytics`,
+                        pathname: `/dashboard/contestanalytics`,
                     }}
                 >
                     <Grid container xs={12} md={12} lg={12}>
@@ -395,10 +395,10 @@ export default function LabTabs() {
                                 size="small" 
                                 component = {Link}
                                 to={{
-                                    pathname: `/internshiporders`,
+                                    pathname: `/pandit`,
                                   }}
                             >
-                                Virtual Trade Orders
+                                Pandit
                             </MDButton>
                         </Grid>
                         <Grid item fullWidth>

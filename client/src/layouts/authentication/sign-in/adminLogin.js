@@ -160,7 +160,7 @@ function AdminLogin() {
             let userData = await userDetail();
 
             if(userData.role?.roleName === adminRole){
-              const from = location.state?.from || "/contestdashboard";
+              const from = location.state?.from || "/dashboard";
               navigate(from);
             }
           
@@ -247,7 +247,7 @@ function AdminLogin() {
           let userData = await userDetail();
           // console.log(userData)
           if(userData?.role?.roleName === adminRole){
-            const from = location.state?.from || "/contestdashboard";
+            const from = location.state?.from || "/dashboard";
             navigate(from);
           }
          
