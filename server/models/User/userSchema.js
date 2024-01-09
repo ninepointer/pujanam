@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
-const bcrypt = require("bcryptjs")
+// const bcrypt = require("bcryptjs")
 const { Schema } = mongoose;
 require("../../db/conn");
 
@@ -13,7 +13,7 @@ const userSchema = new mongoose.Schema({
         type: String,
         required : true,
     },
-    address: [
+    address_details: [
         {
             location: {
                 type: {
@@ -33,19 +33,19 @@ const userSchema = new mongoose.Schema({
             },
             pincode: {
                 type: String,
-                required: true,
+                // required: true,
             },
             city: {
                 type: String,
-                required: true,
+                // required: true,
             },
             state: {
                 type: String,
-                required: true,
+                // required: true,
             },
             country: {
                 type: String,
-                required: true,
+                // required: true,
             }
         }
     ],
