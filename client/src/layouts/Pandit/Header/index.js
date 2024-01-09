@@ -40,16 +40,16 @@ export default function LabTabs() {
     component={Link}
     to='/dashboard'
     >
-        Back to TestZone Dashboard
+        Back to Pandit
     </MDButton>
     <MDButton 
     variant="outlined" 
     color="warning" 
     size="small"
     component={Link}
-    to='/dailycontestdetails'
+    to='/panditdetails'
     >
-        Create TestZone
+        Create Pandit
     </MDButton>
     </MDBox>
       <TabContext value={value}>

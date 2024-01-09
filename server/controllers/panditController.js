@@ -41,8 +41,6 @@ exports.createPandit = async (req, res) => {
         ApiResponse.error(res,'Something went wrong', 500, error.message);
     }
 };
-
-
 // Get all Pandits
 exports.getAllPandits = async (req, res) => {
     try {

@@ -139,46 +139,6 @@ const userSchema = new mongoose.Schema({
     }]
 })
 
-// //Adding the ninepointer id before saving
-// userSchema.pre('save', async function(next){
-//     if (this.isModified('paidDetails') || this.isModified('activationDetails')) {
-//         // Skip the pre-save logic for activationDate updates
-//         return next();
-//     }
-//     // console.log("inside employee id generator code")
-//     if(!this.employeeid || this.isNew){
-//         const count = await this.constructor.countDocuments();
-        
-//         let userId = this?.email?.split('@')[0] || this?.email;
-//         console.log("Count of Documents: ",userId, this?.email)
-//         let userIds = await userPersonalDetail.find({employeeid:userId})
-//         if(userIds.length > 0)
-//         {
-//              userId = userId.toString()+(userIds.length+1).toString()
-//         }
-//         this.employeeid = userId;
-//         next();
-//     } else {
-//         next();
-//     }
-// });
-
-// userSchema.pre("save", async function(next){
-//     if(!this.isModified('password')){
-//         return next();
-//     } 
-//     this.password = await bcrypt.hash(this.password, 10)
-//     next();
-// })
-
-// userSchema.methods.correctPassword = async function (
-//     candidatePassword,
-//     userPassword
-//   ) {
-//     return await bcrypt.compare(candidatePassword, userPassword);
-//   };
-
-// generating jwt token
 userSchema.methods.generateAuthToken = async function(){
     try{
         let token = jwt.sign({_id: this._id}, process.env.SECRET_KEY);
@@ -198,17 +158,6 @@ userSchema.pre('save', async function(next){
         next();
     }
 });
-// userSchema.methods.changedPasswordAfter = function(JWTiat) {
-//     if (this.passwordChangedAt) {
-//         const changedTimeStamp = parseInt(
-//             this.passwordChangedAt.getTime() / 1000, // Convert to UNIX timestamp
-//             10
-//         );
-//         // console.log('changed at', this.passwordChangedAt);
-//         return JWTiat < changedTimeStamp; // True if the password was changed after token issuance
-//     }
-//     // False means not changed
-//     return false;
-// };
-const userPersonalDetail = mongoose.model("user", userSchema);
+
+const userPersonalDetail = mongoose.model("user-personal-detail", userSchema);
 module.exports = userPersonalDetail;

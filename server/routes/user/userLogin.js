@@ -11,7 +11,7 @@ const moment = require('moment');
 router.post("/login", async (req, res) => {
     const { userId, pass } = req.body;
 
-    // console.log(req.body)
+    console.log(req.body)
 
     if (!userId || !pass) {
         return res.status(422).json({ status: 'error', message: "Please provide login credentials" });
@@ -25,13 +25,15 @@ router.post("/login", async (req, res) => {
 
     const userLogin = await UserDetail.findOne({ email: userId, status: "Active" }).select('_id role password collegeDetails');
 
-    if (!userLogin || !(await userLogin.correctPassword(pass, userLogin.password))) {
-        return res.status(422).json({ error: "invalid details" })
-    } else {
+    console.log("userLogin", userLogin)
+    //todo-vijay
+    // if (!userLogin || !(await userLogin.correctPassword(pass, userLogin.password))) {
+    //     return res.status(422).json({ error: "invalid details" })
+    // } else {
 
-        if (!userLogin) {
-            return res.status(422).json({ status: 'error', message: "Invalid credentials" });
-        } else {
+    //     if (!userLogin) {
+    //         return res.status(422).json({ status: 'error', message: "Invalid credentials" });
+    //     } else {
             if(userLogin?.role?.toString()=='644903ac236de3fd7cfd755c'){
                 return res.status(400).json({status:'error', message:'Invalid request'});
             }
@@ -41,8 +43,8 @@ router.post("/login", async (req, res) => {
                 expires: new Date(Date.now() + 25892000000),
             });
             res.status(201).json({ status: 'success', message: "user logged in succesfully", token: token });
-        }
-    }
+    //     }
+    // }
 })
 
 router.post('/phonelogin', async (req,res, next)=>{

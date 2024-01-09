@@ -18,35 +18,19 @@ const {ObjectId} = require('mongodb')
 const userController = require("../../controllers/userController");
 
 router.post("/signup", async (req, res) => {
-    const { first_name, last_name, email, mobile, collegeDetails } = req.body;
+    const { full_name, email, mobile } = req.body;
     // console.log(req.body)
-    if (!first_name || !last_name || !email || !mobile) {
+    if (!full_name || !email || !mobile) {
         return res.status(400).json({ status: 'error', message: "Please fill all fields to proceed." })
     }
     const isExistingUser = await User.findOne({ $or: [{ email: email }, { mobile: mobile }] })
-    if(collegeDetails && isExistingUser?.collegeDetails?.college){
+    if(isExistingUser){
         return res.status(400).json({
             message: "Your account already exists. Please login with mobile or email",
             status: 'error'
         });
     } 
-    else if(!collegeDetails && !isExistingUser?.collegeDetails?.college && isExistingUser){
-        return res.status(400).json({
-            message: "Your account already exists. Please login with mobile or email",
-            status: 'error'
-        });
-    } else if(!collegeDetails && isExistingUser?.collegeDetails?.college){
-        return res.status(400).json({
-            message: "Your account already exists. Please login with mobile or email",
-            status: 'error'
-        });
-    }
-    // if (isExistingUser) {
-    //     return res.status(400).json({
-    //         message: "Your account already exists. Please login with mobile or email",
-    //         status: 'error'
-    //     });
-    // }
+
     const signedupuser = await SignedUpUser.findOne({ $or: [{ email: email }, { mobile: mobile }] });
     if (signedupuser?.lastOtpTime && moment().subtract(29, 'seconds').isBefore(signedupuser?.lastOtpTime)) {
         return res.status(429).json({ message: 'Please wait a moment before requesting a new OTP' });
@@ -56,17 +40,15 @@ router.post("/signup", async (req, res) => {
     // User sign up detail saving
     try {
         if (signedupuser) {
-            signedupuser.first_name = first_name.trim();
-            signedupuser.last_name = last_name.trim();
+            signedupuser.full_name = full_name.trim();
             signedupuser.mobile = mobile.trim();
             signedupuser.email = email.trim();
             signedupuser.mobile_otp = mobile_otp.trim();
-            signedupuser.collegeDetails = collegeDetails
             await signedupuser.save({ validateBeforeSave: false })
         } else {
             await SignedUpUser.create({
-                first_name: first_name.trim(), last_name: last_name.trim(), email: email.trim(),
-                mobile: mobile.trim(), mobile_otp: mobile_otp, collegeDetails
+                full_name: full_name.trim(), email: email.trim(),
+                mobile: mobile.trim(), mobile_otp: mobile_otp
             });
         }
 
@@ -84,27 +66,27 @@ router.post("/signup", async (req, res) => {
     } catch (err) { console.log(err); res.status(500).json({ message: 'Something went wrong', status: "error" }) }
 })
 
-async function generateUniqueReferralCode() {
-    const length = 8; // change this to modify the length of the referral code
-    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-    let myReferralCode = '';
-    let codeExists = true;
+// async function generateUniqueReferralCode() {
+//     const length = 8; // change this to modify the length of the referral code
+//     const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+//     let myReferralCode = '';
+//     let codeExists = true;
 
-    // Keep generating new codes until a unique one is found
-    while (codeExists) {
-        for (let i = 0; i < length; i++) {
-            myReferralCode += chars.charAt(Math.floor(Math.random() * chars.length));
-        }
+//     // Keep generating new codes until a unique one is found
+//     while (codeExists) {
+//         for (let i = 0; i < length; i++) {
+//             myReferralCode += chars.charAt(Math.floor(Math.random() * chars.length));
+//         }
 
-        // Check if the generated code already exists in the database
-        const existingCode = await User.findOne({ myReferralCode: myReferralCode });
-        if (!existingCode) {
-            codeExists = false;
-        }
-    }
+//         // Check if the generated code already exists in the database
+//         const existingCode = await User.findOne({ myReferralCode: myReferralCode });
+//         if (!existingCode) {
+//             codeExists = false;
+//         }
+//     }
 
-    return myReferralCode;
-}
+//     return myReferralCode;
+// }
 
 router.patch("/verifyotp", userController.varifyOtp);
 

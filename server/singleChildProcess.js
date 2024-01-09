@@ -45,7 +45,7 @@ async function singleProcess() {
     app.use('/api/v1', require("./routes/user/userLogin"));
     app.use('/api/v1', require('./routes/user/userDetailAuth'));
     app.use('/api/v1', require("./routes/user/everyoneRoleAuth"));
-    // app.use('/api/v1/payment', require("./routes/payment/paymentRoute"));
+    app.use('/api/v1/pandit', require("./routes/Pandit/pandit"));
     app.use('/api/v1/dailycontest', require("./routes/DailyContest/dailyContestRoutes"))
     app.use('/api/v1/user', require("./routes/user/userRoutes"));
     app.use('/api/v1/signup', require("./routes/UserRoute/signUpUser"));

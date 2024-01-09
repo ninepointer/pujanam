@@ -61,7 +61,7 @@ function Index() {
   const panditPrevDetail = location?.state?.data;
   const [selectedLanguage, setSelectedLanguage] = useState(panditPrevDetail?.language ? panditPrevDetail?.language : []);
   const [isSubmitted, setIsSubmitted] = useState(false);
-  let baseUrl = process.env.NODE_ENV === "production" ? "/" : "http://localhost:5000/"
+  // let baseUrl = process.env.NODE_ENV === "production" ? "/" : "http://localhost:5000/"
   const [isLoading, setIsLoading] = useState(panditPrevDetail ? true : false)
   const [editing, setEditing] = useState(false)
   const [saving, setSaving] = useState(false)
@@ -102,12 +102,16 @@ function Index() {
 
 
   useEffect(() => {
-    axios.get(`${apiUrl}portfolio/dailycontestportfolio`, {withCredentials: true})
-      .then((res) => {
-        setLanguage(res?.data?.data);
-      }).catch((err) => {
-        return new Error(err)
-      })
+    // axios.get(`${apiUrl}language`, {withCredentials: true})
+    //   .then((res) => {
+    //     setLanguage(res?.data?.data);
+    //   }).catch((err) => {
+    //     return new Error(err)
+    //   })
+    setLanguage([{
+      _id: "659d6f9a30fa1324fb3d2674",
+      language_name: "English"
+    }])
   }, [])
 
 
@@ -127,7 +131,7 @@ function Index() {
       city,
       state
     }
-    const res = await fetch(`${apiUrl}dailycontest/panditPrevDetail`, {
+    const res = await fetch(`${apiUrl}pandit`, {
       method: "POST",
       credentials: "include",
       headers: {
@@ -169,7 +173,7 @@ function Index() {
       city,
       state
     }
-    const res = await fetch(`${baseUrl}api/v1/dailycontest/panditPrevDetail/${panditPrevDetail?._id}`, {
+    const res = await fetch(`${apiUrl}pandit/${panditPrevDetail?._id}`, {
       method: "PUT",
       credentials: "include",
       headers: {
@@ -302,7 +306,7 @@ function Index() {
                     <DemoContainer components={['MobileDateTimePicker']}>
                       <DemoItem>
                         <MobileDateTimePicker
-                          label="TestZone Live Time"
+                          label="DOB"
                           disabled={((isSubmitted || panditPrevDetail) && (!editing || saving))}
                           value={formState?.dob || dayjs(dailyContest?.dob)}
                           onChange={(newValue) => {
@@ -344,7 +348,7 @@ function Index() {
                     label='Email *'
                     name='email'
                     fullWidth
-                    type='number'
+                    type='email'
                     defaultValue={editing ? formState?.email : panditPrevDetail?.email}
                     // onChange={handleChange}
                     onChange={(e) => {
@@ -356,7 +360,7 @@ function Index() {
                   />
                 </Grid>
 
-                <Grid item xs={12} md={6} xl={3}>
+                {/* <Grid item xs={12} md={6} xl={3}>
                   <FormControl sx={{ width: "100%" }}>
                     <InputLabel id="demo-simple-select-autowidth-label">Payout Type *</InputLabel>
                     <Select
@@ -378,7 +382,7 @@ function Index() {
                       <MenuItem value="Reward">Reward</MenuItem>
                     </Select>
                   </FormControl>
-                </Grid>
+                </Grid> */}
 
                 <Grid item xs={12} md={6} xl={4} mb={2}>
                   <TextField
@@ -423,7 +427,7 @@ function Index() {
                       onChange={handleLanguageChange}
                       input={<OutlinedInput label="Tag" />}
                       renderValue={(selectedIds) =>
-                        selectedIds.map(id => id).join(', ')
+                        selectedIds.map(id => language.find(prod => prod._id === id)?.language_name).join(', ')
                       }
                       sx={{ minHeight: "44px" }}
                       MenuProps={MenuProps}
@@ -437,6 +441,120 @@ function Index() {
                     </Select>
                   </FormControl>
                 </Grid> 
+
+                <Grid item xs={12} md={6} xl={4} mb={2}>
+                  <TextField
+                    disabled={((isSubmitted || panditPrevDetail) && (!editing || saving))}
+                    id="outlined-required"
+                    label='Address *'
+                    name='address'
+                    fullWidth
+                    type='text'
+                    defaultValue={editing ? formState?.address : panditPrevDetail?.address}
+                    // onChange={handleChange}
+                    onChange={(e) => {
+                      setFormState(prevState => ({
+                        ...prevState,
+                        address: (e.target.value)
+                      }))
+                    }}
+                  />
+                </Grid>
+
+                <Grid item xs={12} md={6} xl={4} mb={2}>
+                  <TextField
+                    disabled={((isSubmitted || panditPrevDetail) && (!editing || saving))}
+                    id="outlined-required"
+                    label='City *'
+                    name='city'
+                    fullWidth
+                    type='text'
+                    defaultValue={editing ? formState?.city : panditPrevDetail?.city}
+                    // onChange={handleChange}
+                    onChange={(e) => {
+                      setFormState(prevState => ({
+                        ...prevState,
+                        city: (e.target.value)
+                      }))
+                    }}
+                  />
+                </Grid>
+
+                <Grid item xs={12} md={6} xl={4} mb={2}>
+                  <TextField
+                    disabled={((isSubmitted || panditPrevDetail) && (!editing || saving))}
+                    id="outlined-required"
+                    label='Pincode *'
+                    name='pincode'
+                    fullWidth
+                    type='number'
+                    defaultValue={editing ? formState?.pincode : panditPrevDetail?.pincode}
+                    // onChange={handleChange}
+                    onChange={(e) => {
+                      setFormState(prevState => ({
+                        ...prevState,
+                        pincode: (e.target.value)
+                      }))
+                    }}
+                  />
+                </Grid>
+
+                <Grid item xs={12} md={6} xl={4} mb={2}>
+                  <TextField
+                    disabled={((isSubmitted || panditPrevDetail) && (!editing || saving))}
+                    id="outlined-required"
+                    label='State *'
+                    name='state'
+                    fullWidth
+                    type='text'
+                    defaultValue={editing ? formState?.state : panditPrevDetail?.state}
+                    // onChange={handleChange}
+                    onChange={(e) => {
+                      setFormState(prevState => ({
+                        ...prevState,
+                        state: (e.target.value)
+                      }))
+                    }}
+                  />
+                </Grid>
+
+                <Grid item xs={12} md={6} xl={4} mb={2}>
+                  <TextField
+                    disabled={((isSubmitted || panditPrevDetail) && (!editing || saving))}
+                    id="outlined-required"
+                    label='Longitude *'
+                    name='longitude'
+                    fullWidth
+                    type='number'
+                    defaultValue={editing ? formState?.longitude : panditPrevDetail?.longitude}
+                    // onChange={handleChange}
+                    onChange={(e) => {
+                      setFormState(prevState => ({
+                        ...prevState,
+                        longitude: (e.target.value)
+                      }))
+                    }}
+                  />
+                </Grid>
+
+                <Grid item xs={12} md={6} xl={4} mb={2}>
+                  <TextField
+                    disabled={((isSubmitted || panditPrevDetail) && (!editing || saving))}
+                    id="outlined-required"
+                    label='Latitude *'
+                    name='latitude'
+                    fullWidth
+                    type='number'
+                    defaultValue={editing ? formState?.latitude : panditPrevDetail?.latitude}
+                    // onChange={handleChange}
+                    onChange={(e) => {
+                      setFormState(prevState => ({
+                        ...prevState,
+                        latitude: (e.target.value)
+                      }))
+                    }}
+                  />
+                </Grid>
 
                 <Grid item xs={12} md={6} xl={3}>
                   <FormControl sx={{ width: "100%" }}>

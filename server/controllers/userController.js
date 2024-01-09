@@ -478,9 +478,7 @@ exports.varifyOtp = async (req, res) => {
     email,
     mobile,
     mobile_otp,
-    referrerCode,
     fcmTokenData,
-    collegeDetails
   } = req.body
 
 
@@ -532,13 +530,13 @@ exports.varifyOtp = async (req, res) => {
     let creation = "Auto SignUp";
 
     let obj = {
-      first_name: first_name.trim(), last_name: last_name.trim(), designation: 'Trader', email: email.trim(),
+      full_name: full_name.trim(), 
+      email: email.trim(),
       mobile: mobile.trim(),
-      name: first_name.trim() + ' ' + last_name.trim().substring(0, 1),
       status: 'Active',
-      employeeid: userId,
+      // employeeid: userId,
       joining_date: user.last_modifiedOn,
-      myReferralCode: (await myReferralCode).toString(),
+      // myReferralCode: (await myReferralCode).toString(),
       // referrerCode: referredBy && referrerCode,
       creationProcess: creation,
     }

@@ -42,9 +42,9 @@ const Authenticate = async (req, res, next) => {
             if(user?.role?.toString()=='644903ac236de3fd7cfd755c'){
                 return res.status(400).json({status:'error', message:'Invalid request'});
             }
-            if (user.changedPasswordAfter(verifyToken.iat)) {
-                return res.status(401).send({ status: "error", message: "User recently changed password! Please log in again." });
-            }
+            // if (user.changedPasswordAfter(verifyToken.iat)) {
+            //     return res.status(401).send({ status: "error", message: "User recently changed password! Please log in again." });
+            // }
             
         // }
 
