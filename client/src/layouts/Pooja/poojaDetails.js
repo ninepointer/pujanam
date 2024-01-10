@@ -2,7 +2,7 @@
 import DashboardLayout from "../../examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "../../examples/Navbars/DashboardNavbar";
 import Footer from "../../examples/Footer";
-import CreateTierForm from "./createTierForm";
+import CreatePoojaForm from "./createPoojaForm";
 
 function Tables() {
 
@@ -10,7 +10,7 @@ function Tables() {
     <>
     <DashboardLayout>
       <DashboardNavbar />
-      <CreateTierForm/>
+      <CreatePoojaForm/>
       <Footer />
     </DashboardLayout>
     </>

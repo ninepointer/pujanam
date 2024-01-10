@@ -10,18 +10,17 @@ import MDTypography from "../../../components/MDTypography";
 import money from "../../../assets/images/money.png"
 import { Link, useLocation } from "react-router-dom";
 import moment from 'moment';
+import { apiUrl } from '../../../constants/constants';
 
-
-const UpcomingContest = ({type}) => {
+const ActivePandit = ({type}) => {
 let [skip, setSkip] = useState(0);
 const limitSetting = 10;
 const [count, setCount] = useState(0);
 const [isLoading,setIsLoading] = useState(false);
-const [upcomingContest,setUpcomingContest] = useState([]);
-let baseUrl = process.env.NODE_ENV === "production" ? "/" : "http://localhost:5000/"
+const [data,setData] = useState([]);
 
   useEffect(()=>{
-    let call1 = axios.get(`${baseUrl}api/v1/dailycontest/contests/collegeongoing?skip=${skip}&limit=${limitSetting}`,{
+    let call1 = axios.get(`${apiUrl}pandit/active/?skip=${skip}&limit=${limitSetting}`,{
                 withCredentials: true,
                 headers: {
                     Accept: "application/json",
@@ -32,8 +31,11 @@ let baseUrl = process.env.NODE_ENV === "production" ? "/" : "http://localhost:50
     Promise.all([call1])
     .then(([api1Response]) => {
       // Process the responses here
-      console.log(api1Response.data.data)
-      setUpcomingContest(api1Response.data.data)
+      setData(api1Response.data.data)
+      setCount(api1Response.data.count)
+      setTimeout(()=>{
+        setIsLoading(false)
+      },100)
     })
     .catch((error) => {
       // Handle errors here
@@ -45,9 +47,9 @@ let baseUrl = process.env.NODE_ENV === "production" ? "/" : "http://localhost:50
         return;
     }
     setSkip(prev => prev-limitSetting);
-    setUpcomingContest([]);
+    setData([]);
     setIsLoading(true)
-    axios.get(`${baseUrl}api/v1/dailycontest/contests/collegeongoing?skip=${skip-limitSetting}&limit=${limitSetting}`,{
+    axios.get(`${apiUrl}pandit/active/?skip=${skip}&limit=${limitSetting}`,{
         withCredentials: true,
         headers: {
             Accept: "application/json",
@@ -56,7 +58,7 @@ let baseUrl = process.env.NODE_ENV === "production" ? "/" : "http://localhost:50
         },
     })
     .then((res) => {
-        setUpcomingContest(res.data.data)
+        setData(res.data.data)
         setCount(res.data.count)
         setTimeout(()=>{
             setIsLoading(false)
@@ -72,9 +74,9 @@ let baseUrl = process.env.NODE_ENV === "production" ? "/" : "http://localhost:50
       return;
     }
     setSkip(prev => prev+limitSetting);
-    setUpcomingContest([]);
+    setData([]);
     setIsLoading(true)
-    axios.get(`${baseUrl}api/v1/dailycontest/contests/collegeongoing?skip=${skip+limitSetting}&limit=${limitSetting}`,{
+    axios.get(`${apiUrl}pandit/active/?skip=${skip}&limit=${limitSetting}`,{
         withCredentials: true,
         headers: {
             Accept: "application/json",
@@ -83,7 +85,7 @@ let baseUrl = process.env.NODE_ENV === "production" ? "/" : "http://localhost:50
         },
     })
     .then((res) => {
-        setUpcomingContest(res.data.data)
+        setData(res.data.data)
         setCount(res.data.count)
         setTimeout(()=>{
             setIsLoading(false)
@@ -97,13 +99,12 @@ let baseUrl = process.env.NODE_ENV === "production" ? "/" : "http://localhost:50
   
     return (
       <>
-      {upcomingContest.length > 0 ?
+      {data.length > 0 ?
         
           <MDBox>
             <Grid container spacing={2} bgColor="dark">
-              {upcomingContest?.map((e)=>{
+              {data?.map((e)=>{
                 let contestColor = (e?.featured === true && e?.entryFee != 0) ? 'success' : (e?.featured === true && e?.entryFee === 0) ? 'warning' : (e?.featured === false && e?.entryFee != 0) ? 'text' : 'light';
-                console.log(contestColor,e?.featured,e?.entryFee, e?.featured === true && e?.entryFee != 0,e?.featured === true && e?.entryFee === 0 )
                     return (
                       
                       <Grid key={e._id} item xs={12} md={12} lg={12} bgColor="dark">
@@ -115,11 +116,11 @@ let baseUrl = process.env.NODE_ENV === "production" ? "/" : "http://localhost:50
                         component = {Link}
                         style={{minWidth:'100%'}}
                         to={{
-                            pathname: `/dailycontestdetails`,
+                            pathname: `/panditdetails`,
                           }}
                         state={{data: e}}
                       >
-                            <Grid container>
+                            {/* <Grid container>
 
                               <Grid item xs={12} md={6} lg={12} mt={1} mb={1} display="flex" justifyContent="left" >
                                 <MDTypography fontSize={15} style={{ color: "black", paddingRight: 4, fontWeight: 'bold' }}>TestZone Name: {e?.contestName}</MDTypography>
@@ -180,7 +181,7 @@ let baseUrl = process.env.NODE_ENV === "production" ? "/" : "http://localhost:50
 
                               </Grid>
 
-                            </Grid>
+                            </Grid> */}
                       </MDButton>
                       </MDBox>
                       </Grid>
@@ -199,7 +200,7 @@ let baseUrl = process.env.NODE_ENV === "production" ? "/" : "http://localhost:50
           :
          <Grid container spacing={1} xs={12} md={6} lg={12}>
           <Grid item mt={2} xs={6} md={3} lg={12} display="flex" justifyContent="center">
-            <MDTypography color="light">No Ongoing College TestZone(s)</MDTypography>
+            <MDTypography color="light">No Upcoming TestZone(s)</MDTypography>
           </Grid>
          </Grid>
          } 
@@ -209,4 +210,4 @@ let baseUrl = process.env.NODE_ENV === "production" ? "/" : "http://localhost:50
 
 
 
-export default UpcomingContest;
+export default ActivePandit;

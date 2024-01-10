@@ -421,51 +421,13 @@ export default function LabTabs() {
                                 size="small" 
                                 component = {Link}
                                 to={{
-                                    pathname: `/userorders`,
+                                    pathname: `/pooja`,
                                   }}
                             >
-                                My Orders
+                                Pooja
                             </MDButton>
                         </Grid>
-                        <Grid item fullWidth>
-                            <MDButton 
-                                variant="contained" 
-                                color={"warning"} 
-                                size="small" 
-                                component = {Link}
-                                to={{
-                                    pathname: `/portfolio`,
-                                  }}
-                            >
-                                Portfolio
-                            </MDButton>
-                        </Grid>
-                        <Grid item fullWidth>
-                            <MDButton 
-                                variant="contained" 
-                                color={"error"} 
-                                size="small" 
-                                component = {Link}
-                                to={{
-                                    pathname: `/referralprogram`,
-                                  }}
-                            >
-                                Referral Program
-                            </MDButton>
-                        </Grid>
-                        <Grid item fullWidth>
-                            <MDButton 
-                                variant="contained" 
-                                color={"dark"} 
-                                size="small" 
-                                component = {Link}
-                                to={{
-                                    pathname: `/tutorialvideos`,
-                                  }}
-                            >
-                                Tutorial Videos
-                            </MDButton>
-                        </Grid>
+                
                     </Grid>
                 </MDBox>
                 

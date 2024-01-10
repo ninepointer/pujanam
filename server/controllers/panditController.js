@@ -1,6 +1,6 @@
 const Pandit = require('../models/Pandit/pandit');
 const ApiResponse = require('../helpers/ApiResponse'); // Assuming ApiResponse class is saved in utils folder
-
+const {ObjectId} = require('mongodb')
 // Create a Pandit
 exports.createPandit = async (req, res) => {
     try {
@@ -98,7 +98,7 @@ exports.additionalInformationPandit = async (req, res) => {
         if (!updatedAdditionalInfo) {
             return ApiResponse.notFound(res, 'Pandit not found');
         }
-        ApiResponse.success(res, updatedPandit, 'Pandit updated successfully');
+        ApiResponse.success(res, updatedAdditionalInfo, 'Pandit updated successfully');
     } catch (error) {
         ApiResponse.error(res,'Something went wrong', 500, error.message);
     }

@@ -8,12 +8,14 @@ const Tier = new mongoose.Schema({
         required: true,
     },
     pooja_items_included: {
-            type: Boolean,
-            required: true
+        type: Boolean,
+        required: true,
+        default: false
     },
     post_pooja_cleanUp_included: {
         type: Boolean,
-        required: true
+        required: true,
+        default: false
     },
     min_pandit_experience: {
         type: Number,

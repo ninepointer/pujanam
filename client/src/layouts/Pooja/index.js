@@ -2,15 +2,22 @@
 import DashboardLayout from "../../examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "../../examples/Navbars/DashboardNavbar";
 import Footer from "../../examples/Footer";
-import CreateTierForm from "./createTierForm";
+
+
+// Data
+// import authorsTableData from "./data/authorsTableData";
+// import projectsTableData from "./data/projectsTableData";
+import Header from "./Header";
 
 function Tables() {
+  // const { columns, rows } = authorsTableData();
+  // const { columns: pColumns, rows: pRows } = projectsTableData();
 
   return (
     <>
     <DashboardLayout>
       <DashboardNavbar />
-      <CreateTierForm/>
+      <Header/>
       <Footer />
     </DashboardLayout>
     </>

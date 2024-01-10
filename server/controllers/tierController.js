@@ -11,7 +11,7 @@ exports.createTier = async (req, res) => {
             max_pandit_experience,
             number_of_main_pandit,
             number_of_assistant_pandit,
-            status,
+            status, pandits
         } = req.body;
 
         const newTier = await Tier.create({
@@ -22,7 +22,7 @@ exports.createTier = async (req, res) => {
             max_pandit_experience,
             number_of_main_pandit,
             number_of_assistant_pandit,
-            status,
+            status, pandits,
             created_by:req.user._id,
             last_modified_by:req.user._id
         });

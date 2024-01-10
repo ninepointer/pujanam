@@ -3,27 +3,20 @@ import * as React from 'react';
 import { useEffect, useState } from "react";
 import axios from "axios";
 import ListItemText from '@mui/material/ListItemText';
-// import { useForm } from "react-hook-form";
-// import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Grid from "@mui/material/Grid";
 import MDTypography from "../../components/MDTypography";
 import MDBox from "../../components/MDBox";
 import MDButton from "../../components/MDButton"
-import { Checkbox, CircularProgress, FormControlLabel, FormGroup, formLabelClasses } from "@mui/material";
+import { Checkbox, CircularProgress } from "@mui/material";
 import MDSnackbar from "../../components/MDSnackbar";
 import MenuItem from '@mui/material/MenuItem';
-// import { styled } from '@mui/material';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
+import Select from '@mui/material/Select';
 import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 import { useNavigate, useLocation } from "react-router-dom";
-// import RegisteredUsers from "./data/registeredUsers";
-// import AllowedUsers from './data/notifyUsers';
-// import { IoMdAddCircle } from 'react-icons/io';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import dayjs from 'dayjs';
-// import Autocomplete from '@mui/material/Autocomplete';
 import { DemoContainer, DemoItem } from '@mui/x-date-pickers/internals/demo';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -36,7 +29,7 @@ import { MobileDateTimePicker } from '@mui/x-date-pickers/MobileDateTimePicker';
 // import FeaturedRegistrations from "./data/featuredRegistrations";
 // import Shared from "./data/shared";
 // import CreateRewards from './data/reward/createReward';
-import ContestRewards from './data/reward/contestReward';
+import AdditionalInfo from './data/addAdditionalInfo/additionalInfo';
 import {apiUrl} from  '../../constants/constants';
 
 // const CustomAutocomplete = styled(Autocomplete)`
@@ -59,6 +52,7 @@ const MenuProps = {
 function Index() {
   const location = useLocation();
   const panditPrevDetail = location?.state?.data;
+  console.log("panditPrevDetail", panditPrevDetail)
   const [selectedLanguage, setSelectedLanguage] = useState(panditPrevDetail?.language ? panditPrevDetail?.language : []);
   const [isSubmitted, setIsSubmitted] = useState(false);
   // let baseUrl = process.env.NODE_ENV === "production" ? "/" : "http://localhost:5000/"
@@ -79,7 +73,7 @@ function Index() {
 
   const [formState, setFormState] = useState({
     pandit_name: '' || panditPrevDetail?.pandit_name,
-    dob: dayjs(panditPrevDetail?.dob) ?? dayjs(new Date()),
+    dob: dayjs(panditPrevDetail?.dob) || dayjs(new Date()),
     mobile: '' || panditPrevDetail?.mobile,
     email: '' || panditPrevDetail?.email,
     experience_in_year: '' || panditPrevDetail?.experience_in_year,
@@ -308,7 +302,9 @@ function Index() {
                         <MobileDateTimePicker
                           label="DOB"
                           disabled={((isSubmitted || panditPrevDetail) && (!editing || saving))}
-                          value={formState?.dob || dayjs(dailyContest?.dob)}
+                          value={formState?.dob 
+                            // || dayjs(dailyContest?.dob)
+                          }
                           onChange={(newValue) => {
                             if (newValue && newValue.isValid()) {
                               setFormState(prevState => ({ ...prevState, dob: newValue }))
@@ -637,9 +633,9 @@ function Index() {
                 )}
               </Grid>
 
-              {(panditPrevDetail?.payoutType === "Reward" || (isSubmitted && formState?.payoutType === "Reward")) && <Grid item xs={12} md={12} xl={12} mt={2}>
+              {(panditPrevDetail || isSubmitted) && <Grid item xs={12} md={12} xl={12} mt={2}>
                 <MDBox>
-                <ContestRewards panditPrevDetail={panditPrevDetail!=undefined ? panditPrevDetail?._id : dailyContest?._id}/>
+                <AdditionalInfo panditPrevDetail={panditPrevDetail!=undefined ? panditPrevDetail : dailyContest}/>
                 </MDBox>
               </Grid>}
               

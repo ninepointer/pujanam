@@ -37,7 +37,7 @@ import { MobileDateTimePicker } from '@mui/x-date-pickers/MobileDateTimePicker';
 // import Shared from "./data/shared";
 // import CreateRewards from './data/reward/createReward';
 import ContestRewards from './data/reward/contestReward';
-import {apiUrl} from  '../../constants/constants';
+import { apiUrl } from '../../constants/constants';
 
 // const CustomAutocomplete = styled(Autocomplete)`
 //   .MuiAutocomplete-clearIndicator {
@@ -58,55 +58,50 @@ const MenuProps = {
 
 function Index() {
   const location = useLocation();
-  const panditPrevDetail = location?.state?.data;
-  const [selectedLanguage, setSelectedLanguage] = useState(panditPrevDetail?.language ? panditPrevDetail?.language : []);
+  const tierPrevDetail = location?.state?.data;
+  const [selectedPandit, setSelectedPandit] = useState(tierPrevDetail?.pandits ? tierPrevDetail?.pandits : []);
   const [isSubmitted, setIsSubmitted] = useState(false);
   // let baseUrl = process.env.NODE_ENV === "production" ? "/" : "http://localhost:5000/"
-  const [isLoading, setIsLoading] = useState(panditPrevDetail ? true : false)
+  const [isLoading, setIsLoading] = useState(tierPrevDetail ? true : false)
   const [editing, setEditing] = useState(false)
   const [saving, setSaving] = useState(false)
   const [creating, setCreating] = useState(false)
   const navigate = useNavigate();
   // const [newObjectId, setNewObjectId] = useState("");
   const [updatedDocument, setUpdatedDocument] = useState([]);
-  const [dailyContest, setDailyContest] = useState([]);
-  const [language, setLanguage] = useState([]);
+  const [tier, setTier] = useState([]);
+  const [pandit, setPandit] = useState([]);
   // const [college, setCollege] = useState([]);
   // const [contestRegistrations, setContestRegistrations] = useState([]);
   // const [featuredRegistrations, setFeaturedRegistrations] = useState([]);
   // const [careers,setCareers] = useState([]);
-  // const [action, setAction] = useState(false);
 
   const [formState, setFormState] = useState({
-    tier_name: '' || panditPrevDetail?.tier_name,
-    min_pandit_experience: '' || panditPrevDetail?.min_pandit_experience,
-    max_pandit_experience: '' || panditPrevDetail?.max_pandit_experience,
-    number_of_main_pandit: '' || panditPrevDetail?.number_of_main_pandit,
-    number_of_assistant_pandit: '' || panditPrevDetail?.number_of_assistant_pandit,
-    status: '' || panditPrevDetail?.status,
-    pooja_items_included: false || panditPrevDetail?.address_details?.pooja_items_included,
-    post_pooja_cleanUp_included: false || panditPrevDetail?.address_details?.post_pooja_cleanUp_included,
+    tier_name: '' || tierPrevDetail?.tier_name,
+    min_pandit_experience: '' || tierPrevDetail?.min_pandit_experience,
+    max_pandit_experience: '' || tierPrevDetail?.max_pandit_experience,
+    number_of_main_pandit: '' || tierPrevDetail?.number_of_main_pandit,
+    number_of_assistant_pandit: '' || tierPrevDetail?.number_of_assistant_pandit,
+    status: '' || tierPrevDetail?.status,
+    pooja_items_included: false || tierPrevDetail?.pooja_items_included,
+    post_pooja_cleanUp_included: false || tierPrevDetail?.post_pooja_cleanUp_included,
   });
 
   useEffect(() => {
     setTimeout(() => {
-      panditPrevDetail && setUpdatedDocument(panditPrevDetail)
+      tierPrevDetail && setUpdatedDocument(tierPrevDetail)
       setIsLoading(false);
     }, 500)
   }, [])
 
 
   useEffect(() => {
-    // axios.get(`${apiUrl}language`, {withCredentials: true})
-    //   .then((res) => {
-    //     setLanguage(res?.data?.data);
-    //   }).catch((err) => {
-    //     return new Error(err)
-    //   })
-    setLanguage([{
-      _id: "659d6f9a30fa1324fb3d2674",
-      language_name: "English"
-    }])
+    axios.get(`${apiUrl}pandit/active`, { withCredentials: true })
+      .then((res) => {
+        setPandit(res?.data?.data);
+      }).catch((err) => {
+        return new Error(err)
+      })
   }, [])
 
 
@@ -115,18 +110,15 @@ function Index() {
     console.log(formState)
 
     setTimeout(() => { setCreating(false); setIsSubmitted(true) }, 500)
-    const {pooja_items_included, post_pooja_cleanUp_included, city, state, longitude, latitude, tier_name, min_pandit_experience, max_pandit_experience, number_of_main_pandit, number_of_assistant_pandit, status, language} = formState;
-    const address_details = {
-      location: {
-        type: "Point",
-        coordinates: [latitude, longitude]
-      },
-      post_pooja_cleanUp_included,
+    const {
       pooja_items_included,
-      city,
-      state
-    }
-    const res = await fetch(`${apiUrl}pandit`, {
+      post_pooja_cleanUp_included,
+      tier_name, min_pandit_experience,
+      max_pandit_experience,
+      number_of_main_pandit,
+      number_of_assistant_pandit, status, pandits } = formState;
+
+    const res = await fetch(`${apiUrl}tier`, {
       method: "POST",
       credentials: "include",
       headers: {
@@ -134,7 +126,12 @@ function Index() {
         "Access-Control-Allow-Credentials": true
       },
       body: JSON.stringify({
-        address_details, tier_name, min_pandit_experience, max_pandit_experience, number_of_main_pandit, number_of_assistant_pandit, status, language
+        pooja_items_included,
+        post_pooja_cleanUp_included,
+        tier_name, min_pandit_experience,
+        max_pandit_experience,
+        number_of_main_pandit,
+        number_of_assistant_pandit, status, pandits
       })
     });
 
@@ -148,7 +145,7 @@ function Index() {
       openSuccessSB("Pandit Ji Saved", data?.message)
       // setNewObjectId(data?.data?._id)
       setIsSubmitted(true)
-      setDailyContest(data?.data);
+      setTier(data?.data);
       setTimeout(() => { setCreating(false); setIsSubmitted(true) }, 500)
     }
   }
@@ -157,18 +154,14 @@ function Index() {
     e.preventDefault()
     setSaving(true)
 
-    const {pooja_items_included, post_pooja_cleanUp_included, city, state, longitude, latitude, tier_name, min_pandit_experience, max_pandit_experience, number_of_main_pandit, number_of_assistant_pandit, status, language} = formState;
-    const address_details = {
-      location: {
-        type: "Point",
-        coordinates: [latitude, longitude]
-      },
+    const { pooja_items_included,
       post_pooja_cleanUp_included,
-      pooja_items_included,
-      city,
-      state
-    }
-    const res = await fetch(`${apiUrl}pandit/${panditPrevDetail?._id}`, {
+      tier_name, min_pandit_experience,
+      max_pandit_experience,
+      number_of_main_pandit,
+      number_of_assistant_pandit, status, pandits } = formState;
+
+    const res = await fetch(`${apiUrl}tier/${tierPrevDetail?._id}`, {
       method: "PUT",
       credentials: "include",
       headers: {
@@ -176,20 +169,25 @@ function Index() {
         "Access-Control-Allow-Credentials": true
       },
       body: JSON.stringify({
-        address_details, tier_name, min_pandit_experience, max_pandit_experience, number_of_main_pandit, number_of_assistant_pandit, status, language
+        pooja_items_included,
+        post_pooja_cleanUp_included,
+        tier_name, min_pandit_experience,
+        max_pandit_experience,
+        number_of_main_pandit,
+        number_of_assistant_pandit, status, pandits
       })
     });
 
     const data = await res.json();
     console.log(data);
-    if (data.status === 500 || data.status == 400 || data.status==401 || data.status == 'error' || data.error || !data) {
+    if (data.status === 500 || data.status == 400 || data.status == 401 || data.status == 'error' || data.error || !data) {
       openErrorSB("Error", data.error)
       setTimeout(() => { setSaving(false); setEditing(true) }, 500)
-    } else if(data.status == 'success') {
+    } else if (data.status == 'success') {
       openSuccessSB("Pandit Ji details Edited", "Edited Successfully")
       setTimeout(() => { setSaving(false); setEditing(false) }, 500)
       console.log("entry succesfull");
-    }else{
+    } else {
       openErrorSB("Error", data.message);
       setTimeout(() => { setSaving(false); setEditing(true) }, 500)
     }
@@ -251,13 +249,13 @@ function Index() {
     }
   };
 
-  const handleLanguageChange = (event) => {
+  const handlePanditChange = (event) => {
     const selectedIds = event.target.value;
-    setSelectedLanguage(selectedIds);
+    setSelectedPandit(selectedIds);
 
     setFormState(prevState => ({
       ...prevState,
-      language: selectedIds
+      pandits: selectedIds
     }));
   };
 
@@ -281,12 +279,12 @@ function Index() {
               <Grid container spacing={2} mt={0.5} mb={0} xs={12} md={12} xl={12}>
                 <Grid item xs={12} md={6} xl={3}>
                   <TextField
-                    disabled={((isSubmitted || panditPrevDetail) && (!editing || saving))}
+                    disabled={((isSubmitted || tierPrevDetail) && (!editing || saving))}
                     id="outlined-required"
                     label='Tier *'
                     name='tier_name'
                     fullWidth
-                    defaultValue={editing ? formState?.tier_name : panditPrevDetail?.tier_name}
+                    defaultValue={editing ? formState?.tier_name : tierPrevDetail?.tier_name}
                     onChange={(e) => {
                       setFormState(prevState => ({
                         ...prevState,
@@ -296,16 +294,16 @@ function Index() {
                   />
                 </Grid>
 
-                
+
                 <Grid item xs={12} md={6} xl={3} mb={2}>
                   <TextField
-                    disabled={((isSubmitted || panditPrevDetail) && (!editing || saving))}
+                    disabled={((isSubmitted || tierPrevDetail) && (!editing || saving))}
                     id="outlined-required"
                     label='Min Pandit Experience(years) *'
                     name='min_pandit_experience'
                     fullWidth
                     type='number'
-                    defaultValue={editing ? formState?.min_pandit_experience : panditPrevDetail?.min_pandit_experience}
+                    defaultValue={editing ? formState?.min_pandit_experience : tierPrevDetail?.min_pandit_experience}
                     // onChange={handleChange}
                     onChange={(e) => {
                       setFormState(prevState => ({
@@ -317,13 +315,13 @@ function Index() {
                 </Grid>
                 <Grid item xs={12} md={6} xl={3} mb={2}>
                   <TextField
-                    disabled={((isSubmitted || panditPrevDetail) && (!editing || saving))}
+                    disabled={((isSubmitted || tierPrevDetail) && (!editing || saving))}
                     id="outlined-required"
                     label='Max Pandit Experience(years) *'
                     name='max_pandit_experience'
                     fullWidth
                     type='number'
-                    defaultValue={editing ? formState?.max_pandit_experience : panditPrevDetail?.max_pandit_experience}
+                    defaultValue={editing ? formState?.max_pandit_experience : tierPrevDetail?.max_pandit_experience}
                     // onChange={handleChange}
                     onChange={(e) => {
                       setFormState(prevState => ({
@@ -334,40 +332,42 @@ function Index() {
                   />
                 </Grid>
 
-
-                {/* <Grid item xs={12} md={6} xl={3}>
-                  <FormControl sx={{ width: "100%" }}>
-                    <InputLabel id="demo-simple-select-autowidth-label">Payout Type *</InputLabel>
+                <Grid item xs={12} md={6} xl={4} mt={-1} mb={1}>
+                  <FormControl sx={{ m: 1, width: '100%' }}>
+                    <InputLabel id="demo-multiple-checkbox-label">Pandit</InputLabel>
                     <Select
-                      labelId="demo-simple-select-autowidth-label"
-                      id="demo-simple-select-autowidth"
-                      name='payoutType'
-                      value={formState?.payoutType || panditPrevDetail?.payoutType}
-                      disabled={((isSubmitted || panditPrevDetail) && (!editing || saving))}
-                      onChange={(e) => {
-                        setFormState(prevState => ({
-                          ...prevState,
-                          payoutType: e.target.value
-                        }))
-                      }}
-                      label="Payout Type"
-                      sx={{ minHeight: 43 }}
+                      labelId="demo-multiple-checkbox-label"
+                      id="demo-multiple-checkbox"
+                      multiple
+                      disabled={((isSubmitted || tierPrevDetail) && (!editing || saving))}
+                      value={selectedPandit}
+                      onChange={handlePanditChange}
+                      input={<OutlinedInput label="Tag" />}
+                      renderValue={(selectedIds) =>
+                        selectedIds.map(id => pandit.find(prod => prod._id === id)?.pandit_name).join(', ')
+                      }
+                      sx={{ minHeight: "44px" }}
+                      MenuProps={MenuProps}
                     >
-                      <MenuItem value="Percentage">Percentage</MenuItem>
-                      <MenuItem value="Reward">Reward</MenuItem>
+                      {pandit?.map((elem) => (
+                        <MenuItem key={elem?._id} value={elem?._id}>
+                          <Checkbox checked={selectedPandit.indexOf(elem?._id) > -1} />
+                          <ListItemText primary={elem?.pandit_name} />
+                        </MenuItem>
+                      ))}
                     </Select>
                   </FormControl>
-                </Grid> */}
+                </Grid> 
 
                 <Grid item xs={12} md={6} xl={3} mb={2}>
                   <TextField
-                    disabled={((isSubmitted || panditPrevDetail) && (!editing || saving))}
+                    disabled={((isSubmitted || tierPrevDetail) && (!editing || saving))}
                     id="outlined-required"
                     label='Number of main pandits'
                     name='number_of_main_pandit'
                     fullWidth
                     type='number'
-                    defaultValue={editing ? formState?.number_of_main_pandit : panditPrevDetail?.number_of_main_pandit}
+                    defaultValue={editing ? formState?.number_of_main_pandit : tierPrevDetail?.number_of_main_pandit}
                     // onChange={handleChange}
                     onChange={(e) => {
                       setFormState(prevState => ({
@@ -379,13 +379,13 @@ function Index() {
                 </Grid>
                 <Grid item xs={12} md={6} xl={3} mb={2}>
                   <TextField
-                    disabled={((isSubmitted || panditPrevDetail) && (!editing || saving))}
+                    disabled={((isSubmitted || tierPrevDetail) && (!editing || saving))}
                     id="outlined-required"
                     label='Number of assistant pandits'
                     name='number_of_assistant_pandit'
                     fullWidth
                     type='number'
-                    defaultValue={editing ? formState?.number_of_assistant_pandit : panditPrevDetail?.number_of_assistant_pandit}
+                    defaultValue={editing ? formState?.number_of_assistant_pandit : tierPrevDetail?.number_of_assistant_pandit}
                     // onChange={handleChange}
                     onChange={(e) => {
                       setFormState(prevState => ({
@@ -403,8 +403,8 @@ function Index() {
                       labelId="demo-simple-select-autowidth-label"
                       id="demo-simple-select-autowidth"
                       name='status'
-                      value={formState?.status || panditPrevDetail?.status}
-                      disabled={((isSubmitted || panditPrevDetail) && (!editing || saving))}
+                      value={formState?.status || tierPrevDetail?.status}
+                      disabled={((isSubmitted || tierPrevDetail) && (!editing || saving))}
                       onChange={(e) => {
                         setFormState(prevState => ({
                           ...prevState,
@@ -421,49 +421,49 @@ function Index() {
                 </Grid>
               </Grid>
               <Grid item xs={12} md={6} xl={3}>
-                  <FormGroup>
-                    <FormControlLabel
-                      checked={(panditPrevDetail?.pooja_items_included !== undefined && !editing && formState?.pooja_items_included === undefined) ? panditPrevDetail?.pooja_items_included : formState?.pooja_items_included}
-                      disabled={((isSubmitted || panditPrevDetail) && (!editing || saving))}
-                      control={<Checkbox />}
-                      onChange={(e) => {
-                        setFormState(prevState => ({
-                          ...prevState,
-                          actions: ""
-                        }))
-                        setFormState(prevState => ({
-                          ...prevState,
-                          pooja_items_included: e.target.checked
-                        }))
-                      }}
-                      label="Pooja Items Included" />
-                  </FormGroup>
-                </Grid>
+                <FormGroup>
+                  <FormControlLabel
+                    checked={(tierPrevDetail?.pooja_items_included !== undefined && !editing && formState?.pooja_items_included === undefined) ? tierPrevDetail?.pooja_items_included : formState?.pooja_items_included}
+                    disabled={((isSubmitted || tierPrevDetail) && (!editing || saving))}
+                    control={<Checkbox />}
+                    onChange={(e) => {
+                      setFormState(prevState => ({
+                        ...prevState,
+                        actions: ""
+                      }))
+                      setFormState(prevState => ({
+                        ...prevState,
+                        pooja_items_included: e.target.checked
+                      }))
+                    }}
+                    label="Pooja Items Included" />
+                </FormGroup>
+              </Grid>
               <Grid item xs={12} md={6} xl={3}>
-                  <FormGroup>
-                    <FormControlLabel
-                      checked={(panditPrevDetail?.post_pooja_cleanUp_included !== undefined && !editing && formState?.post_pooja_cleanUp_included === undefined) ? panditPrevDetail?.post_pooja_cleanUp_included : formState?.post_pooja_cleanUp_included}
-                      disabled={((isSubmitted || panditPrevDetail) && (!editing || saving))}
-                      control={<Checkbox />}
-                      onChange={(e) => {
-                        setFormState(prevState => ({
-                          ...prevState,
-                          actions: ""
-                        }))
-                        setFormState(prevState => ({
-                          ...prevState,
-                          post_pooja_cleanUp_included: e.target.checked
-                        }))
-                      }}
-                      label="Post Pooja Cleanup Included" />
-                  </FormGroup>
-                </Grid>
+                <FormGroup>
+                  <FormControlLabel
+                    checked={(tierPrevDetail?.post_pooja_cleanUp_included !== undefined && !editing && formState?.post_pooja_cleanUp_included === undefined) ? tierPrevDetail?.post_pooja_cleanUp_included : formState?.post_pooja_cleanUp_included}
+                    disabled={((isSubmitted || tierPrevDetail) && (!editing || saving))}
+                    control={<Checkbox />}
+                    onChange={(e) => {
+                      setFormState(prevState => ({
+                        ...prevState,
+                        actions: ""
+                      }))
+                      setFormState(prevState => ({
+                        ...prevState,
+                        post_pooja_cleanUp_included: e.target.checked
+                      }))
+                    }}
+                    label="Post Pooja Cleanup Included" />
+                </FormGroup>
+              </Grid>
 
             </Grid>
 
             <Grid container mt={2} xs={12} md={12} xl={12} >
               <Grid item display="flex" justifyContent="flex-end" xs={12} md={6} xl={12}>
-                {!isSubmitted && !panditPrevDetail && (
+                {!isSubmitted && !tierPrevDetail && (
                   <>
                     <MDButton
                       variant="contained"
@@ -480,7 +480,7 @@ function Index() {
                     </MDButton>
                   </>
                 )}
-                {(isSubmitted || panditPrevDetail) && !editing && (
+                {(isSubmitted || tierPrevDetail) && !editing && (
                   <>
                     <MDButton variant="contained" color="warning" size="small" sx={{ mr: 1, ml: 2 }} onClick={() => { setEditing(true) }}>
                       Edit
@@ -490,7 +490,7 @@ function Index() {
                     </MDButton>
                   </>
                 )}
-                {(isSubmitted || panditPrevDetail) && editing && (
+                {(isSubmitted || tierPrevDetail) && editing && (
                   <>
                     <MDButton
                       variant="contained"
@@ -515,16 +515,16 @@ function Index() {
                 )}
               </Grid>
 
-              {(panditPrevDetail?.payoutType === "Reward" || (isSubmitted && formState?.payoutType === "Reward")) && <Grid item xs={12} md={12} xl={12} mt={2}>
+              {/* {(tierPrevDetail?.payoutType === "Reward" || (isSubmitted && formState?.payoutType === "Reward")) && <Grid item xs={12} md={12} xl={12} mt={2}>
                 <MDBox>
-                <ContestRewards panditPrevDetail={panditPrevDetail!=undefined ? panditPrevDetail?._id : dailyContest?._id}/>
+                  <ContestRewards tierPrevDetail={tierPrevDetail != undefined ? tierPrevDetail?._id : tier?._id} />
                 </MDBox>
-              </Grid>}
-              
+              </Grid>} */}
 
-              {/* {(isSubmitted || panditPrevDetail) && <Grid item xs={12} md={12} xl={12} mt={2}>
+
+              {/* {(isSubmitted || tierPrevDetail) && <Grid item xs={12} md={12} xl={12} mt={2}>
                 <MDBox>
-                  <AllowedUsers saving={saving} dailyContest={panditPrevDetail?._id ? panditPrevDetail : dailyContest} updatedDocument={updatedDocument} setUpdatedDocument={setUpdatedDocument} action={action} setAction={setAction} />
+                  <AllowedUsers saving={saving} tier={tierPrevDetail?._id ? tierPrevDetail : tier} updatedDocument={updatedDocument} setUpdatedDocument={setUpdatedDocument} action={action} setAction={setAction} />
                 </MDBox>
               </Grid>} */}
 
