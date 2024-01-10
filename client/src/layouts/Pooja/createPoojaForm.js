@@ -7,69 +7,34 @@ import Grid from "@mui/material/Grid";
 import MDTypography from "../../components/MDTypography";
 import MDBox from "../../components/MDBox";
 import MDButton from "../../components/MDButton"
-import { Card, CardActionArea, CardContent, Checkbox, CircularProgress, FormControlLabel, FormGroup, Typography, formLabelClasses } from "@mui/material";
+import { Card, CardActionArea, CardContent, Typography } from "@mui/material";
 import MDSnackbar from "../../components/MDSnackbar";
 import MenuItem from '@mui/material/MenuItem';
-import { styled } from '@mui/material';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
+// import { styled } from '@mui/material';
+import Select from '@mui/material/Select';
 import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 import { useNavigate, useLocation } from "react-router-dom";
-// import RegisteredUsers from "./data/registeredUsers";
-import { IoMdAddCircle } from 'react-icons/io';
-import OutlinedInput from '@mui/material/OutlinedInput';
-import dayjs from 'dayjs';
-import Autocomplete from '@mui/material/Autocomplete';
-import { DemoContainer, DemoItem } from '@mui/x-date-pickers/internals/demo';
-import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { MobileDateTimePicker } from '@mui/x-date-pickers/MobileDateTimePicker';
-import DefaultCarouselImage from '../../assets/images/defaultcarousel.png'
 import { apiUrl } from '../../constants/constants';
-import moment from 'moment';
 import Purpose from "./data/purposeOfPooja/purpose";
+import AddTier from "./data/addTier/addTier";
+import Benefit from "./data/benefitOfPooja/benefit";
+import Description from "./data/poojaDescription/description";
+import Item from "./data/poojaItem/item";
+import Faq from "./data/faq/faq";
 
-const CustomAutocomplete = styled(Autocomplete)`
-  .MuiAutocomplete-clearIndicator {
-    color: white;
-  }
-`;
 
-const ITEM_HEIGHT = 30;
-const ITEM_PADDING_TOP = 10;
-const MenuProps = {
-  PaperProps: {
-    style: {
-      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-      width: 250,
-    },
-  },
-};
+
 
 function Index() {
   const location = useLocation();
   const prevPoojaData = location?.state?.data;
   const [isSubmitted, setIsSubmitted] = useState(false);
-  // let baseUrl = process.env.NODE_ENV === "production" ? "/" : "http://localhost:5000/"
-  // const [isLoading, setIsLoading] = useState(prevPoojaData ? true : false)
   const [editing, setEditing] = useState(false)
-  // const [saving, setSaving] = useState(false)
   const [prevData, setPrevData] = useState(prevPoojaData)
   const navigate = useNavigate();
-  // const [newObjectId, setNewObjectId] = useState("");
-  // const [updatedDocument, setUpdatedDocument] = useState([]);
-  // const [collegeData, setCollegeData] = useState([]);
-  // const [notification, setNotification] = useState([]);
   const [newData, setNewData] = useState(null);
-  // const [previewUrl, setPreviewUrl] = useState([]);
-  // const [previousNotifications, setPreviousNotifications] = useState([]);
-  // const [isSending, setIsSending] = useState(false);
-  // const [featuredRegistrations, setFeaturedRegistrations] = useState([]);
-  // // const [careers,setCareers] = useState([]);
   const [tier, setTier] = useState([]);
-  // let Url = process.env.NODE_ENV === "production" ? "/" : "http://localhost:3000/"
-  // const [type, setType] = useState(prevPoojaData?.notificationGroup?.notificationGroupName.includes('Workshop')?'Workshop':'Job');
 
   const [formState, setFormState] = useState({
     pooja_name: '' || prevPoojaData?.pooja_name,
@@ -81,21 +46,16 @@ function Index() {
     status: '' || prevPoojaData?.status,
   });
 
-
-  // const [isfileSizeExceed, setIsFileExceed] = useState(false);
-  // const editor = useRef(null);
   const [file, setFile] = useState(null);
   const [filepreview, setFilePreview] = useState(null);
 
   useEffect(() => {
-    axios.get(`${apiUrl}tier/active`, {withCredentials: true})
+    axios.get(`${apiUrl}tier/active`, { withCredentials: true })
       .then((res) => {
-        // console.log("TestZone Portfolios :", res?.data?.data)
         setTier(res?.data?.data);
       }).catch((err) => {
         return new Error(err)
       })
-
   }, [])
 
   const handleImage = (event) => {
@@ -108,23 +68,6 @@ function Index() {
     reader.readAsDataURL(file);
   };
 
-  const handleTierChange = (event) => {
-    const {
-      target: { value },
-    } = event;
-    let tierId = tier?.filter((elem) => {
-      return elem.tier_name === value;
-    })
-    setFormState(prevState => ({
-      ...prevState,
-      pooja_packages: {
-        ...prevState.pooja_packages,
-        _id: tierId[0]?._id,
-        tier_name: tierId[0]?.tier_name
-      }
-    }));
-    // console.log("portfolioId", portfolioId, formState)
-  };
 
   const handleUpload = async () => {
 
@@ -141,15 +84,15 @@ function Index() {
       }
 
       for (let elem in formState) {
-        if (elem !== "poojaImage"){
-          if(typeof(formState[elem]) === "object"){
+        if (elem !== "poojaImage") {
+          if (typeof (formState[elem]) === "object") {
 
-            for(let subelem in formState[elem]){
+            for (let subelem in formState[elem]) {
               formData.append(`${subelem}`, formState[elem][subelem]);
             }
             // Append the Blob to formData
-            
-          } else{
+
+          } else {
             formData.append(`${elem}`, formState[elem]);
           }
         }
@@ -189,15 +132,15 @@ function Index() {
 
 
       for (let elem in formState) {
-        if (elem !== "poojaImage"){
-          if(typeof(formState[elem]) === "object"){
+        if (elem !== "poojaImage") {
+          if (typeof (formState[elem]) === "object") {
 
-            for(let subelem in formState[elem]){
+            for (let subelem in formState[elem]) {
               formData.append(`${subelem}`, formState[elem][subelem]);
             }
             // Append the Blob to formData
-            
-          } else{
+
+          } else {
             formData.append(`${elem}`, formState[elem]);
           }
         }
@@ -398,57 +341,9 @@ function Index() {
               </Grid>
             </Grid>
 
-            <Grid container spacing={2} mt={0.5} mb={0} xs={12} md={9} xl={12}>
-
-              <Grid item xs={12} md={6} xl={6}>
-                <FormControl sx={{ width: '100%' }}>
-                  <InputLabel id="demo-multiple-name-label">Tier</InputLabel>
-                  <Select
-                    labelId="demo-multiple-name-label"
-                    id="demo-multiple-name"
-                    name='portfolio'
-                    disabled={((isSubmitted || prevPoojaData) && (!editing))}
-                    value={formState?.pooja_packages?.tier_name || prevPoojaData?.pooja_packages?.tier_name}
-                    onChange={handleTierChange}
-                    input={<OutlinedInput label="Portfolio" />}
-                    sx={{ minHeight: 45 }}
-                    MenuProps={MenuProps}
-                  >
-                    {tier?.map((elem) => (
-                      <MenuItem
-                        key={elem?.tier_name}
-                        value={elem?.tier_name}
-                      >
-                        {elem.tier_name}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              </Grid>
-
-              <Grid item xs={12} md={8} xl={6}>
-                <TextField
-                  disabled={((newData || prevData) && (!editing))}
-                  id="outlined-required"
-                  label='Pooja Price *'
-                  type='number'
-                  fullWidth
-                  value={formState?.pooja_packages?.price}
-                  onChange={(e) => {
-                    setFormState(prevState => ({
-                      ...prevState,
-                      pooja_packages: {
-                        ...prevState.pooja_packages,
-                        price: e.target.value
-                      }
-                    }))
-                  }}
-                />
-              </Grid>
-            </Grid>
           </Grid>
 
-         
+
 
           <Grid container mb={2} spacing={2} xs={12} md={12} xl={4} mt={1} display="flex" justifyContent='flex-start' alignItems='center' style={{ width: "300px", height: "180px" }}>
             {filepreview ?
@@ -466,8 +361,8 @@ function Index() {
                               </Typography>
                             </MDBox>
                             <Grid item xs={12} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' >
-                          <img src={filepreview} style={{ width: "180px", height: "180px", borderBottomLeftRadius: 10, borderBottomRightRadius: 10 }} />
-                        </Grid>
+                              <img src={filepreview} style={{ width: "180px", height: "180px", borderBottomLeftRadius: 10, borderBottomRightRadius: 10 }} />
+                            </Grid>
                           </CardContent>
                         </Grid>
                       </CardActionArea>
@@ -575,10 +470,40 @@ function Index() {
         </Grid>
 
         {(prevData || isSubmitted) && <Grid item xs={12} md={12} xl={12} mt={2}>
-                <MDBox>
-                <Purpose prevData={prevData!=undefined ? prevData : newData}/>
-                </MDBox>
-              </Grid>}
+          <MDBox>
+            <AddTier prevData={prevData != undefined ? prevData : newData} tier={tier} />
+          </MDBox>
+        </Grid>}
+
+        {(prevData || isSubmitted) && <Grid item xs={12} md={12} xl={12} mt={2}>
+          <MDBox>
+            <Purpose prevData={prevData != undefined ? prevData : newData} />
+          </MDBox>
+        </Grid>}
+        
+        {(prevData || isSubmitted) && <Grid item xs={12} md={12} xl={12} mt={2}>
+          <MDBox>
+            <Benefit prevData={prevData != undefined ? prevData : newData} />
+          </MDBox>
+        </Grid>}
+
+        {(prevData || isSubmitted) && <Grid item xs={12} md={12} xl={12} mt={2}>
+          <MDBox>
+            <Description prevData={prevData != undefined ? prevData : newData} />
+          </MDBox>
+        </Grid>}
+
+        {(prevData || isSubmitted) && <Grid item xs={12} md={12} xl={12} mt={2}>
+          <MDBox>
+            <Item prevData={prevData != undefined ? prevData : newData} />
+          </MDBox>
+        </Grid>}
+
+        {(prevData || isSubmitted) && <Grid item xs={12} md={12} xl={12} mt={2}>
+          <MDBox>
+            <Faq prevData={prevData != undefined ? prevData : newData} faq={tier} />
+          </MDBox>
+        </Grid>}
 
 
         {renderSuccessSB}

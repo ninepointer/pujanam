@@ -36,7 +36,7 @@ import { MobileDateTimePicker } from '@mui/x-date-pickers/MobileDateTimePicker';
 // import FeaturedRegistrations from "./data/featuredRegistrations";
 // import Shared from "./data/shared";
 // import CreateRewards from './data/reward/createReward';
-import ContestRewards from './data/reward/contestReward';
+// import ContestRewards from './data/reward/contestReward';
 import { apiUrl } from '../../constants/constants';
 
 // const CustomAutocomplete = styled(Autocomplete)`
@@ -162,7 +162,7 @@ function Index() {
       number_of_assistant_pandit, status, pandits } = formState;
 
     const res = await fetch(`${apiUrl}tier/${tierPrevDetail?._id}`, {
-      method: "PUT",
+      method: "PATCH",
       credentials: "include",
       headers: {
         "content-type": "application/json",

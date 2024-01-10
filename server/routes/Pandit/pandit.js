@@ -10,6 +10,7 @@ router.get('/active', Authenticate, restrictTo('Admin', 'SuperAdmin'), panditCon
 router.get('/:id', Authenticate, restrictTo('Admin', 'SuperAdmin'), panditController.getPanditById);
 router.patch('/:id', Authenticate, restrictTo('Admin', 'SuperAdmin'), panditController.editPandit);
 router.patch('/additionalinfo/:id', Authenticate, restrictTo('Admin', 'SuperAdmin'), panditController.additionalInformationPandit);
+router.delete('/deleteinfo/:id', Authenticate, restrictTo('Admin', 'SuperAdmin'), panditController.deleteInfo);
 
 
 module.exports=router;

@@ -85,20 +85,55 @@ exports.editPandit = async (req, res) => {
     }
 };
 
-// Edit a Pandit
+// Edit a Pandit additional_information
 exports.additionalInformationPandit = async (req, res) => {
+    const id = req.params.id;
+    const {data, prevData} = req.body;
+    try {
+        if(prevData){
+            const pandit = await Pandit.findOne({_id: new ObjectId(id)});
+            const newArr = [];
+            for(let elem of pandit.additional_information){
+                if(elem === prevData){
+                    elem = data;
+                }
+                newArr.push(elem)
+            }
+
+            pandit.additional_information = newArr;
+            await pandit.save({new: true, validateBeforeSave: false});
+            ApiResponse.success(res, pandit, 'Pandit updated successfully');
+
+        } else{
+            const update = await Pandit.findOneAndUpdate({_id: new ObjectId(id)}, {
+                $push: {
+                    additional_information: data
+                }
+            }, {new: true});
+            if (!update) {
+                return ApiResponse.notFound(res, 'Pandit not found');
+            }
+            ApiResponse.success(res, update, 'Pandit updated successfully');
+    
+        }
+    } catch (error) {
+        ApiResponse.error(res,'Something went wrong', 500, error.message);
+    }
+};
+
+exports.deleteInfo = async (req, res) => {
     const id = req.params.id;
     const {data} = req.body;
     try {
-        const updatedAdditionalInfo = await Pandit.findOneAndUpdate({_id: new ObjectId(id)}, {
-            $push: {
+        const update = await Pandit.findOneAndUpdate({_id: new ObjectId(id)}, {
+            $pull: {
                 additional_information: data
             }
         }, {new: true});
-        if (!updatedAdditionalInfo) {
+        if (!update) {
             return ApiResponse.notFound(res, 'Pandit not found');
         }
-        ApiResponse.success(res, updatedAdditionalInfo, 'Pandit updated successfully');
+        ApiResponse.success(res, update, 'Pandit updated successfully');
     } catch (error) {
         ApiResponse.error(res,'Something went wrong', 500, error.message);
     }

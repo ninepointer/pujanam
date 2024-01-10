@@ -63,7 +63,7 @@ function Index() {
   const navigate = useNavigate();
   // const [newObjectId, setNewObjectId] = useState("");
   const [updatedDocument, setUpdatedDocument] = useState([]);
-  const [dailyContest, setDailyContest] = useState([]);
+  const [panditData, setPanditData] = useState([]);
   const [language, setLanguage] = useState([]);
   // const [college, setCollege] = useState([]);
   // const [contestRegistrations, setContestRegistrations] = useState([]);
@@ -77,7 +77,7 @@ function Index() {
     mobile: '' || panditPrevDetail?.mobile,
     email: '' || panditPrevDetail?.email,
     experience_in_year: '' || panditPrevDetail?.experience_in_year,
-    dob: '' || panditPrevDetail?.dob,
+    // dob: '' || panditPrevDetail?.dob,
     description: '' || panditPrevDetail?.description,
     pincode: '' || panditPrevDetail?.address_details?.pincode,
     address: '' || panditPrevDetail?.address_details?.address,
@@ -147,7 +147,7 @@ function Index() {
       openSuccessSB("Pandit Ji Saved", data?.message)
       // setNewObjectId(data?.data?._id)
       setIsSubmitted(true)
-      setDailyContest(data?.data);
+      setPanditData(data?.data);
       setTimeout(() => { setCreating(false); setIsSubmitted(true) }, 500)
     }
   }
@@ -168,7 +168,7 @@ function Index() {
       state
     }
     const res = await fetch(`${apiUrl}pandit/${panditPrevDetail?._id}`, {
-      method: "PUT",
+      method: "PATCH",
       credentials: "include",
       headers: {
         "content-type": "application/json",
@@ -303,7 +303,7 @@ function Index() {
                           label="DOB"
                           disabled={((isSubmitted || panditPrevDetail) && (!editing || saving))}
                           value={formState?.dob 
-                            // || dayjs(dailyContest?.dob)
+                            || dayjs(panditData?.dob)
                           }
                           onChange={(newValue) => {
                             if (newValue && newValue.isValid()) {
@@ -356,29 +356,6 @@ function Index() {
                   />
                 </Grid>
 
-                {/* <Grid item xs={12} md={6} xl={3}>
-                  <FormControl sx={{ width: "100%" }}>
-                    <InputLabel id="demo-simple-select-autowidth-label">Payout Type *</InputLabel>
-                    <Select
-                      labelId="demo-simple-select-autowidth-label"
-                      id="demo-simple-select-autowidth"
-                      name='payoutType'
-                      value={formState?.payoutType || panditPrevDetail?.payoutType}
-                      disabled={((isSubmitted || panditPrevDetail) && (!editing || saving))}
-                      onChange={(e) => {
-                        setFormState(prevState => ({
-                          ...prevState,
-                          payoutType: e.target.value
-                        }))
-                      }}
-                      label="Payout Type"
-                      sx={{ minHeight: 43 }}
-                    >
-                      <MenuItem value="Percentage">Percentage</MenuItem>
-                      <MenuItem value="Reward">Reward</MenuItem>
-                    </Select>
-                  </FormControl>
-                </Grid> */}
 
                 <Grid item xs={12} md={6} xl={4} mb={2}>
                   <TextField
@@ -446,8 +423,8 @@ function Index() {
                     name='address'
                     fullWidth
                     type='text'
-                    defaultValue={editing ? formState?.address : panditPrevDetail?.address}
-                    // onChange={handleChange}
+                    defaultValue={editing ? formState?.address : panditPrevDetail?.address_details?.address}
+                    // onChange={handleChange}address_details?.
                     onChange={(e) => {
                       setFormState(prevState => ({
                         ...prevState,
@@ -465,7 +442,7 @@ function Index() {
                     name='city'
                     fullWidth
                     type='text'
-                    defaultValue={editing ? formState?.city : panditPrevDetail?.city}
+                    defaultValue={editing ? formState?.city : panditPrevDetail?.address_details?.city}
                     // onChange={handleChange}
                     onChange={(e) => {
                       setFormState(prevState => ({
@@ -484,7 +461,7 @@ function Index() {
                     name='pincode'
                     fullWidth
                     type='number'
-                    defaultValue={editing ? formState?.pincode : panditPrevDetail?.pincode}
+                    defaultValue={editing ? formState?.pincode : panditPrevDetail?.address_details?.pincode}
                     // onChange={handleChange}
                     onChange={(e) => {
                       setFormState(prevState => ({
@@ -503,7 +480,7 @@ function Index() {
                     name='state'
                     fullWidth
                     type='text'
-                    defaultValue={editing ? formState?.state : panditPrevDetail?.state}
+                    defaultValue={editing ? formState?.state : panditPrevDetail?.address_details?.state}
                     // onChange={handleChange}
                     onChange={(e) => {
                       setFormState(prevState => ({
@@ -522,7 +499,7 @@ function Index() {
                     name='longitude'
                     fullWidth
                     type='number'
-                    defaultValue={editing ? formState?.longitude : panditPrevDetail?.longitude}
+                    defaultValue={editing ? formState?.longitude : panditPrevDetail?.address_details?.location?.coordinates[1]}
                     // onChange={handleChange}
                     onChange={(e) => {
                       setFormState(prevState => ({
@@ -541,7 +518,7 @@ function Index() {
                     name='latitude'
                     fullWidth
                     type='number'
-                    defaultValue={editing ? formState?.latitude : panditPrevDetail?.latitude}
+                    defaultValue={editing ? formState?.latitude : panditPrevDetail?.address_details?.location?.coordinates[0]}
                     // onChange={handleChange}
                     onChange={(e) => {
                       setFormState(prevState => ({
@@ -635,14 +612,14 @@ function Index() {
 
               {(panditPrevDetail || isSubmitted) && <Grid item xs={12} md={12} xl={12} mt={2}>
                 <MDBox>
-                <AdditionalInfo panditPrevDetail={panditPrevDetail!=undefined ? panditPrevDetail : dailyContest}/>
+                <AdditionalInfo prevData={panditPrevDetail!=undefined ? panditPrevDetail : panditData}/>
                 </MDBox>
               </Grid>}
               
 
               {/* {(isSubmitted || panditPrevDetail) && <Grid item xs={12} md={12} xl={12} mt={2}>
                 <MDBox>
-                  <AllowedUsers saving={saving} dailyContest={panditPrevDetail?._id ? panditPrevDetail : dailyContest} updatedDocument={updatedDocument} setUpdatedDocument={setUpdatedDocument} action={action} setAction={setAction} />
+                  <AllowedUsers saving={saving} panditData={panditPrevDetail?._id ? panditPrevDetail : panditData} updatedDocument={updatedDocument} setUpdatedDocument={setUpdatedDocument} action={action} setAction={setAction} />
                 </MDBox>
               </Grid>} */}
 

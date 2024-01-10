@@ -7,32 +7,35 @@ import MDBox from "../../../../components/MDBox";
 import MDButton from "../../../../components/MDButton"
 // import { userContext } from "../../../../AuthContext";
 // import axios from "axios";
-// import MenuItem from '@mui/material/MenuItem';
+import MenuItem from '@mui/material/MenuItem';
 
 import { CircularProgress } from "@mui/material";
 import MDSnackbar from "../../../../components/MDSnackbar";
 import { apiUrl } from '../../../../constants/constants';
-// import Select from '@mui/material/Select';
-// import InputLabel from '@mui/material/InputLabel';
-// import FormControl from '@mui/material/FormControl';
-// import OutlinedInput from '@mui/material/OutlinedInput';
+import Select from '@mui/material/Select';
+import InputLabel from '@mui/material/InputLabel';
+import FormControl from '@mui/material/FormControl';
+import OutlinedInput from '@mui/material/OutlinedInput';
 const ITEM_HEIGHT = 30;
 const ITEM_PADDING_TOP = 10;
-// const MenuProps = {
-//   PaperProps: {
-//     style: {
-//       maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-//       width: 250,
-//     },
-//   },
-// };
-export default function CreateFaq({ setId, createForm, setCreateForm, prevData, prevFaq, faq }) {
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+      width: 250,
+    },
+  },
+};
+export default function CreateTier({ setId, createForm, setCreateForm, prevData, prevTier, tier }) {
 
     const [isSubmitted, setIsSubmitted] = useState(false);
     const [formState, setFormState] = useState({
-        faq: {
-            question: "" || prevFaq?.question,
-            answer: "" || prevFaq?.answer,
+        pooja_packages: {
+            tier: {
+               _id: "" || prevTier?.tier?._id,
+               tier_name: "" || prevTier?.tier?.tier_name
+            },
+            price: "" || prevTier?.price,
         }
     });
     const [isLoading, setIsLoading] = useState(false)
@@ -42,14 +45,14 @@ export default function CreateFaq({ setId, createForm, setCreateForm, prevData, 
         // setCreating(true)
         console.log("Reward Form State: ", formState)
 
-        if (!formState?.faq) {
+        if (!formState?.pooja_packages) {
             setTimeout(() => {  setIsSubmitted(false) }, 500)
             return openErrorSB("Missing Field", "Please fill all the mandatory fields")
         }
 
-        const { faq} = formState;
+        const { pooja_packages} = formState;
 
-        const res = await fetch(`${apiUrl}pooja/faq/${prevData?._id}`, {
+        const res = await fetch(`${apiUrl}pooja/tier/${prevData?._id}`, {
             method: "PATCH",
             credentials: "include",
             headers: {
@@ -57,7 +60,7 @@ export default function CreateFaq({ setId, createForm, setCreateForm, prevData, 
                 "Access-Control-Allow-Credentials": true
             },
             body: JSON.stringify({
-                data: faq, prevData: prevFaq
+                pooja_packages, prevPackage: prevTier
             })
         });
 
@@ -121,6 +124,23 @@ export default function CreateFaq({ setId, createForm, setCreateForm, prevData, 
         />
     );
 
+    const handleTierChange = (event) => {
+        const {
+          target: { value },
+        } = event;
+        let tierId = tier?.filter((elem) => {
+          return elem.tier_name === value;
+        })
+        setFormState(prevState => ({
+          ...prevState,
+          pooja_packages: {
+            ...prevState.pooja_packages,
+            _id: tierId[0]?._id,
+            tier_name: tierId[0]?.tier_name
+          }
+        }));
+        // console.log("portfolioId", portfolioId, formState)
+      };
 
     return (
         <>
@@ -134,30 +154,36 @@ export default function CreateFaq({ setId, createForm, setCreateForm, prevData, 
                     <MDBox mt={4} p={3}>
                         <MDBox display="flex" justifyContent="space-between" alignItems="center">
                             <MDTypography variant="caption" fontWeight="bold" color="text" textTransform="uppercase">
-                                Faq Details
+                                Tier Details
                             </MDTypography>
                         </MDBox>
 
                         <Grid container spacing={1} mt={0.5} alignItems="center">
 
-                        <Grid item xs={12} md={8} xl={5}>
-                                <TextField
-                                    disabled={isSubmitted}
-                                    id="outlined-required"
-                                    label='Pooja Price *'
-                                    type='text'
-                                    fullWidth
-                                    value={formState?.faq?.question}
-                                    onChange={(e) => {
-                                        setFormState(prevState => ({
-                                            ...prevState,
-                                            faq: {
-                                                ...prevState.faq,
-                                                question: e.target.value
-                                            }
-                                        }))
-                                    }}
-                                />
+                            <Grid item xs={12} md={6} xl={5}>
+                                <FormControl sx={{ width: '100%' }}>
+                                    <InputLabel id="demo-multiple-name-label">Tier</InputLabel>
+                                    <Select
+                                        labelId="demo-multiple-name-label"
+                                        id="demo-multiple-name"
+                                        name='portfolio'
+                                        disabled={isSubmitted}
+                                        value={formState?.pooja_packages?.tier_name || prevTier?.tier?.tier_name}
+                                        onChange={handleTierChange}
+                                        input={<OutlinedInput label="Portfolio" />}
+                                        sx={{ minHeight: 45 }}
+                                        MenuProps={MenuProps}
+                                    >
+                                        {tier?.map((elem) => (
+                                            <MenuItem
+                                                key={elem?.tier_name}
+                                                value={elem?.tier_name}
+                                            >
+                                                {elem.tier_name}
+                                            </MenuItem>
+                                        ))}
+                                    </Select>
+                                </FormControl>
                             </Grid>
 
                             <Grid item xs={12} md={8} xl={5}>
@@ -165,15 +191,15 @@ export default function CreateFaq({ setId, createForm, setCreateForm, prevData, 
                                     disabled={isSubmitted}
                                     id="outlined-required"
                                     label='Pooja Price *'
-                                    type='text'
+                                    type='number'
                                     fullWidth
-                                    value={formState?.faq?.answer}
+                                    value={formState?.pooja_packages?.price}
                                     onChange={(e) => {
                                         setFormState(prevState => ({
                                             ...prevState,
-                                            faq: {
-                                                ...prevState.faq,
-                                                answer: e.target.value
+                                            pooja_packages: {
+                                                ...prevState.pooja_packages,
+                                                price: e.target.value
                                             }
                                         }))
                                     }}

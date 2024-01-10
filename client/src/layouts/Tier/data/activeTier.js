@@ -10,18 +10,17 @@ import MDTypography from "../../../components/MDTypography";
 import money from "../../../assets/images/money.png"
 import { Link, useLocation } from "react-router-dom";
 import moment from 'moment';
+import { apiUrl } from '../../../constants/constants';
 
-
-const UpcomingContest = ({type}) => {
+const ActivePandit = ({type}) => {
 let [skip, setSkip] = useState(0);
 const limitSetting = 10;
 const [count, setCount] = useState(0);
 const [isLoading,setIsLoading] = useState(false);
-const [upcomingContest,setUpcomingContest] = useState([]);
-let baseUrl = process.env.NODE_ENV === "production" ? "/" : "http://localhost:5000/"
+const [data,setData] = useState([]);
 
   useEffect(()=>{
-    let call1 = axios.get(`${baseUrl}api/v1/dailycontest/contests/adminupcoming?skip=${skip}&limit=${limitSetting}`,{
+    let call1 = axios.get(`${apiUrl}tier/active/?skip=${skip}&limit=${limitSetting}`,{
                 withCredentials: true,
                 headers: {
                     Accept: "application/json",
@@ -32,7 +31,7 @@ let baseUrl = process.env.NODE_ENV === "production" ? "/" : "http://localhost:50
     Promise.all([call1])
     .then(([api1Response]) => {
       // Process the responses here
-      setUpcomingContest(api1Response.data.data)
+      setData(api1Response.data.data)
       setCount(api1Response.data.count)
       setTimeout(()=>{
         setIsLoading(false)
@@ -48,9 +47,9 @@ let baseUrl = process.env.NODE_ENV === "production" ? "/" : "http://localhost:50
         return;
     }
     setSkip(prev => prev-limitSetting);
-    setUpcomingContest([]);
+    setData([]);
     setIsLoading(true)
-    axios.get(`${baseUrl}api/v1/dailycontest/contests/adminupcoming?skip=${skip-limitSetting}&limit=${limitSetting}`,{
+    axios.get(`${apiUrl}tier/active/?skip=${skip}&limit=${limitSetting}`,{
         withCredentials: true,
         headers: {
             Accept: "application/json",
@@ -59,7 +58,7 @@ let baseUrl = process.env.NODE_ENV === "production" ? "/" : "http://localhost:50
         },
     })
     .then((res) => {
-        setUpcomingContest(res.data.data)
+        setData(res.data.data)
         setCount(res.data.count)
         setTimeout(()=>{
             setIsLoading(false)
@@ -75,9 +74,9 @@ let baseUrl = process.env.NODE_ENV === "production" ? "/" : "http://localhost:50
       return;
     }
     setSkip(prev => prev+limitSetting);
-    setUpcomingContest([]);
+    setData([]);
     setIsLoading(true)
-    axios.get(`${baseUrl}api/v1/dailycontest/contests/adminupcoming?skip=${skip+limitSetting}&limit=${limitSetting}`,{
+    axios.get(`${apiUrl}tier/active/?skip=${skip}&limit=${limitSetting}`,{
         withCredentials: true,
         headers: {
             Accept: "application/json",
@@ -86,7 +85,7 @@ let baseUrl = process.env.NODE_ENV === "production" ? "/" : "http://localhost:50
         },
     })
     .then((res) => {
-        setUpcomingContest(res.data.data)
+        setData(res.data.data)
         setCount(res.data.count)
         setTimeout(()=>{
             setIsLoading(false)
@@ -100,88 +99,58 @@ let baseUrl = process.env.NODE_ENV === "production" ? "/" : "http://localhost:50
   
     return (
       <>
-      {upcomingContest.length > 0 ?
+      {data.length > 0 ?
         
           <MDBox>
             <Grid container spacing={2} bgColor="dark">
-              {upcomingContest?.map((e)=>{
-                let contestColor = (e?.featured === true && e?.entryFee != 0) ? 'success' : (e?.featured === true && e?.entryFee === 0) ? 'warning' : (e?.featured === false && e?.entryFee != 0) ? 'text' : 'light';
-                // console.log(contestColor,e?.featured,e?.entryFee, e?.featured === true && e?.entryFee != 0,e?.featured === true && e?.entryFee === 0 )
+              {data?.map((e)=>{
                     return (
                       
                       <Grid key={e._id} item xs={12} md={12} lg={12} bgColor="dark">
                       <MDBox padding={0} style={{borderRadius:4}}>
                       <MDButton 
                         variant="contained" 
-                        color={contestColor} 
+                        color={"text"} 
                         size="small" 
                         component = {Link}
                         style={{minWidth:'100%'}}
                         to={{
-                            pathname: `/dailycontestdetails`,
+                            pathname: `/tierdetails`,
                           }}
                         state={{data: e}}
                       >
                             <Grid container>
 
                               <Grid item xs={12} md={6} lg={12} mt={1} mb={1} display="flex" justifyContent="left" >
-                                <MDTypography fontSize={15} style={{ color: "black", paddingRight: 4, fontWeight: 'bold' }}>TestZone Name: {e?.contestName}</MDTypography>
+                                <MDTypography fontSize={15} style={{ color: "black", paddingRight: 4, fontWeight: 'bold' }}>Tier Name: {e?.tier_name}</MDTypography>
                               </Grid>
 
                               <Grid item xs={12} md={6} lg={12} display={"flex"} justifyContent={"center"} alignItems={"center"}>
                                 <Grid item xs={12} md={6} lg={2} mb={1} display="flex" justifyContent="center">
-                                  <MDTypography fontSize={9} style={{ color: "black" }}>Registrations: <span style={{ fontSize: 9, fontWeight: 700 }}>{e?.participants?.length}</span></MDTypography>
+                                  <MDTypography fontSize={9} style={{ color: "black" }}>Pooja Item Include: <span style={{ fontSize: 13, fontWeight: 700 }}>{e?.pooja_items_included}</span></MDTypography>
+                                </Grid>
+
+                                <Grid item xs={12} md={6} lg={3} mb={1} display="flex" justifyContent="center">
+                                  <MDTypography fontSize={9} style={{ color: "black" }}>Pooja CleanUp Include: <span style={{ fontSize: 13, fontWeight: 700 }}>{e?.post_pooja_cleanUp_included}</span></MDTypography>
                                 </Grid>
 
                                 <Grid item xs={12} md={6} lg={2} mb={1} display="flex" justifyContent="center">
-                                  <MDTypography fontSize={9} style={{ color: "black" }}>Interests: <span style={{ fontSize: 9, fontWeight: 700 }}>{e?.interestedUsers?.length}</span></MDTypography>
+                                  <MDTypography fontSize={9} style={{ color: "black" }}>Min Exp: <span style={{ fontSize: 13, fontWeight: 700 }}>{e?.min_pandit_experience}</span></MDTypography>
                                 </Grid>
 
                                 <Grid item xs={12} md={6} lg={2} mb={1} display="flex" justifyContent="center">
-                                  <MDTypography fontSize={9} style={{ color: "black" }}>Start Date: <span style={{ fontSize: 9, fontWeight: 700 }}>{moment.utc(e?.contestStartTime).utcOffset('+05:30').format('DD-MMM hh:mm a')}</span></MDTypography>
+                                  <MDTypography fontSize={9} style={{ color: "black" }}>Max Exp: <span style={{ fontSize: 13, fontWeight: 700 }}>{e?.max_pandit_experience}</span></MDTypography>
+                                </Grid>
+
+                                
+                                <Grid item xs={12} md={6} lg={2} mb={1} display="flex" justifyContent="center">
+                                  <MDTypography fontSize={9} style={{ color: "black" }}>Main Pandit: <span style={{ fontSize: 13, fontWeight: 700 }}>{e?.number_of_main_pandit}</span></MDTypography>
                                 </Grid>
 
                                 <Grid item xs={12} md={6} lg={2} mb={1} display="flex" justifyContent="center">
-                                  <MDTypography fontSize={9} style={{ color: "black" }}>End Date: <span style={{ fontSize: 9, fontWeight: 700 }}>{moment.utc(e?.contestEndTime).utcOffset('+05:30').format('DD-MMM hh:mm a')}</span></MDTypography>
+                                  <MDTypography fontSize={9} style={{ color: "black" }}>Asst. Pandit: <span style={{ fontSize: 13, fontWeight: 700 }}>{e?.number_of_assistant_pandit}</span></MDTypography>
                                 </Grid>
-
-                                <Grid item xs={12} md={6} lg={2} mb={1} display="flex" justifyContent="center">
-                                  <MDTypography fontSize={9} style={{ color: "black" }}>Featured: <span style={{ fontSize: 9, fontWeight: 700 }}>{e?.featured === true ? 'TRUE' : 'FALSE'}</span></MDTypography>
                                 </Grid>
-
-                                <Grid item xs={12} md={6} lg={2} mb={1} display="flex" justifyContent="center">
-                                  <MDTypography fontSize={9} style={{ color: "black" }}>Portfolio: <span style={{ fontSize: 9, fontWeight: 700 }}>₹{Intl.NumberFormat(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(e?.portfolio?.portfolioValue)}</span></MDTypography>
-                                </Grid>
-
-                                </Grid>
-
-                                <Grid item xs={12} md={6} lg={12} display={"flex"} justifyContent={"center"} alignItems={"center"} textAlign={"center"}>
-
-                                <Grid item xs={12} md={6} lg={2} mb={1} display="flex" justifyContent="center">
-                                  <MDTypography fontSize={9} style={{ color: "black" }}>Entry Fee: <span style={{ fontSize: 9, fontWeight: 700 }}>₹{Intl.NumberFormat(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(e?.entryFee)}</span></MDTypography>
-                                </Grid>
-
-                                <Grid item xs={12} md={6} lg={2} mb={1} display="flex" justifyContent="center">
-                                  <MDTypography fontSize={9} style={{ color: "black" }}>Payout %: <span style={{ fontSize: 9, fontWeight: 700 }}>{e?.payoutPercentage}%</span></MDTypography>
-                                </Grid>
-
-                                <Grid item xs={12} md={6} lg={2} mb={1} display="flex" justifyContent="center">
-                                  <MDTypography fontSize={9} style={{ color: "black" }}>Total Spots: <span style={{ fontSize: 9, fontWeight: 700 }}>{e?.maxParticipants}</span></MDTypography>
-                                </Grid>
-
-                                <Grid item xs={12} md={6} lg={2} mb={1} display="flex" justifyContent="center">
-                                  <MDTypography fontSize={9} style={{ color: "black" }}>Spot Left: <span style={{ fontSize: 9, fontWeight: 700 }}>{e?.maxParticipants - e?.participants?.length}</span></MDTypography>
-                                </Grid>
-
-                                <Grid item xs={12} md={6} lg={2} mb={1} display="flex" justifyContent="center">
-                                  <MDTypography fontSize={9} style={{ color: "black" }}>TestZone Type: <span style={{ fontSize: 9, fontWeight: 700 }}>{e?.entryFee === 0 ? "Free" : 'Paid'}</span></MDTypography>
-                                </Grid>
-
-                                <Grid item xs={12} md={6} lg={2} mb={1} display="flex" justifyContent="center">
-                                  <MDTypography fontSize={9} style={{ color: "black" }}>TestZone For: <span style={{ fontSize: 9, fontWeight: 700 }}>{e?.contestFor}</span></MDTypography>
-                                </Grid>
-
-                              </Grid>
 
                             </Grid>
                       </MDButton>
@@ -202,7 +171,7 @@ let baseUrl = process.env.NODE_ENV === "production" ? "/" : "http://localhost:50
           :
          <Grid container spacing={1} xs={12} md={6} lg={12}>
           <Grid item mt={2} xs={6} md={3} lg={12} display="flex" justifyContent="center">
-            <MDTypography color="light">No Upcoming TestZone(s)</MDTypography>
+            <MDTypography color="light">No Active Pandit(s)</MDTypography>
           </Grid>
          </Grid>
          } 
@@ -212,4 +181,4 @@ let baseUrl = process.env.NODE_ENV === "production" ? "/" : "http://localhost:50
 
 
 
-export default UpcomingContest;
+export default ActivePandit;

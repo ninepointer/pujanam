@@ -30,7 +30,7 @@ export default function CreateBenefit({ setId, createForm, setCreateForm, prevDa
 
         const { info} = formState;
 
-        const res = await fetch(`${apiUrl}pandit/additionalinfo/${prevData?._id}`, {
+        const res = await fetch(`${apiUrl}pooja/benefit/${prevData?._id}`, {
             method: "PATCH",
             credentials: "include",
             headers: {
@@ -118,7 +118,7 @@ export default function CreateBenefit({ setId, createForm, setCreateForm, prevDa
                     <MDBox mt={4} p={3}>
                         <MDBox display="flex" justifyContent="space-between" alignItems="center">
                             <MDTypography variant="caption" fontWeight="bold" color="text" textTransform="uppercase">
-                                Info Details
+                                Benefit Details
                             </MDTypography>
                         </MDBox>
 
@@ -128,7 +128,7 @@ export default function CreateBenefit({ setId, createForm, setCreateForm, prevDa
                                 <TextField
                                     disabled={((isSubmitted))}
                                     id="outlined-required"
-                                    label='Info *'
+                                    label='Benefit*'
                                     inputMode='text'
                                     fullWidth
                                     value={formState?.info}

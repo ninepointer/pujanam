@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
 const Booking = new mongoose.Schema({
-    user_id:{
+    user_id: {
         type: Schema.Types.ObjectId,
         ref: 'user'
     },
@@ -10,53 +10,51 @@ const Booking = new mongoose.Schema({
         type: Date,
         required: true,
     },
-    address_details: [
-        {
-            location: {
-                type: {
-                    type: String,
-                    enum: ['Point'],
-                    default: 'Point',
-                    required: true
-                },
-                coordinates: {
-                    type: [Number],
-                    // required: true
-                }
-            },
-            address: {
+    address_details: {
+        location: {
+            type: {
                 type: String,
-                // required: true,
+                enum: ['Point'],
+                default: 'Point',
+                required: true
             },
-            pincode: {
-                type: String,
-                // required: true,
-            },
-            city: {
-                type: String,
-                // required: true,
-            },
-            state: {
-                type: String,
-                // required: true,
-            },
-            country: {
-                type: String,
-                // required: true,
+            coordinates: {
+                type: [Number],
+                // required: true
             }
+        },
+        address: {
+            type: String,
+            // required: true,
+        },
+        pincode: {
+            type: String,
+            // required: true,
+        },
+        city: {
+            type: String,
+            // required: true,
+        },
+        state: {
+            type: String,
+            // required: true,
+        },
+        country: {
+            type: String,
+            // required: true,
         }
-    ],
-    full_name:{
-        type: String,
-        required : true,
     },
-    mobile:{
+    full_name: {
         type: String,
-        required : true,
+        required: true,
+    },
+    mobile: {
+        type: String,
+        required: true,
     },
     booking_amount: {
         type: Number,
-        required : true,
+        required: true,
     },
     product_id: {
         type: Schema.Types.ObjectId,
@@ -73,9 +71,13 @@ const Booking = new mongoose.Schema({
         type: Schema.Types.ObjectId,
         ref: 'pandit'
     },
-    coupon_code:{
+    tier: {
+        type: Schema.Types.ObjectId,
+        ref: 'tier'
+    },
+    coupon_code: {
         type: String,
-        required : true,
+        // required: true,
     },
     status: {
         type: String,
@@ -85,21 +87,21 @@ const Booking = new mongoose.Schema({
     },
     created_on: {
         type: Date,
-        default: function() {
-          return Date.now();
+        default: function () {
+            return Date.now();
         }
     },
-    created_by:{
+    created_by: {
         type: Schema.Types.ObjectId,
         ref: 'user'
     },
-    last_modified_on:{
+    last_modified_on: {
         type: Date,
-        default: function() {
-          return Date.now();
+        default: function () {
+            return Date.now();
         }
     },
-    last_modified_by:{
+    last_modified_by: {
         type: Schema.Types.ObjectId,
         ref: 'user'
     }

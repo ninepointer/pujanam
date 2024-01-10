@@ -37,13 +37,13 @@ const Pooja = new mongoose.Schema({
     pooja_duration: {
         type: Number
     },
-    pooja_packages: {
+    pooja_packages: [{
         tier: {
             type: Schema.Types.ObjectId,
             ref: "tier"
         },
         price: {type: Number}
-    },
+    }],
     pooja_type: {
         type: String,
         enum: ['Home', 'Online'],

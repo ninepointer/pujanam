@@ -12,7 +12,7 @@ import { Link, useLocation } from "react-router-dom";
 import moment from 'moment';
 import { apiUrl } from '../../../constants/constants';
 
-const ActivePandit = ({type}) => {
+const ActivePooja = () => {
 let [skip, setSkip] = useState(0);
 const limitSetting = 10;
 const [count, setCount] = useState(0);
@@ -20,7 +20,7 @@ const [isLoading,setIsLoading] = useState(false);
 const [data,setData] = useState([]);
 
   useEffect(()=>{
-    let call1 = axios.get(`${apiUrl}pandit/active/?skip=${skip}&limit=${limitSetting}`,{
+    let call1 = axios.get(`${apiUrl}pooja/active/?skip=${skip}&limit=${limitSetting}`,{
                 withCredentials: true,
                 headers: {
                     Accept: "application/json",
@@ -49,7 +49,7 @@ const [data,setData] = useState([]);
     setSkip(prev => prev-limitSetting);
     setData([]);
     setIsLoading(true)
-    axios.get(`${apiUrl}pandit/active/?skip=${skip}&limit=${limitSetting}`,{
+    axios.get(`${apiUrl}pooja/active/?skip=${skip}&limit=${limitSetting}`,{
         withCredentials: true,
         headers: {
             Accept: "application/json",
@@ -76,7 +76,7 @@ const [data,setData] = useState([]);
     setSkip(prev => prev+limitSetting);
     setData([]);
     setIsLoading(true)
-    axios.get(`${apiUrl}pandit/active/?skip=${skip}&limit=${limitSetting}`,{
+    axios.get(`${apiUrl}pooja/active/?skip=${skip}&limit=${limitSetting}`,{
         withCredentials: true,
         headers: {
             Accept: "application/json",
@@ -104,84 +104,45 @@ const [data,setData] = useState([]);
           <MDBox>
             <Grid container spacing={2} bgColor="dark">
               {data?.map((e)=>{
-                let contestColor = (e?.featured === true && e?.entryFee != 0) ? 'success' : (e?.featured === true && e?.entryFee === 0) ? 'warning' : (e?.featured === false && e?.entryFee != 0) ? 'text' : 'light';
                     return (
                       
                       <Grid key={e._id} item xs={12} md={12} lg={12} bgColor="dark">
                       <MDBox padding={0} style={{borderRadius:4}}>
                       <MDButton 
                         variant="contained" 
-                        color={contestColor} 
+                        color={"light"} 
                         size="small" 
                         component = {Link}
                         style={{minWidth:'100%'}}
                         to={{
-                            pathname: `/panditdetails`,
+                            pathname: `/poojadetails`,
                           }}
                         state={{data: e}}
                       >
-                            {/* <Grid container>
+                            <Grid container>
 
                               <Grid item xs={12} md={6} lg={12} mt={1} mb={1} display="flex" justifyContent="left" >
-                                <MDTypography fontSize={15} style={{ color: "black", paddingRight: 4, fontWeight: 'bold' }}>TestZone Name: {e?.contestName}</MDTypography>
+                                <MDTypography fontSize={15} style={{ color: "black", paddingRight: 4, fontWeight: 'bold' }}>Pooja Name: {e?.pooja_name}</MDTypography>
                               </Grid>
 
                               <Grid item xs={12} md={6} lg={12} display={"flex"} justifyContent={"center"} alignItems={"center"}>
                                 <Grid item xs={12} md={6} lg={2} mb={1} display="flex" justifyContent="center">
-                                  <MDTypography fontSize={9} style={{ color: "black" }}>Registrations: <span style={{ fontSize: 9, fontWeight: 700 }}>{e?.participants?.length}</span></MDTypography>
+                                  <MDTypography fontSize={9} style={{ color: "black" }}>Pooja Includes: <span style={{ fontSize: 9, fontWeight: 700 }}>{e?.pooja_includes}</span></MDTypography>
                                 </Grid>
 
                                 <Grid item xs={12} md={6} lg={2} mb={1} display="flex" justifyContent="center">
-                                  <MDTypography fontSize={9} style={{ color: "black" }}>Interests: <span style={{ fontSize: 9, fontWeight: 700 }}>{e?.interestedUsers?.length}</span></MDTypography>
+                                  <MDTypography fontSize={9} style={{ color: "black" }}>Pooja Duration: <span style={{ fontSize: 9, fontWeight: 700 }}>{e?.pooja_duration}</span></MDTypography>
                                 </Grid>
 
                                 <Grid item xs={12} md={6} lg={2} mb={1} display="flex" justifyContent="center">
-                                  <MDTypography fontSize={9} style={{ color: "black" }}>Start Date: <span style={{ fontSize: 9, fontWeight: 700 }}>{moment.utc(e?.contestStartTime).utcOffset('+05:30').format('DD-MMM hh:mm a')}</span></MDTypography>
+                                  <MDTypography fontSize={9} style={{ color: "black" }}>Pooja Type: <span style={{ fontSize: 9, fontWeight: 700 }}>{e?.pooja_type}</span></MDTypography>
                                 </Grid>
 
                                 <Grid item xs={12} md={6} lg={2} mb={1} display="flex" justifyContent="center">
-                                  <MDTypography fontSize={9} style={{ color: "black" }}>End Date: <span style={{ fontSize: 9, fontWeight: 700 }}>{moment.utc(e?.contestEndTime).utcOffset('+05:30').format('DD-MMM hh:mm a')}</span></MDTypography>
+                                  <MDTypography fontSize={9} style={{ color: "black" }}>Status: <span style={{ fontSize: 9, fontWeight: 700 }}>{e?.status}</span></MDTypography>
                                 </Grid>
-
-                                <Grid item xs={12} md={6} lg={2} mb={1} display="flex" justifyContent="center">
-                                  <MDTypography fontSize={9} style={{ color: "black" }}>Featured: <span style={{ fontSize: 9, fontWeight: 700 }}>{e?.featured === true ? 'TRUE' : 'FALSE'}</span></MDTypography>
                                 </Grid>
-
-                                <Grid item xs={12} md={6} lg={2} mb={1} display="flex" justifyContent="center">
-                                  <MDTypography fontSize={9} style={{ color: "black" }}>Portfolio: <span style={{ fontSize: 9, fontWeight: 700 }}>₹{Intl.NumberFormat(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(e?.portfolio?.portfolioValue)}</span></MDTypography>
-                                </Grid>
-
-                                </Grid>
-
-                                <Grid item xs={12} md={6} lg={12} display={"flex"} justifyContent={"center"} alignItems={"center"} textAlign={"center"}>
-
-                                <Grid item xs={12} md={6} lg={2} mb={1} display="flex" justifyContent="center">
-                                  <MDTypography fontSize={9} style={{ color: "black" }}>Entry Fee: <span style={{ fontSize: 9, fontWeight: 700 }}>₹{Intl.NumberFormat(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(e?.entryFee)}</span></MDTypography>
-                                </Grid>
-
-                                <Grid item xs={12} md={6} lg={2} mb={1} display="flex" justifyContent="center">
-                                  <MDTypography fontSize={9} style={{ color: "black" }}>Payout %: <span style={{ fontSize: 9, fontWeight: 700 }}>{e?.payoutPercentage}%</span></MDTypography>
-                                </Grid>
-
-                                <Grid item xs={12} md={6} lg={2} mb={1} display="flex" justifyContent="center">
-                                  <MDTypography fontSize={9} style={{ color: "black" }}>Total Spots: <span style={{ fontSize: 9, fontWeight: 700 }}>{e?.maxParticipants}</span></MDTypography>
-                                </Grid>
-
-                                <Grid item xs={12} md={6} lg={2} mb={1} display="flex" justifyContent="center">
-                                  <MDTypography fontSize={9} style={{ color: "black" }}>Spot Left: <span style={{ fontSize: 9, fontWeight: 700 }}>{e?.maxParticipants - e?.participants?.length}</span></MDTypography>
-                                </Grid>
-
-                                <Grid item xs={12} md={6} lg={2} mb={1} display="flex" justifyContent="center">
-                                  <MDTypography fontSize={9} style={{ color: "black" }}>TestZone Type: <span style={{ fontSize: 9, fontWeight: 700 }}>{e?.entryFee === 0 ? "Free" : 'Paid'}</span></MDTypography>
-                                </Grid>
-
-                                <Grid item xs={12} md={6} lg={2} mb={1} display="flex" justifyContent="center">
-                                  <MDTypography fontSize={9} style={{ color: "black" }}>TestZone For: <span style={{ fontSize: 9, fontWeight: 700 }}>{e?.contestFor}</span></MDTypography>
-                                </Grid>
-
-                              </Grid>
-
-                            </Grid> */}
+                            </Grid>
                       </MDButton>
                       </MDBox>
                       </Grid>
@@ -210,4 +171,4 @@ const [data,setData] = useState([]);
 
 
 
-export default ActivePandit;
+export default ActivePooja;

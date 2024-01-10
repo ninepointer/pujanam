@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-// import axios from "axios";
+import axios from "axios";
 // import Box from '@mui/material/Box';
 import DataTable from "../../../../examples/Tables/DataTable";
 import MDButton from "../../../../components/MDButton"
@@ -10,6 +10,8 @@ import Card from "@mui/material/Card";
 import { AiOutlineEdit } from 'react-icons/ai';
 // import { CircularProgress } from "@mui/material";
 // import TabContext from '@material-ui/lab/TabContext';
+import { apiUrl } from '../../../../constants/constants';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 
 // import battleRewardData from "../data/battleRewardData";
@@ -17,41 +19,57 @@ import { AiOutlineEdit } from 'react-icons/ai';
 import CreatePurpose from './createPurpose';
 
 const Purpose = ({ prevData }) => {
-
-    // const [reRender, setReRender] = useState(true);
+    const [data, setData] = useState(prevData);
     let columns = [
+        { Header: "Delete", accessor: "delete", align: "center" },
         { Header: "Edit", accessor: "edit", align: "center" },
         { Header: "Purpose", accessor: "purpose", align: "center" },
     ];
 
     let rows = [];
     const [createForm, setCreateForm] = useState(false);
-    // const [additionalInfo, setAdditionalInfo] = useState([]);
-    // const { columns, rows } = battleRewardData();
     const [id, setId] = useState();
 
-    // let baseUrl = process.env.NODE_ENV === "production" ? "/" : "http://localhost:5000/"
+    useEffect(() => {
+        axios.get(`${apiUrl}pooja/${prevData?._id}`, {withCredentials: true})
+            .then((res) => {
+                setData(res.data.data);
+            }).catch((err) => {
+                return new Error(err);
+            })
+    }, [createForm])
 
-    // useEffect(() => {
+    async function deletePurpose(elem){
+        const res = await fetch(`${apiUrl}pooja/deletepurpose/${data?._id}`, {
+            method: "DELETE",
+            credentials: "include",
+            headers: {
+                "content-type": "application/json",
+                "Access-Control-Allow-Credentials": true
+            },
+            body: JSON.stringify({
+                data: elem
+            })
+        });
 
-    //     axios.get(`${baseUrl}api/v1/dailycontest/${contest}/rewards`)
-    //         .then((res) => {
-    //             setAdditionalInfo(res.data.data);
-    //             // console.log(res.data.data);
-    //         }).catch((err) => {
-    //             return new Error(err);
-    //         })
-    // }, [createForm])
+        const docData = await res.json();
+        console.log(docData.error, docData);
+        if (!docData.error) {
+            setData(docData?.data)
+            // setCreateForm(!createForm)
+        }
+    }
 
-    prevData?.purpose_of_pooja?.map((elem) => {
+    data?.purpose_of_pooja?.map((elem) => {
         let infoData = {}
 
         infoData.edit = (
-            // <MDButton variant="text" color="info" size="small" sx={{fontSize:10}} fontWeight="medium">
-            <AiOutlineEdit onClick={() => { setCreateForm(true); setId(elem) }} />
-            // </MDButton>
+            <AiOutlineEdit cursor="pointer" onClick={() => { setCreateForm(true); setId(elem) }} />
         );
-        infoData.info = (
+        infoData.delete = (
+            <DeleteIcon cursor="pointer" onClick={() => { deletePurpose(elem) }} />
+        );
+        infoData.purpose = (
             <MDTypography component="a" variant="caption" color="text" fontWeight="medium">
                 {elem}
             </MDTypography>
@@ -74,7 +92,7 @@ const Purpose = ({ prevData }) => {
                 </MDBox>
             </MDBox>
             {createForm && <>
-                <CreatePurpose createForm={createForm} setCreateForm={setCreateForm} prevData={prevData} info={id}  />
+                <CreatePurpose createForm={createForm} setCreateForm={setCreateForm} prevData={prevData} prevInfo={id} setId={setId}  />
             </>
             }
             <MDBox mt={1}>

@@ -5,7 +5,7 @@ const poojaController = require('../../controllers/Pooja/userPoojaController');
 
 
 router.get('/', Authenticate,  poojaController.getAllPooja);
-// router.get('/active', Authenticate,  poojaController.getActivePoojas);
+router.post('/booking', Authenticate,  poojaController.booking);
 // router.get('/:id', Authenticate,  poojaController.getPoojaById);
 
 module.exports=router;

@@ -1,34 +1,22 @@
 import * as React from 'react';
-import { useContext, useState } from "react";
+import { useState } from "react";
 import TextField from '@mui/material/TextField';
 import Grid from "@mui/material/Grid";
 import MDTypography from "../../../../components/MDTypography";
 import MDBox from "../../../../components/MDBox";
 import MDButton from "../../../../components/MDButton"
-// import { userContext } from "../../../../AuthContext";
-// import axios from "axios";
-import { CircularProgress, Typography } from "@mui/material";
+import { CircularProgress } from "@mui/material";
 import MDSnackbar from "../../../../components/MDSnackbar";
 import { apiUrl } from '../../../../constants/constants';
 
-export default function CreateRewards({ createForm, setCreateForm, panditPrevDetail, info }) {
+export default function CreateItem({ setId, createForm, setCreateForm, prevData, prevInfo }) {
 
     const [isSubmitted, setIsSubmitted] = useState(false);
     const [formState, setFormState] = useState({
-        info: "" || info,
+        info: "" || prevInfo,
     });
-    // const [id, setId] = useState();
-    // const [isObjectNew, setIsObjectNew] = useState(id ? true : false)
     const [isLoading, setIsLoading] = useState(false)
-    // const [editing, setEditing] = useState(false)
-    // const [saving, setSaving] = useState(false)
-    // const [creating, setCreating] = useState(false)
-    // const [newObjectId, setNewObjectId] = useState()
-    // const [addRewardObject, setAddRewardObject] = useState(false);
 
-
-
-    let baseUrl = process.env.NODE_ENV === "production" ? "/" : "http://localhost:5000/"
 
     async function onNext(e, formState) {
         e.preventDefault()
@@ -42,7 +30,7 @@ export default function CreateRewards({ createForm, setCreateForm, panditPrevDet
 
         const { info} = formState;
 
-        const res = await fetch(`${apiUrl}pandit/additionalinfo/${panditPrevDetail?._id}`, {
+        const res = await fetch(`${apiUrl}pooja/item/${prevData?._id}`, {
             method: "PATCH",
             credentials: "include",
             headers: {
@@ -50,7 +38,7 @@ export default function CreateRewards({ createForm, setCreateForm, panditPrevDet
                 "Access-Control-Allow-Credentials": true
             },
             body: JSON.stringify({
-                data:info
+                data:info, prevData: prevInfo
             })
         });
 
@@ -61,6 +49,9 @@ export default function CreateRewards({ createForm, setCreateForm, panditPrevDet
             setTimeout(() => {  setIsSubmitted(true) }, 500)
             openSuccessSB(data.message, `Contest Reward Created with prize: ${data.data?.prize}`)
             setCreateForm(!createForm);
+            setFormState({});
+            setId("")
+            prevInfo = "";
 
         } else {
             setTimeout(() => {  setIsSubmitted(false) }, 500)
@@ -68,13 +59,6 @@ export default function CreateRewards({ createForm, setCreateForm, panditPrevDet
             return openErrorSB("Couldn't Add Reward", data.error)
         }
     }
-
-
-    // const date = new Date(rewardData.lastModifiedOn);
-
-    // const formattedLastModifiedOn = `${date.getUTCDate()}/${date.toLocaleString('default', { month: 'short' })}/${String(date.getUTCFullYear())} ${String(date.getUTCHours()).padStart(2, '0')}:${String(date.getUTCMinutes()).padStart(2, '0')}:${String(date.getUTCSeconds()).padStart(2, '0')}`;
-
-
 
     const [title, setTitle] = useState('')
     const [content, setContent] = useState('')
@@ -86,8 +70,6 @@ export default function CreateRewards({ createForm, setCreateForm, panditPrevDet
         setSuccessSB(true);
     }
     const closeSuccessSB = () => setSuccessSB(false);
-    // console.log("Title, Content, Time: ",title,content,time)
-
 
     const renderSuccessSB = (
         <MDSnackbar
@@ -136,17 +118,17 @@ export default function CreateRewards({ createForm, setCreateForm, panditPrevDet
                     <MDBox mt={4} p={3}>
                         <MDBox display="flex" justifyContent="space-between" alignItems="center">
                             <MDTypography variant="caption" fontWeight="bold" color="text" textTransform="uppercase">
-                                Additional Info Details
+                                Pooja Item Details
                             </MDTypography>
                         </MDBox>
 
-                        <Grid container spacing={1} mt={0.5} alignItems="space-between">
+                        <Grid container spacing={1} mt={0.5} alignItems="center" justifyContent={"space-between"}>
 
-                            <Grid item xs={12} md={5} xl={6}>
+                            <Grid item xs={12} md={5} xl={9}>
                                 <TextField
                                     disabled={((isSubmitted))}
                                     id="outlined-required"
-                                    label='Additional Info*'
+                                    label='Pooja Item*'
                                     inputMode='text'
                                     fullWidth
                                     value={formState?.info}

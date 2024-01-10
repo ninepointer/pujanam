@@ -13,7 +13,7 @@ const Payment = new mongoose.Schema({
     },
     payment_mode: {
         type: String,
-        enum: ["COD", "Online"],
+        enum: ["PAP", "Online"],
         required: true
     },
     created_on: {

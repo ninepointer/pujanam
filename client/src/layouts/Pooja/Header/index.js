@@ -8,14 +8,7 @@ import { CircularProgress } from '@mui/material';
 import MDBox from '../../../components/MDBox';
 import MDButton from '../../../components/MDButton';
 import {Link} from 'react-router-dom'
-// import UpcomingContest from '../data/activeDailyContests';
-// import CompletedContest from '../data/completedDailyContests';
-// import DraftContest from '../data/draftDailyContests'
-// import OngoingDailyContest from '../data/ongoingDailyContest';
-// import FeaturedUpcomingContests from '../data/featuredActiveDailyContests'
-// import FeaturedOngoingContests from '../data/featuredOngoingDailyContests'
-// import CollegeOngoingContests from '../data/collegeOngoingDailyContests'
-// import CollegeUpcomingContests from '../data/collegeUpcomingDailyContests'
+import Active from '../data/activePooja'
 
 
 export default function LabTabs() {
@@ -55,17 +48,12 @@ export default function LabTabs() {
       <TabContext value={value}>
         <MDBox sx={{ borderBottom: 1, borderColor: 'divider'}}>
           <TabList onChange={handleChange} aria-label="lab API tabs example">
-            {/* <Tab label="Featured (O)" value="1" />
-            <Tab label="Featured (U)" value="2" />
-            <Tab label="StoxHero (O)" value="3" />
-            <Tab label="College (O)" value="4" />
-            <Tab label="College (U)" value="5" />
-            <Tab label="StoxHero (U)" value="6" />
-            <Tab label="All Completed" value="7" />
-            <Tab label="All Draft" value="8" /> */}
+            <Tab label="Published" value="1" />
+            <Tab label="Unpublished" value="2" />
+            <Tab label="Draft" value="3" />
           </TabList>
         </MDBox>
-          {/* <TabPanel value="1">
+          <TabPanel value="1">
           {isLoading ? 
           
           <MDBox display="flex" justifyContent="center" alignItems="center" mt={5} mb={5}>
@@ -73,7 +61,7 @@ export default function LabTabs() {
           </MDBox>
           : 
           <MDBox style={{minWidth:'100%'}}>
-          <FeaturedOngoingContests/>
+          <Active/>
           </MDBox>
           }
           </TabPanel>
@@ -85,7 +73,7 @@ export default function LabTabs() {
           </MDBox>
           : 
           <MDBox style={{minWidth:'100%'}}>
-          <FeaturedUpcomingContests/>
+          <Active/>
           </MDBox>
           }
           </TabPanel>
@@ -97,64 +85,13 @@ export default function LabTabs() {
           </MDBox>
           : 
           <MDBox style={{minWidth:'100%'}}>
-          <OngoingDailyContest/>
+          <Active/>
           </MDBox>
    
           }
           </TabPanel>
-          <TabPanel value="4">
-          {isLoading ? 
-          
-          <MDBox display="flex" justifyContent="center" alignItems="center" mt={5} mb={5}>
-            <CircularProgress color="info" />
-          </MDBox>
-          : 
-          <MDBox style={{minWidth:'100%'}}>
-          <CollegeOngoingContests/>
-          </MDBox>
-   
-          }
-          </TabPanel>
-          <TabPanel value="5">
-          {isLoading ? 
-          
-          <MDBox display="flex" justifyContent="center" alignItems="center" mt={5} mb={5}>
-            <CircularProgress color="info" />
-          </MDBox>
-          : 
-          <MDBox style={{minWidth:'100%'}}>
-          <CollegeUpcomingContests/>
-          </MDBox>
-   
-          }
-          </TabPanel>
-          <TabPanel value="6">
-          {isLoading ? 
-          <MDBox display="flex" justifyContent="center" alignItems="center" mt={5} mb={5}>
-            <CircularProgress color="info" />
-          </MDBox>
-          : 
-          <UpcomingContest/>
-          }
-        </TabPanel>
-        <TabPanel value="7">
-          {isLoading ? 
-          <MDBox display="flex" justifyContent="center" alignItems="center" mt={5} mb={5}>
-            <CircularProgress color="info" />
-          </MDBox>
-          : 
-          <CompletedContest/>
-          }
-        </TabPanel>
-        <TabPanel value="8">
-          {isLoading ? 
-          <MDBox display="flex" justifyContent="center" alignItems="center" mt={5} mb={5}>
-            <CircularProgress color="info" />
-          </MDBox>
-          : 
-          <DraftContest/>
-          }
-        </TabPanel> */}
+     
+      
       </TabContext>
     </MDBox>
   );
