@@ -32,22 +32,12 @@ import createCache from "@emotion/cache";
 
 // Material Dashboard 2 React routes
 import routes from "./routes";
-// import adminRoutes from "./routes";
-// import userRoutes from "./routesUser";
-// import analyticsRoutes from "./analyticsRoutes"
-// // import routesAffiliate from "./routesAffiliate";
-// import routesAffiliate from "./routesAffiliate";
-// import routesCollegeFunc from "./routesCollege";
-
-// Material Dashboard 2 React contexts
 import { useMaterialUIController, setMiniSidenav, setOpenConfigurator, setLayout } from "./context";
 
 // Images
 import brandWhite from "./assets/images/logo-ct.png";
 import Logo from "./assets/images/logos/fullLogo.png"
 import brandDark from "./assets/images/logo-ct-dark.png";
-// import SignIn from "./layouts/authentication/sign-in"
-// import NewMain from "./NewMain"
 import { userContext } from "./AuthContext";
 import Cookies from 'js-cookie';
 import homeRoutes from "./homeRoute";
@@ -58,18 +48,14 @@ import JobDescription from './layouts/HomePage/pages/JobDescription'
 import JobApply from './layouts/HomePage/pages/EICCareerForm'
 import ContestRegistration from './layouts/HomePage/pages/ContestRegistration'
 import FeaturedContestRegistration from './layouts/HomePage/pages/FeaturedContestRegistration'
-// import Home from "../src/layouts/HomePage/pages/Home";
 import About from "../src/layouts/HomePage/pages/About";
-// import ResetPassword from './layouts/authentication/reset-password'
 import ResetPassword from './layouts/authentication/reset-password/cover';
-// import CampaignDetails from './layouts/campaign/campaignDetails'
 import { adminRole } from "./variables";
 import { userRole } from "./variables";
 import { Affiliate } from "./variables";
 import Contact from "./layouts/HomePage/pages/Contact";
 import Privacy from "./layouts/HomePage/pages/Privacy";
 import Terms from "./layouts/HomePage/pages/Tnc";
-// import Contests from "../src/layouts/UserDailyContest/Header/contests";
 import ProtectedRoute from "./ProtectedRoute";
 import AdminLogin from "./layouts/authentication/sign-in/adminLogin";
 import BlogCard from "./layouts/HomePage/pages/BlogCards";
