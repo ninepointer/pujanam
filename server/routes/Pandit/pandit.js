@@ -9,6 +9,7 @@ router.get('/', Authenticate, restrictTo('Admin', 'SuperAdmin'), panditControlle
 router.get('/active', Authenticate, restrictTo('Admin', 'SuperAdmin'), panditController.getActivePandits);
 router.get('/:id', Authenticate, restrictTo('Admin', 'SuperAdmin'), panditController.getPanditById);
 router.patch('/:id', Authenticate, restrictTo('Admin', 'SuperAdmin'), panditController.editPandit);
+router.patch('additionalinfo/:id', Authenticate, restrictTo('Admin', 'SuperAdmin'), panditController.additionalInformationPandit);
 
 
 module.exports=router;

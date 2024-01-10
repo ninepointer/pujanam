@@ -159,5 +159,5 @@ userSchema.pre('save', async function(next){
     }
 });
 
-const userPersonalDetail = mongoose.model("user-personal-detail", userSchema);
+const userPersonalDetail = mongoose.model("user", userSchema);
 module.exports = userPersonalDetail;

@@ -84,3 +84,22 @@ exports.editPandit = async (req, res) => {
         ApiResponse.error(res,'Something went wrong', 500, error.message);
     }
 };
+
+// Edit a Pandit
+exports.additionalInformationPandit = async (req, res) => {
+    const id = req.params.id;
+    const {data} = req.body;
+    try {
+        const updatedAdditionalInfo = await Pandit.findOneAndUpdate({_id: new ObjectId(id)}, {
+            $push: {
+                additional_information: data
+            }
+        }, {new: true});
+        if (!updatedAdditionalInfo) {
+            return ApiResponse.notFound(res, 'Pandit not found');
+        }
+        ApiResponse.success(res, updatedPandit, 'Pandit updated successfully');
+    } catch (error) {
+        ApiResponse.error(res,'Something went wrong', 500, error.message);
+    }
+};
