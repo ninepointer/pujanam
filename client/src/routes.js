@@ -4,6 +4,8 @@ import DailyContestDashboard from './layouts/dailyContestDashboard'
 import DailyContest from "./layouts/dailyContest";
 import Pandit from "./layouts/Pandit"
 import PanditDetails from './layouts/Pandit/panditDetails'
+import Tier from './layouts/Tier'
+import TierDetails from './layouts/Tier/tierDetails'
 
 
 const routes = [
@@ -21,6 +23,15 @@ const routes = [
   {
     route: "/panditdetails",
     component: <PanditDetails />,
+  },
+  {
+    key: "dailycontest",
+    route: "/tier",
+    component: <Tier />,
+  },
+  {
+    route: "/tierdetails",
+    component: <TierDetails />,
   },
   {
     type: "collapse",
