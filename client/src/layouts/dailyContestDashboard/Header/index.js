@@ -404,6 +404,19 @@ export default function LabTabs() {
                         <Grid item fullWidth>
                             <MDButton 
                                 variant="contained" 
+                                color={"success"} 
+                                size="small" 
+                                component = {Link}
+                                to={{
+                                    pathname: `/tier`,
+                                  }}
+                            >
+                                Tiers
+                            </MDButton>
+                        </Grid>
+                        <Grid item fullWidth>
+                            <MDButton 
+                                variant="contained" 
                                 color={"dark"} 
                                 size="small" 
                                 component = {Link}
