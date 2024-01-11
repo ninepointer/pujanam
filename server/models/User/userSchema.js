@@ -67,7 +67,8 @@ const userSchema = new mongoose.Schema({
         // required: true,
     },
     bookings: [{
-        bookingTime: {type: Date}
+        type: Schema.Types.ObjectId,
+        ref: 'booking',
     }],
     status: {
         type: String,

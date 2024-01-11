@@ -509,17 +509,17 @@ exports.varifyOtp = async (req, res) => {
 
 
   user.status = 'OTP Verified';
-  user.last_modifiedOn = new Date();
+  user.last_modified_on = new Date();
   await user.save({ validateBeforeSave: false });
 
   // const myReferralCode = await generateUniqueReferralCode();
   // const count = await User.countDocuments();
-  let userId = email.split('@')[0]
-  let userIds = await UserDetail.find({ employeeid: userId })
+  // let userId = email.split('@')[0]
+  // let userIds = await UserDetail.find({ employeeid: userId })
 
-  if (userIds.length > 0) {
-    userId = userId.toString() + (userIds.length + 1).toString()
-  }
+  // if (userIds.length > 0) {
+  //   userId = userId.toString() + (userIds.length + 1).toString()
+  // }
 
 
 
@@ -535,10 +535,10 @@ exports.varifyOtp = async (req, res) => {
       mobile: mobile.trim(),
       status: 'Active',
       // employeeid: userId,
-      joining_date: user.last_modifiedOn,
+      joining_date: user.last_modified_on,
       // myReferralCode: (await myReferralCode).toString(),
       // referrerCode: referredBy && referrerCode,
-      creationProcess: creation,
+      creation_process: creation,
     }
 
     if (fcmTokenData) {
@@ -571,7 +571,7 @@ exports.varifyOtp = async (req, res) => {
     res.status(201).json({ status: "Success", data: populatedUser, message: "Welcome! Your account is created, please login with your credentials.", token: token });
 
     // now inserting userId in free portfolio's
-    const idOfUser = newuser._id;
+    // const idOfUser = newuser._id;
 
 
     if (!newuser) return res.status(400).json({ status: 'error', message: 'Something went wrong' });
