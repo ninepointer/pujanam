@@ -512,7 +512,7 @@ exports.varifyOtp = async (req, res) => {
   user.last_modifiedOn = new Date();
   await user.save({ validateBeforeSave: false });
 
-  const myReferralCode = await generateUniqueReferralCode();
+  // const myReferralCode = await generateUniqueReferralCode();
   // const count = await User.countDocuments();
   let userId = email.split('@')[0]
   let userIds = await UserDetail.find({ employeeid: userId })
