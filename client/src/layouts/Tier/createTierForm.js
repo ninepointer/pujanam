@@ -140,9 +140,9 @@ function Index() {
     console.log(data, res.status);
     if (res.status !== 201) {
       setTimeout(() => { setCreating(false); setIsSubmitted(false) }, 500)
-      openErrorSB("Pandit Ji not saved", data?.message)
+      openErrorSB("Tier not saved", data?.message)
     } else {
-      openSuccessSB("Pandit Ji Saved", data?.message)
+      openSuccessSB("Tier Saved", data?.message)
       // setNewObjectId(data?.data?._id)
       setIsSubmitted(true)
       setTier(data?.data);
@@ -184,7 +184,7 @@ function Index() {
       openErrorSB("Error", data.error)
       setTimeout(() => { setSaving(false); setEditing(true) }, 500)
     } else if (data.status == 'success') {
-      openSuccessSB("Pandit Ji details Edited", "Edited Successfully")
+      openSuccessSB("Tier details Edited", "Edited Successfully")
       setTimeout(() => { setSaving(false); setEditing(false) }, 500)
       console.log("entry succesfull");
     } else {
@@ -277,7 +277,7 @@ function Index() {
 
             <Grid container display="flex" flexDirection="row" justifyContent="space-between">
               <Grid container spacing={2} mt={0.5} mb={0} xs={12} md={12} xl={12}>
-                <Grid item xs={12} md={6} xl={3}>
+                <Grid item xs={12} md={6} xl={4}>
                   <TextField
                     disabled={((isSubmitted || tierPrevDetail) && (!editing || saving))}
                     id="outlined-required"
@@ -294,8 +294,7 @@ function Index() {
                   />
                 </Grid>
 
-
-                <Grid item xs={12} md={6} xl={3} mb={2}>
+                <Grid item xs={12} md={6} xl={4} mb={2}>
                   <TextField
                     disabled={((isSubmitted || tierPrevDetail) && (!editing || saving))}
                     id="outlined-required"
@@ -313,7 +312,8 @@ function Index() {
                     }}
                   />
                 </Grid>
-                <Grid item xs={12} md={6} xl={3} mb={2}>
+
+                <Grid item xs={12} md={6} xl={4} mb={2}>
                   <TextField
                     disabled={((isSubmitted || tierPrevDetail) && (!editing || saving))}
                     id="outlined-required"
@@ -332,8 +332,8 @@ function Index() {
                   />
                 </Grid>
 
-                <Grid item xs={12} md={6} xl={4} mt={-1} mb={1}>
-                  <FormControl sx={{ m: 1, width: '100%' }}>
+                <Grid item xs={12} md={6} xl={4}  mb={1}>
+                  <FormControl sx={{ width: '100%' }}>
                     <InputLabel id="demo-multiple-checkbox-label">Pandit</InputLabel>
                     <Select
                       labelId="demo-multiple-checkbox-label"
@@ -357,9 +357,9 @@ function Index() {
                       ))}
                     </Select>
                   </FormControl>
-                </Grid> 
+                </Grid>
 
-                <Grid item xs={12} md={6} xl={3} mb={2}>
+                <Grid item xs={12} md={6} xl={4} mb={2}>
                   <TextField
                     disabled={((isSubmitted || tierPrevDetail) && (!editing || saving))}
                     id="outlined-required"
@@ -377,7 +377,8 @@ function Index() {
                     }}
                   />
                 </Grid>
-                <Grid item xs={12} md={6} xl={3} mb={2}>
+
+                <Grid item xs={12} md={6} xl={4} mb={2}>
                   <TextField
                     disabled={((isSubmitted || tierPrevDetail) && (!editing || saving))}
                     id="outlined-required"
@@ -396,7 +397,7 @@ function Index() {
                   />
                 </Grid>
 
-                <Grid item xs={12} md={6} xl={3}>
+                <Grid item xs={12} md={6} xl={4}>
                   <FormControl sx={{ width: "100%" }}>
                     <InputLabel id="demo-simple-select-autowidth-label">Status *</InputLabel>
                     <Select
@@ -419,46 +420,47 @@ function Index() {
                     </Select>
                   </FormControl>
                 </Grid>
-              </Grid>
-              <Grid item xs={12} md={6} xl={3}>
-                <FormGroup>
-                  <FormControlLabel
-                    checked={(tierPrevDetail?.pooja_items_included !== undefined && !editing && formState?.pooja_items_included === undefined) ? tierPrevDetail?.pooja_items_included : formState?.pooja_items_included}
-                    disabled={((isSubmitted || tierPrevDetail) && (!editing || saving))}
-                    control={<Checkbox />}
-                    onChange={(e) => {
-                      setFormState(prevState => ({
-                        ...prevState,
-                        actions: ""
-                      }))
-                      setFormState(prevState => ({
-                        ...prevState,
-                        pooja_items_included: e.target.checked
-                      }))
-                    }}
-                    label="Pooja Items Included" />
-                </FormGroup>
-              </Grid>
-              <Grid item xs={12} md={6} xl={3}>
-                <FormGroup>
-                  <FormControlLabel
-                    checked={(tierPrevDetail?.post_pooja_cleanUp_included !== undefined && !editing && formState?.post_pooja_cleanUp_included === undefined) ? tierPrevDetail?.post_pooja_cleanUp_included : formState?.post_pooja_cleanUp_included}
-                    disabled={((isSubmitted || tierPrevDetail) && (!editing || saving))}
-                    control={<Checkbox />}
-                    onChange={(e) => {
-                      setFormState(prevState => ({
-                        ...prevState,
-                        actions: ""
-                      }))
-                      setFormState(prevState => ({
-                        ...prevState,
-                        post_pooja_cleanUp_included: e.target.checked
-                      }))
-                    }}
-                    label="Post Pooja Cleanup Included" />
-                </FormGroup>
-              </Grid>
 
+                <Grid item xs={12} md={6} xl={4}>
+                  <FormGroup>
+                    <FormControlLabel
+                      checked={(tierPrevDetail?.pooja_items_included !== undefined && !editing && formState?.pooja_items_included === undefined) ? tierPrevDetail?.pooja_items_included : formState?.pooja_items_included}
+                      disabled={((isSubmitted || tierPrevDetail) && (!editing || saving))}
+                      control={<Checkbox />}
+                      onChange={(e) => {
+                        setFormState(prevState => ({
+                          ...prevState,
+                          actions: ""
+                        }))
+                        setFormState(prevState => ({
+                          ...prevState,
+                          pooja_items_included: e.target.checked
+                        }))
+                      }}
+                      label="Pooja Items Included" />
+                  </FormGroup>
+                </Grid>
+
+                <Grid item xs={12} md={6} xl={4}>
+                  <FormGroup>
+                    <FormControlLabel
+                      checked={(tierPrevDetail?.post_pooja_cleanUp_included !== undefined && !editing && formState?.post_pooja_cleanUp_included === undefined) ? tierPrevDetail?.post_pooja_cleanUp_included : formState?.post_pooja_cleanUp_included}
+                      disabled={((isSubmitted || tierPrevDetail) && (!editing || saving))}
+                      control={<Checkbox />}
+                      onChange={(e) => {
+                        setFormState(prevState => ({
+                          ...prevState,
+                          actions: ""
+                        }))
+                        setFormState(prevState => ({
+                          ...prevState,
+                          post_pooja_cleanUp_included: e.target.checked
+                        }))
+                      }}
+                      label="Post Pooja Cleanup Included" />
+                  </FormGroup>
+                </Grid>
+              </Grid>
             </Grid>
 
             <Grid container mt={2} xs={12} md={12} xl={12} >

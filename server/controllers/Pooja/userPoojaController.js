@@ -5,11 +5,23 @@ const Booking = require("../../models/Bookings/bookingSchema");
 const Payment = require("../../models/Payment/payment");
 const mongoose = require('mongoose');
 
-// Create a Pandit
 exports.getAllPooja = async (req, res) => {
     try {
         const pooja = await Pooja.find({status: "Published"})
-        .select('-created_by -created_on -last_modified_on -__v -status');
+        .populate('pooja_packages.tier', 'tier_name pooja_items_included post_pooja_cleanUp_included min_pandit_experience max_pandit_experience number_of_main_pandit number_of_assistant_pandit')
+        .select('-created_by -created_on -last_modified_on -last_modified_by -__v -status');
+        ApiResponse.success(res, pooja);
+    } catch (error) {
+        ApiResponse.error(res,'Something went wrong', 500, error.message);
+    }
+};
+
+exports.getPoojaById = async (req, res) => {
+    const {id} = req.params;
+    try {
+        const pooja = await Pooja.findOne({_id: new ObjectId(id)})
+        .populate('pooja_packages.tier', 'tier_name pooja_items_included post_pooja_cleanUp_included min_pandit_experience max_pandit_experience number_of_main_pandit number_of_assistant_pandit')
+        .select('-created_by -created_on -last_modified_on -last_modified_by -__v -status');
         ApiResponse.success(res, pooja);
     } catch (error) {
         ApiResponse.error(res,'Something went wrong', 500, error.message);
@@ -40,7 +52,7 @@ exports.booking = async (req, res) => {
 
         const payment = await Payment.create({
             //todo-vijay
-            transaction_id: "TO_BE_SET", payment_status: "UnPaid", payment_mode: "PAP", created_by: req.user._id
+            transaction_id: generateUniqueTransactionId(), payment_status: "UnPaid", payment_mode: "PAP", created_by: req.user._id
         });
 
         const createBooking = await Booking.create([{
@@ -60,3 +72,14 @@ exports.booking = async (req, res) => {
         ApiResponse.error(res, 'Something went wrong', 500, error.message);
     }
 };
+
+function generateUniqueTransactionId() {
+    const maxLength = 36;
+    const allowedCharacters = "0123456789";
+
+    const timestampPart = "MTID" + Date.now().toString();
+    const remainingLength = maxLength - timestampPart.length;
+    const randomChars = Array.from({ length: 5 }, () => allowedCharacters[Math.floor(Math.random() * allowedCharacters.length)]).join('');
+
+    return timestampPart + randomChars;
+}

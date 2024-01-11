@@ -357,7 +357,7 @@ function Index() {
                 </Grid>
 
 
-                <Grid item xs={12} md={6} xl={4} mb={2}>
+                <Grid item xs={12} md={6} xl={3} mb={2}>
                   <TextField
                     disabled={((isSubmitted || panditPrevDetail) && (!editing || saving))}
                     id="outlined-required"
@@ -388,8 +388,8 @@ function Index() {
                   />
                 </Grid>
 
-                <Grid item xs={12} md={6} xl={4} mt={-1} mb={1}>
-                  <FormControl sx={{ m: 1, width: '100%' }}>
+                <Grid item xs={12} md={6} xl={3} mb={1}>
+                  <FormControl sx={{ width: '100%' }}>
                     <InputLabel id="demo-multiple-checkbox-label">Language</InputLabel>
                     <Select
                       labelId="demo-multiple-checkbox-label"
@@ -415,7 +415,7 @@ function Index() {
                   </FormControl>
                 </Grid> 
 
-                <Grid item xs={12} md={6} xl={4} mb={2}>
+                <Grid item xs={12} md={6} xl={3} mb={2}>
                   <TextField
                     disabled={((isSubmitted || panditPrevDetail) && (!editing || saving))}
                     id="outlined-required"
@@ -434,7 +434,7 @@ function Index() {
                   />
                 </Grid>
 
-                <Grid item xs={12} md={6} xl={4} mb={2}>
+                <Grid item xs={12} md={6} xl={3} mb={2}>
                   <TextField
                     disabled={((isSubmitted || panditPrevDetail) && (!editing || saving))}
                     id="outlined-required"
@@ -453,7 +453,7 @@ function Index() {
                   />
                 </Grid>
 
-                <Grid item xs={12} md={6} xl={4} mb={2}>
+                <Grid item xs={12} md={6} xl={3} mb={2}>
                   <TextField
                     disabled={((isSubmitted || panditPrevDetail) && (!editing || saving))}
                     id="outlined-required"
@@ -472,7 +472,7 @@ function Index() {
                   />
                 </Grid>
 
-                <Grid item xs={12} md={6} xl={4} mb={2}>
+                <Grid item xs={12} md={6} xl={3} mb={2}>
                   <TextField
                     disabled={((isSubmitted || panditPrevDetail) && (!editing || saving))}
                     id="outlined-required"
@@ -491,7 +491,7 @@ function Index() {
                   />
                 </Grid>
 
-                <Grid item xs={12} md={6} xl={4} mb={2}>
+                <Grid item xs={12} md={6} xl={3} mb={2}>
                   <TextField
                     disabled={((isSubmitted || panditPrevDetail) && (!editing || saving))}
                     id="outlined-required"
@@ -510,7 +510,7 @@ function Index() {
                   />
                 </Grid>
 
-                <Grid item xs={12} md={6} xl={4} mb={2}>
+                <Grid item xs={12} md={6} xl={3} mb={2}>
                   <TextField
                     disabled={((isSubmitted || panditPrevDetail) && (!editing || saving))}
                     id="outlined-required"
