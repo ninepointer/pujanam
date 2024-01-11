@@ -32,7 +32,7 @@ router.post("/signup", async (req, res) => {
     } 
 
     const signedupuser = await SignedUpUser.findOne({ $or: [{ email: email }, { mobile: mobile }] });
-    if (signedupuser?.lastOtpTime && moment().subtract(29, 'seconds').isBefore(signedupuser?.lastOtpTime)) {
+    if (signedupuser?.last_otp_time && moment().subtract(29, 'seconds').isBefore(signedupuser?.last_otp_time)) {
         return res.status(429).json({ message: 'Please wait a moment before requesting a new OTP' });
       }
     let mobile_otp = otpGenerator.generate(6, { digits: true, lowerCaseAlphabets: false, upperCaseAlphabets: false, specialChars: false });
@@ -102,7 +102,7 @@ router.patch("/resendotp", async (req, res)=>{
             message: "User with this email doesnt exist"
         })
     }
-    if (user?.lastOtpTime && moment().subtract(29, 'seconds').isBefore(user?.lastOtpTime)) {
+    if (user?.last_otp_time && moment().subtract(29, 'seconds').isBefore(user?.last_otp_time)) {
         return res.status(429).json({ message: 'Please wait a moment before requesting a new OTP' });
       }
     let email_otp = otpGenerator.generate(6, { upperCaseAlphabets: true,lowerCaseAlphabets: false, specialChars: false });

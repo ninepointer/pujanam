@@ -123,6 +123,9 @@ const userSchema = new mongoose.Schema({
         device_type: String,
         device_details: String
     },
+    last_otp_time: {
+        type: Date,
+    },
     fcm_tokens:[{
         token: String,
         brand: String,

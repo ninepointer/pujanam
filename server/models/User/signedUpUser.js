@@ -33,7 +33,7 @@ const signedUpUserSchema = new mongoose.Schema({
         type: String,
         // required: true
     },
-    lastOtpTime:Date,
+    last_otp_time: Date,
     email_otp:{
         type: String,
         // required: true

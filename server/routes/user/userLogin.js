@@ -26,14 +26,13 @@ router.post("/login", async (req, res) => {
     const userLogin = await UserDetail.findOne({ email: userId, status: "Active" }).select('_id role password collegeDetails');
 
     console.log("userLogin", userLogin)
-    //todo-vijay
-    // if (!userLogin || !(await userLogin.correctPassword(pass, userLogin.password))) {
-    //     return res.status(422).json({ error: "invalid details" })
-    // } else {
+    if (!userLogin || !(await userLogin.correctPassword(pass, userLogin.password))) {
+        return res.status(422).json({ error: "invalid details" })
+    } else {
 
-    //     if (!userLogin) {
-    //         return res.status(422).json({ status: 'error', message: "Invalid credentials" });
-    //     } else {
+        if (!userLogin) {
+            return res.status(422).json({ status: 'error', message: "Invalid credentials" });
+        } else {
             if(userLogin?.role?.toString()=='644903ac236de3fd7cfd755c'){
                 return res.status(400).json({status:'error', message:'Invalid request'});
             }
@@ -43,8 +42,8 @@ router.post("/login", async (req, res) => {
                 expires: new Date(Date.now() + 25892000000),
             });
             res.status(201).json({ status: 'success', message: "user logged in succesfully", token: token });
-    //     }
-    // }
+        }
+    }
 })
 
 router.post('/phonelogin', async (req,res, next)=>{
@@ -61,14 +60,14 @@ router.post('/phonelogin', async (req,res, next)=>{
         if(!user){
             return res.status(404).json({status: 'error', message: 'The mobile number is not registered. Please signup.'})
         }
-        if (user?.lastOtpTime && moment().subtract(29, 'seconds').isBefore(user?.lastOtpTime)) {
+        if (user?.last_otp_time && moment().subtract(29, 'seconds').isBefore(user?.last_otp_time)) {
             return res.status(429).json({ message: 'Please wait a moment before requesting a new OTP' });
           }
     
         let mobile_otp = otpGenerator.generate(6, {digits: true, lowerCaseAlphabets: false, upperCaseAlphabets: false, specialChars: false});
     
         user.mobile_otp = mobile_otp;
-        user.lastOtpTime = new Date();
+        user.last_otp_time = new Date();
         await user.save({validateBeforeSave: false});
     
         // sendSMS([mobile.toString()], `Your otp to login to StoxHero is: ${mobile_otp}`);
@@ -88,7 +87,7 @@ router.post('/phonelogin', async (req,res, next)=>{
 });
 
 router.post('/verifyphonelogin', async(req,res,next)=>{
-    const {mobile, mobile_otp, fcmTokenData, college, rollno} = req.body;
+    const {mobile, mobile_otp, fcmTokenData} = req.body;
 
     try {
         console.log("fcm data", fcmTokenData);
@@ -96,25 +95,19 @@ router.post('/verifyphonelogin', async(req,res,next)=>{
         if(!user){
             return res.status(404).json({status: 'error', message: 'The mobile number is not registered. Please signup.'});
         }
-        if(!user?.collegeDetails?.college && college){
-            return res.status(404).json({status: 'error', message: 'The mobile number is not registered. Please signup.'});
-        }
-        console.log((college && user?.collegeDetails) && (user?.collegeDetails?.college?.toString() !== college?.toString()), (college , user?.collegeDetails) , (user?.collegeDetails?.college?.toString() , college?.toString()))
-        if((college && user?.collegeDetails?.college) && (user?.collegeDetails?.college?.toString() !== college?.toString())){
-            return res.status(404).json({status: 'error', message: "Kindly access your account by logging in through the designated URL associated with your registration."});
-        }
+
         if (process.env.PROD != 'true' && mobile == '7737384957' && mobile_otp == '987654') {
             const token = await user.generateAuthToken();
             console.log(fcmTokenData?.token);
             if (fcmTokenData?.token) {
                 console.log('inside if');
-                const tokenExists = user?.fcmTokens?.some(token => token?.token === fcmTokenData.token);
-                // If the token does not exist, add it to the fcmTokens array
+                const tokenExists = user?.fcm_tokens?.some(token => token?.token === fcmTokenData.token);
+                // If the token does not exist, add it to the fcm_tokens array
                 console.log('token exists', tokenExists);
                 if (!tokenExists) {
                     console.log('saving fcm token');
                     fcmTokenData.lastUsedAt = new Date();
-                    user.fcmTokens.push(fcmTokenData);
+                    user.fcm_tokens.push(fcmTokenData);
                     await user.save({ validateBeforeSave: false });
                     console.log('FCM token added successfully.');
                 } else {
@@ -152,13 +145,13 @@ router.post('/verifyphonelogin', async(req,res,next)=>{
         console.log(fcmTokenData?.token);    
         if(fcmTokenData?.token){
             console.log('inside if');
-            const tokenExists = user?.fcmTokens?.some(token => token?.token === fcmTokenData.token);
-        // If the token does not exist, add it to the fcmTokens array
+            const tokenExists = user?.fcm_tokens?.some(token => token?.token === fcmTokenData.token);
+        // If the token does not exist, add it to the fcm_tokens array
             console.log('token exists', tokenExists);
             if (!tokenExists) {
                 console.log('saving fcm token');
                 fcmTokenData.lastUsedAt = new Date();
-                user.fcmTokens.push(fcmTokenData);
+                user.fcm_tokens.push(fcmTokenData);
                 await user.save({validateBeforeSave:false});
                 console.log('FCM token added successfully.');
             } else {
@@ -189,14 +182,14 @@ router.post("/resendmobileotp", async(req, res)=>{
             return res.status(404).json({status: 'error', message: 'The mobile number is not registered. Please signup.'});
         }
 
-        if (user?.lastOtpTime && moment().subtract(29, 'seconds').isBefore(user?.lastOtpTime)) {
+        if (user?.last_otp_time && moment().subtract(29, 'seconds').isBefore(user?.last_otp_time)) {
             return res.status(429).json({ message: 'Please wait a moment before requesting a new OTP' });
         }
 
         let mobile_otp = otpGenerator.generate(6, {digits: true, lowerCaseAlphabets: false, upperCaseAlphabets: false, specialChars: false});
         
         user.mobile_otp = mobile_otp;
-        user.lastOtpTime=new Date();
+        user.last_otp_time=new Date();
         await user.save({validateBeforeSave: false});
     
         // sendSMS([mobile.toString()], `Your OTP is ${mobile_otp}`);
@@ -264,11 +257,11 @@ router.post("/addfcmtoken", authentication, async (req, res)=>{
     try{
         const user = await UserDetail.findById(req.user._id);
         if(fcmTokenData?.token){
-            const tokenExists = user?.fcmTokens?.some(token => token?.token === fcmTokenData?.token);
-        // If the token does not exist, add it to the fcmTokens array
+            const tokenExists = user?.fcm_tokens?.some(token => token?.token === fcmTokenData?.token);
+        // If the token does not exist, add it to the fcm_tokens array
             if (!tokenExists) {
                 fcmTokenData.lastUsedAt = new Date();
-                user.fcmTokens.push(fcmTokenData);
+                user.fcm_tokens.push(fcmTokenData);
                 await user.save({validateBeforeSave:false});
                 console.log('FCM token added successfully.');
                 res.status(200).json({status:'success', message:'Fcm data added.'})
