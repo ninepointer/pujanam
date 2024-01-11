@@ -8,7 +8,7 @@ const mongoose = require('mongoose');
 exports.getAllPooja = async (req, res) => {
     try {
         const pooja = await Pooja.find({status: "Published"})
-        .populate('pooja_packages.tier', 'tier_name pooja_items_included post_pooja_cleanUp_included min_pandit_experience max_pandit_experience number_of_main_pandit number_of_assistant_pandit')
+        .populate('packages.tier', 'tier_name pooja_items_included post_pooja_cleanUp_included min_pandit_experience max_pandit_experience number_of_main_pandit number_of_assistant_pandit')
         .select('-created_by -created_on -last_modified_on -last_modified_by -__v -status');
         ApiResponse.success(res, pooja);
     } catch (error) {
@@ -20,7 +20,7 @@ exports.getPoojaById = async (req, res) => {
     const {id} = req.params;
     try {
         const pooja = await Pooja.findOne({_id: new ObjectId(id)})
-        .populate('pooja_packages.tier', 'tier_name pooja_items_included post_pooja_cleanUp_included min_pandit_experience max_pandit_experience number_of_main_pandit number_of_assistant_pandit')
+        .populate('packages.tier', 'tier_name pooja_items_included post_pooja_cleanUp_included min_pandit_experience max_pandit_experience number_of_main_pandit number_of_assistant_pandit')
         .select('-created_by -created_on -last_modified_on -last_modified_by -__v -status');
         ApiResponse.success(res, pooja);
     } catch (error) {
@@ -35,7 +35,7 @@ exports.booking = async (req, res) => {
     try {
         const {
             latitude, longitude, address, pincode, city, state, country,
-            full_name, mobile, booking_amount, poojaId, tierId
+            full_name, mobile, booking_amount, poojaId, tierId, booking_date
         } = req.body;
 
         const address_details = {
@@ -56,7 +56,7 @@ exports.booking = async (req, res) => {
         });
 
         const createBooking = await Booking.create([{
-            user_id: req.user._id, booking_date: new Date(), address_details, full_name, mobile,
+            user_id: req.user._id, booking_date, transaction_date: new Date(), address_details, full_name, mobile,
             booking_amount, product_id: "659e81ea30fa1324fb3d2681", sub_product_id: poojaId, tier: tierId,
             status: "Success", created_by: req.user._id, paymentDetails: payment._id
         }], { session });

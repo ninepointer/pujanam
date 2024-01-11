@@ -5,27 +5,11 @@ import Grid from "@mui/material/Grid";
 import MDTypography from "../../../../components/MDTypography";
 import MDBox from "../../../../components/MDBox";
 import MDButton from "../../../../components/MDButton"
-// import { userContext } from "../../../../AuthContext";
-// import axios from "axios";
-// import MenuItem from '@mui/material/MenuItem';
-
 import { CircularProgress } from "@mui/material";
 import MDSnackbar from "../../../../components/MDSnackbar";
 import { apiUrl } from '../../../../constants/constants';
-// import Select from '@mui/material/Select';
-// import InputLabel from '@mui/material/InputLabel';
-// import FormControl from '@mui/material/FormControl';
-// import OutlinedInput from '@mui/material/OutlinedInput';
-const ITEM_HEIGHT = 30;
-const ITEM_PADDING_TOP = 10;
-// const MenuProps = {
-//   PaperProps: {
-//     style: {
-//       maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-//       width: 250,
-//     },
-//   },
-// };
+
+
 export default function CreateFaq({ setId, createForm, setCreateForm, prevData, prevFaq, faq }) {
 
     const [isSubmitted, setIsSubmitted] = useState(false);
@@ -39,8 +23,6 @@ export default function CreateFaq({ setId, createForm, setCreateForm, prevData, 
 
     async function onNext(e, formState) {
         e.preventDefault()
-        // setCreating(true)
-        console.log("Reward Form State: ", formState)
 
         if (!formState?.faq) {
             setTimeout(() => {  setIsSubmitted(false) }, 500)
@@ -144,7 +126,7 @@ export default function CreateFaq({ setId, createForm, setCreateForm, prevData, 
                                 <TextField
                                     disabled={isSubmitted}
                                     id="outlined-required"
-                                    label='Pooja Price *'
+                                    label='Question *'
                                     type='text'
                                     fullWidth
                                     value={formState?.faq?.question}
@@ -164,7 +146,7 @@ export default function CreateFaq({ setId, createForm, setCreateForm, prevData, 
                                 <TextField
                                     disabled={isSubmitted}
                                     id="outlined-required"
-                                    label='Pooja Price *'
+                                    label='Answer *'
                                     type='text'
                                     fullWidth
                                     value={formState?.faq?.answer}

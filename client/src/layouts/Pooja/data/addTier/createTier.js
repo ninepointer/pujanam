@@ -30,7 +30,7 @@ export default function CreateTier({ setId, createForm, setCreateForm, prevData,
 
     const [isSubmitted, setIsSubmitted] = useState(false);
     const [formState, setFormState] = useState({
-        pooja_packages: {
+        packages: {
             tier: {
                _id: "" || prevTier?.tier?._id,
                tier_name: "" || prevTier?.tier?.tier_name
@@ -45,12 +45,12 @@ export default function CreateTier({ setId, createForm, setCreateForm, prevData,
         // setCreating(true)
         console.log("Reward Form State: ", formState)
 
-        if (!formState?.pooja_packages) {
+        if (!formState?.packages) {
             setTimeout(() => {  setIsSubmitted(false) }, 500)
             return openErrorSB("Missing Field", "Please fill all the mandatory fields")
         }
 
-        const { pooja_packages} = formState;
+        const { packages} = formState;
 
         const res = await fetch(`${apiUrl}pooja/tier/${prevData?._id}`, {
             method: "PATCH",
@@ -60,7 +60,7 @@ export default function CreateTier({ setId, createForm, setCreateForm, prevData,
                 "Access-Control-Allow-Credentials": true
             },
             body: JSON.stringify({
-                pooja_packages, prevPackage: prevTier
+                packages, prevPackage: prevTier
             })
         });
 
@@ -133,8 +133,8 @@ export default function CreateTier({ setId, createForm, setCreateForm, prevData,
         })
         setFormState(prevState => ({
           ...prevState,
-          pooja_packages: {
-            ...prevState.pooja_packages,
+          packages: {
+            ...prevState.packages,
             _id: tierId[0]?._id,
             tier_name: tierId[0]?.tier_name
           }
@@ -168,7 +168,7 @@ export default function CreateTier({ setId, createForm, setCreateForm, prevData,
                                         id="demo-multiple-name"
                                         name='portfolio'
                                         disabled={isSubmitted}
-                                        value={formState?.pooja_packages?.tier_name || prevTier?.tier?.tier_name}
+                                        value={formState?.packages?.tier_name || prevTier?.tier?.tier_name}
                                         onChange={handleTierChange}
                                         input={<OutlinedInput label="Portfolio" />}
                                         sx={{ minHeight: 45 }}
@@ -193,12 +193,12 @@ export default function CreateTier({ setId, createForm, setCreateForm, prevData,
                                     label='Pooja Price *'
                                     type='number'
                                     fullWidth
-                                    value={formState?.pooja_packages?.price}
+                                    value={formState?.packages?.price}
                                     onChange={(e) => {
                                         setFormState(prevState => ({
                                             ...prevState,
-                                            pooja_packages: {
-                                                ...prevState.pooja_packages,
+                                            packages: {
+                                                ...prevState.packages,
                                                 price: e.target.value
                                             }
                                         }))

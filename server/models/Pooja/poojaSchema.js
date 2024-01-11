@@ -2,49 +2,52 @@ const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
 const Pooja = new mongoose.Schema({
-    pooja_name: {
+    name: {
         type: String,
         required: true,
     },
-    pooja_description: [
-        {
-            type: String,
-        }
-    ],
-    pooja_includes: {
+    description: {
         type: String,
         required: true,
     },
-    purpose_of_pooja: [
+    includes: [
         {
             type: String,
         }
     ],
-    benefits_of_pooja: [
+    purpose: [
         {
             type: String,
         }
     ],
-    pooja_image: {
+    benefits: [
+        {
+            header: {type: String},
+            description: {type: String},
+        }
+    ],
+    image: {
         url: {type: String},
         name: {type: String}
     },
-    pooja_items: [
+    items: [
         {
-            type: String,
+            name: {type: String},
+            quantity: {type: Number},
+            unit: {type: String},
         }
     ],
-    pooja_duration: {
+    duration: {
         type: Number
     },
-    pooja_packages: [{
+    packages: [{
         tier: {
             type: Schema.Types.ObjectId,
             ref: "tier"
         },
         price: {type: Number}
     }],
-    pooja_type: {
+    type: {
         type: String,
         enum: ['Home', 'Online'],
         required: true

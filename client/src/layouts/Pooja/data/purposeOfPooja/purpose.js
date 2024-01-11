@@ -60,7 +60,7 @@ const Purpose = ({ prevData }) => {
         }
     }
 
-    data?.purpose_of_pooja?.map((elem) => {
+    data?.purpose?.map((elem) => {
         let infoData = {}
 
         infoData.edit = (

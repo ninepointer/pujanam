@@ -136,7 +136,15 @@ const userSchema = new mongoose.Schema({
             type: Date,
         },
         tags: [{type: String}],
-    }]
+    }],
+    favourite_mandirs: [{
+        type: Schema.Types.ObjectId,
+        ref: 'mandir',
+    }],
+    favourite_devi_devta: [{
+        type: Schema.Types.ObjectId,
+        ref: 'devi-devta',
+    }],
 })
 
 userSchema.methods.generateAuthToken = async function(){

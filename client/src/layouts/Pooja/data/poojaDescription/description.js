@@ -52,7 +52,7 @@ const Description = ({ prevData }) => {
         }
     }
 
-    data?.pooja_description?.map((elem) => {
+    data?.description?.map((elem) => {
         let infoData = {}
 
         infoData.edit = (

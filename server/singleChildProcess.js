@@ -52,7 +52,7 @@ async function singleProcess() {
 
     app.use('/api/v1/dailycontest', require("./routes/DailyContest/dailyContestRoutes"))
     app.use('/api/v1/user', require("./routes/user/userRoutes"));
-    app.use('/api/v1/signup', require("./routes/UserRoute/signUpUser"));
+    // app.use('/api/v1/signup', require("./routes/UserRoute/signUpUser"));
 
 
     const PORT = process.env.PORT || 5002;

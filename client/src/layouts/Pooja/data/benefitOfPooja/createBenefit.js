@@ -13,22 +13,23 @@ export default function CreateBenefit({ setId, createForm, setCreateForm, prevDa
 
     const [isSubmitted, setIsSubmitted] = useState(false);
     const [formState, setFormState] = useState({
-        info: "" || prevInfo,
+        benefits: {
+            header: "" || prevInfo?.header,
+            description: "" || prevInfo?.description,
+        }
     });
     const [isLoading, setIsLoading] = useState(false)
 
 
     async function onNext(e, formState) {
         e.preventDefault()
-        // setCreating(true)
-        console.log("Reward Form State: ", formState)
 
-        if (!formState?.info) {
+        if (!formState?.benefits) {
             setTimeout(() => {  setIsSubmitted(false) }, 500)
             return openErrorSB("Missing Field", "Please fill all the mandatory fields")
         }
 
-        const { info} = formState;
+        const { benefits} = formState;
 
         const res = await fetch(`${apiUrl}pooja/benefit/${prevData?._id}`, {
             method: "PATCH",
@@ -38,7 +39,7 @@ export default function CreateBenefit({ setId, createForm, setCreateForm, prevDa
                 "Access-Control-Allow-Credentials": true
             },
             body: JSON.stringify({
-                data:info, prevData: prevInfo
+                data:benefits, prevData: prevInfo
             })
         });
 
@@ -124,18 +125,41 @@ export default function CreateBenefit({ setId, createForm, setCreateForm, prevDa
 
                         <Grid container spacing={1} mt={0.5} alignItems="center" justifyContent={"space-between"}>
 
-                            <Grid item xs={12} md={5} xl={9}>
+                            <Grid item xs={12} md={5} xl={4.5}>
                                 <TextField
                                     disabled={((isSubmitted))}
                                     id="outlined-required"
-                                    label='Benefit*'
+                                    label='Header*'
                                     inputMode='text'
                                     fullWidth
-                                    value={formState?.info}
+                                    value={formState?.benefits?.header}
                                     onChange={(e) => {
                                         setFormState(prevState => ({
                                             ...prevState,
-                                            info: e.target.value
+                                            benefits: {
+                                                ...prevState.benefits,
+                                                header: e.target.value
+                                            }
+                                        }))
+                                    }}
+                                />
+                            </Grid>
+
+                            <Grid item xs={12} md={5} xl={4.5}>
+                                <TextField
+                                    disabled={((isSubmitted))}
+                                    id="outlined-required"
+                                    label='Description*'
+                                    inputMode='text'
+                                    fullWidth
+                                    value={formState?.benefits?.description}
+                                    onChange={(e) => {
+                                        setFormState(prevState => ({
+                                            ...prevState,
+                                            benefits: {
+                                                ...prevState.benefits,
+                                                description: e.target.value
+                                            }
                                         }))
                                     }}
                                 />

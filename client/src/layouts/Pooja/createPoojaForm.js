@@ -22,6 +22,7 @@ import Benefit from "./data/benefitOfPooja/benefit";
 import Description from "./data/poojaDescription/description";
 import Item from "./data/poojaItem/item";
 import Faq from "./data/faq/faq";
+import Include from "./data/poojaIncludes/includes";
 
 
 
@@ -37,12 +38,12 @@ function Index() {
   const [tier, setTier] = useState([]);
 
   const [formState, setFormState] = useState({
-    pooja_name: '' || prevPoojaData?.pooja_name,
-    pooja_includes: '' || prevPoojaData?.pooja_includes,
-    pooja_image: '' || prevPoojaData?.pooja_image.url,
-    pooja_duration: '' || prevPoojaData?.pooja_duration,
-    pooja_packages: '' || prevPoojaData?.pooja_packages,
-    pooja_type: '' || prevPoojaData?.pooja_type,
+    name: '' || prevPoojaData?.name,
+    description: '' || prevPoojaData?.description,
+    image: '' || prevPoojaData?.image.url,
+    duration: '' || prevPoojaData?.duration,
+    packages: '' || prevPoojaData?.packages,
+    type: '' || prevPoojaData?.type,
     status: '' || prevPoojaData?.status,
   });
 
@@ -229,33 +230,14 @@ function Index() {
                   id="outlined-required"
                   label='Pooja Name *'
                   fullWidth
-                  value={formState?.pooja_name}
+                  value={formState?.name}
                   onChange={(e) => {
                     setFormState(prevState => ({
                       ...prevState,
-                      pooja_name: e.target.value
+                      name: e.target.value
                     }))
                   }} />
               </Grid>
-
-              <Grid item xs={12} md={12} xl={6}>
-                <TextField
-                  disabled={((newData || prevData) && (!editing))}
-                  id="outlined-required"
-                  label='Pooja Include *'
-                  fullWidth
-                  value={formState?.pooja_includes}
-                  onChange={(e) => {
-                    setFormState(prevState => ({
-                      ...prevState,
-                      pooja_includes: e.target.value
-                    }))
-                  }}
-                />
-              </Grid>
-            </Grid>
-
-            <Grid container spacing={2} mt={0.5} mb={0} xs={12} md={9} xl={12}>
 
               <Grid item xs={12} md={8} xl={6}>
                 <TextField
@@ -264,15 +246,19 @@ function Index() {
                   label='Pooja Duration (Minutes) *'
                   fullWidth
                   type='number'
-                  value={formState?.pooja_duration}
+                  value={formState?.duration}
                   onChange={(e) => {
                     setFormState(prevState => ({
                       ...prevState,
-                      pooja_duration: e.target.value
+                      duration: e.target.value
                     }))
                   }}
                 />
               </Grid>
+
+            </Grid>
+
+            <Grid container spacing={2} mt={0.5} mb={0} xs={12} md={9} xl={12}>
 
               <Grid item xs={12} md={4} xl={6}>
                 <FormControl sx={{ width: "100%" }}>
@@ -280,13 +266,13 @@ function Index() {
                   <Select
                     labelId="demo-simple-select-autowidth-label"
                     id="demo-simple-select-autowidth"
-                    name='pooja_type'
-                    value={formState?.pooja_type}
+                    name='type'
+                    value={formState?.type}
                     disabled={((newData || prevData) && (!editing))}
                     onChange={(e) => {
                       setFormState(prevState => ({
                         ...prevState,
-                        pooja_type: e.target.value
+                        type: e.target.value
                       }))
                     }}
                     label="Status"
@@ -297,9 +283,6 @@ function Index() {
                   </Select>
                 </FormControl>
               </Grid>
-            </Grid>
-
-            <Grid container spacing={2} mt={0.5} mb={0} xs={12} md={9} xl={12}>
 
               <Grid item xs={12} md={4} xl={6}>
                 <FormControl sx={{ width: "100%" }}>
@@ -325,8 +308,11 @@ function Index() {
                   </Select>
                 </FormControl>
               </Grid>
+            </Grid>
 
-              <Grid item xs={12} md={6} xl={6}>
+            <Grid container spacing={2} mt={0.5} mb={0} xs={12} md={9} xl={12}>
+
+              <Grid item xs={12} md={6} xl={12}>
                 <MDButton variant="outlined" style={{ fontSize: 10 }} fullWidth color={(newData?.images?.length && !file) ? "warning" : ((newData?.images?.length && file) || file) ? "error" : "success"} component="label">
                   Upload Logo
                   <input
@@ -342,8 +328,6 @@ function Index() {
             </Grid>
 
           </Grid>
-
-
 
           <Grid container mb={2} spacing={2} xs={12} md={12} xl={4} mt={1} display="flex" justifyContent='flex-start' alignItems='center' style={{ width: "300px", height: "180px" }}>
             {filepreview ?
@@ -386,7 +370,7 @@ function Index() {
                                   </Typography>
                                 </MDBox>
                                 <Grid item xs={12} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{}}>
-                                  <img src={newData?.pooja_image?.url || prevPoojaData?.pooja_image?.url} style={{ width: "180px", height: "180px", borderBottomLeftRadius: 10, borderBottomRightRadius: 10 }} />
+                                  <img src={newData?.image?.url || prevPoojaData?.image?.url} style={{ width: "180px", height: "180px", borderBottomLeftRadius: 10, borderBottomRightRadius: 10 }} />
                                 </Grid>
                               </CardContent>
                             </Grid>
@@ -423,6 +407,23 @@ function Index() {
             }
           </Grid>
 
+        </Grid>
+
+        <Grid item xs={12} md={12} xl={12} mt={2}>
+          <TextField
+            disabled={((newData || prevData) && (!editing))}
+            id="outlined-required"
+            label='Description *'
+            fullWidth
+            multiline
+            value={formState?.description}
+            onChange={(e) => {
+              setFormState(prevState => ({
+                ...prevState,
+                description: e.target.value
+              }))
+            }}
+          />
         </Grid>
 
 
@@ -489,7 +490,7 @@ function Index() {
 
         {(prevData || isSubmitted) && <Grid item xs={12} md={12} xl={12} mt={2}>
           <MDBox>
-            <Description prevData={prevData != undefined ? prevData : newData} />
+            <Include prevData={prevData != undefined ? prevData : newData} />
           </MDBox>
         </Grid>}
 

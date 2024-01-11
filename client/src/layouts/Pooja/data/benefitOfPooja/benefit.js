@@ -15,7 +15,8 @@ const Purpose = ({ prevData }) => {
     let columns = [
         { Header: "Delete", accessor: "delete", align: "center" },
         { Header: "Edit", accessor: "edit", align: "center" },
-        { Header: "Benefit", accessor: "benefit", align: "center" },
+        { Header: "Header", accessor: "header", align: "center" },
+        { Header: "Description", accessor: "description", align: "center" },
     ];
 
     let rows = [];
@@ -52,7 +53,7 @@ const Purpose = ({ prevData }) => {
         }
     }
 
-    data?.benefits_of_pooja?.map((elem) => {
+    data?.benefits?.map((elem) => {
         let infoData = {}
 
         infoData.edit = (
@@ -61,9 +62,14 @@ const Purpose = ({ prevData }) => {
         infoData.delete = (
             <DeleteIcon cursor="pointer" onClick={() => { deleteBenefit(elem) }} />
         );
-        infoData.benefit = (
+        infoData.header = (
             <MDTypography component="a" variant="caption" color="text" fontWeight="medium">
-                {elem}
+                {elem?.header}
+            </MDTypography>
+        );
+        infoData.description = (
+            <MDTypography component="a" variant="caption" color="text" fontWeight="medium">
+                {elem?.description}
             </MDTypography>
         );
 

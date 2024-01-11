@@ -10,6 +10,10 @@ const Booking = new mongoose.Schema({
         type: Date,
         required: true,
     },
+    transaction_date: {
+        type: Date,
+        required: true,
+    },
     address_details: {
         location: {
             type: {

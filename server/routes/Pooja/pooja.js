@@ -22,6 +22,8 @@ router.get('/active', Authenticate, restrictTo('Admin', 'SuperAdmin'), poojaCont
 router.get('/:id', Authenticate, restrictTo('Admin', 'SuperAdmin'), poojaController.getPoojaById);
 router.patch('/:id', Authenticate, restrictTo('Admin', 'SuperAdmin'),  upload.single("poojaImage"), poojaController.editPooja);
 router.patch('/purpose/:id', Authenticate, restrictTo('Admin', 'SuperAdmin'), poojaController.addPurpose);
+router.patch('/include/:id', Authenticate, restrictTo('Admin', 'SuperAdmin'), poojaController.addPoojaInclude);
+
 router.patch('/benefit/:id', Authenticate, restrictTo('Admin', 'SuperAdmin'), poojaController.addBenefits);
 router.patch('/description/:id', Authenticate, restrictTo('Admin', 'SuperAdmin'), poojaController.addDescription);
 router.patch('/faq/:id', Authenticate, restrictTo('Admin', 'SuperAdmin'), poojaController.addFaq);
@@ -33,6 +35,7 @@ router.delete('/deletedescription/:id', Authenticate, restrictTo('Admin', 'Super
 router.delete('/deleteitem/:id', Authenticate, restrictTo('Admin', 'SuperAdmin'), poojaController.deleteItem);
 router.delete('/deletebenefit/:id', Authenticate, restrictTo('Admin', 'SuperAdmin'), poojaController.deleteBenefit);
 router.delete('/deletefaq/:id', Authenticate, restrictTo('Admin', 'SuperAdmin'), poojaController.deleteFaq);
+router.delete('/deleteinclude/:id', Authenticate, restrictTo('Admin', 'SuperAdmin'), poojaController.deleteInclude);
 
 
 

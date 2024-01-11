@@ -61,7 +61,7 @@ const AddTier = ({ prevData, tier }) => {
         }
     }
 
-    data?.pooja_packages?.map((elem) => {
+    data?.packages?.map((elem) => {
         let infoData = {}
 
         infoData.edit = (

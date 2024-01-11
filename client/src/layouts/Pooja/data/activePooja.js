@@ -122,20 +122,20 @@ const [data,setData] = useState([]);
                             <Grid container>
 
                               <Grid item xs={12} md={6} lg={12} mt={1} mb={1} display="flex" justifyContent="left" >
-                                <MDTypography fontSize={15} style={{ color: "black", paddingRight: 4, fontWeight: 'bold' }}>Pooja Name: {e?.pooja_name}</MDTypography>
+                                <MDTypography fontSize={15} style={{ color: "black", paddingRight: 4, fontWeight: 'bold' }}>Pooja Name: {e?.name}</MDTypography>
                               </Grid>
 
                               <Grid item xs={12} md={6} lg={12} display={"flex"} justifyContent={"center"} alignItems={"center"}>
                                 <Grid item xs={12} md={6} lg={2} mb={1} display="flex" justifyContent="center">
-                                  <MDTypography fontSize={9} style={{ color: "black" }}>Pooja Includes: <span style={{ fontSize: 9, fontWeight: 700 }}>{e?.pooja_includes}</span></MDTypography>
+                                  <MDTypography fontSize={9} style={{ color: "black" }}>Pooja Includes: <span style={{ fontSize: 9, fontWeight: 700 }}>{e?.includes}</span></MDTypography>
                                 </Grid>
 
                                 <Grid item xs={12} md={6} lg={2} mb={1} display="flex" justifyContent="center">
-                                  <MDTypography fontSize={9} style={{ color: "black" }}>Pooja Duration: <span style={{ fontSize: 9, fontWeight: 700 }}>{e?.pooja_duration}</span></MDTypography>
+                                  <MDTypography fontSize={9} style={{ color: "black" }}>Pooja Duration: <span style={{ fontSize: 9, fontWeight: 700 }}>{e?.duration}</span></MDTypography>
                                 </Grid>
 
                                 <Grid item xs={12} md={6} lg={2} mb={1} display="flex" justifyContent="center">
-                                  <MDTypography fontSize={9} style={{ color: "black" }}>Pooja Type: <span style={{ fontSize: 9, fontWeight: 700 }}>{e?.pooja_type}</span></MDTypography>
+                                  <MDTypography fontSize={9} style={{ color: "black" }}>Pooja Type: <span style={{ fontSize: 9, fontWeight: 700 }}>{e?.type}</span></MDTypography>
                                 </Grid>
 
                                 <Grid item xs={12} md={6} lg={2} mb={1} display="flex" justifyContent="center">

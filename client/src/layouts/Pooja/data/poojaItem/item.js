@@ -15,7 +15,9 @@ const Item = ({ prevData }) => {
     let columns = [
         { Header: "Delete", accessor: "delete", align: "center" },
         { Header: "Edit", accessor: "edit", align: "center" },
-        { Header: "Item", accessor: "item", align: "center" },
+        { Header: "Item Name", accessor: "itemName", align: "center" },
+        { Header: "Quantity", accessor: "quantity", align: "center" },
+        { Header: "Unit", accessor: "unit", align: "center" },
     ];
 
     let rows = [];
@@ -31,7 +33,7 @@ const Item = ({ prevData }) => {
             })
     }, [createForm])
 
-    async function deleteItem(elem){
+    async function deleteItem(id){
         const res = await fetch(`${apiUrl}pooja/deleteitem/${data?._id}`, {
             method: "DELETE",
             credentials: "include",
@@ -40,7 +42,7 @@ const Item = ({ prevData }) => {
                 "Access-Control-Allow-Credentials": true
             },
             body: JSON.stringify({
-                data: elem
+                data: id
             })
         });
 
@@ -52,7 +54,7 @@ const Item = ({ prevData }) => {
         }
     }
 
-    data?.pooja_items?.map((elem) => {
+    data?.items?.map((elem) => {
         let infoData = {}
 
         infoData.edit = (
@@ -61,9 +63,19 @@ const Item = ({ prevData }) => {
         infoData.delete = (
             <DeleteIcon cursor="pointer" onClick={() => { deleteItem(elem) }} />
         );
-        infoData.item = (
+        infoData.itemName = (
             <MDTypography component="a" variant="caption" color="text" fontWeight="medium">
-                {elem}
+                {elem?.name}
+            </MDTypography>
+        );
+        infoData.quantity = (
+            <MDTypography component="a" variant="caption" color="text" fontWeight="medium">
+                {elem?.quantity}
+            </MDTypography>
+        );
+        infoData.unit = (
+            <MDTypography component="a" variant="caption" color="text" fontWeight="medium">
+                {elem?.unit}
             </MDTypography>
         );
 

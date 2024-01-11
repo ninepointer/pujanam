@@ -43,39 +43,33 @@ const processUpload = async (uploadedFiles, s3, route) => {
 exports.createPooja = async (req, res) => {
     try {
         const {
-            pooja_name,
-            pooja_description,
-            pooja_includes,
-            purpose_of_pooja,
-            benefits_of_pooja,
-            pooja_items,
-            pooja_duration,
-            pooja_type,
+            name,
+            description,
+            // includes,
+            purpose,
+            benefits,
+            items,
+            duration,
+            type,
             status,
             faq,
             price,
             _id
         } = req.body;
 
-
-        const packages = {
-            price: price,
-            tier: _id
-        }
         const image = req.file;
-        const poojaImage = image && await Promise.all(await processUpload([image], s3, pooja_name, true));
+        const poojaImage = image && await Promise.all(await processUpload([image], s3, name, true));
 
         const newPooja = await Pooja.create({
-            pooja_name,
-            pooja_description,
-            pooja_includes,
-            purpose_of_pooja,
-            benefits_of_pooja,
-            pooja_image: poojaImage[0],
-            pooja_items,
-            pooja_duration,
-            pooja_packages: packages,
-            pooja_type,
+            name,
+            description,
+            // includes,
+            purpose,
+            benefits,
+            image: poojaImage[0],
+            items,
+            duration,
+            type,
             status,
             faq,
             created_by: req.user._id
@@ -92,7 +86,7 @@ exports.createPooja = async (req, res) => {
 exports.getPoojaById = async (req, res) => {
     try {
         const pooja = await Pooja.findById(req.params.id)
-        .populate('pooja_packages.tier', 'tier_name');
+        .populate('packages.tier', 'tier_name');
         if (!pooja) {
             return ApiResponse.notFound(res, 'Pooja not found');
         }
@@ -112,7 +106,7 @@ exports.editPooja = async (req, res) => {
 
         if (image) {
             poojaImage = await Promise.all(await processUpload([image], s3, update.route));
-            update.pooja_image = poojaImage[0];
+            update.image = poojaImage[0];
         }
 
         update.last_modified_by = req?.user?._id;
@@ -142,10 +136,45 @@ exports.getAllPoojas = async (req, res) => {
 exports.getActivePoojas = async (req, res) => {
     try {
         const activePoojas = await Pooja.find({ status: 'Published' })
-        .populate('pooja_packages.tier', 'tier_name')
+        .populate('packages.tier', 'tier_name')
         ApiResponse.success(res, activePoojas);
     } catch (error) {
         ApiResponse.error(res, 'Something went wrong', 500, error.message);
+    }
+};
+
+exports.addPoojaInclude = async (req, res) => {
+    const id = req.params.id;
+    const {data, prevData} = req.body;
+    try {
+        if(prevData){
+            const pooja = await Pooja.findOne({_id: new ObjectId(id)});
+            const newArr = [];
+            for(let elem of pooja.includes){
+                if(elem === prevData){
+                    elem = data;
+                }
+                newArr.push(elem)
+            }
+
+            pooja.includes = newArr;
+            await pooja.save({new: true, validateBeforeSave: false});
+            ApiResponse.success(res, pooja, 'Pooja updated successfully');
+
+        } else{
+            const update = await Pooja.findOneAndUpdate({_id: new ObjectId(id)}, {
+                $push: {
+                    includes: data
+                }
+            }, {new: true});
+            if (!update) {
+                return ApiResponse.notFound(res, 'Pooja not found');
+            }
+            ApiResponse.success(res, update, 'Pooja updated successfully');
+    
+        }
+    } catch (error) {
+        ApiResponse.error(res,'Something went wrong', 500, error.message);
     }
 };
 
@@ -156,21 +185,21 @@ exports.addPurpose = async (req, res) => {
         if(prevData){
             const pooja = await Pooja.findOne({_id: new ObjectId(id)});
             const newArr = [];
-            for(let elem of pooja.purpose_of_pooja){
+            for(let elem of pooja.purpose){
                 if(elem === prevData){
                     elem = data;
                 }
                 newArr.push(elem)
             }
 
-            pooja.purpose_of_pooja = newArr;
+            pooja.purpose = newArr;
             await pooja.save({new: true, validateBeforeSave: false});
             ApiResponse.success(res, pooja, 'Pooja updated successfully');
 
         } else{
             const update = await Pooja.findOneAndUpdate({_id: new ObjectId(id)}, {
                 $push: {
-                    purpose_of_pooja: data
+                    purpose: data
                 }
             }, {new: true});
             if (!update) {
@@ -187,25 +216,27 @@ exports.addPurpose = async (req, res) => {
 exports.addBenefits = async (req, res) => {
     const id = req.params.id;
     const {data, prevData} = req.body;
+
     try {
         if(prevData){
             const pooja = await Pooja.findOne({_id: new ObjectId(id)});
             const newArr = [];
-            for(let elem of pooja.benefits_of_pooja){
-                if(elem === prevData){
-                    elem = data;
+            for(let elem of pooja.benefits){
+                if(elem._id?.toString() === prevData?._id?.toString()){
+                    elem.header = data.header;
+                    elem.description = data.description;
                 }
                 newArr.push(elem)
             }
 
-            pooja.benefits_of_pooja = newArr;
+            pooja.benefits = newArr;
             await pooja.save({new: true, validateBeforeSave: false});
             ApiResponse.success(res, pooja, 'Pooja updated successfully');
 
         } else{
             const update = await Pooja.findOneAndUpdate({_id: new ObjectId(id)}, {
                 $push: {
-                    benefits_of_pooja: data
+                    benefits: data
                 }
             }, {new: true});
             if (!update) {
@@ -226,21 +257,21 @@ exports.addDescription = async (req, res) => {
         if(prevData){
             const pooja = await Pooja.findOne({_id: new ObjectId(id)});
             const newArr = [];
-            for(let elem of pooja.pooja_description){
+            for(let elem of pooja.description){
                 if(elem === prevData){
                     elem = data;
                 }
                 newArr.push(elem)
             }
 
-            pooja.pooja_description = newArr;
+            pooja.description = newArr;
             await pooja.save({new: true, validateBeforeSave: false});
             ApiResponse.success(res, pooja, 'Pooja updated successfully');
 
         } else{
             const update = await Pooja.findOneAndUpdate({_id: new ObjectId(id)}, {
                 $push: {
-                    pooja_description: data
+                    description: data
                 }
             }, {new: true});
             if (!update) {
@@ -257,25 +288,28 @@ exports.addDescription = async (req, res) => {
 exports.addPoojaItem = async (req, res) => {
     const id = req.params.id;
     const {data, prevData} = req.body;
+
     try {
         if(prevData){
             const pooja = await Pooja.findOne({_id: new ObjectId(id)});
             const newArr = [];
-            for(let elem of pooja.pooja_items){
-                if(elem === prevData){
-                    elem = data;
+            for(let elem of pooja.items){
+                if(elem._id?.toString() === prevData?._id?.toString()){
+                    elem.name = data.name;
+                    elem.quantity = data.quantity;
+                    elem.unit = data.unit;
                 }
                 newArr.push(elem)
             }
 
-            pooja.pooja_items = newArr;
+            pooja.items = newArr;
             await pooja.save({new: true, validateBeforeSave: false});
             ApiResponse.success(res, pooja, 'Pooja updated successfully');
 
         } else{
             const update = await Pooja.findOneAndUpdate({_id: new ObjectId(id)}, {
                 $push: {
-                    pooja_items: data
+                    items: data
                 }
             }, {new: true});
             if (!update) {
@@ -328,30 +362,30 @@ exports.addFaq = async (req, res) => {
 
 exports.addTier = async (req, res) => {
     const id = req.params.id;
-    const {pooja_packages, prevPackage} = req.body;
+    const {packages, prevPackage} = req.body;
 
     try {
         if(prevPackage){
             const pooja = await Pooja.findOne({_id: new ObjectId(id)}).
-            populate('pooja_packages.tier', 'tier_name')
+            populate('packages.tier', 'tier_name')
             const newArr = [];
-            for(let elem of pooja.pooja_packages){
+            for(let elem of pooja.packages){
                 if(elem?.tier?._id?.toString() === prevPackage?.tier?._id?.toString()){
-                    elem = pooja_packages;
+                    elem = packages;
                 }
                 newArr.push(elem)
             }
 
-            pooja.pooja_packages = newArr;
+            pooja.packages = newArr;
             await pooja.save({new: true, validateBeforeSave: false});
             ApiResponse.success(res, pooja, 'Pooja updated successfully');
 
         } else{
         const update = await Pooja.findOneAndUpdate({_id: new ObjectId(id)}, {
             $push: {
-                pooja_packages: {
-                    tier: pooja_packages._id,
-                    price: pooja_packages.price
+                packages: {
+                    tier: packages._id,
+                    price: packages.price
                 }
             }
         }, {new: true});
@@ -371,13 +405,13 @@ exports.deleteTier = async (req, res) => {
     try {
         const update = await Pooja.findOneAndUpdate({_id: new ObjectId(id)}, {
             $pull: {
-                pooja_packages: {
+                packages: {
                     _id: new ObjectId(docId)
                 }
             }
         }, {new: true});
 
-        await update.populate('pooja_packages.tier', 'tier_name');
+        await update.populate('packages.tier', 'tier_name');
         if (!update) {
             return ApiResponse.notFound(res, 'Pooja not found');
         }
@@ -393,7 +427,25 @@ exports.deletePurpose = async (req, res) => {
     try {
         const update = await Pooja.findOneAndUpdate({_id: new ObjectId(id)}, {
             $pull: {
-                purpose_of_pooja: data
+                purpose: data
+            }
+        }, {new: true});
+        if (!update) {
+            return ApiResponse.notFound(res, 'Pooja not found');
+        }
+        ApiResponse.success(res, update, 'Pooja updated successfully');
+    } catch (error) {
+        ApiResponse.error(res,'Something went wrong', 500, error.message);
+    }
+};
+
+exports.deleteInclude = async (req, res) => {
+    const id = req.params.id;
+    const {data} = req.body;
+    try {
+        const update = await Pooja.findOneAndUpdate({_id: new ObjectId(id)}, {
+            $pull: {
+                includes: data
             }
         }, {new: true});
         if (!update) {
@@ -411,7 +463,7 @@ exports.deleteBenefit = async (req, res) => {
     try {
         const update = await Pooja.findOneAndUpdate({_id: new ObjectId(id)}, {
             $pull: {
-                benefits_of_pooja: data
+                benefits: data
             }
         }, {new: true});
         if (!update) {
@@ -429,7 +481,7 @@ exports.deleteDescription = async (req, res) => {
     try {
         const update = await Pooja.findOneAndUpdate({_id: new ObjectId(id)}, {
             $pull: {
-                pooja_description: data
+                description: data
             }
         }, {new: true});
         if (!update) {
@@ -467,7 +519,7 @@ exports.deleteItem = async (req, res) => {
     try {
         const update = await Pooja.findOneAndUpdate({_id: new ObjectId(id)}, {
             $pull: {
-                pooja_items: data
+                items: data
             }
         }, {new: true});
         if (!update) {

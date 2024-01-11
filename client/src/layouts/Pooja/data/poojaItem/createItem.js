@@ -13,22 +13,24 @@ export default function CreateItem({ setId, createForm, setCreateForm, prevData,
 
     const [isSubmitted, setIsSubmitted] = useState(false);
     const [formState, setFormState] = useState({
-        info: "" || prevInfo,
+        items: {
+            name: "" || prevInfo?.name,
+            quantity: "" || prevInfo?.quantity,
+            unit: "" || prevInfo?.unit,
+        }
     });
     const [isLoading, setIsLoading] = useState(false)
 
 
     async function onNext(e, formState) {
         e.preventDefault()
-        // setCreating(true)
-        console.log("Reward Form State: ", formState)
 
-        if (!formState?.info) {
-            setTimeout(() => {  setIsSubmitted(false) }, 500)
+        if (!formState?.items) {
+            setTimeout(() => { setIsSubmitted(false) }, 500)
             return openErrorSB("Missing Field", "Please fill all the mandatory fields")
         }
 
-        const { info} = formState;
+        const { items } = formState;
 
         const res = await fetch(`${apiUrl}pooja/item/${prevData?._id}`, {
             method: "PATCH",
@@ -38,7 +40,7 @@ export default function CreateItem({ setId, createForm, setCreateForm, prevData,
                 "Access-Control-Allow-Credentials": true
             },
             body: JSON.stringify({
-                data:info, prevData: prevInfo
+                data: items, prevData: prevInfo
             })
         });
 
@@ -46,7 +48,7 @@ export default function CreateItem({ setId, createForm, setCreateForm, prevData,
         console.log(data.error, data);
         if (!data.error) {
             // setNewObjectId(data.data?._id)
-            setTimeout(() => {  setIsSubmitted(true) }, 500)
+            setTimeout(() => { setIsSubmitted(true) }, 500)
             openSuccessSB(data.message, `Contest Reward Created with prize: ${data.data?.prize}`)
             setCreateForm(!createForm);
             setFormState({});
@@ -54,7 +56,7 @@ export default function CreateItem({ setId, createForm, setCreateForm, prevData,
             prevInfo = "";
 
         } else {
-            setTimeout(() => {  setIsSubmitted(false) }, 500)
+            setTimeout(() => { setIsSubmitted(false) }, 500)
             console.log("Invalid Entry");
             return openErrorSB("Couldn't Add Reward", data.error)
         }
@@ -124,18 +126,62 @@ export default function CreateItem({ setId, createForm, setCreateForm, prevData,
 
                         <Grid container spacing={1} mt={0.5} alignItems="center" justifyContent={"space-between"}>
 
-                            <Grid item xs={12} md={5} xl={9}>
+                            <Grid item xs={12} md={5} xl={3}>
                                 <TextField
                                     disabled={((isSubmitted))}
                                     id="outlined-required"
-                                    label='Pooja Item*'
+                                    label='Item Name*'
                                     inputMode='text'
                                     fullWidth
-                                    value={formState?.info}
+                                    value={formState?.items?.name}
                                     onChange={(e) => {
                                         setFormState(prevState => ({
                                             ...prevState,
-                                            info: e.target.value
+                                            items: {
+                                                ...prevState.items,
+                                                name: e.target.value
+                                            }
+                                        }))
+                                    }}
+                                />
+                            </Grid>
+
+                            <Grid item xs={12} md={5} xl={3}>
+                                <TextField
+                                    disabled={((isSubmitted))}
+                                    id="outlined-required"
+                                    label='Quantity*'
+                                    type='number'
+                                    inputMode='number'
+                                    fullWidth
+                                    value={formState?.items?.quantity}
+                                    onChange={(e) => {
+                                        setFormState(prevState => ({
+                                            ...prevState,
+                                            items: {
+                                                ...prevState.items,
+                                                quantity: e.target.value
+                                            }
+                                        }))
+                                    }}
+                                />
+                            </Grid>
+
+                            <Grid item xs={12} md={5} xl={3}>
+                                <TextField
+                                    disabled={((isSubmitted))}
+                                    id="outlined-required"
+                                    label='Unit*'
+                                    inputMode='text'
+                                    fullWidth
+                                    value={formState?.items?.unit}
+                                    onChange={(e) => {
+                                        setFormState(prevState => ({
+                                            ...prevState,
+                                            items: {
+                                                ...prevState.items,
+                                                unit: e.target.value
+                                            }
                                         }))
                                     }}
                                 />
