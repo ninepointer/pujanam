@@ -45,7 +45,8 @@ exports.createPooja = async (req, res) => {
         const {
             name,
             description,
-            // includes,
+            cetegory,
+            sub_cetegory,
             purpose,
             benefits,
             items,
@@ -57,13 +58,15 @@ exports.createPooja = async (req, res) => {
             _id
         } = req.body;
 
+        // console.log(req.body)
         const image = req.file;
         const poojaImage = image && await Promise.all(await processUpload([image], s3, name, true));
 
         const newPooja = await Pooja.create({
             name,
             description,
-            // includes,
+            cetegory,
+            sub_cetegory,
             purpose,
             benefits,
             image: poojaImage[0],

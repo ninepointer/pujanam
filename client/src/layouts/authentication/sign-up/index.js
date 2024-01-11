@@ -153,7 +153,7 @@ function Cover(props) {
               },
           });
                    
-          setDetails.setUserDetail(res.data);
+          setDetails.setUserDetail(res.data.data);
           
           //console.log("this is data of particular user", res.data);
   
@@ -250,7 +250,7 @@ const [buttonClicked, setButtonClicked] = useState(false);
       setDetails.setUserDetail(data.data);
       setShowConfirmation(false);
       const userData = await userDetail();
-      if(userData?.role?.roleName === adminRole){
+      if(userData?.data?.role?.roleName === adminRole){
         const from = location.state?.from || "/dashboard";
         navigate(from);
       }
@@ -366,7 +366,7 @@ const [buttonClicked, setButtonClicked] = useState(false);
               setInvalidDetail(data.message);
           }else{
             let userData = await userDetail();
-            if(userData?.role?.roleName === adminRole){
+            if(userData?.data?.role?.roleName === adminRole){
               const from = location.state?.from || "/dashboard";
               navigate(from);
             }

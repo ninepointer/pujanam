@@ -6,7 +6,7 @@ const mongoSanitize = require('express-mongo-sanitize');
 const xssClean = require("xss-clean");
 const hpp = require("hpp")
 const { zerodhaAccountType } = require("./constant")
-
+const Product = require('./models/Product/product');
 async function commonProcess() {
     // await setIOValue();
 
@@ -33,6 +33,7 @@ async function commonProcess() {
 
 
     app.get('/api/v1/servertime', (req, res, next) => { res.json({ status: 'success', data: new Date() }) })
+    app.get('/api/v1/product', async (req, res, next) => { res.json({ status: 'success', data: await Product.find() }) })
 
     app.use('/api/v1', require("./routes/user/signedUpUser"))
     app.use('/api/v1', require("./routes/user/userLogin"));
@@ -42,6 +43,7 @@ async function commonProcess() {
     app.use('/api/v1/tier', require("./routes/Tier/tier"));
     app.use('/api/v1/pooja', require("./routes/Pooja/pooja"));
     app.use('/api/v1/booking', require("./routes/Booking/booking"));
+    app.use('/api/v1/devta', require("./routes/DeviDevta/devi-devta"));
 
     app.use('/api/v1/dailycontest', require("./routes/DailyContest/dailyContestRoutes"))
     app.use('/api/v1/user', require("./routes/user/userRoutes"));

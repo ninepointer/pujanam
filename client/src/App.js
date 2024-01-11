@@ -118,7 +118,7 @@ export default function App() {
         },
     })
     .then((res)=>{
-      setDetails.setUserDetail(res.data);
+      setDetails.setUserDetail(res.data.data);
       setDetailUser((res.data));
       setIsLoading(false);
 
@@ -328,7 +328,7 @@ export default function App() {
           :
           pathname == "/" || !pathname ?
           <Route path="/" element={<Navigate 
-            to={getDetails?.userDetails.role?.roleName === adminRole ? "/tenxdashboard" : getDetails.userDetails?.designation == 'Equity Trader' ? '/infinitytrading':'/home'} 
+            to={getDetails?.userDetails.role?.roleName === adminRole ? "/tenxdashboard" : getDetails.userDetails?.designation == 'Equity Trader' ? '/infinitytrading':'/dashboard'} 
             />} />
             :
             pathname == "/:collegename" ?
@@ -350,7 +350,7 @@ export default function App() {
           <Route path='/blogs' element={<BlogCard/>}/>
           <Route path='/calculators' element={<Calculator/>}/>
           <Route path='/' element={<Navigate 
-            to={getDetails?.userDetails?.role ? getDetails?.userDetails.role?.roleName === adminRole ? "/tenxdashboard" : getDetails.userDetails?.designation == 'Equity Trader' ? '/infinitytrading':'/home':'/'} 
+            to={getDetails?.userDetails?.role ? getDetails?.userDetails.role?.roleName === adminRole ? "/tenxdashboard" : getDetails.userDetails?.designation == 'Equity Trader' ? '/infinitytrading':'/dashboard':'/'} 
             />}/>
           <Route path='/adminlogin' element={<AdminLogin />}/>
           <Route path='/about' element={<About/>}/>

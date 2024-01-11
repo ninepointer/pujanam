@@ -7,7 +7,7 @@ import Grid from "@mui/material/Grid";
 import MDTypography from "../../components/MDTypography";
 import MDBox from "../../components/MDBox";
 import MDButton from "../../components/MDButton"
-import { Card, CardActionArea, CardContent, Typography } from "@mui/material";
+import { Card, CardActionArea, CardContent, OutlinedInput, Typography } from "@mui/material";
 import MDSnackbar from "../../components/MDSnackbar";
 import MenuItem from '@mui/material/MenuItem';
 // import { styled } from '@mui/material';
@@ -24,7 +24,16 @@ import Item from "./data/poojaItem/item";
 import Faq from "./data/faq/faq";
 import Include from "./data/poojaIncludes/includes";
 
-
+const ITEM_HEIGHT = 30;
+const ITEM_PADDING_TOP = 10;
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+      width: 250,
+    },
+  },
+};
 
 
 function Index() {
@@ -36,6 +45,7 @@ function Index() {
   const navigate = useNavigate();
   const [newData, setNewData] = useState(null);
   const [tier, setTier] = useState([]);
+  const [cetegories, setPortfolios] = useState([]);
 
   const [formState, setFormState] = useState({
     name: '' || prevPoojaData?.name,
@@ -45,6 +55,11 @@ function Index() {
     packages: '' || prevPoojaData?.packages,
     type: '' || prevPoojaData?.type,
     status: '' || prevPoojaData?.status,
+    sub_cetegory: '' || prevPoojaData?.sub_cetegory,
+    cetegory: {
+      id: "" || prevPoojaData?.cetegory?._id,
+      name: "" || prevPoojaData?.cetegory?.product_name
+    },
   });
 
   const [file, setFile] = useState(null);
@@ -54,6 +69,14 @@ function Index() {
     axios.get(`${apiUrl}tier/active`, { withCredentials: true })
       .then((res) => {
         setTier(res?.data?.data);
+      }).catch((err) => {
+        return new Error(err)
+      })
+
+      axios.get(`${apiUrl}product`, {withCredentials: true})
+      .then((res) => {
+        // console.log("TestZone Portfolios :", res?.data?.data)
+        setPortfolios(res?.data?.data);
       }).catch((err) => {
         return new Error(err)
       })
@@ -87,11 +110,8 @@ function Index() {
       for (let elem in formState) {
         if (elem !== "poojaImage") {
           if (typeof (formState[elem]) === "object") {
-
-            for (let subelem in formState[elem]) {
-              formData.append(`${subelem}`, formState[elem][subelem]);
-            }
-            // Append the Blob to formData
+            if(elem === "cetegory")
+            formData.append(`${"cetegory"}`, formState[elem].id);
 
           } else {
             formData.append(`${elem}`, formState[elem]);
@@ -135,10 +155,11 @@ function Index() {
       for (let elem in formState) {
         if (elem !== "poojaImage") {
           if (typeof (formState[elem]) === "object") {
-
-            for (let subelem in formState[elem]) {
-              formData.append(`${subelem}`, formState[elem][subelem]);
-            }
+            if(elem === "cetegory")
+            formData.append(`${"cetegory"}`, formState[elem].id);
+            // for (let subelem in formState[elem]) {
+            //   formData.append(`${subelem}`, formState[elem][subelem]);
+            // }
             // Append the Blob to formData
 
           } else {
@@ -211,6 +232,23 @@ function Index() {
     />
   );
 
+  const handleCetegoryChange = (event) => {
+    const {
+      target: { value },
+    } = event;
+    let data = cetegories?.filter((elem) => {
+      return elem.product_name === value;
+    })
+    setFormState(prevState => ({
+      ...prevState,
+      cetegory: {
+        ...prevState.cetegory,
+        id: data[0]?._id,
+        name: data[0]?.product_name
+      }
+    }));
+  };
+
   return (
     <>
       <MDBox pl={2} pr={2} mt={4} mb={2}>
@@ -262,7 +300,7 @@ function Index() {
 
               <Grid item xs={12} md={4} xl={6}>
                 <FormControl sx={{ width: "100%" }}>
-                  <InputLabel id="demo-simple-select-autowidth-label">Status *</InputLabel>
+                  <InputLabel id="demo-simple-select-autowidth-label">Type *</InputLabel>
                   <Select
                     labelId="demo-simple-select-autowidth-label"
                     id="demo-simple-select-autowidth"
@@ -275,7 +313,7 @@ function Index() {
                         type: e.target.value
                       }))
                     }}
-                    label="Status"
+                    label="Type"
                     sx={{ minHeight: 43 }}
                   >
                     <MenuItem value="Home">Home</MenuItem>
@@ -311,6 +349,63 @@ function Index() {
             </Grid>
 
             <Grid container spacing={2} mt={0.5} mb={0} xs={12} md={9} xl={12}>
+
+              <Grid item xs={12} md={4} xl={6}>
+                <FormControl sx={{ width: "100%" }}>
+                  <InputLabel id="demo-simple-select-autowidth-label">Sub Cetegory *</InputLabel>
+                  <Select
+                    labelId="demo-simple-select-autowidth-label"
+                    id="demo-simple-select-autowidth"
+                    name='sub_cetegory'
+                    value={formState?.sub_cetegory}
+                    disabled={((newData || prevData) && (!editing))}
+                    onChange={(e) => {
+                      setFormState(prevState => ({
+                        ...prevState,
+                        sub_cetegory: e.target.value
+                      }))
+                    }}
+                    label="Sub Cetegory"
+                    sx={{ minHeight: 43 }}
+                  >
+                    <MenuItem value="General Pooja">General Pooja</MenuItem>
+                    <MenuItem value="Jaap">Jaap</MenuItem>
+                    <MenuItem value="Paath">Paath</MenuItem>
+                    <MenuItem value="Havan">Havan</MenuItem>
+                    <MenuItem value="Kundli Dosh Pooja">Kundli Dosh Pooja</MenuItem>
+                    <MenuItem value="Festival Pooja">Festival Pooja</MenuItem>
+                  </Select>
+                </FormControl>
+              </Grid>
+
+              <Grid item xs={12} md={6} xl={6}>
+                <FormControl sx={{ width: '100%' }}>
+                  <InputLabel id="demo-multiple-name-label">Cetegory</InputLabel>
+                  <Select
+                    labelId="demo-multiple-name-label"
+                    id="demo-multiple-name"
+                    name='cetegory'
+                    disabled={((isSubmitted || prevPoojaData) && (!editing))}
+                    value={formState?.cetegory?.name || prevPoojaData?.cetegory?.product_name || prevPoojaData?.cetegory?.product_name}
+                    onChange={handleCetegoryChange}
+                    input={<OutlinedInput label="Portfolio" />}
+                    sx={{ minHeight: 45 }}
+                    MenuProps={MenuProps}
+                  >
+                    {cetegories?.map((cetegory) => (
+                      <MenuItem
+                        key={cetegory?.product_name}
+                        value={cetegory?.product_name}
+                      >
+                        {cetegory.product_name}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Grid>
+            </Grid>
+
+            <Grid container spacing={2} mt={8} mb={0} xs={12} md={9} xl={12}>
 
               <Grid item xs={12} md={6} xl={12}>
                 <MDButton variant="outlined" style={{ fontSize: 10 }} fullWidth color={(newData?.images?.length && !file) ? "warning" : ((newData?.images?.length && file) || file) ? "error" : "success"} component="label">

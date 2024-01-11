@@ -82,6 +82,16 @@ const Pooja = new mongoose.Schema({
         type: Schema.Types.ObjectId,
         ref: 'user'
     },
+    cetegory: {
+        type: Schema.Types.ObjectId,
+        ref: 'product'
+    },
+    sub_cetegory: {
+        type: String,
+        enum: ['General Pooja', 'Jaap', "Havan", "Kundli Dosh Pooja", 'Festival Pooja', 'Paath'],
+        default: 'Published',
+        required: true
+    }
 });
 const PoojaSchema = mongoose.model('pooja', Pooja);
 module.exports = PoojaSchema;
