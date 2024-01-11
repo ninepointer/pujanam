@@ -1,4 +1,4 @@
-const ApiResponse = require('../../helpers/ApiResponse'); // Assuming ApiResponse class is saved in utils folder
+const ApiResponse = require('../../helpers/apiResponse'); // Assuming ApiResponse class is saved in utils folder
 const {ObjectId} = require('mongodb');
 const Booking = require("../../models/Bookings/bookingSchema");
 

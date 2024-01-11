@@ -1,5 +1,5 @@
 const Pooja = require('../../models/Pooja/poojaSchema');
-const ApiResponse = require('../../helpers/ApiResponse');
+const ApiResponse = require('../../helpers/apiResponse');
 const AWS = require('aws-sdk');
 const { ObjectId } = require('mongodb');
 

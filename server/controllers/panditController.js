@@ -1,5 +1,5 @@
 const Pandit = require('../models/Pandit/pandit');
-const ApiResponse = require('../helpers/ApiResponse'); // Assuming ApiResponse class is saved in utils folder
+const ApiResponse = require('../helpers/apiResponse'); // Assuming ApiResponse class is saved in utils folder
 const {ObjectId} = require('mongodb')
 // Create a Pandit
 exports.createPandit = async (req, res) => {
