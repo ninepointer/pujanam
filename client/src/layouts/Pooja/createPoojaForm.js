@@ -45,7 +45,7 @@ function Index() {
   const navigate = useNavigate();
   const [newData, setNewData] = useState(null);
   const [tier, setTier] = useState([]);
-  const [cetegories, setPortfolios] = useState([]);
+  const [cetegories, setCategories] = useState([]);
 
   const [formState, setFormState] = useState({
     name: '' || prevPoojaData?.name,
@@ -55,10 +55,10 @@ function Index() {
     packages: '' || prevPoojaData?.packages,
     type: '' || prevPoojaData?.type,
     status: '' || prevPoojaData?.status,
-    sub_cetegory: '' || prevPoojaData?.sub_cetegory,
-    cetegory: {
-      id: "" || prevPoojaData?.cetegory?._id,
-      name: "" || prevPoojaData?.cetegory?.product_name
+    sub_category: '' || prevPoojaData?.sub_category,
+    category: {
+      id: "" || prevPoojaData?.category?._id,
+      name: "" || prevPoojaData?.category?.product_name
     },
   });
 
@@ -76,7 +76,7 @@ function Index() {
       axios.get(`${apiUrl}product`, {withCredentials: true})
       .then((res) => {
         // console.log("TestZone Portfolios :", res?.data?.data)
-        setPortfolios(res?.data?.data);
+        setCategories(res?.data?.data);
       }).catch((err) => {
         return new Error(err)
       })
@@ -110,8 +110,8 @@ function Index() {
       for (let elem in formState) {
         if (elem !== "poojaImage") {
           if (typeof (formState[elem]) === "object") {
-            if(elem === "cetegory")
-            formData.append(`${"cetegory"}`, formState[elem].id);
+            if(elem === "category")
+            formData.append(`${"category"}`, formState[elem].id);
 
           } else {
             formData.append(`${elem}`, formState[elem]);
@@ -155,8 +155,8 @@ function Index() {
       for (let elem in formState) {
         if (elem !== "poojaImage") {
           if (typeof (formState[elem]) === "object") {
-            if(elem === "cetegory")
-            formData.append(`${"cetegory"}`, formState[elem].id);
+            if(elem === "category")
+            formData.append(`${"category"}`, formState[elem].id);
             // for (let subelem in formState[elem]) {
             //   formData.append(`${subelem}`, formState[elem][subelem]);
             // }
@@ -241,8 +241,8 @@ function Index() {
     })
     setFormState(prevState => ({
       ...prevState,
-      cetegory: {
-        ...prevState.cetegory,
+      category: {
+        ...prevState.category,
         id: data[0]?._id,
         name: data[0]?.product_name
       }
@@ -356,13 +356,13 @@ function Index() {
                   <Select
                     labelId="demo-simple-select-autowidth-label"
                     id="demo-simple-select-autowidth"
-                    name='sub_cetegory'
-                    value={formState?.sub_cetegory}
+                    name='sub_category'
+                    value={formState?.sub_category}
                     disabled={((newData || prevData) && (!editing))}
                     onChange={(e) => {
                       setFormState(prevState => ({
                         ...prevState,
-                        sub_cetegory: e.target.value
+                        sub_category: e.target.value
                       }))
                     }}
                     label="Sub Cetegory"
@@ -384,20 +384,20 @@ function Index() {
                   <Select
                     labelId="demo-multiple-name-label"
                     id="demo-multiple-name"
-                    name='cetegory'
+                    name='category'
                     disabled={((isSubmitted || prevPoojaData) && (!editing))}
-                    value={formState?.cetegory?.name || prevPoojaData?.cetegory?.product_name || prevPoojaData?.cetegory?.product_name}
+                    value={formState?.category?.name || prevPoojaData?.category?.product_name || prevPoojaData?.category?.product_name}
                     onChange={handleCetegoryChange}
                     input={<OutlinedInput label="Portfolio" />}
                     sx={{ minHeight: 45 }}
                     MenuProps={MenuProps}
                   >
-                    {cetegories?.map((cetegory) => (
+                    {cetegories?.map((category) => (
                       <MenuItem
-                        key={cetegory?.product_name}
-                        value={cetegory?.product_name}
+                        key={category?.product_name}
+                        value={category?.product_name}
                       >
-                        {cetegory.product_name}
+                        {category.product_name}
                       </MenuItem>
                     ))}
                   </Select>

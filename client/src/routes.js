@@ -8,6 +8,8 @@ import Tier from './layouts/Tier'
 import Pooja from './layouts/Pooja'
 import TierDetails from './layouts/Tier/tierDetails'
 import PoojaDetails from './layouts/Pooja/poojaDetails'
+import DeviDevDetails from './layouts/DeviDevta/devDetails'
+import DeviDev from './layouts/DeviDevta';
 
 
 const routes = [
@@ -16,6 +18,15 @@ const routes = [
     key: "dailycontest",
     route: "/dashboard/dailycontest",
     component: <DailyContest />,
+  },
+  {
+    key: "devidevta",
+    route: "/devidevta",
+    component: <DeviDev />,
+  },
+  {
+    route: "/devidevtadetails",
+    component: <DeviDevDetails />,
   },
   {
     key: "pandit",

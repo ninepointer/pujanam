@@ -4,6 +4,7 @@ const {ObjectId} = require('mongodb');
 const Booking = require("../../models/Bookings/bookingSchema");
 const Payment = require("../../models/Payment/payment");
 const mongoose = require('mongoose');
+const User = require("../../models/User/userSchema")
 
 exports.getAllPooja = async (req, res) => {
     try {
@@ -31,6 +32,7 @@ exports.getPoojaById = async (req, res) => {
 exports.booking = async (req, res) => {
     const session = await mongoose.startSession();
     session.startTransaction();
+    const userId = req.user._id;
 
     try {
         const {
@@ -50,16 +52,22 @@ exports.booking = async (req, res) => {
             country: country
         }
 
-        const payment = await Payment.create({
+        const payment = await Payment.create([{
             //todo-vijay
             transaction_id: generateUniqueTransactionId(), payment_status: "UnPaid", payment_mode: "PAP", created_by: req.user._id
-        });
+        }], { session });
 
         const createBooking = await Booking.create([{
             user_id: req.user._id, booking_date, transaction_date: new Date(), address_details, full_name, mobile,
             booking_amount, product_id: "659e81ea30fa1324fb3d2681", sub_product_id: poojaId, tier: tierId,
             status: "Success", created_by: req.user._id, paymentDetails: payment._id
         }], { session });
+
+        const user = await User.findOneAndUpdate({_id: new ObjectId(userId)}, {
+            $push: {
+                bookings: createBooking?.[0]._id
+            }
+        }, {session})
 
         await session.commitTransaction();
         session.endSession();

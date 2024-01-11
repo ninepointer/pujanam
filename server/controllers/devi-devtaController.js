@@ -126,16 +126,17 @@ exports.getActiveDevta = async (req, res) => {
 
 exports.addOtherDevta = async (req, res) => {
     const id = req.params.id;
-    const {other_devta, prevPackage} = req.body;
+    const {other_names, prevPackage} = req.body;
 
+    console.log(other_names,prevPackage)
     try {
         if(prevPackage){
             const deviDevta = await DeviDevta.findOne({_id: new ObjectId(id)}).
             populate('other_names', 'name')
             const newArr = [];
             for(let elem of deviDevta.other_names){
-                if(elem?.other_names?._id?.toString() === prevPackage?.other_names?._id?.toString()){
-                    elem = other_devta;
+                if(elem?._id?.toString() === prevPackage?._id?.toString()){
+                    elem = other_names;
                 }
                 newArr.push(elem)
             }
@@ -147,9 +148,11 @@ exports.addOtherDevta = async (req, res) => {
         } else{
         const update = await DeviDevta.findOneAndUpdate({_id: new ObjectId(id)}, {
             $push: {
-                other_names: other_devta._id
+                other_names: other_names._id
             }
-        }, {new: true});
+        }, {new: true})
+        .populate('other_names', 'name')
+        
         if (!update) {
             return ApiResponse.notFound(res, 'DeviDevta not found');
         }
@@ -162,16 +165,17 @@ exports.addOtherDevta = async (req, res) => {
 
 exports.addAssociateDevta = async (req, res) => {
     const id = req.params.id;
-    const {other_devta, prevPackage} = req.body;
+    const {other_names, prevPackage} = req.body;
 
+    console.log(other_names,prevPackage)
     try {
         if(prevPackage){
             const deviDevta = await DeviDevta.findOne({_id: new ObjectId(id)}).
             populate('associated_devi_devta', 'name')
             const newArr = [];
             for(let elem of deviDevta.associated_devi_devta){
-                if(elem?.associated_devi_devta?._id?.toString() === prevPackage?.associated_devi_devta?._id?.toString()){
-                    elem = other_devta;
+                if(elem?._id?.toString() === prevPackage?._id?.toString()){
+                    elem = other_names;
                 }
                 newArr.push(elem)
             }
@@ -183,9 +187,11 @@ exports.addAssociateDevta = async (req, res) => {
         } else{
         const update = await DeviDevta.findOneAndUpdate({_id: new ObjectId(id)}, {
             $push: {
-                associated_devi_devta: other_devta._id
+                associated_devi_devta: other_names._id
             }
-        }, {new: true});
+        }, {new: true})
+        .populate('associated_devi_devta', 'name')
+        
         if (!update) {
             return ApiResponse.notFound(res, 'DeviDevta not found');
         }
@@ -237,9 +243,7 @@ exports.deleteOtherDevta = async (req, res) => {
     try {
         const update = await DeviDevta.findOneAndUpdate({_id: new ObjectId(id)}, {
             $pull: {
-                other_names: {
-                    _id: new ObjectId(docId)
-                }
+                other_names: new ObjectId(docId)
             }
         }, {new: true});
 
@@ -259,9 +263,7 @@ exports.deleteAssociateDevta = async (req, res) => {
     try {
         const update = await DeviDevta.findOneAndUpdate({_id: new ObjectId(id)}, {
             $pull: {
-                associated_devi_devta: {
-                    _id: new ObjectId(docId)
-                }
+                associated_devi_devta: new ObjectId(docId)
             }
         }, {new: true});
 

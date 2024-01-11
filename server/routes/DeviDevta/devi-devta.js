@@ -14,11 +14,11 @@ const upload = multer({
 });
 
 
-router.post('/', Authenticate, restrictTo('Admin', 'SuperAdmin'),  upload.single("poojaImage"), deviDevtaController.create);
+router.post('/', Authenticate, restrictTo('Admin', 'SuperAdmin'),  upload.single("devImage"), deviDevtaController.create);
 router.get('/', Authenticate, restrictTo('Admin', 'SuperAdmin'), deviDevtaController.getAllDevta);
 router.get('/active', Authenticate, restrictTo('Admin', 'SuperAdmin'), deviDevtaController.getActiveDevta);
 router.get('/:id', Authenticate, restrictTo('Admin', 'SuperAdmin'), deviDevtaController.getDevtaById);
-router.patch('/:id', Authenticate, restrictTo('Admin', 'SuperAdmin'),  upload.single("poojaImage"), deviDevtaController.edit);
+router.patch('/:id', Authenticate, restrictTo('Admin', 'SuperAdmin'),  upload.single("devImage"), deviDevtaController.edit);
 router.patch('/othername/:id', Authenticate, restrictTo('Admin', 'SuperAdmin'), deviDevtaController.addOtherDevta);
 router.patch('/associate/:id', Authenticate, restrictTo('Admin', 'SuperAdmin'), deviDevtaController.addAssociateDevta);
 router.patch('/geography/:id', Authenticate, restrictTo('Admin', 'SuperAdmin'), deviDevtaController.addGeography);

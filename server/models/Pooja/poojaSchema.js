@@ -82,14 +82,13 @@ const Pooja = new mongoose.Schema({
         type: Schema.Types.ObjectId,
         ref: 'user'
     },
-    cetegory: {
+    category: {
         type: Schema.Types.ObjectId,
         ref: 'product'
     },
-    sub_cetegory: {
+    sub_category: {
         type: String,
         enum: ['General Pooja', 'Jaap', "Havan", "Kundli Dosh Pooja", 'Festival Pooja', 'Paath'],
-        default: 'Published',
         required: true
     }
 });

@@ -427,6 +427,20 @@ export default function LabTabs() {
                                 Pooja
                             </MDButton>
                         </Grid>
+
+                        <Grid item fullWidth>
+                            <MDButton 
+                                variant="contained" 
+                                color={"secondary"} 
+                                size="small" 
+                                component = {Link}
+                                to={{
+                                    pathname: `/devidevta`,
+                                  }}
+                            >
+                                Devi-Devta
+                            </MDButton>
+                        </Grid>
                 
                     </Grid>
                 </MDBox>

@@ -45,8 +45,8 @@ exports.createPooja = async (req, res) => {
         const {
             name,
             description,
-            cetegory,
-            sub_cetegory,
+            category,
+            sub_category,
             purpose,
             benefits,
             items,
@@ -65,8 +65,8 @@ exports.createPooja = async (req, res) => {
         const newPooja = await Pooja.create({
             name,
             description,
-            cetegory,
-            sub_cetegory,
+            category,
+            sub_category,
             purpose,
             benefits,
             image: poojaImage[0],
