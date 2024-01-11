@@ -7,6 +7,7 @@ const authentication = require("../../authentication/authentication");
 const {sendSMS, sendOTP} = require('../../utils/smsService');
 const otpGenerator = require('otp-generator');
 const moment = require('moment');
+const ApiResponse = require('../../helpers/apiResponse');
 
 router.post("/login", async (req, res) => {
     const { userId, pass } = req.body;
@@ -204,45 +205,16 @@ router.post("/resendmobileotp", async(req, res)=>{
 });
 
 router.get("/loginDetail", authentication, async (req, res)=>{
-    const id = req.user._id;
-    // console.log("ID:",id)
+    try{
+        const id = req.user._id;
     
-    const user = await UserDetail.findOne({_id: id, status: "Active"})
-    .populate('role', 'roleName')
-    // .populate('portfolio.portfolioId','portfolioName portfolioValue portfolioType portfolioAccount')
-    // .populate('collegeDetails.college','name route')
-    // .populate({
-    //     path : 'subscription.subscriptionId',
-    //     select: 'portfolio',
-    //     populate: [{
-    //         path: 'portfolio',
-    //         select: 'portfolioName portfolioValue portfolioType portfolioAccount'
-    //     },
-    //     ]
-    // })
-    // .populate({
-    //     path: 'internshipBatch',
-    //     select: 'batchName batchStartDate batchEndDate career portfolio participants',
-    //     populate: [{
-    //         path: 'career',
-    //         select: 'jobTitle'
-    //     },
-    //     {
-    //         path: 'portfolio',
-    //         select: 'portfolioValue'
-    //     },
-    //     {
-    //         path: 'participants',
-    //         populate: {
-    //             path: 'college',
-    //             select: 'collegeName'
-    //         }
-    //     }
-    // ],
-    // })
-    .select('isAffiliate collegeDetails pincode KYCStatus aadhaarCardFrontImage aadhaarCardBackImage panCardFrontImage passportPhoto addressProofDocument profilePhoto _id address city cohort country degree designation dob email employeeid first_name fund gender joining_date last_name last_occupation location mobile myReferralCode name role state status trading_exp whatsApp_number aadhaarNumber panNumber drivingLicenseNumber passportNumber accountNumber bankName googlePay_number ifscCode nameAsPerBankAccount payTM_number phonePe_number upiId watchlistInstruments isAlgoTrader contests portfolio referrals subscription internshipBatch bankState')
+        const user = await UserDetail.findOne({_id: id, status: "Active"})
+        .populate('role', 'roleName')
+        ApiResponse.success(res, user);
+    } catch(err){
+        ApiResponse.error(res, 'Something went wrong', 500, err.message);
+    }
 
-    res.json(user);
 })
 
 router.get("/logout", authentication, (req, res)=>{
