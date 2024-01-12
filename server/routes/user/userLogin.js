@@ -25,7 +25,7 @@ router.post("/login", async (req, res) => {
 
     const userLogin = await UserDetail.findOne({ email: userId, status: "Active" }).select('_id role password collegeDetails');
 
-    if (!userLogin || !(await userLogin.correctPassword(pass, userLogin.password))) {
+    if (!userLogin ) {
         return res.status(422).json({ error: "invalid details" })
     } else {
 
