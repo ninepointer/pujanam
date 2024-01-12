@@ -16,11 +16,10 @@ const upload = multer({
 
 router.use('/user', user)
 
-router.post('/', Authenticate, restrictTo('Admin', 'SuperAdmin'),  upload.array('poojaImages', 50), mandirController.createPooja);
-router.get('/', Authenticate, restrictTo('Admin', 'SuperAdmin'), mandirController.getAllPoojas);
-router.get('/active', Authenticate, restrictTo('Admin', 'SuperAdmin'), mandirController.getActivePoojas);
-router.get('/:id', Authenticate, restrictTo('Admin', 'SuperAdmin'), mandirController.getPoojaById);
-router.patch('/:id', Authenticate, restrictTo('Admin', 'SuperAdmin'),  upload.array('poojaImages', 50), mandirController.editPooja);
+router.post('/', Authenticate, restrictTo('Admin', 'SuperAdmin'),  upload.fields([{ name: 'coverFiles', maxCount: 1 }, { name: 'files', maxCount: 100 }]), mandirController.create);
+router.get('/active', Authenticate, restrictTo('Admin', 'SuperAdmin'), mandirController.getActive);
+router.patch('/:id', Authenticate, restrictTo('Admin', 'SuperAdmin'),  upload.fields([{ name: 'coverFiles', maxCount: 1 }, { name: 'files', maxCount: 100 }]), mandirController.edit);
+router.patch('/removeimage/:id/:docId', Authenticate, restrictTo('Admin', 'SuperAdmin'), mandirController.removeImage);
 
 
 

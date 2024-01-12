@@ -8,7 +8,7 @@ import { CircularProgress } from '@mui/material';
 import MDBox from '../../../components/MDBox';
 import MDButton from '../../../components/MDButton';
 import {Link} from 'react-router-dom'
-import Active from '../data/activePooja'
+import Active from '../data/activeMandir'
 
 
 export default function LabTabs() {
@@ -33,23 +33,23 @@ export default function LabTabs() {
     component={Link}
     to='/dashboard'
     >
-        Back to Pooja
+        Back to Dashboard
     </MDButton>
     <MDButton 
     variant="outlined" 
     color="warning" 
     size="small"
     component={Link}
-    to='/poojadetails'
+    to='/mandirdetails'
     >
-        Create Pooja
+        Create Mandir
     </MDButton>
     </MDBox>
       <TabContext value={value}>
         <MDBox sx={{ borderBottom: 1, borderColor: 'divider'}}>
           <TabList onChange={handleChange} aria-label="lab API tabs example">
-            <Tab label="Published" value="1" />
-            <Tab label="Unpublished" value="2" />
+            <Tab label="Active" value="1" />
+            <Tab label="Inactive" value="2" />
             <Tab label="Draft" value="3" />
           </TabList>
         </MDBox>

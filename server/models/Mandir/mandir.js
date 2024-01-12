@@ -11,6 +11,20 @@ const Mandir = new mongoose.Schema({
         type: String,
         required: true,
     },
+    cover_image: {
+        url: {type: String},
+        name: {type: String}
+    },
+    dham: {
+        type: Boolean,
+        required: true,
+        default: false
+    },
+    popular: {
+        type: Boolean,
+        required: true,
+        default: false
+    },
     morning_opening_time: {
         type: Date,
         required: true,
@@ -82,17 +96,17 @@ const Mandir = new mongoose.Schema({
         type: Schema.Types.ObjectId,
         ref: 'user'
     }],
-    constructionYear: {
+    construction_year: {
         type: Number,
         required: true
     },
     pandit_mobile_number: {
         type: String,
-        required: true
+        // required: true
     },
     pandit_full_name: {
         type: String,
-        required: true
+        // required: true
     },
     status: {
         type: String,

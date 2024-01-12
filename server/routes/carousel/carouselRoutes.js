@@ -15,10 +15,10 @@ const currentUser = (req,res,next) =>{
 }
 router.route('/').get(getCarousels).post(Authenticate, restrictTo('Admin', 'Super Admin'), uploadMulter, resizePhoto, uploadToS3 ,createCarousel);
 router.route('/active').get(getActiveCarousels)
-router.route('/infinitylive').get(Authenticate, getInfinityLiveCarousels)
-router.route('/stoxherolive').get(Authenticate, getStoxHeroLiveCarousels)
-router.route('/infinityupcoming').get(getUpcomingInfinityCarousels)
-router.route('/stoxheroupcoming').get(getUpcomingStoxHeroCarousels)
+// router.route('/infinitylive').get(Authenticate, getInfinityLiveCarousels)
+// router.route('/stoxherolive').get(Authenticate, getStoxHeroLiveCarousels)
+// router.route('/infinityupcoming').get(getUpcomingInfinityCarousels)
+// router.route('/stoxheroupcoming').get(getUpcomingStoxHeroCarousels)
 router.route('/live').get(Authenticate, getLiveCarousels)
 router.route('/upcoming').get(getUpcomingCarousels)
 router.route('/home').get(Authenticate,getHomePageCarousels)

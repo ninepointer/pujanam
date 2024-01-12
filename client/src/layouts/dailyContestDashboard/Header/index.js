@@ -5,77 +5,23 @@ import MDButton from '../../../components/MDButton';
 import {Grid, CircularProgress, Divider} from '@mui/material';
 import MDTypography from '../../../components/MDTypography';
 import { Link } from "react-router-dom";
-import CachedIcon from '@mui/icons-material/Cached';
-import LiveContest from '../data/infinityContests'
 
 //data
 import CompanySideContestDailyChart from '../data/companySideContestDailyChart'
-import DailyContestUsers from '../data/dailyContestUsers'
 import DailyPaidContestUsers from '../data/dailyPaidContestUsers'
-import PnlOverviewMock from '../infinityContestComponent/pnlOverviewMock';
-import PnlOverviewLive from '../infinityContestComponent/pnlOverviewLive';
-import XTSOverview from '../infinityContestComponent/xtsOverview';
 
 export default function LabTabs() {
-  const [isLoading,setIsLoading] = useState(false);
   const [dailyAllContestUsers, setDailyAllContestUsers] = useState();
   const [completedContest,setCompletedContest] = useState();
-  let baseUrl = process.env.NODE_ENV === "production" ? "/" : "http://localhost:5000/"
 
-
-  useEffect(()=>{
-
-    axios.get(`${baseUrl}api/v1/dailycontest/trade/payoutchart`, {withCredentials: true})
-    .then((res) => {
-        console.log("Inside Payout chart data");
-        setCompletedContest(res.data.data);
-        // console.log("Completed TestZone Res:",res.data.data)
-    }).catch((err) => {
-        setIsLoading(false)
-        return new Error(err);
-    })
-  }, [])
-
-  useEffect(()=>{
-    let call1 = axios.get((`${baseUrl}api/v1/dailycontest/contest/dailyallcontestusers`),{
-        withCredentials: true,
-        headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Credentials": true
-            },
-        })
-    Promise.all([call1])
-    .then(([api1Response]) => {
-    //   setDailyContestUsers(api1Response.data.data)
-      setDailyAllContestUsers(api1Response.data.data)
-    })
-    .catch((error) => {
-      // Handle errors here
-      console.error(error);
-    });
-    
-  },[])
 
   return (
     <MDBox bgColor="dark" mt={2} mb={1} p={2} borderRadius={10} display='flex' flexDirection='column' justifyContent='center' alignItems='center' minHeight='auto' maxWidth='100%'>
         <MDBox display='flex' justifyContent='left'>
-            <MDTypography ml={1} mb={1} color='light' fontSize={18} fontWeight='bold'>TestZone Dashboard</MDTypography>
+            <MDTypography ml={1} mb={1} color='light' fontSize={18} fontWeight='bold'>Dashboard</MDTypography>
         </MDBox>
 
-        <Grid container xs={12} md={12} lg={12}>
-            <MDBox minWidth='100%'>
-                {/* <LiveContest socket={socket}/> */}
-            </MDBox>
-        </Grid>
-
-        {/* <XTSOverview socket={socket} />
-        <PnlOverviewLive socket={socket} />
-        <PnlOverviewMock socket={socket} /> */}
-        
-
         <Grid container spacing={1} xs={12} md={12} lg={12} mt={0.5} mb={0.5} display='flex' justifyContent='center' alignItems='center'>
-
             <Grid item xs={12} md={6} lg={3}>
 
                 <MDButton
@@ -442,7 +388,7 @@ export default function LabTabs() {
                             </MDButton>
                         </Grid>
 
-                        {/* <Grid item fullWidth>
+                        <Grid item fullWidth>
                             <MDButton 
                                 variant="contained" 
                                 color={"warning"} 
@@ -454,7 +400,7 @@ export default function LabTabs() {
                             >
                                 Mandir
                             </MDButton>
-                        </Grid> */}
+                        </Grid>
                 
                     </Grid>
                 </MDBox>

@@ -4,8 +4,10 @@ const router = express.Router({mergeParams: true});
 const mandirController = require('../../controllers/Mandir/userMandirController');
 
 
-// router.get('/', Authenticate,  mandirController.getAllPooja);
-// router.post('/booking', Authenticate,  mandirController.booking);
-// router.get('/:id', Authenticate,  mandirController.getPoojaById);
+router.get('/', Authenticate,  mandirController.getActive);
+router.get('/dham', Authenticate,  mandirController.getDham);
+router.get('/popular', Authenticate,  mandirController.getPopular);
+router.patch('/addfavourite/:id', Authenticate,  mandirController.addToFavourite);
+router.patch('/sharedby/:id', Authenticate,  mandirController.sharedBy);
 
 module.exports=router;
