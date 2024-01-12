@@ -50,7 +50,7 @@ const carouselSchema = new mongoose.Schema({
     },
     clickedBy: [
         {
-            userId:{type:Schema.Types.ObjectId,ref: 'user-personal-detail'},
+            userId:{type:Schema.Types.ObjectId,ref: 'user'},
             clickedOn:{type:Date, default: ()=>new Date()}
         }
     ],
@@ -66,12 +66,12 @@ const carouselSchema = new mongoose.Schema({
     },
     createdBy:{
         type: Schema.Types.ObjectId,
-        ref: 'user-personal-detail',
+        ref: 'user',
         // required : true
     },
     lastModifiedBy:{
         type: Schema.Types.ObjectId,
-        ref: 'user-personal-detail',
+        ref: 'user',
         // required : true
     },
 })

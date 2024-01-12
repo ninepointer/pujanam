@@ -51,46 +51,12 @@ export default function LabTabs() {
       <TabContext value={value}>
         <Box sx={{ borderBottom: 1, borderColor: 'divider'}}>
           <TabList onChange={handleChange} aria-label="lab API tabs example">
-            <Tab label="StoxHero Carousels" value="1" />
-            <Tab label="Infinity Carousels" value="2" />
-            <Tab label="All Carousels" value="3" />
-            <Tab label="Draft Carousels" value="4" />
-            <Tab label="Past Carousels" value="5" />
+            <Tab label="All Carousels" value="1" />
+            <Tab label="Draft Carousels" value="2" />
+            <Tab label="Past Carousels" value="3" />
           </TabList>
         </Box>
         <TabPanel value="1">
-          {isLoading ? 
-          <MDBox display="flex" justifyContent="center" alignItems="center" mt={5} mb={5}>
-            <CircularProgress color="info" />
-          </MDBox>
-          : 
-          <MDBox>
-            <MDBox>
-              <StoxHeroLiveCarousels/> 
-            </MDBox>
-            <MDBox>
-              <StoxHeroUpcomingCarousels/> 
-            </MDBox>
-          </MDBox>
-          }
-          </TabPanel>
-        <TabPanel value="2">
-          {isLoading ? 
-          <MDBox display="flex" justifyContent="center" alignItems="center" mt={5} mb={5}>
-            <CircularProgress color="info" />
-          </MDBox>
-          : 
-          <MDBox>
-            <MDBox>
-              <InfinityLiveCarousels/> 
-            </MDBox>
-            <MDBox>
-              <InfinityUpcomingCarousels/> 
-            </MDBox>
-          </MDBox>
-          }
-        </TabPanel>
-        <TabPanel value="3">
           {isLoading ? 
           <MDBox display="flex" justifyContent="center" alignItems="center" mt={5} mb={5}>
             <CircularProgress color="info" />
@@ -106,7 +72,7 @@ export default function LabTabs() {
           </MDBox>
           }
         </TabPanel>
-        <TabPanel value="4">
+        <TabPanel value="2">
           {isLoading ? 
           <MDBox display="flex" justifyContent="center" alignItems="center" mt={5} mb={5}>
             <CircularProgress color="info" />
@@ -118,7 +84,7 @@ export default function LabTabs() {
           }
         </TabPanel>
 
-        <TabPanel value="5">
+        <TabPanel value="3">
           {isLoading ? 
           <MDBox display="flex" justifyContent="center" alignItems="center" mt={5} mb={5}>
             <CircularProgress color="info" />

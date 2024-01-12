@@ -42,12 +42,6 @@ import { userContext } from "./AuthContext";
 import Cookies from 'js-cookie';
 import homeRoutes from "./homeRoute";
 import SignUp from './layouts/authentication/sign-up'
-import Careers from './layouts/HomePage/pages/Career'
-import Workshops from './layouts/HomePage/pages/Workshop'
-import JobDescription from './layouts/HomePage/pages/JobDescription'
-import JobApply from './layouts/HomePage/pages/EICCareerForm'
-import ContestRegistration from './layouts/HomePage/pages/ContestRegistration'
-import FeaturedContestRegistration from './layouts/HomePage/pages/FeaturedContestRegistration'
 import About from "../src/layouts/HomePage/pages/About";
 import ResetPassword from './layouts/authentication/reset-password/cover';
 import { adminRole } from "./variables";
@@ -58,10 +52,6 @@ import Privacy from "./layouts/HomePage/pages/Privacy";
 import Terms from "./layouts/HomePage/pages/Tnc";
 import ProtectedRoute from "./ProtectedRoute";
 import AdminLogin from "./layouts/authentication/sign-in/adminLogin";
-import BlogCard from "./layouts/HomePage/pages/BlogCards";
-import BlogData from "./layouts/HomePage/pages/BlogData";
-import Calculator from "./layouts/HomePage/pages/Calculator";
-import CollegeSignUp from './layouts/authentication/sign-up/collegeSignupLogin'
 
 const TRACKING_ID = "UA-264098426-2"
 ReactGA.initialize(TRACKING_ID);
@@ -132,15 +122,6 @@ export default function App() {
     })
 
   }, [])
-
-  // useEffect(() => {
-  //   return () => {
-  //     socket.close();
-  //   }
-  // }, [])
-
-
-  // Cache for the rtl
   useMemo(() => {
     const cacheRtl = createCache({
       key: "rtl",
@@ -328,44 +309,27 @@ export default function App() {
           :
           pathname == "/" || !pathname ?
           <Route path="/" element={<Navigate 
-            to={getDetails?.userDetails.role?.roleName === adminRole ? "/tenxdashboard" : getDetails.userDetails?.designation == 'Equity Trader' ? '/infinitytrading':'/dashboard'} 
+            to={getDetails?.userDetails.role?.roleName === adminRole ? "/dashboard" : getDetails.userDetails?.designation == 'Equity Trader' ? '/infinitytrading':'/dashboard'} 
             />} />
             :
-            pathname == "/:collegename" ?
-            <Route path="/:collegename" element={<CollegeSignUp location={myLocation.current} />} />
-            :
             <Route path="*" element={<NotFound />} />
-          // <Route path="/" element={<Navigate to={pathname} />} />
-          // <Route path="/" element={<Navigate to="/virtualtrading" />} />
           
           }
 
 
           <Route path='/resetpassword' element={<ResetPassword/>}/>
-          <Route path='/careers' element={<Careers location={myLocation.current}/>}/>
           <Route path='/privacy' element={<Privacy/>}/>
           <Route path='/terms' element={<Terms/>}/>
-          <Route path='/careers/:name/jobdescription' element={<JobDescription/>}/>
-          <Route path='/careers/careerform/:name' element={<JobApply/>}/>
-          <Route path='/blogs' element={<BlogCard/>}/>
-          <Route path='/calculators' element={<Calculator/>}/>
           <Route path='/' element={<Navigate 
-            to={getDetails?.userDetails?.role ? getDetails?.userDetails.role?.roleName === adminRole ? "/tenxdashboard" : getDetails.userDetails?.designation == 'Equity Trader' ? '/infinitytrading':'/dashboard':'/'} 
+            to={getDetails?.userDetails?.role ? getDetails?.userDetails.role?.roleName === adminRole ? "/dashboard" : getDetails.userDetails?.designation == 'Equity Trader' ? '/infinitytrading':'/dashboard':'/'} 
             />}/>
           <Route path='/adminlogin' element={<AdminLogin />}/>
           <Route path='/about' element={<About/>}/>
           
           <Route path='/contact' element={<Contact/>}/>
-          <Route path='/workshops' element={<Workshops location={myLocation.current}/>}/>
-          <Route path='/blogs/:id' element={<BlogData/>}/>
-          <Route path='/collegetestzone/:id/:date' element={<ContestRegistration/>}/>
-          <Route path='/testzone/:id/:date' element={<FeaturedContestRegistration/>}/>
-          <Route path="/:collegename" element={<CollegeSignUp location={myLocation.current} />} />
-
           <Route path="*" element={<NotFound />} />
 
         </Routes>
-        {/* <MessagePopUp socket={socket} userId={detailUser?._id} /> */}
       </ThemeProvider>
   );
 } 
