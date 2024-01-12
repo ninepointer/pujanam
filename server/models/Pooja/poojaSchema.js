@@ -2,49 +2,52 @@ const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
 const Pooja = new mongoose.Schema({
-    pooja_name: {
+    name: {
         type: String,
         required: true,
     },
-    pooja_description: [
-        {
-            type: String,
-        }
-    ],
-    poojaIncludes: {
+    description: {
         type: String,
         required: true,
     },
-    purposeOfPooja: [
+    includes: [
         {
             type: String,
         }
     ],
-    benefitsOfPooja: [
+    purpose: [
         {
             type: String,
         }
     ],
-    poojaImage: {
+    benefits: [
+        {
+            header: {type: String},
+            description: {type: String},
+        }
+    ],
+    image: {
         url: {type: String},
         name: {type: String}
     },
-    poojaItems: [
+    items: [
         {
-            type: String,
+            name: {type: String},
+            quantity: {type: Number},
+            unit: {type: String},
         }
     ],
-    poojaDuration: {
-
+    duration: {
+        type: Number
     },
-    poojaPackages: {
+    packages: [{
         tier: {
             type: Schema.Types.ObjectId,
             ref: "tier"
         },
         price: {type: Number}
-    },
-    poojaType: {
+    }],
+    type: {
         type: String,
         enum: ['Home', 'Online'],
         required: true
@@ -59,26 +62,35 @@ const Pooja = new mongoose.Schema({
         question: {type: String},
         answer: {type: String}
     }],
-    createdOn: {
+    created_on: {
         type: Date,
         default: function() {
           return Date.now();
         }
     },
-    createdBy:{
+    created_by:{
         type: Schema.Types.ObjectId,
         ref: 'user'
     },
-    lastModifiedOn: {
+    last_modified_on: {
         type: Date,
         default: function() {
             return Date.now();
         }
     },
-    lastModifiedBy:{
+    last_modified_by:{
         type: Schema.Types.ObjectId,
         ref: 'user'
     },
+    category: {
+        type: Schema.Types.ObjectId,
+        ref: 'product'
+    },
+    sub_category: {
+        type: String,
+        enum: ['General Pooja', 'Jaap', "Havan", "Kundli Dosh Pooja", 'Festival Pooja', 'Paath'],
+        required: true
+    }
 });
 const PoojaSchema = mongoose.model('pooja', Pooja);
 module.exports = PoojaSchema;

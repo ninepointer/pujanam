@@ -112,7 +112,7 @@ function Cover(props) {
     referrerCode:"",
     mobile_otp:"",
   });
-  let baseUrl = process.env.NODE_ENV === "production" ? "/" : "http://localhost:5001/"
+  let baseUrl = process.env.NODE_ENV === "production" ? "/" : "http://localhost:5000/"
   
   useEffect(()=>{
     setformstate(prevState => ({...prevState, referrerCode: referrerCodeString}));
@@ -153,7 +153,7 @@ function Cover(props) {
               },
           });
                    
-          setDetails.setUserDetail(res.data);
+          setDetails.setUserDetail(res.data.data);
           
           //console.log("this is data of particular user", res.data);
   
@@ -250,8 +250,8 @@ const [buttonClicked, setButtonClicked] = useState(false);
       setDetails.setUserDetail(data.data);
       setShowConfirmation(false);
       const userData = await userDetail();
-      if(userData?.role?.roleName === adminRole){
-        const from = location.state?.from || "/contestdashboard";
+      if(userData?.data?.role?.roleName === adminRole){
+        const from = location.state?.from || "/dashboard";
         navigate(from);
       }
      
@@ -366,8 +366,8 @@ const [buttonClicked, setButtonClicked] = useState(false);
               setInvalidDetail(data.message);
           }else{
             let userData = await userDetail();
-            if(userData?.role?.roleName === adminRole){
-              const from = location.state?.from || "/contestdashboard";
+            if(userData?.data?.role?.roleName === adminRole){
+              const from = location.state?.from || "/dashboard";
               navigate(from);
             }
          

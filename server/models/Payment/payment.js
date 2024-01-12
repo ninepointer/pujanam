@@ -2,76 +2,40 @@ const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
 const Payment = new mongoose.Schema({
-    transactionId: {
+    transaction_id: {
         type: String,
         // required: true,
     },
-    paymentTime: {
-        type: Date,
-        required: true,
-    },
-    currency: {
+    payment_status: {
         type: String,
-        required: true,
-        enum: ['INR', 'Other']
+        enum: ["Paid", "UnPaid"],
+        required: true
     },
-    amount: {
-        type: Number,
-        required: true,
-    },
-    gstAmount:Number,
-    paymentBy: {
-        type: Schema.Types.ObjectId,
-        ref: 'user'
-    },
-    paymentFor: {
+    payment_mode: {
         type: String,
+        enum: ["PAP", "Online"],
+        required: true
     },
-    coupon:String,
-    productId:{
-        type: Schema.Types.ObjectId
-    },
-    paymentMode: {
-        type: String,
-        // required: true,
-        enum: ['UPI', 'Account Transfer', 'Other', 'CARD', 'NETBANKING']
-    },
-    paymentStatus:{
-        type: String,
-        enum:['succeeded', 'failed', 'processing', 'initiated', 'started', 'expired']
-    },
-    actions:[{
-        actionTitle: String,
-        actionDate: Date,
-        actionBy: {
-            type:Schema.Types.ObjectId,
-            ref:'user'
-        }
-    }],
-    merchantTransactionId: String,
-    createdOn: {
+    created_on: {
         type: Date,
         default: function() {
           return Date.now();
         }
     },
-    createdBy:{
+    created_by:{
         type: Schema.Types.ObjectId,
         ref: 'user'
     },
-    modifiedOn: {
+    last_modified_on:{
         type: Date,
         default: function() {
-            return Date.now();
+          return Date.now();
         }
     },
-    modifiedBy:{
+    last_modified_by:{
         type: Schema.Types.ObjectId,
         ref: 'user'
-    },
-    gatewayResponse: {},
-    productId: Schema.Types.ObjectId,
-    bonusRedemption:Number,
+    }
 });
 const payment = mongoose.model('payment', Payment);
 module.exports = payment;

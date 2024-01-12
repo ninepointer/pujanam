@@ -3,11 +3,11 @@ const { Schema } = mongoose;
 
 const signedUpUserSchema = new mongoose.Schema({
 
-    first_name:{
+    full_name:{
         type: String,
         required : true
     },
-    createdOn:{
+    created_on:{
         type: Date,
         required: true,
         default: ()=>new Date(),
@@ -16,14 +16,10 @@ const signedUpUserSchema = new mongoose.Schema({
         type: Date,
         // required: true,
     },
-    last_modifiedOn:{
+    last_modified_on:{
         type: Date,
         required: true,
         default: ()=>new Date(),
-    },
-    last_name:{
-        type: String,
-        required : true
     },
     email:{
         type: String,
@@ -37,26 +33,15 @@ const signedUpUserSchema = new mongoose.Schema({
         type: String,
         // required: true
     },
-    lastOtpTime:Date,
+    last_otp_time: Date,
     email_otp:{
         type: String,
-        // required: true
-    },
-    collegeDetails:{
-        rollno: String,
-        college: {
-            type: Schema.Types.ObjectId,
-            ref: 'college-detail'    
-        }
         // required: true
     },
     status:{
         type: String,
         enum: ['OTP Verification Pending','OTP Verified','Approved','Rejected'],
         default:'OTP Verification Pending'
-    },
-    referrerCode:{
-        type: String,
     }
   
 })

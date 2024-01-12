@@ -69,7 +69,7 @@ function Basic() {
     ReactGA.pageview(window.location.pathname)
   },[])
 
-  let baseUrl = process.env.NODE_ENV === "production" ? "/" : "http://localhost:5001/"
+  let baseUrl = process.env.NODE_ENV === "production" ? "/" : "http://localhost:5000/"
 
     const navigate = useNavigate();
     const location = useLocation();
@@ -108,7 +108,7 @@ function Basic() {
               },
           });
                    
-          setDetails.setUserDetail(res.data);
+          setDetails.setUserDetail(res.data.data);
           
           //console.log("this is data of particular user", res.data);
   
@@ -158,8 +158,8 @@ function Basic() {
             // this function is extracting data of user who is logged in
             let userData = await userDetail();
 
-            if(userData.role?.roleName === adminRole){
-              const from = location.state?.from || "/contestdashboard";
+            if(userData?.data?.role?.roleName === adminRole){
+              const from = location.state?.from || "/dashboard";
               navigate(from);
             }
           
@@ -245,8 +245,8 @@ function Basic() {
         }else{
           let userData = await userDetail();
           // console.log(userData)
-          if(userData?.role?.roleName === adminRole){
-            const from = location.state?.from || "/contestdashboard";
+          if(userData?.data?.role?.roleName === adminRole){
+            const from = location.state?.from || "/dashboard";
             navigate(from);
           }
          

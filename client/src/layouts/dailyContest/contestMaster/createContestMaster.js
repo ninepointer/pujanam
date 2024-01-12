@@ -68,7 +68,7 @@ function Index() {
     console.log('id hai', contest);
     // const [applicationCount, setApplicationCount] = useState(0);
     const [isSubmitted, setIsSubmitted] = useState(false);
-    let baseUrl = process.env.NODE_ENV === "production" ? "/" : "http://localhost:5001/"
+    let baseUrl = process.env.NODE_ENV === "production" ? "/" : "http://localhost:5000/"
     const [isLoading, setIsLoading] = useState(contest ? true : false)
     const [editing, setEditing] = useState(false)
     const [saving, setSaving] = useState(false)
@@ -539,7 +539,7 @@ function Index() {
                                         >
                                             {creating ? <CircularProgress size={20} color="inherit" /> : "Save"}
                                         </MDButton>
-                                        <MDButton variant="contained" color="error" size="small" disabled={creating} onClick={() => { navigate("/contestdashboard/dailycontest") }}>
+                                        <MDButton variant="contained" color="error" size="small" disabled={creating} onClick={() => { navigate("/dashboard/dailycontest") }}>
                                             Cancel
                                         </MDButton>
                                     </>
@@ -550,7 +550,7 @@ function Index() {
                                             <MDButton variant="contained" color="warning" size="small" sx={{ mr: 1, ml: 2 }} onClick={() => { setEditing(true) }}>
                                                 Edit
                                             </MDButton>}
-                                        <MDButton variant="contained" color="info" size="small" onClick={() => { navigate('/contestdashboard/dailycontest') }}>
+                                        <MDButton variant="contained" color="info" size="small" onClick={() => { navigate('/dashboard/dailycontest') }}>
                                             Back
                                         </MDButton>
                                     </>

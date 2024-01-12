@@ -144,7 +144,7 @@ function Cover(props) {
     mobile_otp: "",
     rollno: ""
   });
-  let baseUrl = process.env.NODE_ENV === "production" ? "/" : "http://localhost:5001/"
+  let baseUrl = process.env.NODE_ENV === "production" ? "/" : "http://localhost:5000/"
 
   useEffect(() => {
     setformstate(prevState => ({ ...prevState, referrerCode: referrerCodeString }));
@@ -185,7 +185,7 @@ function Cover(props) {
         },
       });
 
-      setDetails.setUserDetail(res.data);
+      setDetails.setUserDetail(res.data.data);
 
       //console.log("this is data of particular user", res.data);
 
@@ -293,20 +293,20 @@ function Cover(props) {
       setDetails.setUserDetail(data.data);
       setShowConfirmation(false);
       const userData = await userDetail();
-      if (userData?.role?.roleName === adminRole) {
+      if (userData?.data?.role?.roleName === adminRole) {
         const from = location.state?.from || "/tenxdashboard";
         navigate(from);
       }
-      else if (userData?.role?.roleName === "data") {
+      else if (userData?.data?.role?.roleName === "data") {
         const from = location.state?.from || "/analytics";
         navigate(from);
       }
-      else if (userData?.role?.roleName === userRole) {
-        const from = location.state?.from || `/${userData?.collegeDetails?.college?.route}/home`;
+      else if (userData?.data?.role?.roleName === userRole) {
+        const from = location.state?.from || `/${userData?.collegeDetails?.college?.route}/dashboard`;
         navigate(from);
       }
-      else if (userData?.role?.roleName === Affiliate) {
-        const from = location.state?.from || "/home";
+      else if (userData?.data?.role?.roleName === Affiliate) {
+        const from = location.state?.from || "/dashboard";
         navigate(from);
       }
       setButtonClicked(false);
@@ -419,16 +419,16 @@ function Cover(props) {
         setInvalidDetail(data.message);
       } else {
         let userData = await userDetail();
-        if (userData?.role?.roleName === adminRole) {
+        if (userData?.data?.role?.roleName === adminRole) {
           const from = location.state?.from || "/tenxdashboard";
           navigate(from);
         }
-        else if (userData?.role?.roleName === userRole) {
-          const from = location.state?.from || `/${userData?.collegeDetails?.college?.route}/home`;
+        else if (userData?.data?.role?.roleName === userRole) {
+          const from = location.state?.from || `/${userData?.collegeDetails?.college?.route}/dashboard`;
           navigate(from);
         }
-        else if (userData?.role?.roleName === Affiliate) {
-          const from = location.state?.from || "/home";
+        else if (userData?.data?.role?.roleName === Affiliate) {
+          const from = location.state?.from || "/dashboard";
           navigate(from);
         }
       }

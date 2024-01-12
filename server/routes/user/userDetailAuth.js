@@ -12,7 +12,7 @@ const Authenticate = require("../../authentication/authentication");
 const { ObjectId } = require("mongodb");
 const Role = require("../../models/User/everyoneRoleSchema");
 const sendMail = require('../../utils/emailService');
-const {sendMultiNotifications} = require('../../utils/fcmService');
+// const {sendMultiNotifications} = require('../../utils/fcmService');
 const restrictTo = require('../../authentication/authorization');
 
 
@@ -621,12 +621,12 @@ router.patch('/userdetail/me', authController.protect, currentUser, uploadMultip
             createdBy:'63ecbc570302e7cf0153370c',
             lastModifiedBy:'63ecbc570302e7cf0153370c'  
           });
-          if(user?.fcmTokens?.length>0){
-            await sendMultiNotifications('KYC Verification Request Received', 
-              `Ypur KYC Verification request is received. It may take 3-5 business days for the process to be completed.`,
-              user?.fcmTokens?.map(item=>item.token), null, {route:'profile'}
-              )  
-          }
+          // if(user?.fcmTokens?.length>0){
+          //   await sendMultiNotifications('KYC Verification Request Received', 
+          //     `Ypur KYC Verification request is received. It may take 3-5 business days for the process to be completed.`,
+          //     user?.fcmTokens?.map(item=>item.token), null, {route:'profile'}
+          //     )  
+          // }
         }
         filteredBody.lastModified = new Date();
   

@@ -38,7 +38,7 @@ export default function LabTabs() {
     color="warning" 
     size="small"
     component={Link}
-    to='/contestdashboard'
+    to='/dashboard'
     >
         Back to TestZone Dashboard
     </MDButton>
