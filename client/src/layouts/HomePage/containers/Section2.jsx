@@ -57,12 +57,7 @@ const Section2 = ({data}) => {
         })}
       >
         <Grid container spacing={3} justifyContent="space-between">
-          {items.map((item, index)=>(
-            <Grid item xs={6} md={4} lg={3} key={item.subtitle}>
-              <CustomCounter  {...item} data={data} />
-            </Grid>
-            
-          ))}
+          
         </Grid>
       </Box>
     </Container>

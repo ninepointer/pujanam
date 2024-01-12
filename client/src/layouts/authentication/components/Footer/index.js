@@ -23,7 +23,7 @@ function Footer({ light }) {
   const { size } = typography;
 
   return (
-    <MDBox width="100%" bottom={0} py={2} style={{backgroundColor:'#315c45'}}>
+    <MDBox width="100%" bottom={0} py={2} style={{backgroundColor:'#FDB769'}}>
       <Grid container xs={12} md={12} lg={12}>
 
           <Grid item xs={12} md={12} lg={4} mt={1}>
@@ -42,33 +42,33 @@ function Footer({ light }) {
                 </Icon>
               </MDBox>
               by
-              <Link href="https://www.stoxhero.com/" target="_blank">
+              <Link href="https://www.punyam.app/" target="_blank">
                 <MDTypography variant="button" fontWeight="medium" color={light ? "dark" : "white"}>
-                  &nbsp;StoxHero&nbsp;
+                  &nbsp;punyam&nbsp;
                 </MDTypography>
               </Link>
-              for a better trading experience.
+              for a great spiritual experience.
             </MDBox>
           </Grid>
 
           <Grid item xs={12} md={12} lg={4} mt={1} display='flex' justifyContent='center' alignItems='center'>
             <MDBox lineHeight={1}>
-              <Link href="https://www.youtube.com/@stoxhero_official" target="_blank">
+              <Link href="https://www.youtube.com/@punyamapp" target="_blank">
                 <YoutubeIcon color='white'/>
               </Link>
             </MDBox>
             <MDBox pl={2} lineHeight={1}>
-              <Link href="https://www.linkedin.com/company/stoxhero" target="_blank">
+              <Link href="https://www.linkedin.com/company/punyamapp" target="_blank">
                 <LinkedInIcon color='white'/>
               </Link>
             </MDBox>
             <MDBox pl={2} lineHeight={1}>
-              <Link href="https://www.instagram.com/stoxhero_official/" target="_blank">
+              <Link href="https://www.instagram.com/punyamapp/" target="_blank">
                 <InstagramIcon color='white'/>
               </Link>
             </MDBox>
             <MDBox pl={2} lineHeight={1}>
-              <Link href="https://www.facebook.com/stoxhero" target="_blank">
+              <Link href="https://www.facebook.com/punyamapp" target="_blank">
                 <FacebookIcon color='white'/>
               </Link>
             </MDBox>
@@ -98,13 +98,13 @@ function Footer({ light }) {
               </Link>
             </MDBox>
             <MDBox pl={2} lineHeight={1}>
-              <Link href="/terms" target="_blank">
+              <Link href="/privacy" target="_blank">
                 <MDTypography
                   variant="button"
                   fontWeight="regular"
                   color={light ? "dark" : "white"}
                 >
-                  Terms of Usage
+                  Privacy Policy
                 </MDTypography>
               </Link>
             </MDBox>
@@ -120,7 +120,7 @@ function Footer({ light }) {
               fontSize={size.sm}
               // style={{textDecoration:'underline'}}
             >
-              For support: team@stoxhero.com
+              For support: pooja@punyam.app
             </MDBox>
           </Grid>
 
@@ -134,7 +134,7 @@ function Footer({ light }) {
               fontSize={size.sm}
               style={{textAlign:'center'}}
             >
-              © 2023, STOXHERO GAMES TECHNOLOGIES PRIVATE LIMITED. All rights reserved.
+              © 2024, punyam.app All rights reserved.
             </MDBox>
           </Grid>
 

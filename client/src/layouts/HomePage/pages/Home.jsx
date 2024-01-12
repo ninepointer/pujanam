@@ -21,7 +21,6 @@ import { apiUrl } from '../../../constants/constants';
 
 const Home = () => {
   const [data, setData] = useState();
-  console.log('home page');
   const getMetrics = async()=>{
     const res = await axios.get(`${apiUrl}appmetrics`);
     setData(res.data.data);
@@ -35,13 +34,13 @@ const Home = () => {
     <div>
       <ThemeProvider theme={theme}>
       <Navbar/>
-      <Section1/>
+      {/* <Section1/> */}
       <Section2 data ={data}/>
       <Box sx={{ height:{sx:"4000px"},width:"100%", bgcolor:"#06070A", position: "relative" }}>
       
-      <Section4/>
-      <Section6/>
-      <Section7/>
+      {/* <Section4/> */}
+      {/* <Section6/> */}
+      {/* <Section7/> */}
       {/* <Section5/>
       <Section8/>
       <Section9/>

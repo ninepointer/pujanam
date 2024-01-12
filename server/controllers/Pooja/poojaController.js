@@ -137,6 +137,16 @@ exports.getAllPoojas = async (req, res) => {
     }
 };
 
+exports.getHomePoojas = async (req, res) => {
+    try {
+        const poojas = await Pooja.find()
+        .populate('category', 'product_name');
+        ApiResponse.success(res, poojas);
+    } catch (error) {
+        ApiResponse.error(res, 'Something went wrong', 500, error.message);
+    }
+};
+
 // Get only active Poojas
 exports.getActivePoojas = async (req, res) => {
     try {

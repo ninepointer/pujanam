@@ -42,39 +42,13 @@ const Section1 = () => {
       {/* Background Elements */}
       
       <Box ref={ref} sx={{position:'absolute',zIndex:-1, top:0, left:0, right:0}}>
-        <Box sx={{height:"15px",mb:3,width:"100%",background:"#06070A",position:"absolute",bottom:{xs:"-30px"}}}></Box>
-        <img src={back} style={{width:"100%",opacity:"0.9",}} alt="img" />
-
         
-
-         {/* Star image */}
-        {/* <img src={ShootingStarImage} style={{position:"absolute", top:"30px", right:'15%', width:"500px" }} /> */}
-
-
-
-        {/* Trees */}
-        {/* <Hidden mdDown>
-
-        </Hidden> */}
-        {/* <img src={TreesImage} style={{position:"absolute",width:"100%",right:0,left:0,bottom:0 }} alt="" /> */}
-
-
-        {/* Cliff image */}
-        {/* <img src={CliffImage} style={{position:"absolute", right:0, top:0, backgroundSize:"cover", height:'100%' }} /> */}
-
-
-         {/* Horse image */}
-        {/* <img src={HorseImage} style={{position:"absolute",height:"38%",right:"14%",bottom:"45%" }} /> */}
-
-        <Box sx={{bgcolor:"#06070A",position:"absolute",bottom:"0",left:0,right:0,height:{xs:"4000px", md:"2150px", lg:"1800px" },top:height,}}>
-
-        </Box>
-
-
+        <Box sx={{height:"15px",mb:3,width:"100%",background:"#06070A",position:"absolute",bottom:{xs:"-30px"}}}></Box>
+          <img src={back} style={{width:"100%",opacity:"0.9",}} alt="img" />
+        <Box sx={{bgcolor:"#06070A",position:"absolute",bottom:"0",left:0,right:0,height:{xs:"4000px", md:"2150px", lg:"1800px" },top:height,}}></Box>
 
       </Box>
 
-      {/* Content */}
       <Container sx={{ height: "80vh", mt:8,[theme.breakpoints.up("md")]: { mt: 6 } }}>
         <Stack sx={{ height: "100%", px: 3 }} justifyContent="center" >
 
@@ -83,20 +57,6 @@ const Section1 = () => {
 
           <Stack direction={{ xs: "column", md: "row" }} alignItems="center" spacing={4}>
             <a href="/login"><LaunchButton fullWidth={isSmallScreen} sx={{ height: '55px' }} /></a>
-            {/* <CustomButton fullWidth={isSmallScreen} >
-              <Apple sx={{ml:-2,}} style={{color:"red",fontSize:"55px"}} />
-              <Stack sx={{ textAlign: 'left', ml: 1 }}>
-                <Typography variant='caption' sx={{ lineHeight: 1 }} >Download on the </Typography>
-                <Typography variant='h5'>App Store</Typography>
-              </Stack>
-            </CustomButton>
-            <CustomButton fullWidth={isSmallScreen} >
-              <Google sx={{ fontSize: 88, ml: -1 }} />
-              <Stack sx={{ textAlign: 'left', ml: 1 }}>
-                <Typography variant='caption' sx={{ lineHeight: 1 }} >Get it on </Typography>
-                <Typography variant='h5'>Google Play</Typography>
-              </Stack>
-            </CustomButton> */}
           </Stack>
 
         </Stack>

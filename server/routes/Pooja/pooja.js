@@ -18,6 +18,7 @@ router.use('/user', user)
 
 router.post('/', Authenticate, restrictTo('Admin', 'SuperAdmin'),  upload.single("poojaImage"), poojaController.createPooja);
 router.get('/', Authenticate, restrictTo('Admin', 'SuperAdmin'), poojaController.getAllPoojas);
+router.get('/home', poojaController.getHomePoojas);
 router.get('/active', Authenticate, restrictTo('Admin', 'SuperAdmin'), poojaController.getActivePoojas);
 router.get('/:id', Authenticate, restrictTo('Admin', 'SuperAdmin'), poojaController.getPoojaById);
 router.patch('/:id', Authenticate, restrictTo('Admin', 'SuperAdmin'),  upload.single("poojaImage"), poojaController.editPooja);
