@@ -115,6 +115,8 @@ exports.edit = (async (req, res, next) => {
         const mandir = await Mandir.findOne({_id: new ObjectId(id)});
         update.images = mandir?.images;
         update.cover_image = mandir?.cover_image;
+        update.favourite = mandir?.favourite;
+        update.share = mandir?.share
 
         if(uploadedFiles?.files){
             otherImages = await Promise.all(await processUpload(uploadedFiles.files, s3, update.name));
