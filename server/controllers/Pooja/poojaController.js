@@ -89,7 +89,8 @@ exports.createPooja = async (req, res) => {
 exports.getPoojaById = async (req, res) => {
     try {
         const pooja = await Pooja.findById(req.params.id)
-        .populate('packages.tier', 'tier_name');
+        .populate('packages.tier', 'tier_name')
+        .populate('category', 'product_name');
         if (!pooja) {
             return ApiResponse.notFound(res, 'Pooja not found');
         }
@@ -128,7 +129,8 @@ exports.editPooja = async (req, res) => {
 
 exports.getAllPoojas = async (req, res) => {
     try {
-        const poojas = await Pooja.find();
+        const poojas = await Pooja.find()
+        .populate('category', 'product_name');
         ApiResponse.success(res, poojas);
     } catch (error) {
         ApiResponse.error(res, 'Something went wrong', 500, error.message);
@@ -140,6 +142,7 @@ exports.getActivePoojas = async (req, res) => {
     try {
         const activePoojas = await Pooja.find({ status: 'Published' })
         .populate('packages.tier', 'tier_name')
+        .populate('category', 'product_name');
         ApiResponse.success(res, activePoojas);
     } catch (error) {
         ApiResponse.error(res, 'Something went wrong', 500, error.message);

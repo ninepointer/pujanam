@@ -10,6 +10,11 @@ import TierDetails from './layouts/Tier/tierDetails'
 import PoojaDetails from './layouts/Pooja/poojaDetails'
 import DeviDevDetails from './layouts/DeviDevta/devDetails'
 import DeviDev from './layouts/DeviDevta';
+import MandirDetails from './layouts/Mandir/mandirDetails';
+import Mandir from './layouts/Mandir';
+import Carousel from './layouts/carousel'
+import CarouselDetails from './layouts/carousel/carouselDetails'
+import ViewCarouselIcon from '@mui/icons-material/ViewCarousel';
 
 
 const routes = [
@@ -36,6 +41,15 @@ const routes = [
   {
     route: "/panditdetails",
     component: <PanditDetails />,
+  },
+  {
+    key: "mandir",
+    route: "/mandir",
+    component: <Mandir />,
+  },
+  {
+    route: "/mandirdetails",
+    component: <MandirDetails />,
   },
   {
     key: "tier",
@@ -71,7 +85,19 @@ const routes = [
     route: "/dailycontestdetails",
     component: <DailyContestDetails />,
   },
-
+  {
+    type: "collapse",
+    name: "Carousel",
+    key: "carousel",
+    icon: <ViewCarouselIcon/>,
+    route: "/carousel",
+    component: <Carousel />,
+  },
+  {
+    key: "carouselDetails",
+    route: "/carouseldetails",
+    component: <CarouselDetails />,
+  },
 
 
 ];

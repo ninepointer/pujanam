@@ -46,7 +46,10 @@ function Index() {
   const [formState, setFormState] = useState({
     name: '' || prevDevData?.name,
     description: '' || prevDevData?.description,
-    image: '' || prevDevData?.image.url,
+    image: {
+      name: '' || prevDevData?.image.name,
+      url: '' || prevDevData?.image.url
+    },
     status: '' || prevDevData?.status,
   });
 
@@ -264,7 +267,7 @@ function Index() {
 
             <Grid item xs={12} md={6} xl={6}>
                 <MDButton variant="outlined" style={{ fontSize: 10 }} fullWidth color={(newData?.images?.length && !file) ? "warning" : ((newData?.images?.length && file) || file) ? "error" : "success"} component="label">
-                  Upload Logo
+                  Upload Image
                   <input
                     hidden
                     disabled={((newData || prevData) && (!editing))}
@@ -401,7 +404,7 @@ function Index() {
               color="info"
               size="small"
               sx={{ mr: 1, ml: 1 }}
-              onClick={() => { navigate('/pooja') }}
+              onClick={() => { navigate('/devidevta') }}
             >
               Back
             </MDButton>}
@@ -420,7 +423,7 @@ function Index() {
               color="info"
               size="small"
               sx={{ mr: 1, ml: 1 }}
-              onClick={() => { navigate('/pooja') }}
+              onClick={() => { navigate('/devidevta') }}
             >
               Cancel
             </MDButton>}

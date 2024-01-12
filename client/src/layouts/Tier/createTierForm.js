@@ -477,7 +477,7 @@ function Index() {
                     >
                       {creating ? <CircularProgress size={20} color="inherit" /> : "Save"}
                     </MDButton>
-                    <MDButton variant="contained" color="error" size="small" disabled={creating} onClick={() => { navigate("/dashboard/dailycontest") }}>
+                    <MDButton variant="contained" color="error" size="small" disabled={creating} onClick={() => { navigate("/tier") }}>
                       Cancel
                     </MDButton>
                   </>
@@ -487,7 +487,7 @@ function Index() {
                     <MDButton variant="contained" color="warning" size="small" sx={{ mr: 1, ml: 2 }} onClick={() => { setEditing(true) }}>
                       Edit
                     </MDButton>
-                    <MDButton variant="contained" color="info" size="small" onClick={() => { navigate('/dashboard/dailycontest') }}>
+                    <MDButton variant="contained" color="info" size="small" onClick={() => { navigate('/tier') }}>
                       Back
                     </MDButton>
                   </>
@@ -517,18 +517,6 @@ function Index() {
                 )}
               </Grid>
 
-              {/* {(tierPrevDetail?.payoutType === "Reward" || (isSubmitted && formState?.payoutType === "Reward")) && <Grid item xs={12} md={12} xl={12} mt={2}>
-                <MDBox>
-                  <ContestRewards tierPrevDetail={tierPrevDetail != undefined ? tierPrevDetail?._id : tier?._id} />
-                </MDBox>
-              </Grid>} */}
-
-
-              {/* {(isSubmitted || tierPrevDetail) && <Grid item xs={12} md={12} xl={12} mt={2}>
-                <MDBox>
-                  <AllowedUsers saving={saving} tier={tierPrevDetail?._id ? tierPrevDetail : tier} updatedDocument={updatedDocument} setUpdatedDocument={setUpdatedDocument} action={action} setAction={setAction} />
-                </MDBox>
-              </Grid>} */}
 
             </Grid>
 

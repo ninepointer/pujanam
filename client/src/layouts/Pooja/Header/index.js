@@ -33,7 +33,7 @@ export default function LabTabs() {
     component={Link}
     to='/dashboard'
     >
-        Back to Pooja
+        Back to Dashboard
     </MDButton>
     <MDButton 
     variant="outlined" 

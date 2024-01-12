@@ -40,7 +40,7 @@ export default function LabTabs() {
     component={Link}
     to='/dashboard'
     >
-        Back to Tiers
+        Back to Dashboard
     </MDButton>
     <MDButton 
     variant="outlined" 

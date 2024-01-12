@@ -431,7 +431,7 @@ export default function LabTabs() {
                         <Grid item fullWidth>
                             <MDButton 
                                 variant="contained" 
-                                color={"secondary"} 
+                                color={"error"} 
                                 size="small" 
                                 component = {Link}
                                 to={{
@@ -441,6 +441,20 @@ export default function LabTabs() {
                                 Devi-Devta
                             </MDButton>
                         </Grid>
+
+                        {/* <Grid item fullWidth>
+                            <MDButton 
+                                variant="contained" 
+                                color={"warning"} 
+                                size="small" 
+                                component = {Link}
+                                to={{
+                                    pathname: `/mandir`,
+                                  }}
+                            >
+                                Mandir
+                            </MDButton>
+                        </Grid> */}
                 
                     </Grid>
                 </MDBox>

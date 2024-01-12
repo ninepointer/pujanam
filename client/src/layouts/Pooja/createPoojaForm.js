@@ -50,7 +50,10 @@ function Index() {
   const [formState, setFormState] = useState({
     name: '' || prevPoojaData?.name,
     description: '' || prevPoojaData?.description,
-    image: '' || prevPoojaData?.image.url,
+    image: {
+      url: '' || prevPoojaData?.image.url,
+      name: '' || prevPoojaData?.image.name
+    },
     duration: '' || prevPoojaData?.duration,
     packages: '' || prevPoojaData?.packages,
     type: '' || prevPoojaData?.type,
@@ -409,7 +412,7 @@ function Index() {
 
               <Grid item xs={12} md={6} xl={12}>
                 <MDButton variant="outlined" style={{ fontSize: 10 }} fullWidth color={(newData?.images?.length && !file) ? "warning" : ((newData?.images?.length && file) || file) ? "error" : "success"} component="label">
-                  Upload Logo
+                  Upload Image
                   <input
                     hidden
                     disabled={((newData || prevData) && (!editing))}
