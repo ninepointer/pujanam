@@ -1,5 +1,5 @@
-const DeviDevta = require('../models/Devi-Devta/devi-devta');
-const ApiResponse = require('../helpers/apiResponse');
+const DeviDevta = require('../../models/Devi-Devta/devi-devta');
+const ApiResponse = require('../../helpers/apiResponse');
 const AWS = require('aws-sdk');
 const { ObjectId } = require('mongodb');
 

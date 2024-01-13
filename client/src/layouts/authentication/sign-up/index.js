@@ -45,6 +45,7 @@ import HomePageMandirCard from './homePageMandirCards'
 import HomePagePoojaServicesCard from './homePagePoojaServicesCards'
 import HomePagePoojaSamagriCard from './homePagePoojaSamagriCards'
 import HomePagePoojaWasteCard from './homePagePoojaWasteCards'
+import MapSearch from "./mapSearch";
 
 // const GOOGLE_MAPS_API_KEY = 'AIzaSyArsP6WOgekS-LFDimu2G6FrsRrB6K29BI';
 
@@ -78,9 +79,9 @@ function Cover(props) {
   };
   const [center, setCenter] = useState({ lat: 0, lng: 0 });
   const [markerPosition, setMarkerPosition] = useState(null);
-  // const [value, setValue] = React.useState(null);
-  // const [inputValue, setInputValue] = React.useState('');
-  // const [options, setOptions] = React.useState([]);
+  const [value, setValue] = React.useState(null);
+  const [inputValue, setInputValue] = React.useState('');
+  const [options, setOptions] = React.useState([]);
   // const loaded = React.useRef(false);
 
   // if (typeof window !== 'undefined' && !loaded.current) {
@@ -268,63 +269,7 @@ function Cover(props) {
           </Grid>
           <Grid item xs={12} md={12} lg={12} display='flex' justifyContent='center' alignItems='center'>
             <MDBox mb={2} display='flex' justifyContent='center' alignItems='center'>
-              <Autocomplete
-                  id="google-map-demo"
-                  sx={{ width: 300, textAlign:'center' }}
-                  getOptionLabel={(option) =>
-                    typeof option === 'string' ? option : option.description
-                  }
-                  filterOptions={(x) => x}
-                  options={options}
-                  autoComplete
-                  includeInputInList
-                  filterSelectedOptions
-                  value={value}
-                  noOptionsText="search your location"
-                  onChange={(event, newValue) => {
-                    setOptions(newValue ? [newValue, ...options] : options);
-                    setValue(newValue);
-                  }}
-                  onInputChange={(event, newInputValue) => {
-                    setInputValue(newInputValue);
-                  }}
-                  renderInput={(params) => (
-                    <TextField {...params} label="select your location" fullWidth />
-                  )}
-                  renderOption={(props, option) => {
-                    const matches =
-                      option.structured_formatting.main_text_matched_substrings || [];
-
-                    const parts = parse(
-                      option.structured_formatting.main_text,
-                      matches.map((match) => [match.offset, match.offset + match.length]),
-                    );
-
-                    return (
-                      <li {...props}>
-                        <Grid container alignItems="center">
-                          <Grid item sx={{ display: 'flex', width: 44 }}>
-                            <LocationOnIcon sx={{ color: 'text.secondary' }} />
-                          </Grid>
-                          <Grid item sx={{ width: 'calc(100% - 44px)', wordWrap: 'break-word' }}>
-                            {parts.map((part, index) => (
-                              <MDBox
-                                key={index}
-                                component="span"
-                                sx={{ fontWeight: part.highlight ? 'bold' : 'regular' }}
-                              >
-                                {part.text}
-                              </MDBox>
-                            ))}
-                            <Typography variant="body2" color="text.secondary">
-                              {option.structured_formatting.secondary_text}
-                            </Typography>
-                          </Grid>
-                        </Grid>
-                      </li>
-                    );
-                  }}
-                />
+              <MapSearch />
             </MDBox>
           </Grid>
           <Grid item xs={12} md={12} lg={12} display='flex' justifyContent='center' alignItems='center'>

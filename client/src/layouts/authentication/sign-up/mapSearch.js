@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import { Grid } from '@mui/material';
 import MDBox from '../../../components/MDBox';
 import { debounce } from '@mui/material/utils';
@@ -12,13 +12,10 @@ import { apiUrl } from '../../../constants/constants';
 import MDAvatar from "../../../components/MDAvatar";
 import logo from "../../../assets/images/logo.png";
 import { styled } from '@mui/material';
+import SearchIcon from '@mui/icons-material/Search';
+import { Divider } from '@mui/material';
+import { Box } from '@mui/system';
 
-const CustomAutocomplete = styled(Autocomplete)`
-  .MuiAutocomplete-clearIndicator {
-    color: white;
-    border: none !important;
-  }
-`;
 
 function MapSearch() {
     const [value, setValue] = React.useState(null);
@@ -26,13 +23,14 @@ function MapSearch() {
     const [templeValue, setTempleValue] = useState();
     const [options, setOptions] = React.useState([]);
     const [templeData, setTempleData] = useState([]);
+    const [templeInputValue, setTempleInputValue] = useState([]);
     const [coordinates, setCoordinates] = React.useState({
         lat: 0,
         long: 0
     })
 
-    async function getCoordinates(){
-        if(value?.place_id){
+    async function getCoordinates() {
+        if (value?.place_id) {
             const data = await axios(`${apiUrl}location/placedetails?place_id=${value.place_id}`);
             setCoordinates({
                 lat: data.data.data.geometry.location.lat,
@@ -41,7 +39,7 @@ function MapSearch() {
         }
     }
 
-    useEffect(()=>{
+    useEffect(() => {
         getCoordinates()
     }, [value])
 
@@ -84,159 +82,234 @@ function MapSearch() {
         };
     }, [inputValue, fetch]);
 
-    useEffect(()=>{
-        templeDataFetch()
-    }, [coordinates])
+    const fetchTemple = React.useMemo(
+        () =>
+            debounce(async (request, callback) => {
+                console.log("request", request)
+                const templeData = await axios(`${apiUrl}mandir/user/bydistance?lat=${coordinates.lat}&long=${coordinates.long}&search=${request.input}`,
+            { withCredentials: true });
 
-    async function templeDataFetch(){
-        const templeData = await axios(`${apiUrl}mandir/user/bydistance?lat=${coordinates.lat}&long=${coordinates.long}`,
-                            {withCredentials: true});
-        
-        setTempleData(templeData?.data?.data);
-    }
+            callback(templeData?.data?.data);
+                // callback(templeData.data.data);
+            }, 400),
+        [],
+    );
+
+    React.useEffect(() => {
+        let active = true;
+
+        if (templeInputValue === '') {
+            setTempleData(templeValue ? [templeValue] : []);
+            return undefined;
+        }
+
+        fetchTemple({ input: templeInputValue }, (results) => {
+            if (active) {
+                let newOptions = [];
+
+                if (templeValue) {
+                    newOptions = [templeValue];
+                }
+
+                if (results) {
+                    newOptions = [...newOptions, ...results];
+                }
+
+                setTempleData(newOptions);
+            }
+        });
+
+        return () => {
+            active = false;
+        };
+    }, [templeInputValue, fetchTemple]);
+
+
     return (
-        <MDBox mb={2} display='flex' justifyContent='center'>
-            <Autocomplete
-                id="google-map-demo"
-                sx={{ width: 300, textAlign: 'center', backgroundColor: "whitesmoke" }}
-                getOptionLabel={(option) =>
-                    typeof option === 'string' ? option : option.description
-                }
-                filterOptions={(x) => x}
-                options={options}
-                autoComplete
-                includeInputInList
-                filterSelectedOptions
-                value={value}
-                noOptionsText="search your location"
-                onChange={(event, newValue) => {
-                    setOptions(newValue ? [newValue, ...options] : options);
-                    setValue(newValue);
-                }}
-                onInputChange={(event, newInputValue) => {
-                    setInputValue(newInputValue);
-                }}
-                renderInput={(params) => (
-                    <TextField {...params} label="select your location" fullWidth />
-                )}
-                renderOption={(props, option) => {
-                    const matches =
-                        option.structured_formatting.main_text_matched_substrings || [];
+        <>
+            <MDBox mb={2} display='flex' justifyContent='center' backgroundColor="#FFFFFF">
+                <MDBox sx={{
+                    display: "flex", justifyContent: "space-between", alignContent: "center", alignItems: "center", backgroundColor: "#FFFFFF",
+                    borderTopLeftRadius: "10px",
+                    borderBottomLeftRadius: "10px",
+                }}>
+                    <MDBox style={{ alignContent: 'center' }}>
+                        <LocationOnIcon sx={{ color: '#9C4722' }} backgroundColor="#FFFFFF" />
+                    </MDBox>
+                    <MDBox>
+                        <Autocomplete
+                            id="google-map-demo"
+                            sx={{
+                                width: 250, textAlign: 'center', backgroundColor: "#FFFFFF",
 
-                    const parts = parse(
-                        option.structured_formatting.main_text,
-                        matches.map((match) => [match.offset, match.offset + match.length]),
-                    );
-
-                    return (
-                        <li {...props}>
-                            <Grid container alignItems="center">
-                                <Grid item sx={{ display: 'flex', width: 44 }}>
-                                    <LocationOnIcon sx={{ color: 'text.secondary' }} />
-                                </Grid>
-                                <Grid item sx={{ width: 'calc(100% - 44px)', wordWrap: 'break-word' }}>
-                                    {parts.map((part, index) => (
-                                        <MDBox
-                                            key={index}
-                                            component="span"
-                                            sx={{ fontWeight: part.highlight ? 'bold' : 'regular' }}
-                                        >
-                                            {part.text}
-                                        </MDBox>
-                                    ))}
-                                    <Typography variant="body2" color="text.secondary">
-                                        {option.structured_formatting.secondary_text}
-                                    </Typography>
-                                </Grid>
-                            </Grid>
-                        </li>
-                    );
-                }}
-            />
-
-            <CustomAutocomplete
-                id="mandirs"
-                sx={{ width: 500, textAlign: 'center', backgroundColor: "whitesmoke", border: "none",
-                borderTopRightRadius: "10px",
-                borderBottomRightRadius: "10px",
-            }}
-                getOptionLabel={(option) =>
-                    typeof option === 'string' ? option : option.name
-                }
-                filterOptions={(x) => x}
-                options={templeData}
-                autoComplete
-                includeInputInList
-                filterSelectedOptions
-                value={templeValue}
-                noOptionsText="search temples"
-                onChange={(event, newValue) => {
-                    // setOptions(newValue ? [newValue, ...templeData] : templeData);
-                    setTempleValue(newValue);
-                }}
-
-                
-                renderOption={(props, option) => {
-                    return (
-                        <li {...props}>
-                            <Grid container 
-                                lg={12} xs={12} md={12}
-                                display='flex' flexDirection={'row'} justifyContent={'center'} alignContent={'center'}
-                                alignItems='center' 
-                            >
-                                <Grid item lg={3} xs={3} md={3} sx={{ display: 'flex', width: "100%" }}>
-                                    <MDAvatar
-                                        src={option.cover_image.url || logo}
-                                        alt={"Stock"}
-                                        size="lg"
-                                        sx={({ borders: { borderWidth }, palette: { white } }) => ({
-                                            // border: `${borderWidth[2]} solid ${white.main}`,
-                                            cursor: "pointer",
-                                            borderRadius: "10px",
-                                            height: "60px",
-                                            width: "100px",
-                                            // position: "relative",
-                                            ml: 0,
-                                            "&:hover, &:focus": {
-                                                // zIndex: "10",
+                            }}
+                            getOptionLabel={(option) =>
+                                typeof option === 'string' ? option : option.description
+                            }
+                            filterOptions={(x) => x}
+                            options={options}
+                            autoComplete
+                            includeInputInList
+                            filterSelectedOptions
+                            value={value}
+                            noOptionsText="Search your location"
+                            onChange={(event, newValue) => {
+                                setOptions(newValue ? [newValue, ...options] : options);
+                                setValue(newValue);
+                            }}
+                            onInputChange={(event, newInputValue) => {
+                                setInputValue(newInputValue);
+                            }}
+                            renderInput={(params) => (
+                                <TextField {...params} label="Select your location" fullWidth
+                                    InputProps={{
+                                        ...params.InputProps,
+                                        style: {
+                                            color: '#ED9121',
+                                            height: 52,
+                                            outline: "none",
+                                            borderWidth: 0,
+                                            '&:hover': {
+                                                borderWidth: 0, // Adjust the styles for hover if needed
                                             },
-                                        })}
-                                    />
-                                </Grid>
-                                <Grid item lg={9} xs={9} md={9} sx={{ width: '100%', wordWrap: 'break-word' }}>
-                                    <MDBox
-                                        component="span"
-                                        sx={{ fontWeight: option.highlight ? 'bold' : 'regular' }}
-                                    >
-                                        {option.name}
-                                    </MDBox>
-                                    <Typography variant="body2" color="text.secondary">
-                                        {`${option.address_details.city}, ${option.address_details.state}, ${option.address_details.country}`}
-                                    </Typography>
-                                </Grid>
-                            </Grid>
-                        </li>
-                    );
-                }}
-                renderInput={(params) => (
-                    <TextField
-                        {...params}
-                        label="Temples"
-                        InputProps={{
-                            ...params.InputProps,
-                            style: {
-                                color: 'grey',
-                                height: 50,
-                            },
-                        }}
-                        InputLabelProps={{
-                            style: { color: 'grey' },
-                        }}
-                    />
-                )}
+                                            border: "none"
+                                        },
+                                    }}
+                                />
+                            )}
+                            renderOption={(props, option) => {
+                                const matches =
+                                    option.structured_formatting.main_text_matched_substrings || [];
+
+                                const parts = parse(
+                                    option.structured_formatting.main_text,
+                                    matches.map((match) => [match.offset, match.offset + match.length]),
+                                );
+
+                                return (
+                                    <li {...props}>
+                                        <Grid container alignItems="center">
+                                            <Grid item sx={{ display: 'flex', width: "100%" }}>
+                                                <LocationOnIcon sx={{ color: 'text.secondary' }} />
+                                            </Grid>
+                                            <Grid item sx={{ width: '100%', wordWrap: 'break-word' }}>
+                                                {parts.map((part, index) => (
+                                                    <MDBox
+                                                        key={index}
+                                                        component="span"
+                                                        sx={{ fontWeight: part.highlight ? 'bold' : 'regular' }}
+                                                    >
+                                                        {part.text}
+                                                    </MDBox>
+                                                ))}
+                                                <Typography variant="body2" color="text.secondary">
+                                                    {option.structured_formatting.secondary_text}
+                                                </Typography>
+                                            </Grid>
+                                        </Grid>
+                                    </li>
+                                );
+                            }}
+                        />
+                    </MDBox>
+                </MDBox>
+
+                {/* <Divider orientation="vertical" color='black' backgroundColor='#FFFFFF' /> */}
                 
-            />
-        </MDBox>
+                <MDBox sx={{
+                    display: "flex", justifyContent: "space-between", alignContent: "center", alignItems: "center", backgroundColor: "#FFFFFF",
+                    borderTopRightRadius: "10px",
+                    borderBottomRightRadius: "10px",
+                }}>
+                    <MDBox style={{ backgroundColor: "#FFFFFF" }}>
+                        <SearchIcon sx={{ color: '#9C4722' }} backgroundColor="#FFFFFF" />
+                    </MDBox>
+                    <MDBox>
+                        <Autocomplete
+                            id="mandirs"
+                            sx={{
+                                width: 400,
+                                textAlign: 'center',
+                                backgroundColor: "#FFFFFF",
+                                border: "none",
+                                borderTopRightRadius: "20px",
+                                borderBottomRightRadius: "20px",
+                                outline: "none"
+                            }}
+                            style={{ border: 'none' }}
+                            getOptionLabel={(option) =>
+                                typeof option === 'string' ? option : option.name
+                            }
+                            filterOptions={(x) => x}
+                            options={templeData}
+                            autoHighlight
+                            autoComplete
+                            includeInputInList
+                            filterSelectedOptions
+                            value={templeValue}
+                            noOptionsText= {templeInputValue ? "No Temple Found!" : "Search for temples"}
+                            onChange={(event, newValue) => {
+                                setTempleValue(newValue);
+                            }}
+                            onInputChange={(event, newInputValue) => {
+                                setTempleInputValue(newInputValue);
+                            }}
+                            renderOption={(props, option) => (
+                                <li {...props}>
+                                    <Grid container lg={12} xs={12} md={12} display='flex' flexDirection={'row'} justifyContent={'center'} alignContent={'center'} alignItems='center'>
+                                        <Grid item lg={4} xs={4} md={4} sx={{ display: 'flex', width: "100%" }}>
+                                            <MDAvatar
+                                                src={option.cover_image.url || logo}
+                                                alt={"Mandir"}
+                                                size="lg"
+                                                sx={{
+                                                    cursor: "pointer",
+                                                    borderRadius: "10px",
+                                                    height: "60px",
+                                                    width: "100px",
+                                                    ml: 0,
+                                                    border: "none"
+                                                }}
+                                            />
+                                        </Grid>
+                                        <Grid item lg={8} xs={8} md={8} sx={{ width: '100%', wordWrap: 'break-word' }}>
+                                            <MDBox
+                                                component="span"
+                                                sx={{ fontWeight: option.highlight ? 'bold' : 'regular' }}
+                                            >
+                                                {option.name}
+                                            </MDBox>
+                                            <Typography variant="body2" color="text.secondary">
+                                                {`${option.address_details.city}, ${option.address_details.state}, ${option.address_details.country}`}
+                                            </Typography>
+                                        </Grid>
+                                    </Grid>
+                                </li>
+                            )}
+                            renderInput={(params) => (
+                                <TextField
+                                    {...params}
+                                    label="Search for temples"
+                                    InputProps={{
+                                        ...params.InputProps,
+                                        style: {
+                                            color: '#ED9121',
+                                            height: 52,
+                                            outline: "none",
+                                            borderWidth: 0,
+                                            border: "none"
+                                        },
+                                    }}
+                                    InputLabelProps={{
+                                        style: { color: 'grey', outline: "none" },
+                                    }}
+                                />
+                            )}
+                        />
+                    </MDBox>
+                </MDBox>
+            </MDBox>
+        </>
     );
 }
 

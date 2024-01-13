@@ -9,7 +9,10 @@ router.get('/home',  mandirController.getActiveHome);
 router.get('/dham', Authenticate,  mandirController.getDham);
 router.get('/popular', Authenticate,  mandirController.getPopular);
 router.get('/bydistance',  mandirController.getByDistance);
+router.get('/bydevta',  mandirController.getBydevta);
+router.get('/bysearch',  mandirController.getBySearch);
 
+router.patch('/count/:id', Authenticate,  mandirController.addToFavourite);
 router.patch('/addfavourite/:id', Authenticate,  mandirController.addToFavourite);
 router.patch('/sharedby/:id', Authenticate,  mandirController.sharedBy);
 
