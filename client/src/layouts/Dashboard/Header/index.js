@@ -6,15 +6,6 @@ import {Grid, CircularProgress, Divider} from '@mui/material';
 import MDTypography from '../../../components/MDTypography';
 import { Link } from "react-router-dom";
 import CachedIcon from '@mui/icons-material/Cached';
-import LiveContest from '../data/infinityContests'
-
-//data
-import CompanySideContestDailyChart from '../data/companySideContestDailyChart'
-import DailyContestUsers from '../data/dailyContestUsers'
-import DailyPaidContestUsers from '../data/dailyPaidContestUsers'
-import PnlOverviewMock from '../infinityContestComponent/pnlOverviewMock';
-import PnlOverviewLive from '../infinityContestComponent/pnlOverviewLive';
-import XTSOverview from '../infinityContestComponent/xtsOverview';
 
 export default function LabTabs() {
 
@@ -23,11 +14,6 @@ export default function LabTabs() {
         <MDBox display='flex' justifyContent='left'>
             <MDTypography ml={1} mb={1} color='light' fontSize={18} fontWeight='bold'>Dashboard</MDTypography>
         </MDBox>
-
-        <Grid container spacing={1} xs={12} md={12} lg={12} mt={0.5} mb={0.5} display='flex' justifyContent='center' alignItems='center'>
-
-           
-        </Grid>
 
 
         <Grid container spacing={2} xs={12} md={12} lg={12} mt={1}>
@@ -88,20 +74,6 @@ export default function LabTabs() {
                                 Devi-Devta
                             </MDButton>
                         </Grid>
-
-                        {/* <Grid item fullWidth>
-                            <MDButton 
-                                variant="contained" 
-                                color={"warning"} 
-                                size="small" 
-                                component = {Link}
-                                to={{
-                                    pathname: `/mandir`,
-                                  }}
-                            >
-                                Mandir
-                            </MDButton>
-                        </Grid> */}
                 
                     </Grid>
                 </MDBox>

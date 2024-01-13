@@ -1,5 +1,4 @@
 import Dashboard from './layouts/Dashboard'
-import DailyContest from "./layouts/dailyContest";
 import Pandit from "./layouts/Pandit"
 import PanditDetails from './layouts/Pandit/panditDetails'
 import Tier from './layouts/Tier'
@@ -22,11 +21,6 @@ import { LiaPrayingHandsSolid } from "react-icons/lia";
 
 const routes = [
 
-  {
-    key: "dailycontest",
-    route: "/dashboard/dailycontest",
-    component: <DailyContest />,
-  },
   {
     route: "/devidevtadetails",
     component: <DeviDevDetails />,
