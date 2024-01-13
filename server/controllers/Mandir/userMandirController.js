@@ -15,6 +15,18 @@ exports.getActive = async (req, res) => {
     }
 };
 
+exports.getActiveHome = async (req, res) => {
+    try {
+        const activeMandir = await Mandir.find({ status: 'Active' })
+        .limit(4)
+        .populate('devi_devta', 'name')
+        .select('-created_on -created_by -last_modified_on -last_modified_by -__v -favourite -share');
+        ApiResponse.success(res, activeMandir);
+    } catch (error) {
+        ApiResponse.error(res, 'Something went wrong', 500, error.message);
+    }
+};
+
 exports.getDham = async (req, res) => {
     try {
         const activeMandir = await Mandir.find({ dham: true })

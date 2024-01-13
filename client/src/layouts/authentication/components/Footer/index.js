@@ -23,7 +23,7 @@ function Footer({ light }) {
   const { size } = typography;
 
   return (
-    <MDBox width="100%" bottom={0} py={2} style={{backgroundColor:'#FDB769'}}>
+    <MDBox width="100%" bottom={0} py={2} >
       <Grid container xs={12} md={12} lg={12}>
 
           <Grid item xs={12} md={12} lg={4} mt={1}>
@@ -34,6 +34,7 @@ function Footer({ light }) {
               flexWrap="wrap"
               color={light ? "text" : "white"}
               fontSize={size.sm}
+              style={{fontFamily: 'Itim'}}
             >
               &copy; {new Date().getFullYear()}, made with
               <MDBox fontSize={size.md} color={light ? "dark" : "white"} mb={-0.5} mx={0.25}>
@@ -43,7 +44,7 @@ function Footer({ light }) {
               </MDBox>
               by
               <Link href="https://www.punyam.app/" target="_blank">
-                <MDTypography variant="button" fontWeight="medium" color={light ? "dark" : "white"}>
+                <MDTypography variant="button" fontWeight="medium" style={{fontFamily: 'Itim'}} color={light ? "dark" : "white"}>
                   &nbsp;punyam&nbsp;
                 </MDTypography>
               </Link>
@@ -81,6 +82,7 @@ function Footer({ light }) {
                   variant="button"
                   fontWeight="regular"
                   color={light ? "dark" : "white"}
+                  style={{fontFamily: 'Itim'}}
                 >
                   About
                 </MDTypography>
@@ -92,6 +94,7 @@ function Footer({ light }) {
                   variant="button"
                   fontWeight="regular"
                   color={light ? "dark" : "white"}
+                  style={{fontFamily: 'Itim'}}
                 >
                   Contact Us
                 </MDTypography>
@@ -103,6 +106,7 @@ function Footer({ light }) {
                   variant="button"
                   fontWeight="regular"
                   color={light ? "dark" : "white"}
+                  style={{fontFamily: 'Itim'}}
                 >
                   Privacy Policy
                 </MDTypography>
@@ -118,6 +122,7 @@ function Footer({ light }) {
               flexWrap="wrap"
               color={light ? "text" : "white"}
               fontSize={size.sm}
+              style={{fontFamily: 'Itim'}}
               // style={{textDecoration:'underline'}}
             >
               For support: pooja@punyam.app
@@ -132,7 +137,7 @@ function Footer({ light }) {
               flexWrap="wrap"
               color={light ? "text" : "white"}
               fontSize={size.sm}
-              style={{textAlign:'center'}}
+              style={{textAlign:'center', fontFamily: 'Itim'}}
             >
               © 2024, punyam.app All rights reserved.
             </MDBox>
@@ -146,7 +151,7 @@ function Footer({ light }) {
               flexWrap="wrap"
               color={light ? "text" : "white"}
               fontSize={size.sm}
-              style={{textAlign:'center'}}
+              style={{textAlign:'center', fontFamily: 'Itim'}}
             >
               S-77, NRI Colony, Sec-24, Pratap Nagar, Sanganer, Pratap Nagar Housing Board, Jaipur-302033
             </MDBox>

@@ -4,6 +4,7 @@ import React, { useState } from 'react'
 import useScrollPosition from '../../hooks/useScrollPosition'
 
 import logo from '../../../../assets/images/punyamapp.png'
+import background from '../../../../assets/images/background.jpg'
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { CallMade, Language, Menu } from '@mui/icons-material'
 import LaunchButton from '../Buttons/LaunchButton'
@@ -27,7 +28,7 @@ const LinkButton = ({ children, ...props }) => (
       color: "#9c4722",
       // color: "white",
       // "&:hover": { color: '#fff'},
-      "&:hover": { color: '#FFA500'},
+      "&:hover": { color: '#FFFFFF'},
     }}
     {...props}
   >
@@ -54,10 +55,10 @@ const Navbar = () => {
 
   return (
     <AppBar 
-        elevation={1} 
+        elevation={0} 
         sx={{ height: NAVBAR_HIEGHT, bgcolor: scrollPosition > 10 ? "white" : "white", 
         backdropFilter: scrollPosition > 10 && "blur(60px)", 
-        marginBottom: "60px"
+        marginBottom: "50px"
         }}
     >
 
@@ -65,10 +66,11 @@ const Navbar = () => {
         <Stack direction='row' justifyContent='space-between' alignItems="center" flexWrap="wrap"  alignContent='center' >
           {/* Logo */}
 
-          <a href="/"><img src={logo} style={{ objectFit: "contain", height: "60px", marginTop: "8px" }} /></a>
+          <a href="/"><img src={logo} style={{ objectFit: "contain", height: "50px", marginTop: "6px" }} /></a>
 
 
-          {!isMobile && (<Stack
+          {!isMobile && (
+          <Stack
             direction="row"
             alignItems="center"
             justifyContent="flex-end"
@@ -81,35 +83,35 @@ const Navbar = () => {
             <a href="/careers">
             <LinkButton>
               <MdOutlineTempleHindu fontSize="small" />
-              <Typography fontWeight="bold" variant="body2">Temples</Typography>
+              <Typography fontWeight="bold" variant="body2" style={{fontFamily:'Itim'}}>Mandirs</Typography>
             </LinkButton>
             </a>
 
             <a href="/workshops">
             <LinkButton>
               <LiaPrayingHandsSolid fontSize="small" />
-              <Typography fontWeight="bold" variant="body2">Pooja</Typography>
+              <Typography fontWeight="bold" variant="body2" style={{fontFamily:'Itim'}}>Pooja Service</Typography>
             </LinkButton>
             </a>
 
             <a href="/workshops">
             <LinkButton>
               <LiaPrayingHandsSolid fontSize="small" />
-              <Typography fontWeight="bold" variant="body2">Pooja Samagri</Typography>
+              <Typography fontWeight="bold" variant="body2" style={{fontFamily:'Itim'}}>Pooja Samagri</Typography>
             </LinkButton>
             </a>
 
             <a href="/blogs">
             <LinkButton>
               <GrBlog fontSize="small" />
-              <Typography fontWeight="bold" variant="body2">Blogs</Typography>
+              <Typography fontWeight="bold" variant="body2" style={{fontFamily:'Itim'}}>Blogs</Typography>
             </LinkButton>
             </a>
 
             <a href="/about">
             <LinkButton spacing={0.5}>
               <CgOrganisation fontSize="small" />
-              <Typography fontWeight="bold" variant="body2">About Us</Typography>
+              <Typography fontWeight="bold" variant="body2" style={{fontFamily:'Itim'}}>About Us</Typography>
             </LinkButton>
             </a>
 
@@ -118,37 +120,42 @@ const Navbar = () => {
           {open&& (
             
             <Stack
-            direction="column"
-            alignItems="center"
-            justifyContent="flex-start"
-            spacing={4}
-            sx={{ flex: 1, background:"#315c45",width:"100%",height:"100vh"}}
-            flexWrap="wrap"
-            position="absolute"
-            top="0"
-            right={0}
-          
-            
-          >
+              direction="column"
+              alignItems="center"
+              justifyContent="flex-start"
+              spacing={4}
+              sx={{
+                flex: 1,
+                backgroundImage: `url(${background})`, // Replace with the actual path to your image
+                backgroundSize: 'cover',
+                backgroundPosition: 'center center',
+                width: '100%',
+                height: '100vh',
+                position: 'absolute',
+                top: 0,
+                right: 0,
+              }}
+              flexWrap="wrap"
+            >
             < img src ="https://icon-library.com/images/x-button-icon/x-button-icon-3.jpg" style={{height:"40px",position:"absolute",top:"8px",color:"#fff", right:"14px", zIndex:999}} sx={{fontSize:"100px"}} onClick={()=>setOpen(false)}/>
 
             <a href="/careers">
             <LinkButton>
-              <Typography variant="body2">Temples</Typography>
+              <MDTypography variant="body2" style={{fontFamily:'Itim', color: "#9c4722"}}>Mandirs</MDTypography>
               
             </LinkButton>
             </a>
 
             <a href="/workshops">
             <LinkButton>
-              <Typography variant="body2">Pooja</Typography>
+              <MDTypography variant="body2" style={{fontFamily:'Itim', color: "#9c4722"}}>Pooja Service</MDTypography>
               
             </LinkButton>
             </a>
 
             <a href="/workshops">
             <LinkButton>
-              <Typography variant="body2">Pooja Samagri</Typography>
+              <MDTypography variant="body2" style={{fontFamily:'Itim', color: "#9c4722"}}>Pooja Samagri</MDTypography>
               
             </LinkButton>
             </a>
@@ -156,21 +163,21 @@ const Navbar = () => {
 
             <a href="/blogs">
             <LinkButton>
-              <Typography variant="body2">Blogs</Typography>
+              <MDTypography variant="body2" style={{fontFamily:'Itim', color: "#9c4722"}}>Blogs</MDTypography>
               
             </LinkButton>
             </a>
 
             <a href="/about">
             <LinkButton spacing={0.5}>
-              <MDTypography variant="body2" sx={{color:'#65BA0D'}}>About us</MDTypography>
+              <MDTypography variant="body2" style={{fontFamily:'Itim', color: "#9c4722"}}>About us</MDTypography>
             </LinkButton>
             </a>
 
             <a href="/about">
             <LinkButton spacing={0.5}>
-              {/* <Language fontSize="small" /> */}
-              <MDTypography variant="body2" sx={{color:'#65BA0D'}}>Hindi</MDTypography>
+              <Language fontSize="small" />
+              <MDTypography variant="body2" style={{fontFamily:'Itim', color: "#9c4722"}}>Hindi</MDTypography>
             </LinkButton>
             </a>
 
@@ -181,14 +188,14 @@ const Navbar = () => {
 
 
           {isMobile ? (
-            <IconButton>
+            <IconButton style={{color:'#9c4722'}}>
               <Menu onClick={Handle} sx={{ color: "#9c4722" }} />
             </IconButton>
           ) : (
           <Stack direction="row" spacing={5} alignItems="center">
             <LinkButton spacing={1} sx={{color: scrollPosition >10 ? '#9c4722' : '#9c4722'}}>
               <Language fontSize="small" />
-              <Typography variant="body2">Hindi</Typography>
+              <Typography variant="body2" style={{fontFamily:'Itim',}}>Hindi</Typography>
             </LinkButton>
 
             <a href="https://play.google.com/store/apps/details?id=com.stoxhero.app" target='_blank'>

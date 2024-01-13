@@ -4,7 +4,7 @@ import Title from '../components/Title/index'
 import React, {useEffect} from 'react'
 import ReactGA from "react-ga"
 import ServiceCard from '../components/Cards/ServiceCard'
-import background from '../../../assets/images/background.png'
+import background from '../../../assets/images/background.jpg'
 
 import useMeasure from 'react-use-measure'
 
@@ -39,42 +39,42 @@ const About = () => {
                 padding: '20px',
                 }}>
                 
-                <Container>
-                    <Grid container spacing={10} flexWrap="wrap-reverse" justifyContent="start" alignItems="center" sx={{ mt: { xs: 10, md: 15, } }}>
+                <Container style={{fontFamily:'Itim'}}>
+                    <Grid container spacing={10} flexWrap="wrap-reverse" justifyContent="start" alignItems="center" sx={{ mt: { xs: 10, md: 15, } }} style={{fontFamily:'Itim'}}>
                         <Grid item xs={12} md={6} sx={{mt:2}}  >
                             <Stack spacing={2} sx={{ maxWidth: '100%' }}>
-                                <Title variant={{ xs: 'h5', sm: 'h2', md: 'h2' }} sx={{ letterSpacing: "0.02em", mb: 1, p:0}} style={{ color: "white" }} >Punyam Privacy Policy</Title>
-                                <Title variant={{ xs: 'body2', sm: 'body2', md: "body2" }} sx={{ fontWeight: 500, letterSpacing: "0.05em", mb: 6, color: "rgba(255, 255, 255, 0.6)" }} >Updated on 13 Jan, 2024</Title>
-                                <Title variant={{ xs: 'body1', sm: 'body1', md: "body1" }} sx={{ fontWeight: 500, letterSpacing: "0.05em", mb: 6, color: "#ffffff", fontWeight:"bold" }} >Your privacy is critically important to us.</Title>
+                                <Title variant={{ xs: 'h5', sm: 'h2', md: 'h2' }} sx={{ letterSpacing: "0.02em", mb: 1, p:0}} style={{ color: "white",fontFamily: "Itim" }} >Punyam Privacy Policy</Title>
+                                <Title variant={{ xs: 'body2', sm: 'body2', md: "body2" }} style={{ fontFamily: "Itim" }} sx={{ fontWeight: 500, letterSpacing: "0.05em", mb: 6, color: "rgba(255, 255, 255, 0.6)" }} >Updated on 13 Jan, 2024</Title>
+                                <Title variant={{ xs: 'body1', sm: 'body1', md: "body1" }} style={{ fontFamily: "Itim" }} sx={{ fontWeight: 500, letterSpacing: "0.05em", mb: 6, color: "#ffffff", fontWeight:"bold" }} >Your privacy is critically important to us.</Title>
                             </Stack>
                         </Grid>
                     </Grid>
                 </Container>
                 <Container>
-                    <Grid item xs={12} md={6} sx={{mt:2, maxWidth:'1280px'}}  >
+                    <Grid item xs={12} md={6} sx={{mt:2, maxWidth:'1280px'}} style={{ fontFamily: "Itim" }} >
                         <Stack spacing={0} sx={{ width: "100%"}}>
-                            <Typography color="#ffffff">
+                            <Typography color="#ffffff" style={{ fontFamily: "Itim" }}>
                                 This document is published in accordance with the provisions of Rule 3 (1) of the Information Technology (Intermediaries Guidelines) Rules, 2011 which requires publishing the Privacy Policy for the access or usage of Punyam's website and Punyam App.
                             </Typography>
                         </Stack>
                     </Grid>
                     <Grid item xs={12} md={6} sx={{mt:2, maxWidth:'1280px'}}  >
                         <Stack spacing={0} sx={{ width: "100%"}}>
-                            <Typography color="#ffffff">
+                            <Typography color="#ffffff" style={{ fontFamily: "Itim" }}>
                                 This Privacy Policy covers the use of Punyam's website and app, including providing information on our policies regarding the collection, use, and disclosure of Personal Information when you use our service. Punyam ("we", "our team", "us") is concerned about the privacy of the users ("you", "your", "user") of our website and app and have provided this privacy policy to familiarize you with the manner in which we collect, use, and disclose your information.
                             </Typography>
                         </Stack>
                     </Grid>
                     <Grid item xs={12} md={6} sx={{mt:2, maxWidth:'1280px'}}  >
                         <Stack spacing={0} sx={{ width: "100%"}}>
-                            <Typography color="#ffffff">
+                            <Typography color="#ffffff" style={{ fontFamily: "Itim" }}>
                                 We will not use or share your information with anyone except as described in this Privacy Policy.
                             </Typography>
                         </Stack>
                     </Grid>
                     <Grid item xs={12} md={6} sx={{mt:2, maxWidth:'1280px'}}  >
                         <Stack spacing={0} sx={{ width: "100%"}}>
-                            <Typography color="#ffffff">
+                            <Typography color="#ffffff" style={{ fontFamily: "Itim" }}>
                                 We use your Personal Information for providing and improving the services offered by us. By using the service, you agree to the collection and use of information in accordance with this policy.
                             </Typography>
                         </Stack>
@@ -82,9 +82,9 @@ const About = () => {
                 </Container>
                 
                 <Container>
-                <Grid item xs={12} md={6} sx={{mt:2, maxWidth:'1280px', mb:8}}  >
+                <Grid item xs={12} md={6} sx={{mt:2, maxWidth:'1280px', mb:8}} style={{ fontFamily: "Itim" }} >
                             <Stack spacing={0} sx={{ width: "100%"}}>
-                                <Typography color="#ffffff">
+                                <Typography color="#ffffff" style={{ fontFamily: "Itim" }}>
                                 1. What information do we collect?<br/><br/>
                                 We collect information from you when you register/login on the app/website. While registering, we may ask for your name, phone number, email, location or address, Date of Birth, Place of Birth. However, you may visit the app/website anonymously.<br/><br/>
                                 When you create an account, you will provide information that could be personally identifiable. We may use your contact information to send you information about our services, but only in accordance with your contact preferences. We reserve the right to contact you for account recovery purposes.<br/><br/>

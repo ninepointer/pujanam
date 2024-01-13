@@ -1,11 +1,14 @@
 .App {
   text-align: center;
-  
 }
 
 .App-logo {
   height: 40vmin;
   pointer-events: none;
+}
+
+.body {
+  font-family: 'Itim', cursive;
 }
 
 @media (prefers-reduced-motion: no-preference) {
