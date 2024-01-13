@@ -1,8 +1,8 @@
 const express = require("express");
 const Authenticate = require('../../authentication/authentication');
 const router = express.Router({mergeParams: true});
-const deviDevtaController = require('../../controllers/devi-devtaController');
-
+const deviDevtaController = require('../../controllers/DeviDevta/devi-devtaController');
+const user = require('./userDeviDevta')
 const restrictTo = require('../../authentication/authorization');
 const multer = require('multer');
 
@@ -13,7 +13,7 @@ const upload = multer({
   },
 });
 
-
+router.use("/user", user)
 router.post('/', Authenticate, restrictTo('Admin', 'SuperAdmin'),  upload.single("devImage"), deviDevtaController.create);
 router.get('/', Authenticate, restrictTo('Admin', 'SuperAdmin'), deviDevtaController.getAllDevta);
 router.get('/active', Authenticate, restrictTo('Admin', 'SuperAdmin'), deviDevtaController.getActiveDevta);

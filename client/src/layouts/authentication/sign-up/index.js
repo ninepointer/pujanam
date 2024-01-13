@@ -9,23 +9,10 @@ import Navbar from '../../HomePage/components/Navbars/Navbar';
 import background from '../../../assets/images/background.jpg'
 import logo from '../../../assets/images/logo.png'
 // import Autocomplete from 'react-google-autocomplete';
-import TextField from '@mui/material/TextField';
-import Autocomplete from '@mui/material/Autocomplete';
-import LocationOnIcon from '@mui/icons-material/LocationOn';
-// import Grid from '@mui/material/Grid';
-import Typography from '@mui/material/Typography';
-import parse from 'autosuggest-highlight/parse';
-import { debounce } from '@mui/material/utils';
-import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
-import { CardActionArea, Divider } from '@mui/material';
-import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
-import { Link } from "react-router-dom";
+
 
 // react-router-dom components
 import { useLocation, useNavigate } from "react-router-dom";
-import { GoogleMap, LoadScript, StandaloneSearchBox, Marker } from '@react-google-maps/api';
 
 // @mui material components
 import Grid from "@mui/material/Grid";
@@ -47,23 +34,7 @@ import HomePagePoojaSamagriCard from './homePagePoojaSamagriCards'
 import HomePagePoojaWasteCard from './homePagePoojaWasteCards'
 import PoojaServices from './poojaServices'
 import TemplesNearMe from './templesNearMe'
-
-// const GOOGLE_MAPS_API_KEY = 'AIzaSyArsP6WOgekS-LFDimu2G6FrsRrB6K29BI';
-
-// function loadScript(src, position, id) {
-//   if (!position) {
-//     return;
-//   }
-
-//   const script = document.createElement('script');
-//   script.setAttribute('async', '');
-//   script.setAttribute('id', id);
-//   script.src = src;
-//   position.appendChild(script);
-// }
-
-// const autocompleteService = { current: null };
-
+import MapSearch from "./mapSearch";
 
 function Cover(props) {
   const navigate = useNavigate();
@@ -83,78 +54,7 @@ function Cover(props) {
   const [value, setValue] = React.useState(null);
   const [inputValue, setInputValue] = React.useState('');
   const [options, setOptions] = React.useState([]);
-  // const loaded = React.useRef(false);
 
-  // if (typeof window !== 'undefined' && !loaded.current) {
-  //   if (!document.querySelector('#google-maps')) {
-  //     loadScript(
-  //       `https://maps.googleapis.com/maps/api/js?key=${GOOGLE_MAPS_API_KEY}&libraries=places`,
-  //       document.querySelector('head'),
-  //       'google-maps',
-  //     );
-  //   }
-
-  //   loaded.current = true;
-  // }
-
-  // const fetch = React.useMemo(
-  //   () =>
-  //     debounce((request, callback) => {
-  //       autocompleteService.current.getPlacePredictions(request, callback);
-  //     }, 400),
-  //   [],
-  // );
-
-  // React.useEffect(() => {
-  //   let active = true;
-
-  //   if (!autocompleteService.current && window.google) {
-  //     autocompleteService.current =
-  //       new window.google.maps.places.AutocompleteService();
-  //   }
-  //   if (!autocompleteService.current) {
-  //     return undefined;
-  //   }
-
-  //   if (inputValue === '') {
-  //     setOptions(value ? [value] : []);
-  //     return undefined;
-  //   }
-
-  //   fetch({ input: inputValue }, (results) => {
-  //     if (active) {
-  //       let newOptions = [];
-
-  //       if (value) {
-  //         newOptions = [value];
-  //       }
-
-  //       if (results) {
-  //         newOptions = [...newOptions, ...results];
-  //       }
-
-  //       setOptions(newOptions);
-  //     }
-  //   });
-
-  //   return () => {
-  //     active = false;
-  //   };
-  // }, [value, inputValue, fetch]);
-
-
-  // const onLoad = (map) => {
-  //   navigator.geolocation.getCurrentPosition(
-  //     (position) => {
-  //       const { latitude, longitude } = position.coords;
-  //       setCenter({ lat: latitude, lng: longitude });
-  //       setMarkerPosition({ lat: latitude, lng: longitude });
-  //     },
-  //     (error) => {
-  //       console.error('Error getting current location:', error);
-  //     }
-  //   );
-  // };
 
   useEffect(()=>{
     let call1 = axios.get(`${apiUrl}usermandir/home`,{
@@ -186,18 +86,6 @@ function Cover(props) {
       // Handle errors here
     });
   },[])
-
-  // const onPlacesChanged = (places) => {
-  //   const place = places[0];
-  //   setCenter({
-  //     lat: place.geometry.location.lat(),
-  //     lng: place.geometry.location.lng(),
-  //   });
-  //   setMarkerPosition({
-  //     lat: place.geometry.location.lat(),
-  //     lng: place.geometry.location.lng(),
-  //   });
-  // };
   
   const isMobile = useMediaQuery(theme.breakpoints.down("lg"))
 
@@ -231,18 +119,18 @@ function Cover(props) {
     };
   }, []);
 
-  const backgroundColor = scrollPosition > 250 ? 'white' : 'transparent'
-  const backdropFilter = scrollPosition > 250 ? 'blur(5px)' : 'none'
+  const backgroundColor = scrollPosition > 10 ? 'white' : 'transparent'
+  const backdropFilter = scrollPosition > 10 ? 'blur(5px)' : 'none'
 
   
 
   return (
     <>
-      <MDBox mt={-1} display='flex' justifyContent='center' flexDirection='column' alignContent='center' alignItems='flex-start' style={{backgroundColor:'white', minHeight:'auto', width: 'auto', minWidth:'100vW', overflow: 'visible'}}>
+      <MDBox mt={-1} display='flex' justifyContent='center' flexDirection='column' alignContent='center' alignItems='center' style={{backgroundColor:'white', minHeight:'auto', width: 'auto', minWidth:'100vW', overflow: 'visible'}}>
       <ThemeProvider theme={theme}>
       <Navbar/>
 
-      <Grid container mt={0} xs={12} md={12} lg={12} style={{
+      <Grid container mt={0} xs={12} md={12} lg={12} display='flex' justifyContent='center' alignItems='center' style={{
           display: 'flex',
           justifyContent: 'center',
           alignContent: 'center',
@@ -269,73 +157,14 @@ function Cover(props) {
               <img src={logo} width={350} alt="Logo" />
             </MDBox>
           </Grid>
-          <Grid item xs={12} md={12} lg={12} display='flex' justifyContent='center' alignItems='center'>
-            <MDBox mb={2} display='flex' justifyContent='center' alignItems='center'>
-              <Autocomplete
-                  id="google-map-demo"
-                  sx={{ width: 300, textAlign:'center' }}
-                  getOptionLabel={(option) =>
-                    typeof option === 'string' ? option : option.description
-                  }
-                  filterOptions={(x) => x}
-                  options={options}
-                  autoComplete
-                  includeInputInList
-                  filterSelectedOptions
-                  value={value}
-                  noOptionsText="search your location"
-                  onChange={(event, newValue) => {
-                    setOptions(newValue ? [newValue, ...options] : options);
-                    setValue(newValue);
-                  }}
-                  onInputChange={(event, newInputValue) => {
-                    setInputValue(newInputValue);
-                  }}
-                  renderInput={(params) => (
-                    <TextField {...params} 
-                      label="select your location" 
-                      fullWidth 
-                      />
-                  )}
-                  renderOption={(props, option) => {
-                    const matches =
-                      option.structured_formatting.main_text_matched_substrings || [];
-
-                    const parts = parse(
-                      option.structured_formatting.main_text,
-                      matches.map((match) => [match.offset, match.offset + match.length]),
-                    );
-
-                    return (
-                      <li {...props} >
-                        <Grid container alignItems="center" style={{border:'none'}}>
-                          <Grid item sx={{ display: 'flex', width: 44 }}>
-                            <LocationOnIcon sx={{ color: 'text.secondary' }} />
-                          </Grid>
-                          <Grid item sx={{ width: 'calc(100% - 44px)', wordWrap: 'break-word' }}>
-                            {parts.map((part, index) => (
-                              <MDBox
-                                key={index}
-                                component="span"
-                                sx={{ fontWeight: part.highlight ? 'bold' : 'regular' }}
-                              >
-                                {part.text}
-                              </MDBox>
-                            ))}
-                            <Typography variant="body2" color="text.secondary">
-                              {option.structured_formatting.secondary_text}
-                            </Typography>
-                          </Grid>
-                        </Grid>
-                      </li>
-                    );
-                  }}
-                />
+          <Grid item xs={12} md={12} lg={12} display='flex' justifyContent='center' alignItems='center' style={{overflow: 'visible'}}>
+            <MDBox mb={2} display='flex' justifyContent='center' alignItems='center' style={{overflow: 'visible'}}>
+              <MapSearch />
             </MDBox>
           </Grid>
           <Grid item xs={12} md={12} lg={12} display='flex' justifyContent='center' alignItems='center'>
             <MDBox display='flex' justifyContent='center' alignItems='center'>
-              <MDTypography variant="h4" sx={{ color: '#fff' }} style={{fontFamily: 'Itim'}}>Seamlessly book pooja services,<br/> discover nearby and popular mandirs,<br/> and order pooja samagri with our app punyam</MDTypography>
+              <MDTypography variant="h4" sx={{ color: '#fff' }} style={{fontFamily: 'Itim'}}>Seamlessly book pooja services,<br/> discover nearby and popular mandirs,<br/> and order pooja samagri with punyam app</MDTypography>
             </MDBox>
           </Grid>
           <Grid item xs={12} md={12} lg={4} mb={isMobile ? 8 : 10} display='flex' justifyContent='center' alignItems='center'>
@@ -346,7 +175,7 @@ function Cover(props) {
         </Grid>
       </Grid>
 
-      <Grid container mt={isMobile ? 75 : 85} mb={2} display='flex' justifyContent='center' alignContent='center' alignItems='center' xs={12} md={12} lg={12} style={{ maxWidth: '100%', height: 'auto', flexGrow: 1, overflowY: 'auto', zIndex:3, overflow: 'visible' }}>
+      <Grid container mt={isMobile ? 75 : 78} mb={2} display='flex' justifyContent='center' alignContent='center' alignItems='center' xs={12} md={12} lg={12} style={{ maxWidth: '100%', height: 'auto', flexGrow: 1, overflowY: 'auto', zIndex:3, overflow: 'visible' }}>
 
             <Grid item xs={12} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '95%', height: 'auto', overflow: 'visible' }}>
               <Grid container xs={12} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{overflow: 'visible'}}>
@@ -355,7 +184,7 @@ function Cover(props) {
                   <Grid container spacing={4} xs={12} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto', overflow: 'visible' }}>
                     <Grid item xs={12} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
                       <MDBox display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
-                        <MDTypography fontSize={20} fontWeight="bold" style={{color:'#000', fontFamily: 'Itim'}}>punyam services!</MDTypography>
+                        <MDTypography variant="h4" fontWeight="bold" style={{color:'#fff', fontFamily: 'Itim'}}>|| offerings on punyam ||</MDTypography>
                       </MDBox>
                     </Grid>
                     <Grid item xs={12} md={12} lg={3} style={{overflow: 'visible'}}>
