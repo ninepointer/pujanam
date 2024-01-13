@@ -9,8 +9,18 @@ import Typography from '@mui/material/Typography';
 import parse from 'autosuggest-highlight/parse';
 import axios from 'axios';
 import { apiUrl } from '../../../constants/constants';
+import MDAvatar from "../../../components/MDAvatar";
+import logo from "../../../assets/images/logo.png";
+import { styled } from '@mui/material';
 
 const GOOGLE_MAPS_API_KEY = 'AIzaSyArsP6WOgekS-LFDimu2G6FrsRrB6K29BI';
+
+const CustomAutocomplete = styled(Autocomplete)`
+  .MuiAutocomplete-clearIndicator {
+    color: white;
+    border: none !important;
+  }
+`;
 
 function loadScript(src, position, id) {
     if (!position) {
@@ -30,11 +40,12 @@ const autocompleteService = { current: null };
 function MapSearch() {
     const [value, setValue] = React.useState(null);
     const [inputValue, setInputValue] = React.useState('');
+    const [templeValue, setTempleValue] = useState();
     const [options, setOptions] = React.useState([]);
     const [templeData, setTempleData] = useState([]);
     const [coordinates, setCoordinates] = React.useState({
-        lat: 0,
-        long: 0
+        lat: 29.5821848,
+        long: 74.3292106
     })
     const loaded = React.useRef(false);
 
@@ -63,7 +74,7 @@ function MapSearch() {
     }, [coordinates])
 
     async function templeDataFetch(){
-        const templeData = await axios(`${apiUrl}mandir/bydistance?lat=${coordinates.lat}&long=${coordinates.long}`,
+        const templeData = await axios(`${apiUrl}mandir/user/bydistance?lat=${coordinates.lat}&long=${coordinates.long}`,
                             {withCredentials: true});
         
         setTempleData(templeData?.data?.data);
@@ -106,12 +117,12 @@ function MapSearch() {
         };
     }, [value, inputValue, fetch]);
 
-
+    console.log("templeData", templeData)
     return (
         <MDBox mb={2} display='flex' justifyContent='center'>
             <Autocomplete
                 id="google-map-demo"
-                sx={{ width: 300, textAlign: 'center' }}
+                sx={{ width: 300, textAlign: 'center', backgroundColor: "whitesmoke" }}
                 getOptionLabel={(option) =>
                     typeof option === 'string' ? option : option.description
                 }
@@ -184,79 +195,87 @@ function MapSearch() {
                 }}
             />
 
-            <Autocomplete
-                id="google-map-demo"
-                sx={{ width: 300, textAlign: 'center' }}
+            <CustomAutocomplete
+                id="mandirs"
+                sx={{ width: 500, textAlign: 'center', backgroundColor: "whitesmoke", border: "none",
+                borderTopRightRadius: "10px",
+                borderBottomRightRadius: "10px",
+            }}
                 getOptionLabel={(option) =>
-                    typeof option === 'string' ? option : option.description
+                    typeof option === 'string' ? option : option.name
                 }
                 filterOptions={(x) => x}
-                options={options}
+                options={templeData}
                 autoComplete
                 includeInputInList
                 filterSelectedOptions
-                value={value}
-                noOptionsText="search your location"
+                value={templeValue}
+                noOptionsText="search temples"
                 onChange={(event, newValue) => {
-                    if (newValue) {
-                        // Create a PlacesService instance
-                        const placesService = new window.google.maps.places.PlacesService(document.createElement('div'));
+                    // setOptions(newValue ? [newValue, ...templeData] : templeData);
+                    setTempleValue(newValue);
+                }}
 
-                        // Use getDetails method to retrieve detailed information about the selected place
-                        placesService.getDetails({ placeId: newValue.place_id }, (place, status) => {
-                            if (status === window.google.maps.places.PlacesServiceStatus.OK) {
-                                // Extract the coordinates from the place object
-                                const { lat, lng } = place.geometry.location;
-                                setCoordinates({
-                                    lat: lat(),
-                                    long: lng()
-                                })
-                                // console.log('Coordinates:', { lat: lat(), lng: lng() });
-                            }
-                        });
-                    }
-                    setOptions(newValue ? [newValue, ...options] : options);
-                    setValue(newValue);
-                }}
-                onInputChange={(event, newInputValue) => {
-                    setInputValue(newInputValue);
-                }}
-                renderInput={(params) => (
-                    <TextField {...params} label="select your location" fullWidth />
-                )}
+                
                 renderOption={(props, option) => {
-                    const matches =
-                        option.structured_formatting.main_text_matched_substrings || [];
-
-                    const parts = parse(
-                        option.structured_formatting.main_text,
-                        matches.map((match) => [match.offset, match.offset + match.length]),
-                    );
-
                     return (
                         <li {...props}>
-                            <Grid container alignItems="center">
-                                <Grid item sx={{ display: 'flex', width: 44 }}>
-                                    <LocationOnIcon sx={{ color: 'text.secondary' }} />
+                            <Grid container 
+                                lg={12} xs={12} md={12}
+                                display='flex' flexDirection={'row'} justifyContent={'center'} alignContent={'center'}
+                                alignItems='center' 
+                            >
+                                <Grid item lg={3} xs={3} md={3} sx={{ display: 'flex', width: "100%" }}>
+                                    <MDAvatar
+                                        src={option.cover_image.url || logo}
+                                        alt={"Stock"}
+                                        size="lg"
+                                        sx={({ borders: { borderWidth }, palette: { white } }) => ({
+                                            // border: `${borderWidth[2]} solid ${white.main}`,
+                                            cursor: "pointer",
+                                            borderRadius: "10px",
+                                            height: "60px",
+                                            width: "100px",
+                                            // position: "relative",
+                                            ml: 0,
+                                            "&:hover, &:focus": {
+                                                // zIndex: "10",
+                                            },
+                                        })}
+                                    />
                                 </Grid>
-                                <Grid item sx={{ width: 'calc(100% - 44px)', wordWrap: 'break-word' }}>
-                                    {parts.map((part, index) => (
-                                        <MDBox
-                                            key={index}
-                                            component="span"
-                                            sx={{ fontWeight: part.highlight ? 'bold' : 'regular' }}
-                                        >
-                                            {part.text}
-                                        </MDBox>
-                                    ))}
+                                <Grid item lg={9} xs={9} md={9} sx={{ width: '100%', wordWrap: 'break-word' }}>
+                                    <MDBox
+                                        component="span"
+                                        sx={{ fontWeight: option.highlight ? 'bold' : 'regular' }}
+                                    >
+                                        {option.name}
+                                    </MDBox>
                                     <Typography variant="body2" color="text.secondary">
-                                        {option.structured_formatting.secondary_text}
+                                        {`${option.address_details.city}, ${option.address_details.state}, ${option.address_details.country}`}
                                     </Typography>
                                 </Grid>
                             </Grid>
                         </li>
                     );
                 }}
+                renderInput={(params) => (
+                    <TextField
+                        {...params}
+                        label="Temples"
+                        InputProps={{
+                            ...params.InputProps,
+                            style: {
+                                color: 'grey',
+                                height: 50,
+                            },
+                        }}
+                        InputLabelProps={{
+                            style: { color: 'grey' },
+                        }}
+                    />
+                )}
+                
             />
         </MDBox>
     );

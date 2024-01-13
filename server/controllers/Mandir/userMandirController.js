@@ -89,7 +89,56 @@ exports.sharedBy = async (req, res) => {
 exports.getByDistance = async (req, res) => {
     const {lat, long} = req.query;
     try {
-        const mandir = await Mandir.aggregate()
+        const mandir = await Mandir.aggregate([
+            {
+              $geoNear: {
+                near: {
+                  type: "Point",
+                  coordinates: [Number(lat), Number(long)],
+                },
+                distanceField: "distance",
+                spherical: true,
+                key: "address_details.location",
+              },
+            },
+            {
+              $lookup: {
+                from: "devi-devtas",
+                localField: "devi_devta",
+                foreignField: "_id",
+                as: "devtas",
+              },
+            },
+            {
+              $unwind: {
+                path: "$devtas",
+              },
+            },
+            {
+              $project: {
+                devi_devta: "$devtas.name",
+                _id: 0,
+                name: 1,
+                description: 1,
+                cover_image: 1,
+                images: 1,
+                dham: 1,
+                popular: 1,
+                morning_closing_time: 1,
+                evening_opening_time: 1,
+                evening_closing_time: 1,
+                morning_opening_time: 1,
+                address_details: 1,
+                construction_year: 1,
+                distance: 1,
+              },
+            },
+            {
+              $sort: {
+                distance: 1,
+              },
+            },
+          ])
         ApiResponse.success(res, mandir);
     } catch (error) {
         ApiResponse.error(res, 'Something went wrong', 500, error.message);
