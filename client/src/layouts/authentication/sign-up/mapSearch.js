@@ -13,29 +13,12 @@ import MDAvatar from "../../../components/MDAvatar";
 import logo from "../../../assets/images/logo.png";
 import { styled } from '@mui/material';
 
-const GOOGLE_MAPS_API_KEY = '';
-
 const CustomAutocomplete = styled(Autocomplete)`
   .MuiAutocomplete-clearIndicator {
     color: white;
     border: none !important;
   }
 `;
-
-function loadScript(src, position, id) {
-    if (!position) {
-        return;
-    }
-
-    const script = document.createElement('script');
-    script.setAttribute('async', '');
-    script.setAttribute('id', id);
-    script.src = src;
-    position.appendChild(script);
-}
-
-const autocompleteService = { current: null };
-
 
 function MapSearch() {
     const [value, setValue] = React.useState(null);
@@ -44,52 +27,36 @@ function MapSearch() {
     const [options, setOptions] = React.useState([]);
     const [templeData, setTempleData] = useState([]);
     const [coordinates, setCoordinates] = React.useState({
-        lat: 29.5821848,
-        long: 74.3292106
+        lat: 0,
+        long: 0
     })
-    const loaded = React.useRef(false);
 
-    if (typeof window !== 'undefined' && !loaded.current) {
-        if (!document.querySelector('#google-maps')) {
-            loadScript(
-                `https://maps.googleapis.com/maps/api/js?key=${GOOGLE_MAPS_API_KEY}&libraries=places`,
-                document.querySelector('head'),
-                'google-maps',
-            );
+    async function getCoordinates(){
+        if(value?.place_id){
+            const data = await axios(`${apiUrl}location/placedetails?place_id=${value.place_id}`);
+            setCoordinates({
+                lat: data.data.data.geometry.location.lat,
+                long: data.data.data.geometry.location.lng,
+            })
         }
-
-        loaded.current = true;
     }
+
+    useEffect(()=>{
+        getCoordinates()
+    }, [value])
 
     const fetch = React.useMemo(
         () =>
-            debounce((request, callback) => {
-                autocompleteService.current.getPlacePredictions(request, callback);
+            debounce(async (request, callback) => {
+                console.log("request", request)
+                const templeData = await axios(`${apiUrl}location/autocomplete?search=${request.input}`);
+                callback(templeData.data.data);
             }, 400),
         [],
     );
 
-    useEffect(()=>{
-        templeDataFetch()
-    }, [coordinates])
-
-    async function templeDataFetch(){
-        const templeData = await axios(`${apiUrl}mandir/user/bydistance?lat=${coordinates.lat}&long=${coordinates.long}`,
-                            {withCredentials: true});
-        
-        setTempleData(templeData?.data?.data);
-    }
-
     React.useEffect(() => {
         let active = true;
-
-        if (!autocompleteService.current && window.google) {
-            autocompleteService.current =
-                new window.google.maps.places.AutocompleteService();
-        }
-        if (!autocompleteService.current) {
-            return undefined;
-        }
 
         if (inputValue === '') {
             setOptions(value ? [value] : []);
@@ -115,9 +82,18 @@ function MapSearch() {
         return () => {
             active = false;
         };
-    }, [value, inputValue, fetch]);
+    }, [inputValue, fetch]);
 
-    console.log("templeData", templeData)
+    useEffect(()=>{
+        templeDataFetch()
+    }, [coordinates])
+
+    async function templeDataFetch(){
+        const templeData = await axios(`${apiUrl}mandir/user/bydistance?lat=${coordinates.lat}&long=${coordinates.long}`,
+                            {withCredentials: true});
+        
+        setTempleData(templeData?.data?.data);
+    }
     return (
         <MDBox mb={2} display='flex' justifyContent='center'>
             <Autocomplete
@@ -134,23 +110,6 @@ function MapSearch() {
                 value={value}
                 noOptionsText="search your location"
                 onChange={(event, newValue) => {
-                    if (newValue) {
-                        // Create a PlacesService instance
-                        const placesService = new window.google.maps.places.PlacesService(document.createElement('div'));
-
-                        // Use getDetails method to retrieve detailed information about the selected place
-                        placesService.getDetails({ placeId: newValue.place_id }, (place, status) => {
-                            if (status === window.google.maps.places.PlacesServiceStatus.OK) {
-                                // Extract the coordinates from the place object
-                                const { lat, lng } = place.geometry.location;
-                                setCoordinates({
-                                    lat: lat(),
-                                    long: lng()
-                                })
-                                // console.log('Coordinates:', { lat: lat(), lng: lng() });
-                            }
-                        });
-                    }
                     setOptions(newValue ? [newValue, ...options] : options);
                     setValue(newValue);
                 }}
