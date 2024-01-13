@@ -13,7 +13,7 @@ import MDAvatar from "../../../components/MDAvatar";
 import logo from "../../../assets/images/logo.png";
 import { styled } from '@mui/material';
 
-const GOOGLE_MAPS_API_KEY = 'AIzaSyArsP6WOgekS-LFDimu2G6FrsRrB6K29BI';
+const GOOGLE_MAPS_API_KEY = '';
 
 const CustomAutocomplete = styled(Autocomplete)`
   .MuiAutocomplete-clearIndicator {
