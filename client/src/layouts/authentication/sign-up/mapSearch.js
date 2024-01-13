@@ -10,7 +10,7 @@ import parse from 'autosuggest-highlight/parse';
 import axios from 'axios';
 import { apiUrl } from '../../../constants/constants';
 
-const GOOGLE_MAPS_API_KEY = 'AIzaSyArsP6WOgekS-LFDimu2G6FrsRrB6K29BI';
+const GOOGLE_MAPS_API_KEY = '';
 
 function loadScript(src, position, id) {
     if (!position) {
