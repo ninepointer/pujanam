@@ -97,3 +97,13 @@ exports.sharedBy = async (req, res) => {
         ApiResponse.error(res, 'Something went wrong', 500, error.message);
     }
 };
+
+exports.getByDistance = async (req, res) => {
+    const {lat, long} = req.query;
+    try {
+        const mandir = await Mandir.aggregate()
+        ApiResponse.success(res, mandir);
+    } catch (error) {
+        ApiResponse.error(res, 'Something went wrong', 500, error.message);
+    }
+};

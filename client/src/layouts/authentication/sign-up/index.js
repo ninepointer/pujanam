@@ -46,21 +46,21 @@ import HomePagePoojaServicesCard from './homePagePoojaServicesCards'
 import HomePagePoojaSamagriCard from './homePagePoojaSamagriCards'
 import HomePagePoojaWasteCard from './homePagePoojaWasteCards'
 
-const GOOGLE_MAPS_API_KEY = 'AIzaSyArsP6WOgekS-LFDimu2G6FrsRrB6K29BI';
+// const GOOGLE_MAPS_API_KEY = 'AIzaSyArsP6WOgekS-LFDimu2G6FrsRrB6K29BI';
 
-function loadScript(src, position, id) {
-  if (!position) {
-    return;
-  }
+// function loadScript(src, position, id) {
+//   if (!position) {
+//     return;
+//   }
 
-  const script = document.createElement('script');
-  script.setAttribute('async', '');
-  script.setAttribute('id', id);
-  script.src = src;
-  position.appendChild(script);
-}
+//   const script = document.createElement('script');
+//   script.setAttribute('async', '');
+//   script.setAttribute('id', id);
+//   script.src = src;
+//   position.appendChild(script);
+// }
 
-const autocompleteService = { current: null };
+// const autocompleteService = { current: null };
 
 
 function Cover(props) {
@@ -78,79 +78,81 @@ function Cover(props) {
   };
   const [center, setCenter] = useState({ lat: 0, lng: 0 });
   const [markerPosition, setMarkerPosition] = useState(null);
-  const [value, setValue] = React.useState(null);
-  const [inputValue, setInputValue] = React.useState('');
-  const [options, setOptions] = React.useState([]);
-  const loaded = React.useRef(false);
+  // const [value, setValue] = React.useState(null);
+  // const [inputValue, setInputValue] = React.useState('');
+  // const [options, setOptions] = React.useState([]);
+  // const loaded = React.useRef(false);
 
-  if (typeof window !== 'undefined' && !loaded.current) {
-    if (!document.querySelector('#google-maps')) {
-      loadScript(
-        `https://maps.googleapis.com/maps/api/js?key=${GOOGLE_MAPS_API_KEY}&libraries=places`,
-        document.querySelector('head'),
-        'google-maps',
-      );
-    }
+  // if (typeof window !== 'undefined' && !loaded.current) {
+  //   if (!document.querySelector('#google-maps')) {
+  //     loadScript(
+  //       `https://maps.googleapis.com/maps/api/js?key=${GOOGLE_MAPS_API_KEY}&libraries=places`,
+  //       document.querySelector('head'),
+  //       'google-maps',
+  //     );
+  //   }
 
-    loaded.current = true;
-  }
+  //   loaded.current = true;
+  // }
 
-  const fetch = React.useMemo(
-    () =>
-      debounce((request, callback) => {
-        autocompleteService.current.getPlacePredictions(request, callback);
-      }, 400),
-    [],
-  );
+  // const fetch = React.useMemo(
+  //   () =>
+  //     debounce((request, callback) => {
+  //       autocompleteService.current.getPlacePredictions(request, callback);
+  //     }, 400),
+  //   [],
+  // );
 
-  React.useEffect(() => {
-    let active = true;
+  // React.useEffect(() => {
+  //   let active = true;
 
-    if (!autocompleteService.current && window.google) {
-      autocompleteService.current =
-        new window.google.maps.places.AutocompleteService();
-    }
-    if (!autocompleteService.current) {
-      return undefined;
-    }
+  //   if (!autocompleteService.current && window.google) {
+  //     autocompleteService.current =
+  //       new window.google.maps.places.AutocompleteService();
+  //   }
+  //   if (!autocompleteService.current) {
+  //     return undefined;
+  //   }
 
-    if (inputValue === '') {
-      setOptions(value ? [value] : []);
-      return undefined;
-    }
+  //   if (inputValue === '') {
+  //     setOptions(value ? [value] : []);
+  //     return undefined;
+  //   }
 
-    fetch({ input: inputValue }, (results) => {
-      if (active) {
-        let newOptions = [];
+  //   fetch({ input: inputValue }, (results) => {
+  //     if (active) {
+  //       let newOptions = [];
 
-        if (value) {
-          newOptions = [value];
-        }
+  //       if (value) {
+  //         newOptions = [value];
+  //       }
 
-        if (results) {
-          newOptions = [...newOptions, ...results];
-        }
+  //       if (results) {
+  //         newOptions = [...newOptions, ...results];
+  //       }
 
-        setOptions(newOptions);
-      }
-    });
+  //       setOptions(newOptions);
+  //     }
+  //   });
 
-    return () => {
-      active = false;
-    };
-  }, [value, inputValue, fetch]);
-  const onLoad = (map) => {
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        const { latitude, longitude } = position.coords;
-        setCenter({ lat: latitude, lng: longitude });
-        setMarkerPosition({ lat: latitude, lng: longitude });
-      },
-      (error) => {
-        console.error('Error getting current location:', error);
-      }
-    );
-  };
+  //   return () => {
+  //     active = false;
+  //   };
+  // }, [value, inputValue, fetch]);
+
+
+  // const onLoad = (map) => {
+  //   navigator.geolocation.getCurrentPosition(
+  //     (position) => {
+  //       const { latitude, longitude } = position.coords;
+  //       setCenter({ lat: latitude, lng: longitude });
+  //       setMarkerPosition({ lat: latitude, lng: longitude });
+  //     },
+  //     (error) => {
+  //       console.error('Error getting current location:', error);
+  //     }
+  //   );
+  // };
 
   useEffect(()=>{
     let call1 = axios.get(`${apiUrl}usermandir/home`,{
@@ -183,17 +185,18 @@ function Cover(props) {
     });
   },[])
 
-  const onPlacesChanged = (places) => {
-    const place = places[0];
-    setCenter({
-      lat: place.geometry.location.lat(),
-      lng: place.geometry.location.lng(),
-    });
-    setMarkerPosition({
-      lat: place.geometry.location.lat(),
-      lng: place.geometry.location.lng(),
-    });
-  };
+  // const onPlacesChanged = (places) => {
+  //   const place = places[0];
+  //   setCenter({
+  //     lat: place.geometry.location.lat(),
+  //     lng: place.geometry.location.lng(),
+  //   });
+  //   setMarkerPosition({
+  //     lat: place.geometry.location.lat(),
+  //     lng: place.geometry.location.lng(),
+  //   });
+  // };
+  
   const isMobile = useMediaQuery(theme.breakpoints.down("lg"))
 
   const handleImageClick = () => {
