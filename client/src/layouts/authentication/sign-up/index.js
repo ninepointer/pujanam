@@ -6,7 +6,7 @@ import ReactGA from "react-ga"
 import axios from "axios";
 import playstore from '../../../assets/images/playstore.png'
 import Navbar from '../../HomePage/components/Navbars/Navbar';
-import background from '../../../assets/images/background.png'
+import background from '../../../assets/images/background.jpg'
 import logo from '../../../assets/images/logo.png'
 // import Autocomplete from 'react-google-autocomplete';
 import TextField from '@mui/material/TextField';
@@ -18,6 +18,7 @@ import parse from 'autosuggest-highlight/parse';
 import { debounce } from '@mui/material/utils';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
+import { CardActionArea, Divider } from '@mui/material';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import { Link } from "react-router-dom";
@@ -39,6 +40,11 @@ import MDButton from "../../../components/MDButton";
 import { userContext } from '../../../AuthContext';
 import Footer from "../components/Footer";
 import { apiUrl } from '../../../constants/constants';
+import { CgOverflow } from "react-icons/cg";
+import HomePageMandirCard from './homePageMandirCards'
+import HomePagePoojaServicesCard from './homePagePoojaServicesCards'
+import HomePagePoojaSamagriCard from './homePagePoojaSamagriCards'
+import HomePagePoojaWasteCard from './homePagePoojaWasteCards'
 
 const GOOGLE_MAPS_API_KEY = 'AIzaSyArsP6WOgekS-LFDimu2G6FrsRrB6K29BI';
 
@@ -63,6 +69,8 @@ function Cover(props) {
   const [count, setCount] = useState(0);
   const [isLoading,setIsLoading] = useState(false);
   const [data,setData] = useState([]);
+  const [pooja,setPooja] = useState([]);
+  const [scrollPosition, setScrollPosition] = useState(0);
   // const GOOGLE_MAPS_API_KEY = 'AIzaSyC3aviU6KHXAjoSnxcw6qbOhjnFctbxPkE';
   const handlePlaceSelected = (place) => {
     // Handle the selected place data (e.g., extract latitude and longitude)
@@ -145,19 +153,27 @@ function Cover(props) {
   };
 
   useEffect(()=>{
-    let call1 = axios.get(`${apiUrl}pooja/home`,{
-                withCredentials: true,
+    let call1 = axios.get(`${apiUrl}usermandir/home`,{
+                withCredentials: false,
                 headers: {
                     Accept: "application/json",
                     "Content-Type": "application/json",
                     "Access-Control-Allow-Credentials": true
                   },
                 })
-    Promise.all([call1])
-    .then(([api1Response]) => {
+    let call2 = axios.get(`${apiUrl}pooja/home`,{
+      withCredentials: false,
+      headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Credentials": true
+        },
+      })
+    Promise.all([call1,call2])
+    .then(([api1Response,api1Response1]) => {
       // Process the responses here
       setData(api1Response.data.data)
-      setCount(api1Response.data.count)
+      setPooja(api1Response1.data.data)
       setTimeout(()=>{
         setIsLoading(false)
       },100)
@@ -185,6 +201,34 @@ function Cover(props) {
     window.open('https://play.google.com/store/apps/details?id=com.stoxhero.app', '_blank');
   };
 
+  const handleOpenNewTab = async (elem) => {
+    
+    const newTab = window.open(`/pooja/${elem?.slug}`, '_blank');
+    // await fetchDeviceDetail(elem?._id);
+  };
+
+  function limitStringWithEllipsis(inputString, maxLength) {
+    if (inputString.length > maxLength) {
+      return inputString.slice(0, maxLength) + '...';
+    }
+    return inputString;
+  }
+  
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrollPosition(window.scrollY);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
+  const backgroundColor = scrollPosition > 250 ? 'white' : 'transparent'
+  const backdropFilter = scrollPosition > 250 ? 'blur(5px)' : 'none'
+
   
 
   return (
@@ -197,216 +241,280 @@ function Cover(props) {
           display: 'flex',
           justifyContent: 'center',
           alignContent: 'center',
-          alignItems: 'stretch',
+          // alignItems: 'stretch',
           backgroundImage: `url(${background})`,
           backgroundSize: 'cover',
           backgroundPosition: 'center center',
-          minHeight: '70vh', // Adjust the percentage as needed
+          height: '100vh', // Adjust the percentage as needed
           flexDirection: 'column',
           textAlign: 'center',
           padding: '20px',
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          // zIndex: 2,
+          filter: backdropFilter,
+          backgroundColor: backgroundColor,
         }}>
-        <MDBox mt={5} mb={2} display='flex' justifyContent='center'>
-          <img src={logo} width={200} style={{textAlign:'center'}}/>
-        </MDBox>
-        <MDBox mb={2} display='flex' justifyContent='center'>
-          <Autocomplete
-              id="google-map-demo"
-              sx={{ width: 300, textAlign:'center' }}
-              getOptionLabel={(option) =>
-                typeof option === 'string' ? option : option.description
-              }
-              filterOptions={(x) => x}
-              options={options}
-              autoComplete
-              includeInputInList
-              filterSelectedOptions
-              value={value}
-              noOptionsText="search your location"
-              onChange={(event, newValue) => {
-                setOptions(newValue ? [newValue, ...options] : options);
-                setValue(newValue);
-              }}
-              onInputChange={(event, newInputValue) => {
-                setInputValue(newInputValue);
-              }}
-              renderInput={(params) => (
-                <TextField {...params} label="select your location" fullWidth />
-              )}
-              renderOption={(props, option) => {
-                const matches =
-                  option.structured_formatting.main_text_matched_substrings || [];
+       
+        <Grid container mt={8} xs={12} md={12} lg={12} display='flex' justifyContent='center' alignItems='center' style={{ position: 'relative', textAlign: 'center', width: '100%', height: '100vh' }}>
+          <Grid item xs={12} md={12} lg={12} display='flex' justifyContent='center' alignItems='center'>
+            <MDBox mb={2} display='flex' justifyContent='center' alignItems='center'>
+              <img src={logo} width={150} alt="Logo" />
+            </MDBox>
+          </Grid>
+          <Grid item xs={12} md={12} lg={12} display='flex' justifyContent='center' alignItems='center'>
+            <MDBox mb={2} display='flex' justifyContent='center' alignItems='center'>
+              <Autocomplete
+                  id="google-map-demo"
+                  sx={{ width: 300, textAlign:'center' }}
+                  getOptionLabel={(option) =>
+                    typeof option === 'string' ? option : option.description
+                  }
+                  filterOptions={(x) => x}
+                  options={options}
+                  autoComplete
+                  includeInputInList
+                  filterSelectedOptions
+                  value={value}
+                  noOptionsText="search your location"
+                  onChange={(event, newValue) => {
+                    setOptions(newValue ? [newValue, ...options] : options);
+                    setValue(newValue);
+                  }}
+                  onInputChange={(event, newInputValue) => {
+                    setInputValue(newInputValue);
+                  }}
+                  renderInput={(params) => (
+                    <TextField {...params} label="select your location" fullWidth />
+                  )}
+                  renderOption={(props, option) => {
+                    const matches =
+                      option.structured_formatting.main_text_matched_substrings || [];
 
-                const parts = parse(
-                  option.structured_formatting.main_text,
-                  matches.map((match) => [match.offset, match.offset + match.length]),
-                );
+                    const parts = parse(
+                      option.structured_formatting.main_text,
+                      matches.map((match) => [match.offset, match.offset + match.length]),
+                    );
 
-                return (
-                  <li {...props}>
-                    <Grid container alignItems="center">
-                      <Grid item sx={{ display: 'flex', width: 44 }}>
-                        <LocationOnIcon sx={{ color: 'text.secondary' }} />
-                      </Grid>
-                      <Grid item sx={{ width: 'calc(100% - 44px)', wordWrap: 'break-word' }}>
-                        {parts.map((part, index) => (
-                          <MDBox
-                            key={index}
-                            component="span"
-                            sx={{ fontWeight: part.highlight ? 'bold' : 'regular' }}
-                          >
-                            {part.text}
-                          </MDBox>
-                        ))}
-                        <Typography variant="body2" color="text.secondary">
-                          {option.structured_formatting.secondary_text}
-                        </Typography>
-                      </Grid>
+                    return (
+                      <li {...props}>
+                        <Grid container alignItems="center">
+                          <Grid item sx={{ display: 'flex', width: 44 }}>
+                            <LocationOnIcon sx={{ color: 'text.secondary' }} />
+                          </Grid>
+                          <Grid item sx={{ width: 'calc(100% - 44px)', wordWrap: 'break-word' }}>
+                            {parts.map((part, index) => (
+                              <MDBox
+                                key={index}
+                                component="span"
+                                sx={{ fontWeight: part.highlight ? 'bold' : 'regular' }}
+                              >
+                                {part.text}
+                              </MDBox>
+                            ))}
+                            <Typography variant="body2" color="text.secondary">
+                              {option.structured_formatting.secondary_text}
+                            </Typography>
+                          </Grid>
+                        </Grid>
+                      </li>
+                    );
+                  }}
+                />
+            </MDBox>
+          </Grid>
+          <Grid item xs={12} md={12} lg={12} display='flex' justifyContent='center' alignItems='center'>
+            <MDBox display='flex' justifyContent='center' alignItems='center'>
+              <MDTypography variant="h4" sx={{ color: '#fff' }} style={{fontFamily: 'Itim'}}>Seamlessly book pooja services,<br/> discover nearby and popular mandirs,<br/> and order pooja samagri with our app punyam</MDTypography>
+            </MDBox>
+          </Grid>
+          <Grid item xs={12} md={12} lg={4} mb={10} display='flex' justifyContent='center' alignItems='center'>
+            <MDBox display='flex' justifyContent='center' alignItems='center'>   
+              <img src={playstore} style={{cursor:'pointer', maxWidth: '80%', maxHeight: '10%', width: 'auto', height: 'auto' }} onClick={handleImageClick}/>
+            </MDBox>
+          </Grid>
+        </Grid>
+      </Grid>
+
+      <Grid container mt={75} mb={2} display='flex' justifyContent='center' alignContent='center' alignItems='center' xs={12} md={12} lg={12} style={{ maxWidth: '100%', height: 'auto', flexGrow: 1, overflowY: 'auto', zIndex:3 }}>
+
+            <Grid item xs={12} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '95%', height: 'auto' }}>
+              <Grid container xs={12} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center'>
+
+                <Grid item xs={12} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ width: '100%' }}>
+                  <Grid container spacing={2} xs={12} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
+                    <Grid item xs={12} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
+                      <MDBox display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
+                        <MDTypography fontSize={20} fontWeight="bold" style={{color:'#000', fontFamily: 'Itim'}}>punyam services!</MDTypography>
+                      </MDBox>
                     </Grid>
-                  </li>
-                );
-              }}
-            />
-        </MDBox>
-        <MDBox display='flex' justifyContent='center'>
-          <MDTypography variant="h4" sx={{ color: '#fff' }}>Book pooja and discover temples near you!</MDTypography>
-        </MDBox>
+                    <Grid item xs={12} md={12} lg={3}>
+                      <HomePageMandirCard />
+                    </Grid>
+                    <Grid item xs={12} md={12} lg={3}>
+                      <HomePagePoojaServicesCard />
+                    </Grid>
+                    <Grid item xs={12} md={12} lg={3}>
+                      <HomePagePoojaSamagriCard />
+                    </Grid>
+                    <Grid item xs={12} md={12} lg={3}>
+                      <HomePagePoojaWasteCard />
+                    </Grid>
+                  </Grid>
+                </Grid>
 
-        <MDBox display='flex' justifyContent='center'>
-            {/* <MDButton component="a" href="https://play.google.com/store/apps/details?id=com.stoxhero.app" target="_blank"> */}
-              <img src={playstore} style={{cursor:'pointer', maxWidth: '15%', maxHeight: '20%', width: 'auto', height: 'auto' }} onClick={handleImageClick}/>
-            {/* </MDButton> */}
-        </MDBox>
+              </Grid>
+            </Grid>
       </Grid>
 
-      <Grid mt={1} container xs={12} md={12} lg={12} style={{
-          // display: 'flex',
-          // justifyContent: 'center',
-          // alignContent: 'center',
-          alignItems: 'stretch',
-          // backgroundImage: `url(${background})`,
-          // backgroundSize: 'cover',
-          // backgroundPosition: 'center center',
-          minHeight: '5vh', // Adjust the percentage as needed
-          flexDirection: 'column',
-          // textAlign: 'center',
-          // position:'relative'
-          // padding: '20px',
-        }}>
-        <MDBox display='flex' justifyContent='center'>
-          <MDTypography variant="h4" sx={{ color: '#000' }}>Pooja services</MDTypography>
-        </MDBox>
+      <Grid container mb={2} display='flex' justifyContent='center' alignContent='center' alignItems='center' xs={12} md={12} lg={12} style={{ maxWidth: '100%', height: 'auto', flexGrow: 1, overflowY: 'auto', zIndex:3 }}>
+
+            <Grid item xs={12} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '95%', height: 'auto' }}>
+              <Grid container xs={12} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center'>
+
+                <Grid item xs={12} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ width: '100%' }}>
+                  <Grid container xs={12} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
+                    <Grid item xs={12} md={12} lg={12} display='flex' justifyContent='flex-start' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
+                      <MDBox display='flex' justifyContent='flex-start' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
+                        <MDTypography fontSize={20} fontWeight="bold" ml={2} style={{color:'#000', fontFamily:'Itim'}}>Trending Pooja, book at your doorstep now!</MDTypography>
+                      </MDBox>
+                    </Grid>
+
+                      {pooja.length > 0 ?
+                        <Grid item xs={12} mt={2} md={12} lg={12} alignItems='stretch'>
+
+                          <MDBox display='flex' justifyContent='center' alignContent='center' alignItems='center'>
+                            <Grid container spacing={3} xs={12} md={12} lg={12} display='flex' justifyContent='flex-start' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
+                              {pooja?.map((elem) => {
+                                return (
+                                  <Grid item xs={12} md={4} lg={3} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
+                                    <Grid container xs={12} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
+                                      <Card sx={{ minWidth: '100%', cursor: 'pointer' }} onClick={() => { handleOpenNewTab(elem) }}>
+
+                                        <CardActionArea>
+                                          <Grid item xs={12} md={4} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
+                                            <img src={elem?.image?.url} style={{ maxWidth: '100%', height: 'auto', borderTopLeftRadius: 10, borderTopRightRadius: 10 }} />
+                                            <Typography variant="h6" fontSize={10} fontWeight={400} style={{ position: 'absolute', top: 0, right: 0, margin: '8px', textAlign: 'center', color: 'black', backgroundColor: "white", borderRadius: "15px", padding: "2px 10px 2px 10px", marginTop: "10px", fontFamily: 'Itim' }}>
+                                              Starting ₹{new Intl.NumberFormat(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(elem?.packages?.[0]?.price)}
+                                            </Typography>
+                                          </Grid>
+                                          <Grid item xs={12} md={4} lg={12} display='flex' justifyContent='flex-start' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
+                                            <CardContent display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
+                                              <MDBox display='flex' justifyContent='flex-start' alignContent='center' alignItems='center' style={{ width: '100%' }}>
+                                                <Typography variant="h5" fontWeight={400} style={{ textAlign: 'center', fontFamily: 'Itim' }}>
+                                                  {elem?.name}
+                                                </Typography>
+                                              </MDBox>
+                                              <MDBox display='flex' justifyContent='flex-start' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto', fontFamily: 'Itim' }}>
+                                                <Typography variant='caption' style={{fontFamily:'Itim'}}>
+                                                  {limitStringWithEllipsis(elem?.description,30)}
+                                                </Typography>
+                                              </MDBox>
+                                              <MDBox mb={-2} display='flex' justifyContent='flex-end' alignContent='center' alignItems='center' style={{ width: '100%'}}>
+                                                <MDButton size='small' variant='contained' style={{fontFamily:'Itim'}}>Book Now</MDButton>
+                                              </MDBox>
+                                            </CardContent>
+                                          </Grid>
+                                        </CardActionArea>
+                                      </Card>
+                                    </Grid>
+                                  </Grid>
+                                )
+                              })}
+                            </Grid>
+                          </MDBox>
+
+                        </Grid>
+                        :
+                        <>
+                          {/* <img src={NoData} width='500px' height='500px' /> */}
+                        </>
+                      }
+
+                  </Grid>
+                </Grid>
+
+              </Grid>
+            </Grid>
       </Grid>
 
-      <Grid container spacing={4} xs={12} md={12} lg={12} style={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignContent: 'center',
-          flexDirection: 'row',
-          textAlign: 'center',
-        }}>
-          
-              {data?.map((elem, index)=>{
+      <Grid container mt={2} mb={2} display='flex' justifyContent='center' alignContent='center' alignItems='center' xs={12} md={12} lg={12} style={{ maxWidth: '100%', height: 'auto', flexGrow: 1, overflowY: 'auto', zIndex:3 }}>
 
-                    return (
-                      <>
-                      <Grid key={elem?._id} item xs={12} md={4} lg={3} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{width: '100%',height: 'auto'}}>
-                      
+            <Grid item xs={12} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '95%', height: 'auto' }}>
+              <Grid container xs={12} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center'>
 
-                      <Card sx={{minWidth:'100%',minHeight:320, maxHeight:320}}>
-                        <CardMedia
-                          sx={{ minHeight: 200, maxHeight:200 }}
-                          image={elem?.image?.url}
-                          title={elem?.name}
-                        />
-                        <CardContent sx={{ minHeight: 60, maxHeight:60}}>
-                          <MDTypography gutterBottom variant="h5" component="div">
-                            {elem?.name}
-                          </MDTypography>
-                          <MDTypography gutterBottom variant="caption" component="div">
-                            Pandit Ji and Pooja Samagri at your doorstep!
-                          </MDTypography>
-                        </CardContent>
-                        <CardActions sx={{ minHeight: 30, maxHeight:30, textAlign:'center', alignContent:'center', alignItems:'center'}} display='flex' justifyContent='center'>
-                          <MDButton component={Link} to={{pathname:`/devidevtadetails`}} state={{ data: elem }} size="small">Book Now</MDButton>
-                          {/* <MDButton component={Link} to={{pathname:`/poojadetails`}} state={{ data: elem }} size="small">Share</MDButton> */}
-                        </CardActions>
-                      </Card>
-                      
-                    
-                      </Grid>  
-                      </> 
-                    )
-              })}
+                <Grid item xs={12} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ width: '100%' }}>
+                  <Grid container xs={12} md={12} lg={12} display='flex' justifyContent='flex-start' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
+                    <Grid ml={2} item xs={12} md={12} lg={12} display='flex' justifyContent='flex-start' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
+                      <MDBox display='flex' justifyContent='center' alignContent='flext-start' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
+                      <MDTypography fontSize={20} fontWeight="bold" style={{color:'#000', fontFamily: 'Itim'}}>Temples near me!</MDTypography>
+                      </MDBox>
+                    </Grid>
+
+                      {data.length > 0 ?
+                        <Grid item xs={12} mt={2} md={12} lg={12} alignItems='stretch'>
+
+                          <MDBox display='flex' justifyContent='center' alignContent='center' alignItems='center'>
+                            <Grid container spacing={3} xs={12} md={12} lg={12} display='flex' justifyContent='flex-start' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
+                              {data?.map((elem) => {
+                                console.log("Packages:",elem)
+                                return (
+                                  <Grid item xs={12} md={4} lg={3} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
+                                    <Grid container xs={12} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
+                                      <Card sx={{ minWidth: '100%', cursor: 'pointer' }} onClick={() => { handleOpenNewTab(elem) }}>
+
+                                        <CardActionArea>
+                                          <Grid item xs={12} md={4} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
+                                            <img src={elem?.cover_image?.url} style={{ maxWidth: '100%', height: 'auto', borderTopLeftRadius: 10, borderTopRightRadius: 10 }} />
+                                            <Typography variant="h6" fontSize={10} fontWeight={400} style={{ position: 'absolute', top: 0, right: 0, margin: '8px', textAlign: 'center', color: 'black', backgroundColor: "white", borderRadius: "15px", padding: "2px 10px 2px 10px", marginTop: "10px", fontFamily: 'Itim' }}>
+                                              {elem?.address_details?.state || "NA"}
+                                            </Typography>
+                                          </Grid>
+                                          <Grid item xs={12} md={4} lg={12} display='flex' justifyContent='flex-start' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
+                                            <CardContent display='flex' justifyContent='flex-start' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
+                                              <MDBox display='flex' justifyContent='flex-start' alignContent='center' alignItems='center' style={{ width: '100%'}}>
+                                                <Typography variant="h5" fontWeight={400} style={{ fontFamily: 'Itim' }}>
+                                                  {limitStringWithEllipsis(elem?.name,20)}
+                                                </Typography>
+                                              </MDBox>
+                                              
+                                              <MDBox display='flex' justifyContent='flex-start' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
+                                                <Typography variant='caption' style={{fontFamily:'Itim'}}>
+                                                  {limitStringWithEllipsis(elem?.description,75)}
+                                                </Typography>
+                                              </MDBox>
+                                            </CardContent>
+                                          </Grid>
+                                        </CardActionArea>
+                                      </Card>
+                                    </Grid>
+                                  </Grid>
+                                )
+                              })}
+                            </Grid>
+                          </MDBox>
+
+                        </Grid>
+                        :
+                        <>
+                          {/* <img src={NoData} width='500px' height='500px' /> */}
+                        </>
+                      }
+
+                  </Grid>
+                </Grid>
+
+              </Grid>
+            </Grid>
       </Grid>
 
-      <Grid mt={2} container xs={12} md={12} lg={12} style={{
-          // display: 'flex',
-          // justifyContent: 'center',
-          // alignContent: 'center',
-          alignItems: 'stretch',
-          // backgroundImage: `url(${background})`,
-          // backgroundSize: 'cover',
-          // backgroundPosition: 'center center',
-          minHeight: '5vh', // Adjust the percentage as needed
-          flexDirection: 'column',
-          // textAlign: 'center',
-          // position:'relative'
-          // padding: '20px',
-        }}>
-        <MDBox display='flex' justifyContent='center'>
-          <MDTypography variant="h4" sx={{ color: '#000' }}>Temples near me!</MDTypography>
-        </MDBox>
+      <Grid container mt={2} mb={2} display='flex' justifyContent='center' alignContent='center' alignItems='center' xs={12} md={12} lg={12} style={{ minWidth: '100%', height: 'auto', flexGrow: 1, overflowY: 'auto', zIndex:3 }}>
+        <Grid item xs={12} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '95%', height: 'auto' }}>
+          <Footer/>
+        </Grid>
       </Grid>
-
-      <Grid container spacing={4} xs={12} md={12} lg={12} style={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignContent: 'center',
-          flexDirection: 'row',
-          textAlign: 'center',
-        }}>
-          
-              {data?.map((elem, index)=>{
-
-                    return (
-                      <>
-                      <Grid key={elem?._id} item xs={12} md={4} lg={3} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{width: '100%',height: 'auto'}}>
-                      
-
-                      <Card sx={{minWidth:'100%',minHeight:320, maxHeight:320}}>
-                        <CardMedia
-                          sx={{ minHeight: 200, maxHeight:200 }}
-                          image={elem?.image?.url}
-                          title={elem?.name}
-                        />
-                        <CardContent sx={{ minHeight: 60, maxHeight:60}}>
-                          <MDTypography gutterBottom variant="h5" component="div">
-                            {elem?.name}
-                          </MDTypography>
-                          <MDTypography gutterBottom variant="caption" component="div">
-                            Pandit Ji and Pooja Samagri at your doorstep!
-                          </MDTypography>
-                        </CardContent>
-                        <CardActions sx={{ minHeight: 30, maxHeight:30, textAlign:'center', alignContent:'center', alignItems:'center'}} display='flex' justifyContent='center'>
-                          <MDButton component={Link} to={{pathname:`/devidevtadetails`}} state={{ data: elem }} size="small">Book Now</MDButton>
-                          {/* <MDButton component={Link} to={{pathname:`/poojadetails`}} state={{ data: elem }} size="small">Share</MDButton> */}
-                        </CardActions>
-                      </Card>
-                      
-                    
-                      </Grid>  
-                      </> 
-                    )
-              })}
-      </Grid>
-
-
       </ThemeProvider>
-      
-      </MDBox>
-      <MDBox mt={2}>
-        <Footer/>
       </MDBox>
     </>
       

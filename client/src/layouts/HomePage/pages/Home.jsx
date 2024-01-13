@@ -20,11 +20,7 @@ import axios from 'axios';
 import { apiUrl } from '../../../constants/constants';
 
 const Home = () => {
-  const [data, setData] = useState();
-  const getMetrics = async()=>{
-    const res = await axios.get(`${apiUrl}appmetrics`);
-    setData(res.data.data);
-  }
+  
   useEffect(()=>{
     getMetrics();
     ReactGA.pageview(window.location.pathname)

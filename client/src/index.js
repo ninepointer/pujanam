@@ -9,7 +9,6 @@ import { MaterialUIControllerProvider } from "./context";
 import AuthContext, { userContext } from "./AuthContext";
 import RenderContext from "./renderContext";
 import SettingContext from "./settingContext"
-// import FeaturedContestRegistration from "./layouts/HomePage/pages/FeaturedContestRegistration"
 
 
 ReactDOM.render(

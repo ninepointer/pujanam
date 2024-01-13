@@ -7,7 +7,7 @@ import pxToRem from "../functions/pxToRem";
 const { dark } = colors;
 
 const baseProperties = {
-  fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
+  fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif, "Itim"',
   fontWeightLighter: 100,
   fontWeightLight: 300,
   fontWeightRegular: 400,
