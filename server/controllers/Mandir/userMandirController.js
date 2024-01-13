@@ -121,6 +121,24 @@ exports.sharedBy = async (req, res) => {
 
 exports.getByDistance = async (req, res) => {
     const {lat, long, search} = req.query;
+    const matchStage = search ? {
+        $and: [
+            {
+              $or: [
+                { name: { $regex: search, $options: 'i' } },
+                { "address_details.city": { $regex: search, $options: 'i' } },
+                { "address_details.state": { $regex: search, $options: 'i' } },
+                { "address_details.pincode": { $regex: search, $options: 'i' } },
+              ]
+            },
+            {
+              status: 'Active'
+            },
+          ]
+    } :
+    {
+        status: 'Active'
+    }
     try {
         const mandir = await Mandir.aggregate([
             {
@@ -135,21 +153,7 @@ exports.getByDistance = async (req, res) => {
               },
             },
             {
-                $match: {
-                    $and: [
-                        {
-                          $or: [
-                            { name: { $regex: search, $options: 'i' } },
-                            { "address_details.city": { $regex: search, $options: 'i' } },
-                            { "address_details.state": { $regex: search, $options: 'i' } },
-                            { "address_details.pincode": { $regex: search, $options: 'i' } },
-                          ]
-                        },
-                        {
-                          status: 'Active'
-                        },
-                      ]
-                }
+                $match: matchStage
             },
             {
               $lookup: {

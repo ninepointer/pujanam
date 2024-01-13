@@ -11,10 +11,7 @@ import axios from 'axios';
 import { apiUrl } from '../../../constants/constants';
 import MDAvatar from "../../../components/MDAvatar";
 import logo from "../../../assets/images/logo.png";
-import { styled } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
-import { Divider } from '@mui/material';
-import { Box } from '@mui/system';
 
 
 function MapSearch() {
@@ -36,6 +33,11 @@ function MapSearch() {
                 lat: data.data.data.geometry.location.lat,
                 long: data.data.data.geometry.location.lng,
             })
+
+            const templeData = await axios(`${apiUrl}mandir/user/bydistance?lat=${data.data.data.geometry.location.lat}&long=${data.data.data.geometry.location.lng}&search=${templeInputValue}`,
+            { withCredentials: true });
+
+            setTempleData(templeData?.data?.data);
         }
     }
 
@@ -124,6 +126,7 @@ function MapSearch() {
         };
     }, [templeInputValue, fetchTemple]);
 
+    console.log("coordinates", coordinates)
 
     return (
         <>
