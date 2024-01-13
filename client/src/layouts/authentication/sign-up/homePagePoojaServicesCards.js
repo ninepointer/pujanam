@@ -19,7 +19,15 @@ function HomeCard() {
     return(
         <Grid item xs={12} md={4} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
             <Grid container xs={12} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
-            <Card sx={{ minWidth: '100%', cursor: 'pointer' }} onClick={() => {}}>
+            <Card sx={{ 
+                minWidth: '100%', 
+                cursor: 'pointer',
+                transition: 'transform 0.3s cubic-bezier(0.25, 0.1, 0.25, 1), box-shadow 0.3s cubic-bezier(0.25, 0.1, 0.25, 1)',
+                '&:hover': {
+                    transform: 'scale(1.10)',
+                    boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)', // Adjust the box shadow as needed
+                    }
+                }} onClick={() => {}}>
 
             <CardActionArea>
                 <Grid item xs={12} md={4} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
