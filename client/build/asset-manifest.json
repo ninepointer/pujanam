@@ -1,10 +1,11 @@
 {
   "files": {
-    "main.js": "/static/js/main.b91e20a2.js",
+    "main.js": "/static/js/main.0d0adcfa.js",
     "static/media/bgBanner1.jpg": "/static/media/bgBanner1.c9ad6246a3bebeb04615.jpg",
     "static/media/main-bg-3.png": "/static/media/main-bg-3.c46dd2d7751431a8e006.png",
-    "static/media/background.png": "/static/media/background.a138b638b4408f686bcb.png",
     "static/media/trading.jpg": "/static/media/trading.37a53048ea613a761226.jpg",
+    "static/media/background.jpg": "/static/media/background.c42a591711e77dddd417.jpg",
+    "static/media/punyamapp.png": "/static/media/punyamapp.f211d702603e7b80c1d1.png",
     "static/media/dao.webp": "/static/media/dao.a6366e8b45f0c87234b5.webp",
     "static/media/main-bg-0_1.webp": "/static/media/main-bg-0_1.c78c2f66219663c585fe.webp",
     "static/media/token.webp": "/static/media/token.e20cc6ef8583942ac1f9.webp",
@@ -13,7 +14,6 @@
     "static/media/playstore.png": "/static/media/playstore.42b05e1778ec714b7540.png",
     "static/media/backgroud.jpg": "/static/media/backgroud.23e9f2f3553dc6a710e5.jpg",
     "static/media/about1.png": "/static/media/about1.f2ff5c407490beb959c8.png",
-    "static/media/logo.png": "/static/media/logo.7faf404ce172982eb226.png",
     "static/media/cofounder_prateek.png": "/static/media/cofounder_prateek.8b80785643ed20d54374.png",
     "static/media/aboutuspage.png": "/static/media/aboutuspage.453ced44a7e1e109495f.png",
     "static/media/main-bg-1_1.webp": "/static/media/main-bg-1_1.b051114fdd6a41f500f0.webp",
@@ -25,9 +25,11 @@
     "static/media/about2.png": "/static/media/about2.fee2d1f2a99ff72813da.png",
     "static/media/news-block-background-mobile.webp": "/static/media/news-block-background-mobile.66667de0e66307e673f4.webp",
     "static/media/shield.webp": "/static/media/shield.ea7f07b760cced092ecc.webp",
-    "static/media/cup-image.png": "/static/media/cup-image.5a8f82a9a1ee09847a3f.png",
+    "static/media/poojasamagri.jpg": "/static/media/poojasamagri.bdf2130089adb96e2960.jpg",
     "static/media/wallet-store.png": "/static/media/wallet-store.136e38564b744ed91790.png",
-    "static/media/punyamapp.png": "/static/media/punyamapp.26459671b1810e744c20.png",
+    "static/media/mandirs.jpg": "/static/media/mandirs.8330b0244a277ccf5339.jpg",
+    "static/media/poojawaste.jpg": "/static/media/poojawaste.15cb30c919d32d8b1f3e.jpg",
+    "static/media/pooja.jpg": "/static/media/pooja.7918d22b9f49788ea45b.jpg",
     "static/media/main-bg-2_1.webp": "/static/media/main-bg-2_1.badcdca57b48fc341ba7.webp",
     "static/media/purse.png": "/static/media/purse.3bdcf4948b4673ae0853.png",
     "static/media/about4.png": "/static/media/about4.dba46fdc20acf86d2a4f.png",
@@ -35,6 +37,7 @@
     "static/media/reddit.webp": "/static/media/reddit.157d61434c78a75c0ead.webp",
     "static/media/twitter.webp": "/static/media/twitter.6f157b8030dd5b66a747.webp",
     "static/media/default-profile.png": "/static/media/default-profile.04fa960999505dcd5a7e.png",
+    "static/media/logo.png": "/static/media/logo.9d1a7dd6f196d4acf1c5.png",
     "static/media/galaxy-digital.svg": "/static/media/galaxy-digital.f177a504276f5ebda6730a79dfb65f43.svg",
     "static/media/dragonfly-capital.svg": "/static/media/dragonfly-capital.1ae02d03fca8cafd970dace897d76268.svg",
     "static/media/about3.webp": "/static/media/about3.80a61c124263d29b23e9.webp",
@@ -66,12 +69,12 @@
     "static/media/atoken.svg": "/static/media/atoken.a398f120f24f65de8efa6a176b173906.svg",
     "static/media/zerion.svg": "/static/media/zerion.a24b93cddfb205d0939af46a2ccd114e.svg",
     "static/media/gemini.svg": "/static/media/gemini.4702ec2a63dda0c10c826af78e17407c.svg",
+    "index.html": "/index.html",
     "static/media/pantera.svg": "/static/media/pantera.0034252c625131661a555b5f63ae4b3b.svg",
     "static/media/mew.svg": "/static/media/mew.b0269a00f9248097aadb55069a898680.svg",
-    "index.html": "/index.html",
-    "main.b91e20a2.js.map": "/static/js/main.b91e20a2.js.map"
+    "main.0d0adcfa.js.map": "/static/js/main.0d0adcfa.js.map"
   },
   "entrypoints": [
-    "static/js/main.b91e20a2.js"
+    "static/js/main.0d0adcfa.js"
   ]
 }
