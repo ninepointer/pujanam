@@ -7,7 +7,7 @@ import Grid from "@mui/material/Grid";
 import MDTypography from "../../components/MDTypography";
 import MDBox from "../../components/MDBox";
 import MDButton from "../../components/MDButton"
-import { Card, CardActionArea, CardContent, OutlinedInput, Typography } from "@mui/material";
+import { Card, CardActionArea, CardContent, Checkbox, FormControlLabel, FormGroup, OutlinedInput, Typography } from "@mui/material";
 import MDSnackbar from "../../components/MDSnackbar";
 import MenuItem from '@mui/material/MenuItem';
 // import { styled } from '@mui/material';
@@ -19,7 +19,7 @@ import { apiUrl } from '../../constants/constants';
 import Purpose from "./data/purposeOfPooja/purpose";
 import AddTier from "./data/addTier/addTier";
 import Benefit from "./data/benefitOfPooja/benefit";
-import Description from "./data/poojaDescription/description";
+// import Description from "./data/poojaDescription/description";
 import Item from "./data/poojaItem/item";
 import Faq from "./data/faq/faq";
 import Include from "./data/poojaIncludes/includes";
@@ -63,6 +63,7 @@ function Index() {
       id: "" || prevPoojaData?.category?._id,
       name: "" || prevPoojaData?.category?.product_name
     },
+    featured: "" || prevPoojaData?.featured
   });
 
   const [file, setFile] = useState(null);
@@ -94,7 +95,6 @@ function Index() {
     };
     reader.readAsDataURL(file);
   };
-
 
   const handleUpload = async () => {
 
@@ -409,8 +409,23 @@ function Index() {
             </Grid>
 
             <Grid container spacing={2} mt={8} mb={0} xs={12} md={9} xl={12}>
+              <Grid item xs={12} md={6} xl={6}>
+                <FormGroup>
+                  <FormControlLabel
+                    checked={(prevPoojaData?.featured !== undefined && !editing && formState?.featured === undefined) ? prevPoojaData?.featured : formState?.featured}
+                    disabled={((newData || prevPoojaData) && (!editing))}
+                    control={<Checkbox />}
+                    onChange={(e) => {
+                      setFormState(prevState => ({
+                        ...prevState,
+                        featured: e.target.checked
+                      }))
+                    }}
+                    label="Featured" />
+                </FormGroup>
+              </Grid>
 
-              <Grid item xs={12} md={6} xl={12}>
+              <Grid item xs={12} md={6} xl={6}>
                 <MDButton variant="outlined" style={{ fontSize: 10 }} fullWidth color={(newData?.images?.length && !file) ? "warning" : ((newData?.images?.length && file) || file) ? "error" : "success"} component="label">
                   Upload Image
                   <input

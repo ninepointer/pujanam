@@ -91,3 +91,41 @@ function generateUniqueTransactionId() {
 
     return timestampPart + randomChars;
 }
+
+exports.viewCount = async (req, res) => {
+    const { id } = req.params;
+    try {
+        const updatedPooja = await Pooja.findOneAndUpdate(
+            { _id: new ObjectId(id) },
+            { $inc: { viewCount: 1 } }, // Increment the count by 1
+            { new: true } // Return the updated document
+        ).select('-created_by -created_on -last_modified_on -last_modified_by -__v -status');
+
+        if (!updatedPooja) {
+            return ApiResponse.error(res, 'Pooja not found', 404);
+        }
+
+        ApiResponse.success(res, updatedPooja, 'Count updated successfully!');
+    } catch (error) {
+        ApiResponse.error(res, 'Something went wrong', 500, error.message);
+    }
+};
+
+
+exports.trandingPooja = async (req, res) => {
+    try {
+        const pooja = await Pooja.find({featured: true}).sort({viewCount: -1})
+        .populate('packages.tier', 'tier_name pooja_items_included post_pooja_cleanUp_included min_pandit_experience max_pandit_experience number_of_main_pandit number_of_assistant_pandit')
+        .select('-created_by -created_on -last_modified_on -last_modified_by -__v -status');
+
+        const pooja2 = await Pooja.find({featured: false}).sort({viewCount: -1})
+        .populate('packages.tier', 'tier_name pooja_items_included post_pooja_cleanUp_included min_pandit_experience max_pandit_experience number_of_main_pandit number_of_assistant_pandit')
+        .select('-created_by -created_on -last_modified_on -last_modified_by -__v -status');
+
+        const result = pooja.concat(pooja2);
+        const newArr = result.slice(0, 4);
+        ApiResponse.success(res, newArr, 'Pooja featched successfully!');
+    } catch (error) {
+        ApiResponse.error(res, 'Something went wrong', 500, error.message);
+    }
+};
