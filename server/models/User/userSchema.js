@@ -5,6 +5,7 @@ const { Schema } = mongoose;
 require("../../db/conn");
 
 const userSchema = new mongoose.Schema({
+    uid:String,
     full_name:{
         type: String,
         required : true,
