@@ -74,7 +74,7 @@ exports.addToFavourite = async (req, res) => {
         })
 
         if(find){
-            ApiResponse.error(res, 'This mandir is already added in your favourite.', 500, error.message);
+            return ApiResponse.error(res, 'This mandir is already added in your favourite.', 500);
         }
 
         const favUser = await User.findOneAndUpdate(
@@ -97,6 +97,7 @@ exports.addToFavourite = async (req, res) => {
 
         ApiResponse.success(res, favUser);
     } catch (error) {
+        console.log(error)
         await session.abortTransaction();
         session.endSession();
 
