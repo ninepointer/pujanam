@@ -1358,7 +1358,7 @@ exports.addAddress = async(req, res)=>{
         address_details: address_details
       }
     }, {new : true}).select('address_details');
-    ApiResponse.success(res, updateAddress, 'Address updated successfully');
+    ApiResponse.success(res, updateAddress);
   
   } catch(error){
     ApiResponse.error(res, 'Something went wrong', 500, error.message);
@@ -1375,7 +1375,7 @@ exports.removeAddress = async(req, res)=>{
       }
     }, {new: true}).select('address_details');
   
-    ApiResponse.success(res, updateAddress, 'Address removed successfully.');  
+    ApiResponse.success(res, updateAddress);  
   } catch(error){
     ApiResponse.error(res, 'Something went wrong', 500, error.message);
   }
@@ -1411,14 +1411,10 @@ exports.editAddress = async (req, res) => {
         // Save the changes
         await userAddress.save({ validateBeforeSave: false, new: true });
 
-        ApiResponse.success(res, userAddress, 'Address edited successfully.');
+        ApiResponse.success(res, userAddress);
         return;
       }
     }
-
-    // await userAddress.save({ validateBeforeSave: false, new: true });
-
-    // ApiResponse.success(res, userAddress, 'Address edited successfully.');
   } catch (error) {
     ApiResponse.error(res, 'Something went wrong', 500, error.message);
   }
