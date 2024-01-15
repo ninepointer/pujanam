@@ -37,12 +37,12 @@ function HomeCard() {
                 <CardContent display='flex' justifyContent='flex-start' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
                     <MDBox display='flex' justifyContent='flex-start' alignContent='center' alignItems='center' style={{ width: '100%'}}>
                         <MDTypography fontSize={20} fontWeight={300} style={{ textAlign: 'center', fontFamily: 'Itim' }}>
-                            Pooja Samagri
+                            Store
                         </MDTypography>
                     </MDBox>
                     <MDBox display='flex' justifyContent='flex-start' alignContent='center' alignItems='center' style={{ width: '100%'}}>
                         <MDTypography fontSize={12} fontWeight={200} style={{ textAlign: 'justify', fontFamily: 'Itim' }}>
-                            Spiritual Essentials at Your Doorstep: Order Pooja Samagris from Home
+                            Spiritual Essentials at Your Doorstep: Order pooja samagris from home
                         </MDTypography>
                     </MDBox>
                     <MDBox mb={-2} display='flex' justifyContent='flex-end' alignContent='center' alignItems='center' style={{ width: '100%'}}>

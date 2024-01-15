@@ -92,7 +92,17 @@ const Mandir = new mongoose.Schema({
         type: Schema.Types.ObjectId,
         ref: 'user'
     }],
-    share: [{
+    uniqueCount: [{
+       ip: {type: String},
+       isMobile: {type: Boolean},
+       country: {type: String},
+       time: {type: Date}
+    }],
+    viewCount: {
+        type: Number,
+        // required: true
+    },
+    uni: [{
         type: Schema.Types.ObjectId,
         ref: 'user'
     }],

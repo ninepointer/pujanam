@@ -37,12 +37,12 @@ function HomeCard() {
                 <CardContent display='flex' justifyContent='flex-start' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
                     <MDBox display='flex' justifyContent='flex-start' alignContent='center' alignItems='center' style={{ width: '100%'}}>
                         <MDTypography fontSize={20} fontWeight={300} style={{ textAlign: 'center', fontFamily: 'Itim' }}>
-                            Pooja Services
+                            Pooja
                         </MDTypography>
                     </MDBox>
                     <MDBox display='flex' justifyContent='flex-start' alignContent='center' alignItems='center' style={{ width: '100%'}}>
                         <MDTypography fontSize={12} fontWeight={200} style={{ textAlign: 'justify', fontFamily: 'Itim' }}>
-                            Bringing Blessings to Your Doorstep: Stay Home and Book Pooja Services
+                            Bringing Blessings to Your Doorstep: Stay home and book poojas
                         </MDTypography>
                     </MDBox>
                     <MDBox mb={-2} display='flex' justifyContent='flex-end' alignContent='center' alignItems='center' style={{ width: '100%'}}>

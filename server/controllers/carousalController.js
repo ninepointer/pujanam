@@ -36,7 +36,7 @@ exports.resizePhoto = (req, res, next) => {
         next();
         return;
     }
-    sharp(req.file.buffer).resize({ width: 1080, height: 720 }).toBuffer()
+    sharp(req.file.buffer).resize({ width: 1080, height: 540 }).toBuffer()
         .then((resizedImageBuffer) => {
             req.file.buffer = resizedImageBuffer;
             // console.log("Resized:",resizedImageBuffer)
@@ -106,7 +106,7 @@ const filterObj = (obj, ...allowedFields) => {
 
 exports.createCarousel = async (req, res, next) => {
     console.log(req, req.body)
-    const { carouselName, description, clickable, window, carouselPosition, linkToCarousel, carouselStartDate, carouselEndDate, status } = req.body;
+    const { carouselName, description, clickable, window, position, carouselPosition, linkToCarousel, carouselStartDate, carouselEndDate, status } = req.body;
     const carouselImage = (req).uploadUrl;
 
     // console.log(req.body);
@@ -116,7 +116,7 @@ exports.createCarousel = async (req, res, next) => {
         //Check if user exists
         // if(await carousel.findOne({isDeleted: false, email})) return res.json({})('User with this email already exists. Please login with existing email.', 401));
         const carousel = await Carousel.create({
-            carouselName: carouselName.trim(), description, clickable, window, carouselPosition, linkToCarousel, carouselStartDate, carouselEndDate, status,
+            carouselName: carouselName.trim(), description, clickable, window, position, carouselPosition, linkToCarousel, carouselStartDate, carouselEndDate, status,
             createdBy: (req).user._id, carouselImage
         });
 
@@ -336,7 +336,7 @@ exports.editCarousel = async (req, res, next) => {
         if (!carousel) return res.status(404).json({ status: 'error', message: 'No such carousel found.' });
 
         const filteredBody = filterObj(req.body, 'carouselName', 'description', 'carouselEndDate',
-            'status', 'window', 'clickable', 'visibility', 'carouselPosition', 'linkToCarousel', 'carouselStartDate', 'lastModifiedBy');
+            'status', 'window', 'position', 'clickable', 'visibility', 'carouselPosition', 'linkToCarousel', 'carouselStartDate', 'lastModifiedBy');
 
         filteredBody.lastModifiedBy = req.user.id;
         // console.log((req).uploadUrl);

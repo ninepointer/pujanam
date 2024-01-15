@@ -174,3 +174,5 @@ exports.getActive = async (req, res) => {
         ApiResponse.error(res, 'Something went wrong', 500, error.message);
     }
 };
+
+

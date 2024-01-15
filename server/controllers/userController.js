@@ -1,13 +1,12 @@
 const multer = require('multer');
 const AWS = require('aws-sdk');
-// const sharp = require('sharp');
 const UserDetail = require('../models/User/userSchema');
 const DeactivateUser = require('../models/User/deactivateUser');
 const { ObjectId } = require('mongodb');
-// const {client, getValue} = require("../marketData/redisClient");
 const sendMail = require('../utils/emailService');
 const mongoose = require('mongoose');
 const SignedUpUser = require("../models/User/signedUpUser");
+const ApiResponse = require('../helpers/apiResponse');
 
 
 const storage = multer.memoryStorage();
@@ -1337,4 +1336,86 @@ exports.checkUserExist = async(req, res)=>{
   const {mobile} = req.params;
   const findUser = await UserDetail.findOne({mobile: mobile});
   res.status(201).json({ status: "success", data: findUser ? true : false});
+}
+
+exports.addAddress = async(req, res)=>{
+  try{
+    const {latitude, longitude, address, pincode, city, state, country} = req.body;
+    const address_details = {
+      location: {
+        type: "Point",
+        coordinates: [latitude, longitude]
+      },
+      address: address,
+      pincode: pincode,
+      city: city,
+      state: state,
+      country: country
+    };
+  
+    const updateAddress = await UserDetail.findOneAndUpdate({_id: new ObjectId(req.user._id)}, {
+      $push: {
+        address_details: address_details
+      }
+    }, {new : true}).select('address_details');
+    ApiResponse.success(res, updateAddress);
+  
+  } catch(error){
+    ApiResponse.error(res, 'Something went wrong', 500, error.message);
+  }
+}
+
+exports.removeAddress = async(req, res)=>{
+  try{
+    const {id} = req.params;
+
+    const updateAddress = await UserDetail.findOneAndUpdate({_id: new ObjectId(req.user._id)}, {
+      $pull: {
+        address_details: { _id: new ObjectId(id) }
+      }
+    }, {new: true}).select('address_details');
+  
+    ApiResponse.success(res, updateAddress);  
+  } catch(error){
+    ApiResponse.error(res, 'Something went wrong', 500, error.message);
+  }
+}
+
+exports.editAddress = async (req, res) => {
+  try {
+    const { id } = req.params;
+    let address_details = {};
+    const { latitude, longitude, address, pincode, city, state, country } = req.body;
+    const userAddress = await UserDetail.findOne({ _id: new ObjectId(req.user._id) }).select('address_details');
+    for (let elem of userAddress.address_details) {
+      if (elem?._id?.toString() === id?.toString()) {
+        console.log("in if", elem._id);
+        const prevLatitude = elem.location.coordinates[0];
+        const prevLongitude = elem.location.coordinates[1];
+
+        address_details = {
+          location: {
+            type: "Point",
+            coordinates: [latitude || prevLatitude, longitude || prevLongitude]
+          },
+          address: address || elem?.address,
+          pincode: pincode || elem?.pincode,
+          city: city || elem?.city,
+          state: state || elem?.state,
+          country: country || elem?.country
+        };
+
+        console.log("address_details", address_details);
+        Object.assign(elem, address_details);
+
+        // Save the changes
+        await userAddress.save({ validateBeforeSave: false, new: true });
+
+        ApiResponse.success(res, userAddress);
+        return;
+      }
+    }
+  } catch (error) {
+    ApiResponse.error(res, 'Something went wrong', 500, error.message);
+  }
 }
