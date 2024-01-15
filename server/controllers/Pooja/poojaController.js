@@ -43,6 +43,7 @@ const processUpload = async (uploadedFiles, s3, route) => {
 exports.createPooja = async (req, res) => {
     try {
         const {
+            featured,
             name,
             description,
             category,
@@ -64,6 +65,7 @@ exports.createPooja = async (req, res) => {
 
         const newPooja = await Pooja.create({
             name,
+            featured,
             description,
             category,
             sub_category,

@@ -1,13 +1,12 @@
 const multer = require('multer');
 const AWS = require('aws-sdk');
-// const sharp = require('sharp');
 const UserDetail = require('../models/User/userSchema');
 const DeactivateUser = require('../models/User/deactivateUser');
 const { ObjectId } = require('mongodb');
-// const {client, getValue} = require("../marketData/redisClient");
 const sendMail = require('../utils/emailService');
 const mongoose = require('mongoose');
 const SignedUpUser = require("../models/User/signedUpUser");
+const ApiResponse = require('../helpers/apiResponse');
 
 
 const storage = multer.memoryStorage();
@@ -1337,4 +1336,38 @@ exports.checkUserExist = async(req, res)=>{
   const {mobile} = req.params;
   const findUser = await UserDetail.findOne({mobile: mobile});
   res.status(201).json({ status: "success", data: findUser ? true : false});
+}
+
+exports.addAddress = async(req, res)=>{
+  const {latitude, longitude, address, pincode, city, state, country} = req.body;
+  const address_details = {
+    location: {
+      type: "Point",
+      coordinates: [latitude, longitude]
+    },
+    address: address,
+    pincode: pincode,
+    city: city,
+    state: state,
+    country: country
+  };
+
+  const updateAddress = await UserDetail.findOneAndUpdate({_id: new ObjectId(req.user._id)}, {
+    $push: {
+      address_details: address_details
+    }
+  }, {new : true});
+  ApiResponse.created(res, updateAddress, 'Address updated successfully');
+}
+
+exports.removeAddress = async(req, res)=>{
+  const {docId} = req.params;
+
+  const updateAddress = await UserDetail.findOneAndUpdate({_id: new ObjectId(req.user._id)}, {
+    $pull: {
+      "address_details._id": new ObjectId(docId)
+    }
+  });
+
+  ApiResponse.success(res, updateAddress, 'Address removed successfully.');
 }

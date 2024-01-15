@@ -91,3 +91,22 @@ function generateUniqueTransactionId() {
 
     return timestampPart + randomChars;
 }
+
+exports.viewCount = async (req, res) => {
+    const { id } = req.params;
+    try {
+        const updatedPooja = await Pooja.findOneAndUpdate(
+            { _id: new ObjectId(id) },
+            { $inc: { count: 1 } }, // Increment the count by 1
+            { new: true } // Return the updated document
+        );
+
+        if (!updatedPooja) {
+            return ApiResponse.error(res, 'Pooja not found', 404);
+        }
+
+        ApiResponse.success(res, updatedPooja, 'Count updated successfully!');
+    } catch (error) {
+        ApiResponse.error(res, 'Something went wrong', 500, error.message);
+    }
+};
