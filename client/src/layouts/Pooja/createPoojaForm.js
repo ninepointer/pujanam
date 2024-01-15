@@ -409,7 +409,7 @@ function Index() {
             </Grid>
 
             <Grid container spacing={2} mt={8} mb={0} xs={12} md={9} xl={12}>
-              <Grid item xs={12} md={6} xl={3}>
+              <Grid item xs={12} md={6} xl={6}>
                 <FormGroup>
                   <FormControlLabel
                     checked={(prevPoojaData?.featured !== undefined && !editing && formState?.featured === undefined) ? prevPoojaData?.featured : formState?.featured}
@@ -425,7 +425,7 @@ function Index() {
                 </FormGroup>
               </Grid>
 
-              <Grid item xs={12} md={6} xl={12}>
+              <Grid item xs={12} md={6} xl={6}>
                 <MDButton variant="outlined" style={{ fontSize: 10 }} fullWidth color={(newData?.images?.length && !file) ? "warning" : ((newData?.images?.length && file) || file) ? "error" : "success"} component="label">
                   Upload Image
                   <input

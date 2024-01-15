@@ -10,6 +10,15 @@ const Pooja = new mongoose.Schema({
         type: String,
         required: true,
     },
+    featured: {
+        type: Boolean,
+        required: true,
+        default: false
+    },
+    viewCount: {
+        type: Number,
+        // required: true,
+    },
     includes: [
         {
             type: String,

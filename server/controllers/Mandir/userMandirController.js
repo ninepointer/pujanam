@@ -230,30 +230,39 @@ exports.getBySearch = async (req, res) => {
     }
 };
 
-// exports.addUniqueUserAndCount = async (req, res) => {
+exports.viewCount = async (req, res) => {
 
-//     const {ip, isMobile, country, mandirId} = req.body;
-//     const mandir = await Mandir.findOne({_id: new ObjectId(mandirId)});
-//     let flag = false;
-
-//     await Promise.all(mandir.reader.map((elem)=>{
-//         if(elem.ip === ip){
-//             flag = true
-//         }
-//     }))
-
-//     if(!flag){
-//         mandir.reader.push({
-//             ip: ip,
-//             isMobile: isMobile,
-//             country: country,
-//             time: new Date()
-//         })
-//     }
-
-//     mandir.viewCount += 1;
-//     const save = await mandir.save({ validateBeforeSave: false, new: true });
-
-
-//     return res.status(200).json({status:"success", message: 'reader data saved.', data: save});
-// };
+    try{
+        const mandirId = req.params.id;
+        const {ip, isMobile, country} = req.body;
+        const mandir = await Mandir.findOne({_id: new ObjectId(mandirId)});
+        let flag = false;
+    
+        await Promise.all(mandir.uniqueCount.map((elem)=>{
+            if(elem.ip === ip){
+                flag = true
+            }
+        }))
+    
+        if(!flag){
+            const updatedMandir = await Mandir.findOneAndUpdate({_id: new ObjectId(mandirId)}, {
+                $push: {
+                    uniqueCount: {
+                        ip: ip,
+                        isMobile: isMobile,
+                        country: country,
+                        time: new Date()
+                    }
+                },
+                $inc: {viewCount: 1}
+            }, { new: true } )
+        }
+    
+        const updatedMandir = await Mandir.findOneAndUpdate({_id: new ObjectId(mandirId)}, {
+            $inc: {viewCount: 1}
+        }, { new: true } )
+        ApiResponse.success(res, updatedMandir, 'Count updated successfully!');
+    } catch (error) {
+        ApiResponse.error(res, 'Something went wrong', 500, error.message);
+    }
+};
