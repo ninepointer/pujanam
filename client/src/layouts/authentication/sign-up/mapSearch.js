@@ -12,6 +12,11 @@ import { apiUrl } from '../../../constants/constants';
 import MDAvatar from "../../../components/MDAvatar";
 import logo from "../../../assets/images/logo.png";
 import SearchIcon from '@mui/icons-material/Search';
+import { Divider } from '@mui/material';
+import { Box } from '@mui/system';
+import InputLabel from '@mui/material/InputLabel';
+import { useMediaQuery } from '@mui/material'
+import theme from '../../HomePage/utils/theme/index'; 
 
 
 function MapSearch() {
@@ -126,117 +131,148 @@ function MapSearch() {
         };
     }, [templeInputValue, fetchTemple]);
 
-    console.log("coordinates", coordinates)
+    const isMobile = useMediaQuery(theme.breakpoints.down("lg"))
+
 
     return (
         <>
-            <MDBox mb={2} display='flex' justifyContent='center' backgroundColor="#FFFFFF">
-                <MDBox sx={{
-                    display: "flex", justifyContent: "space-between", alignContent: "center", alignItems: "center", backgroundColor: "#FFFFFF",
-                    borderTopLeftRadius: "10px",
-                    borderBottomLeftRadius: "10px",
-                }}>
-                    <MDBox style={{ alignContent: 'center' }}>
-                        <LocationOnIcon sx={{ color: '#9C4722' }} backgroundColor="#FFFFFF" />
-                    </MDBox>
-                    <MDBox>
-                        <Autocomplete
-                            id="google-map-demo"
-                            sx={{
-                                width: 250, textAlign: 'center', backgroundColor: "#FFFFFF",
-
-                            }}
-                            getOptionLabel={(option) =>
-                                typeof option === 'string' ? option : option.description
-                            }
-                            filterOptions={(x) => x}
-                            options={options}
-                            autoComplete
-                            includeInputInList
-                            filterSelectedOptions
-                            value={value}
-                            noOptionsText="Search your location"
-                            onChange={(event, newValue) => {
-                                setOptions(newValue ? [newValue, ...options] : options);
-                                setValue(newValue);
-                            }}
-                            onInputChange={(event, newInputValue) => {
-                                setInputValue(newInputValue);
-                            }}
-                            renderInput={(params) => (
-                                <TextField {...params} label="Select your location" fullWidth
+        <Grid container spacing={isMobile ? 1 : 0} ml={isMobile ? 0 : 8} xs={12} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{width:'100%'}}>
+            <Grid item xs={12} md={12} lg={4} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{width:'100%'}}>
+            {/* <MDBox mb={2} display='flex' justifyContent='center'> */}
+                <MDBox display='flex' justifyContent='center'>
+                    <MDBox display='flex' justifyContent='center' alignItems='center' alignContent='center'>
+                        <MDBox display='flex' justifyContent='center' alignItems='center' alignContent='center' style={{padding:8}}
+                        sx={{
+                            display: "flex", justifyContent: "space-between", alignContent: "center", alignItems: "center", 
+                            backgroundColor: "#FFFFFF",
+                            borderTopRightRadius: isMobile ? "0px" : "0px",
+                            borderBottomRightRadius: isMobile ? "0px" : "0px",
+                            borderTopLeftRadius: isMobile ? "10px" : "10px",
+                            borderBottomLeftRadius: isMobile ? "10px" : "10px",
+                        }}>
+                            <LocationOnIcon sx={{ color: '#9C4722', height: 34, }} />
+                        </MDBox>
+                        <MDBox display='flex' justifyContent='center' alignItems='center' alignContent='center'>
+                            <Autocomplete
+                                id="google-map-demo"
+                                sx={{
+                                    width: 300,
+                                    textAlign: 'center',
+                                    backgroundColor: "#FFFFFF",
+                                    border: "none",
+                                    borderTopRightRadius: isMobile ? "10px" : "0px",
+                                    borderBottomRightRadius: isMobile ? "10px" : "0px",
+                                    borderTopLeftRadius: isMobile ? "0px" : "0px",
+                                    borderBottomLeftRadius: isMobile ? "0px" : "0px",
+                                    outline: "none"
+                                }}
+                                getOptionLabel={(option) =>
+                                    typeof option === 'string' ? option : option.description
+                                }
+                                filterOptions={(x) => x}
+                                options={options}
+                                autoComplete
+                                includeInputInList
+                                filterSelectedOptions
+                                value={value}
+                                noOptionsText="Search your location"
+                                onChange={(event, newValue) => {
+                                    setOptions(newValue ? [newValue, ...options] : options);
+                                    setValue(newValue);
+                                }}
+                                onInputChange={(event, newInputValue) => {
+                                    setInputValue(newInputValue);
+                                }}
+                                renderInput={(params) => (
+                                    <TextField variant="standard" {...params} 
+                                    // label="Select your location" 
+                                    fullWidth
+                                    placeholder="Select your location"    
                                     InputProps={{
-                                        ...params.InputProps,
-                                        style: {
-                                            color: '#ED9121',
-                                            height: 52,
-                                            outline: "none",
-                                            borderWidth: 0,
-                                            '&:hover': {
-                                                borderWidth: 0, // Adjust the styles for hover if needed
+                                            ...params.InputProps,
+                                            style: {
+                                                color: '#ED9121',
+                                                height: 50,
+                                                outline: "none",
+                                                borderWidth: 0,
+                                                '&:hover': {
+                                                    borderWidth: 0, // Adjust the styles for hover if needed
+                                                },
+                                                border: "none"
                                             },
-                                            border: "none"
-                                        },
-                                    }}
-                                />
-                            )}
-                            renderOption={(props, option) => {
-                                const matches =
-                                    option.structured_formatting.main_text_matched_substrings || [];
+                                        }}
+                                    />
+                                )}
+                                renderOption={(props, option) => {
+                                    const matches =
+                                        option.structured_formatting.main_text_matched_substrings || [];
 
-                                const parts = parse(
-                                    option.structured_formatting.main_text,
-                                    matches.map((match) => [match.offset, match.offset + match.length]),
-                                );
+                                    const parts = parse(
+                                        option.structured_formatting.main_text,
+                                        matches.map((match) => [match.offset, match.offset + match.length]),
+                                    );
 
-                                return (
-                                    <li {...props}>
-                                        <Grid container alignItems="center">
-                                            <Grid item sx={{ display: 'flex', width: "100%" }}>
-                                                <LocationOnIcon sx={{ color: 'text.secondary' }} />
+                                    return (
+                                        <li {...props}>
+                                            <Grid container xs={12} md={12} lg={12} display='flex' justifyContent='center' alignItems="center">
+                                                <Grid item xs={2} md={2} lg={2} display='flex' justifyContent='center' sx={{ display: 'flex', width: "100%" }}>
+                                                    <LocationOnIcon sx={{ color: 'text.secondary' }} />
+                                                </Grid>
+                                                <Grid item xs={10} md={10} lg={10} display='flex' justifyContent='flex-start' sx={{ width: '100%', wordWrap: 'break-word' }}>
+                                                    <Grid container xs={12} md={12} lg={12} display='flex' justifyContent='flex-start' alignItems="center">
+                                                        {parts.map((part, index) => (
+                                                        <MDBox
+                                                                key={index}
+                                                                component="span"
+                                                                sx={{ fontWeight: part.highlight ? 'bold' : 'regular' }}
+                                                            >
+                                                            <Typography variant="body2" color="text.secondary" style={{fontFamily: 'Itim'}}>
+                                                                {part.text}
+                                                            </Typography>
+                                                        </MDBox>
+                                                        ))}
+                                                        <MDBox>
+                                                            <Typography variant="caption" color="text.secondary" style={{fontFamily: 'Itim'}}>
+                                                                {option.structured_formatting.secondary_text}
+                                                            </Typography>
+                                                        </MDBox>
+                                                    </Grid>
+                                                </Grid>
                                             </Grid>
-                                            <Grid item sx={{ width: '100%', wordWrap: 'break-word' }}>
-                                                {parts.map((part, index) => (
-                                                    <MDBox
-                                                        key={index}
-                                                        component="span"
-                                                        sx={{ fontWeight: part.highlight ? 'bold' : 'regular' }}
-                                                    >
-                                                        {part.text}
-                                                    </MDBox>
-                                                ))}
-                                                <Typography variant="body2" color="text.secondary">
-                                                    {option.structured_formatting.secondary_text}
-                                                </Typography>
-                                            </Grid>
-                                        </Grid>
-                                    </li>
-                                );
-                            }}
-                        />
+                                        </li>
+                                    );
+                                }}
+                            />
+                        </MDBox>
                     </MDBox>
                 </MDBox>
-
+            </Grid>
                 {/* <Divider orientation="vertical" color='black' backgroundColor='#FFFFFF' /> */}
-                
-                <MDBox sx={{
-                    display: "flex", justifyContent: "space-between", alignContent: "center", alignItems: "center", backgroundColor: "#FFFFFF",
-                    borderTopRightRadius: "10px",
-                    borderBottomRightRadius: "10px",
-                }}>
-                    <MDBox style={{ backgroundColor: "#FFFFFF" }}>
-                        <SearchIcon sx={{ color: '#9C4722' }} backgroundColor="#FFFFFF" />
+            <Grid item xs={12} md={12} lg={8} display='flex' justifyContent='center' style={{width:'100%'}}>   
+                <MDBox display='flex' justifyContent='center' alignItems='center' alignContent='center'>
+                    <MDBox display='flex' justifyContent='center' alignItems='center' alignContent='center' style={{padding:8}}
+                    sx={{
+                        display: "flex", justifyContent: "space-between", alignContent: "center", alignItems: "center", 
+                        backgroundColor: "#FFFFFF",
+                        borderTopRightRadius: isMobile ? "0px" : "0px",
+                        borderBottomRightRadius: isMobile ? "0px" : "0px",
+                        borderTopLeftRadius: isMobile ? "10px" : "0px",
+                        borderBottomLeftRadius: isMobile ? "10px" : "0px",
+                    }}>
+                        <SearchIcon sx={{ color: '#9C4722', height: 34, }} />
                     </MDBox>
-                    <MDBox>
+                    <MDBox display='flex' justifyContent='center' alignContent= "center" alignItems="center">
                         <Autocomplete
                             id="mandirs"
                             sx={{
-                                width: 400,
+                                width: isMobile ? 300 : 400,
                                 textAlign: 'center',
                                 backgroundColor: "#FFFFFF",
                                 border: "none",
-                                borderTopRightRadius: "20px",
-                                borderBottomRightRadius: "20px",
+                                borderTopRightRadius: isMobile ? "10px" : "10px",
+                                borderBottomRightRadius: isMobile ? "10px" : "10px",
+                                borderTopLeftRadius: isMobile ? "0px" : "0px",
+                                borderBottomLeftRadius: isMobile ? "0px" : "0px",
                                 outline: "none"
                             }}
                             style={{ border: 'none' }}
@@ -267,9 +303,9 @@ function MapSearch() {
                                                 size="lg"
                                                 sx={{
                                                     cursor: "pointer",
-                                                    borderRadius: "10px",
-                                                    height: "60px",
-                                                    width: "100px",
+                                                    borderRadius: isMobile ? "5px" : "10px",
+                                                    height: isMobile ? "50px" : "60px",
+                                                    width: isMobile ? "75px" : "100px",
                                                     ml: 0,
                                                     border: "none"
                                                 }}
@@ -279,10 +315,13 @@ function MapSearch() {
                                             <MDBox
                                                 component="span"
                                                 sx={{ fontWeight: option.highlight ? 'bold' : 'regular' }}
+                                                style={{fontFamily: "Itim"}}
                                             >
-                                                {option.name}
+                                            <Typography variant="body3" color="text.secondary" style={{fontFamily: "Itim"}}>
+                                                {option.name}<br/>
+                                            </Typography>
                                             </MDBox>
-                                            <Typography variant="body2" color="text.secondary">
+                                            <Typography variant="caption" color="text.secondary" style={{fontFamily: "Itim"}}>
                                                 {`${option.address_details.city}, ${option.address_details.state}, ${option.address_details.country}`}
                                             </Typography>
                                         </Grid>
@@ -290,28 +329,36 @@ function MapSearch() {
                                 </li>
                             )}
                             renderInput={(params) => (
-                                <TextField
+                                <>
+                                <TextField variant="standard"
                                     {...params}
-                                    label="Search for temples"
+                                    placeholder="Search for temples"
+                                    // label="Search for temples"
                                     InputProps={{
                                         ...params.InputProps,
                                         style: {
                                             color: '#ED9121',
-                                            height: 52,
+                                            height: 50,
                                             outline: "none",
                                             borderWidth: 0,
+                                            '&:hover': {
+                                                borderWidth: 0, // Adjust the styles for hover if needed
+                                            },
                                             border: "none"
                                         },
                                     }}
                                     InputLabelProps={{
-                                        style: { color: 'grey', outline: "none" },
+                                        style: { color: 'grey', outline: "none", variant: "standard" },
                                     }}
                                 />
+                                </>
                             )}
                         />
                     </MDBox>
                 </MDBox>
-            </MDBox>
+            </Grid>
+            {/* </MDBox> */}
+        </Grid>
         </>
     );
 }

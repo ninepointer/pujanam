@@ -17,9 +17,17 @@ import CardContent from '@mui/material/CardContent';
 
 function HomeCard() {
     return(
-        <Grid item xs={12} md={4} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
-            <Grid container xs={12} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
-            <Card sx={{ minWidth: '100%', cursor: 'pointer' }} onClick={() => {}}>
+        <Grid item xs={12} md={4} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto', overflow: 'visible' }}>
+            <Grid container xs={12} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto', overflow: 'visible' }}>
+            <Card sx={{ 
+                minWidth: '100%', 
+                cursor: 'pointer',
+                transition: 'transform 0.3s cubic-bezier(0.25, 0.1, 0.25, 1), box-shadow 0.3s cubic-bezier(0.25, 0.1, 0.25, 1)',
+                '&:hover': {
+                    transform: 'scale(1.10)',
+                    boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)', // Adjust the box shadow as needed
+                    }
+                }} onClick={() => {}}>
 
             <CardActionArea>
                 <Grid item xs={12} md={4} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
@@ -29,12 +37,12 @@ function HomeCard() {
                 <CardContent display='flex' justifyContent='flex-start' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
                     <MDBox display='flex' justifyContent='flex-start' alignContent='center' alignItems='center' style={{ width: '100%'}}>
                         <MDTypography fontSize={20} fontWeight={300} style={{ textAlign: 'center', fontFamily: 'Itim' }}>
-                            Pooja Waste
+                            Pooja Leftovers
                         </MDTypography>
                     </MDBox>
                     <MDBox display='flex' justifyContent='flex-start' alignContent='center' alignItems='center' style={{ width: '100%'}}>
                         <MDTypography fontSize={12} fontWeight={200} style={{ textAlign: 'justify', fontFamily: 'Itim' }}>
-                            Preserve Devotion, Respect the Earth: Collecting and Disposing Service of pooja waste
+                            Preserve Devotion, Respect the Earth: Collecting and Disposing Service
                         </MDTypography>
                     </MDBox>
                     <MDBox mb={-2} display='flex' justifyContent='flex-end' alignContent='center' alignItems='center' style={{ width: '100%'}}>
