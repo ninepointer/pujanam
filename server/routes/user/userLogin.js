@@ -276,7 +276,7 @@ app.post('/verifyfirebaselogintoken', async (req, res) => {
         // ... any other user fields
       };
       if(decodedToken?.picture){
-        userObj?.profile_picture?.url = decodedToken?.picture;
+        userObj.profile_picture.url = decodedToken?.picture;
       }
       if(decodedToken?.phone_number){
         userObj.mobile = decodedToken.phone_number.replace(/^\+91/, '');
