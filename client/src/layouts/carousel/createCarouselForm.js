@@ -64,6 +64,7 @@ function Index() {
         clickable: '' || id?.clickable,
         linkToCarousel: '' || id?.linkToCarousel,
         window: '' || id?.window,
+        position: '' || id?.position,
         carouselPosition: '' || id?.carouselPosition,
         visibility: '' || id?.visibility
     });
@@ -87,6 +88,7 @@ function Index() {
           clickable: '' || res.data?.clickable,
           linkToCarousel: '' || res.data?.linkToCarousel,
           window: '' || res.data?.window,
+          position: '' || res.data?.position,
           carouselPosition: '' || res.data?.carouselPosition,
           visibility: '' || res.data?.visibility
         });
@@ -106,23 +108,10 @@ function Index() {
         try{
           const formData = new FormData();
 
-          // if (imageFile) {
-          //   formData.append("carouselImage", imageFile);
-          // }
-
           for (let elem in data) {
             formData.append(`${elem}`, data[elem]);
           }
-
-          // Object.keys(data).forEach((key) => {
-          //   console.log("data to be appended", key)
-          //   formData.append('carouselImage', data[key])
-          //   // formData.append('blogContent', JSON.stringify(childFormState.blogContent));
-          //   // console.log("data appended",formData)
-          //   // console.log("formState",formState)
-          // });
           
-          console.log("formState",formState)
             if(!formState.carouselName || !formState.description || 
               !formState.carouselStartDate || !formState.carouselEndDate
               || !formState.status
@@ -145,7 +134,6 @@ function Index() {
           });
 
           let data1 = await res.json()
-          // console.log("Response:",data1)
           if (data1.data) {
             openSuccessSB("Success", data1.message)
             setIsSubmitted(true)
@@ -434,6 +422,31 @@ function Index() {
                       >
                       <MenuItem value="In App">In App</MenuItem>
                       <MenuItem value="New Tab">New Tab</MenuItem>
+                      </Select>
+                    </FormControl>
+                </Grid>
+
+                <Grid item xs={12} md={6} xl={3} mt={1}>
+                    <FormControl sx={{width: "100%" }}>
+                      <InputLabel id="demo-simple-select-autowidth-label">Position *</InputLabel>
+                      <Select
+                      labelId="demo-simple-select-autowidth-label"
+                      id="demo-simple-select-autowidth"
+                      value={formState?.position}
+                      // value={oldObjectId ? contestData?.status : formState?.status}
+                      disabled={((isSubmitted || id) && (!editing || saving))}
+                      onChange={(e) => {setFormState(prevState => ({
+                          ...prevState,
+                          position: e.target.value
+                      }))}}
+                      label="Position"
+                      sx={{ minHeight:43 }}
+                      >
+                      <MenuItem value="Home">Home</MenuItem>
+                      <MenuItem value="Pooja">Pooja</MenuItem>
+                      <MenuItem value="Mandir">Mandir</MenuItem>
+                      <MenuItem value="Dham">Dham</MenuItem>
+                      <MenuItem value="Popular">Popular</MenuItem>
                       </Select>
                     </FormControl>
                 </Grid>

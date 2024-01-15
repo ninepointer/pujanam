@@ -8,6 +8,7 @@ import playstore from '../../../assets/images/playstore.png'
 import Navbar from '../../HomePage/components/Navbars/Navbar';
 import background from '../../../assets/images/background.jpg'
 import logo from '../../../assets/images/logo.png'
+import {Stack} from "@mui/material";
 // import Autocomplete from 'react-google-autocomplete';
 
 
@@ -35,13 +36,17 @@ import HomePagePoojaWasteCard from './homePagePoojaWasteCards'
 import PoojaServices from './poojaServices'
 import TemplesNearMe from './templesNearMe'
 import MapSearch from "./mapSearch";
+import Dhams from './dhams'
+import PopularMandirNearMe from './popularmandirNearMe'
 
 function Cover(props) {
   const navigate = useNavigate();
   const location = useLocation();
   const [count, setCount] = useState(0);
   const [isLoading,setIsLoading] = useState(false);
-  const [data,setData] = useState([]);
+  const [data,setDham] = useState([]);
+  const [dham,setPopular] = useState([]);
+  const [popular,setData] = useState([]);
   const [pooja,setPooja] = useState([]);
   const [scrollPosition, setScrollPosition] = useState(0);
   // const GOOGLE_MAPS_API_KEY = 'AIzaSyC3aviU6KHXAjoSnxcw6qbOhjnFctbxPkE';
@@ -73,11 +78,29 @@ function Cover(props) {
           "Access-Control-Allow-Credentials": true
         },
       })
-    Promise.all([call1,call2])
-    .then(([api1Response,api1Response1]) => {
+    let call3 = axios.get(`${apiUrl}usermandir/homedham`,{
+      withCredentials: false,
+      headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Credentials": true
+        },
+      })
+    let call4 = axios.get(`${apiUrl}usermandir/homepopular`,{
+      withCredentials: false,
+      headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Credentials": true
+        },
+      })
+    Promise.all([call1,call2,call3,call4])
+    .then(([api1Response,api1Response1,api1Response2,api1Response3]) => {
       // Process the responses here
       setData(api1Response.data.data)
       setPooja(api1Response1.data.data)
+      setDham(api1Response2.data.data)
+      setPopular(api1Response3.data.data)
       setTimeout(()=>{
         setIsLoading(false)
       },100)
@@ -119,33 +142,31 @@ function Cover(props) {
     };
   }, []);
 
-  const backgroundColor = scrollPosition > 10 ? 'white' : 'transparent'
+  const backgroundColor = scrollPosition > 10 ? 'rgba(0, 0, 0, 0.8)' : 'transparent'
   const backdropFilter = scrollPosition > 10 ? 'blur(5px)' : 'none'
 
   
 
   return (
     <>
-      <MDBox mt={-1} display='flex' justifyContent='center' flexDirection='column' alignContent='center' alignItems='center' style={{backgroundColor:'white', minHeight:'auto', width: 'auto', minWidth:'100vW', overflow: 'visible'}}>
+      <MDBox mt={-1} display='flex' justifyContent='center' flexDirection='column' alignContent='center' alignItems='center' style={{ minHeight:'auto', width: 'auto', minWidth:'100vW', overflow: 'visible'}}>
       <ThemeProvider theme={theme}>
       <Navbar/>
-
+      
       <Grid container mt={0} xs={12} md={12} lg={12} display='flex' justifyContent='center' alignItems='center' style={{
           display: 'flex',
           justifyContent: 'center',
           alignContent: 'center',
-          // alignItems: 'stretch',
           backgroundImage: `url(${background})`,
           backgroundSize: 'cover',
           backgroundPosition: 'center center',
-          height: '100vh', // Adjust the percentage as needed
+          height: '100vh',
           flexDirection: 'column',
           textAlign: 'center',
           padding: '20px',
           position: 'fixed',
           top: 0,
           left: 0,
-          // zIndex: 2,
           filter: backdropFilter,
           backgroundColor: backgroundColor,
           overflow: 'visible'
@@ -164,7 +185,7 @@ function Cover(props) {
           </Grid>
           <Grid item xs={12} md={12} lg={12} display='flex' justifyContent='center' alignItems='center'>
             <MDBox display='flex' justifyContent='center' alignItems='center'>
-              <MDTypography variant="h4" sx={{ color: '#fff' }} style={{fontFamily: 'Itim'}}>Seamlessly book pooja services,<br/> discover nearby and popular mandirs,<br/> and order pooja samagri with punyam app</MDTypography>
+              <MDTypography variant="h4" sx={{ color: '#fff' }} style={{fontFamily: 'Itim'}}>Seamlessly book pooja services,<br/> discover nearby and popular mandir,<br/> and order pooja samagri with punyam app</MDTypography>
             </MDBox>
           </Grid>
           <Grid item xs={12} md={12} lg={4} mb={isMobile ? 8 : 10} display='flex' justifyContent='center' alignItems='center'>
@@ -174,8 +195,9 @@ function Cover(props) {
           </Grid>
         </Grid>
       </Grid>
+      
 
-      <Grid container mt={isMobile ? 75 : 78} mb={2} display='flex' justifyContent='center' alignContent='center' alignItems='center' xs={12} md={12} lg={12} style={{ maxWidth: '100%', height: 'auto', flexGrow: 1, overflowY: 'auto', zIndex:3, overflow: 'visible' }}>
+      <Grid container mt={isMobile ? '93vH' : '87vH'} mb={2} display='flex' justifyContent='center' alignContent='center' alignItems='center' xs={12} md={12} lg={12} style={{ maxWidth: '100%', height: 'auto', flexGrow: 1, overflowY: 'auto', zIndex:3, overflow: 'visible' }}>
 
             <Grid item xs={12} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '95%', height: 'auto', overflow: 'visible' }}>
               <Grid container xs={12} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{overflow: 'visible'}}>
@@ -215,7 +237,7 @@ function Cover(props) {
                   <Grid container xs={12} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
                     <Grid item xs={12} md={12} lg={12} display='flex' justifyContent='flex-start' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
                       <MDBox display='flex' justifyContent='flex-start' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
-                        <MDTypography fontSize={20} fontWeight="bold" ml={2} style={{color:'#000', fontFamily:'Itim'}}>Trending Pooja, book at your doorstep now!</MDTypography>
+                        <MDTypography fontSize={20} fontWeight="bold" ml={2} style={{color:'#fff', fontFamily:'Itim'}}>Trending Pooja, book at your doorstep now!</MDTypography>
                       </MDBox>
                     </Grid>
 
@@ -226,7 +248,7 @@ function Cover(props) {
                             <Grid container spacing={3} xs={12} md={12} lg={12} display='flex' justifyContent='flex-start' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
                               {pooja?.map((elem) => {
                                 return (
-                                  <Grid item xs={12} md={4} lg={3} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
+                                  <Grid key={elem?._id} item xs={12} md={4} lg={3} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
                                     <PoojaServices elem={elem} />
                                   </Grid>
                                 )
@@ -258,7 +280,7 @@ function Cover(props) {
                   <Grid container xs={12} md={12} lg={12} display='flex' justifyContent='flex-start' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
                     <Grid ml={2} item xs={12} md={12} lg={12} display='flex' justifyContent='flex-start' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
                       <MDBox display='flex' justifyContent='center' alignContent='flext-start' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
-                      <MDTypography fontSize={20} fontWeight="bold" style={{color:'#000', fontFamily: 'Itim'}}>Temples near me!</MDTypography>
+                      <MDTypography fontSize={20} fontWeight="bold" style={{color:'#fff', fontFamily: 'Itim'}}>Mandir near me!</MDTypography>
                       </MDBox>
                     </Grid>
 
@@ -268,10 +290,93 @@ function Cover(props) {
                           <MDBox display='flex' justifyContent='center' alignContent='center' alignItems='center'>
                             <Grid container spacing={3} xs={12} md={12} lg={12} display='flex' justifyContent='flex-start' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
                               {data?.map((elem) => {
-                                console.log("Packages:",elem)
                                 return (
-                                  <Grid item xs={12} md={4} lg={3} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
+                                  <Grid key={elem?._id} item xs={12} md={4} lg={3} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
                                     <TemplesNearMe elem={elem}/>
+                                  </Grid>
+                                )
+                              })}
+                            </Grid>
+                          </MDBox>
+
+                        </Grid>
+                        :
+                        <>
+                          {/* <img src={NoData} width='500px' height='500px' /> */}
+                        </>
+                      }
+
+                  </Grid>
+                </Grid>
+
+              </Grid>
+            </Grid>
+      </Grid>
+
+      <Grid container mt={2} mb={2} display='flex' justifyContent='center' alignContent='center' alignItems='center' xs={12} md={12} lg={12} style={{ maxWidth: '100%', height: 'auto', flexGrow: 1, overflowY: 'auto', zIndex:3, overflow: 'visible' }}>
+
+            <Grid item xs={12} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '95%', height: 'auto' }}>
+              <Grid container xs={12} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center'>
+
+                <Grid item xs={12} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ width: '100%' }}>
+                  <Grid container xs={12} md={12} lg={12} display='flex' justifyContent='flex-start' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
+                    <Grid ml={2} item xs={12} md={12} lg={12} display='flex' justifyContent='flex-start' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
+                      <MDBox display='flex' justifyContent='center' alignContent='flext-start' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
+                      <MDTypography fontSize={20} fontWeight="bold" style={{color:'#fff', fontFamily: 'Itim'}}>Popular mandir near me!</MDTypography>
+                      </MDBox>
+                    </Grid>
+
+                      {popular.length > 0 ?
+                        <Grid item xs={12} mt={2} md={12} lg={12} alignItems='stretch'>
+
+                          <MDBox display='flex' justifyContent='center' alignContent='center' alignItems='center'>
+                            <Grid container spacing={3} xs={12} md={12} lg={12} display='flex' justifyContent='flex-start' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
+                              {popular?.map((elem) => {
+                                return (
+                                  <Grid key={elem?._id} item xs={12} md={4} lg={3} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
+                                    <PopularMandirNearMe elem={elem}/>
+                                  </Grid>
+                                )
+                              })}
+                            </Grid>
+                          </MDBox>
+
+                        </Grid>
+                        :
+                        <>
+                          {/* <img src={NoData} width='500px' height='500px' /> */}
+                        </>
+                      }
+
+                  </Grid>
+                </Grid>
+
+              </Grid>
+            </Grid>
+      </Grid>
+
+      <Grid container mt={2} mb={2} display='flex' justifyContent='center' alignContent='center' alignItems='center' xs={12} md={12} lg={12} style={{ maxWidth: '100%', height: 'auto', flexGrow: 1, overflowY: 'auto', zIndex:3, overflow: 'visible' }}>
+
+            <Grid item xs={12} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '95%', height: 'auto' }}>
+              <Grid container xs={12} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center'>
+
+                <Grid item xs={12} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ width: '100%' }}>
+                  <Grid container xs={12} md={12} lg={12} display='flex' justifyContent='flex-start' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
+                    <Grid ml={2} item xs={12} md={12} lg={12} display='flex' justifyContent='flex-start' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
+                      <MDBox display='flex' justifyContent='center' alignContent='flext-start' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
+                      <MDTypography fontSize={20} fontWeight="bold" style={{color:'#fff', fontFamily: 'Itim'}}>Char Dham!</MDTypography>
+                      </MDBox>
+                    </Grid>
+
+                      {dham.length > 0 ?
+                        <Grid item xs={12} mt={2} md={12} lg={12} alignItems='stretch'>
+
+                          <MDBox display='flex' justifyContent='center' alignContent='center' alignItems='center'>
+                            <Grid container spacing={3} xs={12} md={12} lg={12} display='flex' justifyContent='flex-start' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
+                              {dham?.map((elem) => {
+                                return (
+                                  <Grid key={elem?._id} item xs={12} md={4} lg={3} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
+                                    <Dhams elem={elem}/>
                                   </Grid>
                                 )
                               })}
