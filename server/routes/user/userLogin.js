@@ -8,6 +8,8 @@ const {sendSMS, sendOTP} = require('../../utils/smsService');
 const otpGenerator = require('otp-generator');
 const moment = require('moment');
 const ApiResponse = require('../../helpers/apiResponse');
+const { application } = require("express");
+const { ObjectId } = require("mongodb");
 
 router.post("/login", async (req, res) => {
     const { userId, pass } = req.body;
@@ -246,6 +248,49 @@ router.post("/addfcmtoken", authentication, async (req, res)=>{
         res.status(500).json({status:'error', message:'Something went wrong.', error: e?.message});
     }
 })
+
+const admin = require('firebase-admin');
+
+const serviceAccount = JSON.parse(Buffer.from(process.env.FIREBASE_SERVICE_ACCOUNT, 'base64').toString('ascii'));
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+});
+
+app.post('/verifyfirebaselogintoken', async (req, res) => {
+    const { idToken } = req.body;
+  
+    try {
+      const decodedToken = await admin.auth().verifyIdToken(idToken);
+      const uid = decodedToken.uid;
+  
+      // Find or create the user in your database
+      const userObj = {
+        uid,
+        email: decodedToken.email,
+        full_name: decodedToken.name,
+        joining_date:new Date(),
+        role: new ObjectId('659fdac630fa1324fb3d2688'),
+        creation_process:'Auto SignUp',
+        status:'Active'
+        // ... any other user fields
+      };
+      if(decodedToken?.picture){
+        userObj?.profile_picture?.url = decodedToken?.picture;
+      }
+      if(decodedToken?.phone_number){
+        userObj.mobile = decodedToken.phone_number.replace(/^\+91/, '');
+      }
+      const user = await UserDetail.findOneAndUpdate({ uid }, userObj, { new: true, upsert: true });
+  
+      // Create a JWT token
+      const token = jwt.sign({ _id }, process.env.SECRET_KEY);
+      return res.status(200).json({ status: 'success', message: "User login successful", token: token });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({status: 'error', message: `Something went wrong. Please try again.`});
+    }
+  });
 
 
 module.exports = router;

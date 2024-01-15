@@ -36,6 +36,11 @@ const carouselSchema = new mongoose.Schema({
         required:true,
         enum: ['Live','Draft','Rejected']
     },
+    position:{
+        type:String,
+        required:true,
+        enum: ['Home','Mandir','Dham','Popular','Shop','Services','Pooja',]
+    },
     clickable:{
         type: Boolean,
         required: true,

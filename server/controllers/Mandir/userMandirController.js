@@ -29,7 +29,7 @@ exports.getActiveHome = async (req, res) => {
 
 exports.getDham = async (req, res) => {
     try {
-        const activeMandir = await Mandir.find({ dham: true })
+        const activeMandir = await Mandir.find({ dham: true, status: 'Active' })
         .populate('devi_devta', 'name')
         .select('-created_on -created_by -last_modified_on -last_modified_by -__v -favourite -share');
         ApiResponse.success(res, activeMandir);
@@ -52,13 +52,35 @@ exports.getBydevta = async (req, res) => {
 
 exports.getPopular = async (req, res) => {
     try {
-        const activeMandir = await Mandir.find({ popular: true })
+        const activeMandir = await Mandir.find({ popular: true, status: 'Active' })
         .populate('devi_devta', 'name')
         .select('-created_on -created_by -last_modified_on -last_modified_by -__v -favourite -share');
         ApiResponse.success(res, activeMandir);
     } catch (error) {
         ApiResponse.error(res, 'Something went wrong', 500, error.message);
     }
+};
+
+exports.getPopularMandirHomeActive = async (req, res) => {
+  try {
+      const activeMandir = await Mandir.find({ status: 'Active', popular: true })
+      .limit(4)
+      .populate('devi_devta', 'name');
+      ApiResponse.success(res, activeMandir);
+  } catch (error) {
+      ApiResponse.error(res, 'Something went wrong', 500, error.message);
+  }
+};
+
+exports.getDhamHomeActive = async (req, res) => {
+  try {
+      const activeMandir = await Mandir.find({ status: 'Active', dham: true })
+      .limit(4)
+      .populate('devi_devta', 'name');
+      ApiResponse.success(res, activeMandir);
+  } catch (error) {
+      ApiResponse.error(res, 'Something went wrong', 500, error.message);
+  }
 };
 
 exports.addToFavourite = async (req, res) => {
