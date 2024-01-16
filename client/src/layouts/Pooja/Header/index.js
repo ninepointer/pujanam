@@ -9,6 +9,9 @@ import MDBox from '../../../components/MDBox';
 import MDButton from '../../../components/MDButton';
 import {Link} from 'react-router-dom'
 import Active from '../data/activePooja'
+import Unpublished from '../data/unpublishedPooja'
+import Draft from '../data/draftPooja'
+import MDTypography from '../../../components/MDTypography';
 
 
 export default function LabTabs() {
@@ -26,14 +29,14 @@ export default function LabTabs() {
   return (
     <MDBox bgColor="light" color="light" mt={2} mb={1} p={2} borderRadius={10} minHeight='auto'>
     <MDBox mb={2} display="flex" justifyContent="space-between">
-    <MDButton 
-    variant="outlined" 
-    color="success" 
-    size="small"
-    component={Link}
-    to='/poojadetails'
-    >
-        Create Pooja
+      <MDButton 
+        variant="outlined" 
+        color="success" 
+        size="small"
+        component={Link}
+        to='/poojadetails'
+      >
+        <MDTypography fontFamily='Itim' variant='caption'>Create Pooja</MDTypography>
     </MDButton>
     </MDBox>
       <TabContext value={value}>
@@ -52,7 +55,7 @@ export default function LabTabs() {
           </MDBox>
           : 
           <MDBox style={{minWidth:'100%'}}>
-          <Active/>
+            <Active/>
           </MDBox>
           }
           </TabPanel>
@@ -64,7 +67,7 @@ export default function LabTabs() {
           </MDBox>
           : 
           <MDBox style={{minWidth:'100%'}}>
-          <Active/>
+            <Unpublished/>
           </MDBox>
           }
           </TabPanel>
@@ -76,7 +79,7 @@ export default function LabTabs() {
           </MDBox>
           : 
           <MDBox style={{minWidth:'100%'}}>
-          <Active/>
+            <Draft/>
           </MDBox>
    
           }

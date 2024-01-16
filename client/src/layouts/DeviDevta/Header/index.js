@@ -27,7 +27,7 @@ export default function LabTabs() {
   return (
     <MDBox mt={2} bgColor="light" color="light" mb={1} p={2} borderRadius={10} minHeight='auto'>
     <MDBox mb={1} display="flex" justifyContent="space-between">
-    <MDButton 
+    <MDButton  
     variant="outlined" 
     color="success" 
     size="small"

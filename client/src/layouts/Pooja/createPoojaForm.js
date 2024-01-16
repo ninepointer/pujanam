@@ -10,7 +10,6 @@ import MDButton from "../../components/MDButton"
 import { Card, CardActionArea, CardContent, Checkbox, FormControlLabel, FormGroup, OutlinedInput, Typography } from "@mui/material";
 import MDSnackbar from "../../components/MDSnackbar";
 import MenuItem from '@mui/material/MenuItem';
-// import { styled } from '@mui/material';
 import Select from '@mui/material/Select';
 import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
@@ -19,10 +18,10 @@ import { apiUrl } from '../../constants/constants';
 import Purpose from "./data/purposeOfPooja/purpose";
 import AddTier from "./data/addTier/addTier";
 import Benefit from "./data/benefitOfPooja/benefit";
-// import Description from "./data/poojaDescription/description";
 import Item from "./data/poojaItem/item";
 import Faq from "./data/faq/faq";
 import Include from "./data/poojaIncludes/includes";
+import DefaultPoojaUpload from "../../assets/images/defaultpoojaupload.png"
 
 const ITEM_HEIGHT = 30;
 const ITEM_PADDING_TOP = 10;
@@ -160,11 +159,6 @@ function Index() {
           if (typeof (formState[elem]) === "object") {
             if(elem === "category")
             formData.append(`${"category"}`, formState[elem].id);
-            // for (let subelem in formState[elem]) {
-            //   formData.append(`${subelem}`, formState[elem][subelem]);
-            // }
-            // Append the Blob to formData
-
           } else {
             formData.append(`${elem}`, formState[elem]);
           }
@@ -260,12 +254,9 @@ function Index() {
             Fill Pooja Details
           </MDTypography>
         </MDBox>
-        <Grid container display="flex" flexDirection="row" justifyContent="space-between">
+        <Grid container spacing={2} mt={2} xs={12} md={12} xl={12} display="flex" flexDirection="row" justifyContent="space-between">
 
-          <Grid container mb={2} xs={12} md={12} xl={8} mt={1} display="flex" justifyContent='flex-start' alignItems='center' style={{ width: "300px", height: "180px" }}>
-            <Grid container spacing={2} mt={0.5} mb={0} xs={12} md={9} xl={12}>
-
-              <Grid item xs={12} md={12} xl={6}>
+              <Grid item xs={12} md={12} xl={3}>
                 <TextField
                   disabled={((newData || prevData) && (!editing))}
                   id="outlined-required"
@@ -280,7 +271,7 @@ function Index() {
                   }} />
               </Grid>
 
-              <Grid item xs={12} md={8} xl={6}>
+              <Grid item xs={12} md={8} xl={3}>
                 <TextField
                   disabled={((newData || prevData) && (!editing))}
                   id="outlined-required"
@@ -297,11 +288,7 @@ function Index() {
                 />
               </Grid>
 
-            </Grid>
-
-            <Grid container spacing={2} mt={0.5} mb={0} xs={12} md={9} xl={12}>
-
-              <Grid item xs={12} md={4} xl={6}>
+              <Grid item xs={12} md={4} xl={3}>
                 <FormControl sx={{ width: "100%" }}>
                   <InputLabel id="demo-simple-select-autowidth-label">Type *</InputLabel>
                   <Select
@@ -325,7 +312,7 @@ function Index() {
                 </FormControl>
               </Grid>
 
-              <Grid item xs={12} md={4} xl={6}>
+              <Grid item xs={12} md={4} xl={3}>
                 <FormControl sx={{ width: "100%" }}>
                   <InputLabel id="demo-simple-select-autowidth-label">Status *</InputLabel>
                   <Select
@@ -349,11 +336,8 @@ function Index() {
                   </Select>
                 </FormControl>
               </Grid>
-            </Grid>
 
-            <Grid container spacing={2} mt={0.5} mb={0} xs={12} md={9} xl={12}>
-
-              <Grid item xs={12} md={4} xl={6}>
+              <Grid item xs={12} md={4} xl={3}>
                 <FormControl sx={{ width: "100%" }}>
                   <InputLabel id="demo-simple-select-autowidth-label">Sub Cetegory *</InputLabel>
                   <Select
@@ -381,9 +365,9 @@ function Index() {
                 </FormControl>
               </Grid>
 
-              <Grid item xs={12} md={6} xl={6}>
+              <Grid item xs={12} md={6} xl={3}>
                 <FormControl sx={{ width: '100%' }}>
-                  <InputLabel id="demo-multiple-name-label">Cetegory</InputLabel>
+                  <InputLabel id="demo-multiple-name-label">Category</InputLabel>
                   <Select
                     labelId="demo-multiple-name-label"
                     id="demo-multiple-name"
@@ -391,7 +375,7 @@ function Index() {
                     disabled={((isSubmitted || prevPoojaData) && (!editing))}
                     value={formState?.category?.name || prevPoojaData?.category?.product_name || prevPoojaData?.category?.product_name}
                     onChange={handleCetegoryChange}
-                    input={<OutlinedInput label="Portfolio" />}
+                    input={<OutlinedInput label="Category" />}
                     sx={{ minHeight: 45 }}
                     MenuProps={MenuProps}
                   >
@@ -406,10 +390,22 @@ function Index() {
                   </Select>
                 </FormControl>
               </Grid>
-            </Grid>
 
-            <Grid container spacing={2} mt={8} mb={0} xs={12} md={9} xl={12}>
-              <Grid item xs={12} md={6} xl={6}>
+              <Grid item xs={12} md={6} xl={3}>
+                <MDButton variant="outlined" style={{ fontSize: 10 }} fullWidth color={(newData?.images?.length && !file) ? "warning" : ((newData?.images?.length && file) || file) ? "error" : "success"} component="label">
+                  Upload Image
+                  <input
+                    hidden
+                    disabled={((newData || prevData) && (!editing))}
+                    accept="image/*"
+                    type="file"
+                    // multiple
+                    onChange={handleImage}
+                  />
+                </MDButton>
+              </Grid>
+
+              <Grid item xs={12} md={6} xl={3}>
                 <FormGroup>
                   <FormControlLabel
                     checked={(prevPoojaData?.featured !== undefined && !editing && formState?.featured === undefined) ? prevPoojaData?.featured : formState?.featured}
@@ -424,119 +420,84 @@ function Index() {
                     label="Featured" />
                 </FormGroup>
               </Grid>
-
-              <Grid item xs={12} md={6} xl={6}>
-                <MDButton variant="outlined" style={{ fontSize: 10 }} fullWidth color={(newData?.images?.length && !file) ? "warning" : ((newData?.images?.length && file) || file) ? "error" : "success"} component="label">
-                  Upload Image
-                  <input
-                    hidden
-                    disabled={((newData || prevData) && (!editing))}
-                    accept="image/*"
-                    type="file"
-                    // multiple
-                    onChange={handleImage}
-                  />
-                </MDButton>
+ 
+              <Grid item xs={12} md={12} xl={8}>
+                <TextField
+                  disabled={((newData || prevData) && (!editing))}
+                  id="outlined-required"
+                  label='Description *'
+                  fullWidth
+                  multiline
+                  rows={9}
+                  value={formState?.description}
+                  onChange={(e) => {
+                    setFormState(prevState => ({
+                      ...prevState,
+                      description: e.target.value
+                    }))
+                  }}
+                />
               </Grid>
-            </Grid>
 
-          </Grid>
+              <Grid item xs={12} md={12} xl={4} >
+                <Grid container xs={12} md={12} xl={12} display="flex" justifyContent='center' alignItems='center' style={{minWidth:'100%'}}>
+                  {filepreview ?
 
-          <Grid container mb={2} spacing={2} xs={12} md={12} xl={4} mt={1} display="flex" justifyContent='flex-start' alignItems='center' style={{ width: "300px", height: "180px" }}>
-            {filepreview ?
-
-              <Grid item xs={12} md={12} xl={3} >
-                <Grid container xs={12} md={12} xl={12} >
-                  <Grid item xs={12} md={12} xl={12} >
-                    <Card sx={{ width: "300px", height: "180px", maxWidth: "300px", maxHeight: "180px", cursor: 'pointer' }}>
-                      <CardActionArea>
-                        <Grid item xs={12} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' >
-                          <CardContent display='flex' justifyContent='center' alignContent='center' alignItems='center' >
-                            <MDBox mb={-2} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ width: '100%', height: 'auto' }}>
-                              <Typography variant="caption" fontFamily='Segoe UI' fontWeight={600} style={{ textAlign: 'center' }}>
-                                Image
-                              </Typography>
-                            </MDBox>
-                            <Grid item xs={12} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' >
-                              <img src={filepreview} style={{ width: "180px", height: "180px", borderBottomLeftRadius: 10, borderBottomRightRadius: 10 }} />
-                            </Grid>
-                          </CardContent>
+                    <Grid item xs={12} md={12} xl={12} style={{minWidth:'100%'}}>
+                      <Card sx={{ width: "100%", height: "auto", minWidth: "100%", maxHeight: "auto", cursor: 'pointer' }}>
+                        <CardActionArea>
+                          <Grid item xs={12} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' >
+                            <img src={filepreview} style={{ width: "100%", height: "auto", borderRadius:10 }} />
+                          </Grid>
+                        </CardActionArea>
+                      </Card>
+                    </Grid>
+                    :
+                    <>
+                      {(newData || prevPoojaData) ?
+                        
+                        <Grid item xs={12} md={12} xl={12} style={{minWidth:'100%'}}>
+                          <Card sx={{ width: "100%", height: "auto", minWidth: "100%", maxHeight: "auto", cursor: 'pointer' }}>
+                            <CardActionArea
+                              sx={{
+                                width: "100%", height: "auto", minWidth: "100%", maxHeight: "auto"
+                              }}
+                            >
+                                  {!newData || !prevPoojaData && 
+                                  <>
+                                  <Grid item xs={12} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{}}>
+                                  <MDBox display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ width: '100%', height: 'auto',  minWidth:'100%', minHeight:'auto' }}>
+                                    <Typography variant="caption" fontFamily='Itim' style={{ textAlign: 'center' }}>
+                                      Image
+                                    </Typography>
+                                  </MDBox>
+                                  </Grid>
+                                  </>
+                                  }
+                                  <Grid item xs={12} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{}}>
+                                    <img src={newData?.image?.url || prevPoojaData?.image?.url} style={{ textAlign: 'center', width: "100%", height: "auto", minWidth:'100%', minHeight:'auto', borderRadius:10 }} />
+                                  </Grid>
+                            </CardActionArea>
+                          </Card>
                         </Grid>
-                      </CardActionArea>
-                    </Card>
-                  </Grid>
+                        
+                        :
+                        <Grid item xs={12} md={12} xl={12} style={{minWidth:'100%'}}>
+                          <Card sx={{ width: "100%", height: "auto", minWidth: "100%", maxHeight: "auto", cursor: 'pointer' }}>
+                            <CardActionArea>
+                              <Grid item xs={12} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{}}>
+                                <MDBox display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ width: '100%', height: 'auto', minWidth:'100%', minHeight:'auto' }}>
+                                  <img src={DefaultPoojaUpload} style={{ textAlign: 'center', width: "100%", height: "auto", minWidth:'100%', minHeight:'auto', borderRadius:10 }} />
+                                </MDBox>
+                              </Grid>
+                            </CardActionArea>
+                          </Card>
+                        </Grid>
+                      }
+                    </>
+                  }
                 </Grid>
               </Grid>
-              :
-              <>
-                {(newData || prevPoojaData) ?
-                  <Grid item xs={12} md={12} xl={3} style={{}}>
-                    <Grid container xs={12} md={12} xl={12} >
-                      <Grid item xs={12} md={12} xl={12} >
-                        <Card sx={{ width: "300px", height: "180px", maxWidth: "300px", maxHeight: "180px", cursor: 'pointer' }}>
-                          <CardActionArea>
-                            <Grid item xs={12} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{}}>
-                              <CardContent display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{}}>
-                                <MDBox mb={-2} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ width: '100%', height: 'auto' }}>
-                                  <Typography variant="caption" fontFamily='Segoe UI' fontWeight={600} style={{ textAlign: 'center' }}>
-                                    Image
-                                  </Typography>
-                                </MDBox>
-                                <Grid item xs={12} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{}}>
-                                  <img src={newData?.image?.url || prevPoojaData?.image?.url} style={{ width: "180px", height: "180px", borderBottomLeftRadius: 10, borderBottomRightRadius: 10 }} />
-                                </Grid>
-                              </CardContent>
-                            </Grid>
-                          </CardActionArea>
-                        </Card>
-                      </Grid>
-                    </Grid>
-                  </Grid>
-                  :
-                  <Grid item xs={12} md={12} xl={3} style={{}}>
-                    <Grid container xs={12} md={12} xl={12} >
-                      <Grid item xs={12} md={12} xl={12} >
-                        <Card sx={{ width: "300px", height: "180px", cursor: 'pointer' }}>
-                          <CardActionArea>
-                            <Grid item xs={12} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{}}>
-                              <CardContent display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{}}>
-                                <MDBox mb={-2} mt={9} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ width: '100%', height: 'auto' }}>
-                                  <Typography variant="caption" fontFamily='Segoe UI' fontWeight={600} style={{ textAlign: 'center' }}>
-                                    Image will show up here!
-                                  </Typography>
-                                </MDBox>
-                                {/* <Grid item xs={12} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{}}>
-                              <img src={newData?.logo?.url || prevPoojaData?.logo?.url} style={{ width: "300px", height: "180px", borderBottomLeftRadius: 10, borderBottomRightRadius: 10 }} />
-                            </Grid> */}
-                              </CardContent>
-                            </Grid>
-                          </CardActionArea>
-                        </Card>
-                      </Grid>
-                    </Grid>
-                  </Grid>
-                }
-              </>
-            }
-          </Grid>
-
-        </Grid>
-
-        <Grid item xs={12} md={12} xl={12} mt={2}>
-          <TextField
-            disabled={((newData || prevData) && (!editing))}
-            id="outlined-required"
-            label='Description *'
-            fullWidth
-            multiline
-            value={formState?.description}
-            onChange={(e) => {
-              setFormState(prevState => ({
-                ...prevState,
-                description: e.target.value
-              }))
-            }}
-          />
         </Grid>
 
 
@@ -583,13 +544,16 @@ function Index() {
           </Grid>
         </Grid>
 
-        {(prevData || isSubmitted) && <Grid item xs={12} md={12} xl={12} mt={2}>
+        <Grid container mb={2} spacing={2} xs={12} md={12} xl={12} mt={1} display="flex" justifyContent='flex-start' alignItems='center' style={{ width: "100%", height: "auto" }}>
+        {(prevData || isSubmitted) && 
+        <Grid item xs={12} md={12} xl={12} mt={2}>
           <MDBox>
             <AddTier prevData={prevData != undefined ? prevData : newData} tier={tier} />
           </MDBox>
         </Grid>}
 
-        {(prevData || isSubmitted) && <Grid item xs={12} md={12} xl={12} mt={2}>
+        {(prevData || isSubmitted) && 
+        <Grid item xs={12} md={12} xl={12} mt={2}>
           <MDBox>
             <Purpose prevData={prevData != undefined ? prevData : newData} />
           </MDBox>
@@ -618,6 +582,7 @@ function Index() {
             <Faq prevData={prevData != undefined ? prevData : newData} faq={tier} />
           </MDBox>
         </Grid>}
+        </Grid>
 
 
         {renderSuccessSB}

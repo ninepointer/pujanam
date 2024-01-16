@@ -10,15 +10,10 @@ import MDButton from '../../../components/MDButton';
 import {Link} from 'react-router-dom'
 import LiveCarousels from '../data/liveCarousels'
 import UpcomingCarousels from '../data/upcomingCarousels'
-import InfinityLiveCarousels from '../data/infinityLiveCarousels'
-import StoxHeroLiveCarousels from '../data/stoxHeroLiveCarousels'
-import InfinityUpcomingCarousels from '../data/infinityUpcomingCarousels'
-import StoxHeroUpcomingCarousels from '../data/stoxHeroUpcomingCarousels'
 import DraftCarousels from '../data/draftCarousels'
 import MDTypography from '../../../components/MDTypography';
 import PastCarousels from '../data/pastCarousals';
-// import TradingPortfolioCard from '../data/tradingPortfolioCard'
-// import InactivePortfolioCard from '../data/inactivePortfolioCard'
+
 
 //data
 // import UpcomingContest from '../data/UserContestCard'
@@ -36,18 +31,18 @@ export default function LabTabs() {
   };
 
   return (
-    <Box sx={{ width: '100%', typography: 'body1' }}>
-    <Box mb={1} mt={1} display="flex" justifyContent="right">
-    <MDButton 
-    variant="contained" 
+    <MDBox bgColor="light" color="light" mt={2} mb={1} p={1} borderRadius={10} minHeight='auto'>
+    <MDBox mb={1} display="flex" justifyContent="space-between">
+    <MDButton  
+    variant="outlined" 
     color="success" 
-    fontSize="small"
+    size="small"
     component={Link}
     to='/carouseldetails'
     >
         Create Carousel
     </MDButton>
-    </Box>
+    </MDBox>
       <TabContext value={value}>
         <Box sx={{ borderBottom: 1, borderColor: 'divider'}}>
           <TabList onChange={handleChange} aria-label="lab API tabs example">
@@ -58,7 +53,7 @@ export default function LabTabs() {
         </Box>
         <TabPanel value="1">
           {isLoading ? 
-          <MDBox display="flex" justifyContent="center" alignItems="center" mt={5} mb={5}>
+          <MDBox display="flex" justifyContent="center" alignItems="center" mt={2} mb={2}>
             <CircularProgress color="info" />
           </MDBox>
           : 
@@ -96,6 +91,6 @@ export default function LabTabs() {
           }
         </TabPanel>
       </TabContext>
-    </Box>
+    </MDBox>
   );
 }

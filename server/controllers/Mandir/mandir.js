@@ -12,6 +12,26 @@ AWS.config.update({
     region: process.env.AWS_REGION
 
 });
+
+exports.resizePhoto = (req, res, next) => {
+    if (!req.file) {
+        // no file uploaded, skip to next middleware
+        console.log('no file');
+        next();
+        return;
+    }
+    sharp(req.file.buffer).resize({ width: 786, height: 512 }).toBuffer()
+        .then((resizedImageBuffer) => {
+            req.file.buffer = resizedImageBuffer;
+            // console.log("Resized:",resizedImageBuffer)
+            next();
+        })
+        .catch((err) => {
+            console.error(err);
+            res.status(500).send({ message: "Error resizing photo" });
+        });
+};
+
 const s3 = new AWS.S3({
     accessKeyId: process.env.AWS_ACCESS_KEY_ID,
     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
@@ -169,7 +189,30 @@ exports.getActive = async (req, res) => {
     try {
         const activeMandir = await Mandir.find({ status: 'Active' })
         .populate('devi_devta', 'name');
-        ApiResponse.success(res, activeMandir);
+        const count = activeMandir?.length;
+        ApiResponse.success(res, activeMandir, count);
+    } catch (error) {
+        ApiResponse.error(res, 'Something went wrong', 500, error.message);
+    }
+};
+
+exports.getInactive = async (req, res) => {
+    try {
+        const inactiveMandir = await Mandir.find({ status: 'Inactive' })
+        .populate('devi_devta', 'name');
+        const count = inactiveMandir?.length;
+        ApiResponse.success(res, inactiveMandir, count);
+    } catch (error) {
+        ApiResponse.error(res, 'Something went wrong', 500, error.message);
+    }
+};
+
+exports.getDraft = async (req, res) => {
+    try {
+        const draftMandir = await Mandir.find({ status: 'Draft' })
+        .populate('devi_devta', 'name');
+        const count = draftMandir?.length;
+        ApiResponse.success(res, draftMandir, count);
     } catch (error) {
         ApiResponse.error(res, 'Something went wrong', 500, error.message);
     }

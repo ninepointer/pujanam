@@ -1,20 +1,18 @@
-
 import React, {useState, useEffect} from 'react'
 import Grid from "@mui/material/Grid";
 import axios from "axios";
 // Material Dashboard 2 React components
 import MDBox from "../../../components/MDBox";
-import MDAvatar from "../../../components/MDAvatar";
 import MDButton from "../../../components/MDButton";
 import MDTypography from "../../../components/MDTypography";
-import money from "../../../assets/images/money.png"
 import { Link, useLocation } from "react-router-dom";
 import moment from 'moment';
 import { apiUrl } from '../../../constants/constants';
 import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
+import { CardActionArea } from '@mui/material';
+import DefaultPanditImage from '../../../assets/images/defaultpanditimage.png'
+import MDAvatar from '../../../components/MDAvatar';
 
 const ActivePandit = ({type}) => {
 let [skip, setSkip] = useState(0);
@@ -114,35 +112,70 @@ const [data,setData] = useState([]);
       {data.length > 0 ?
         
           <MDBox>
-            <Grid container spacing={4} bgColor="light" display="flex" justifyContent="flex-start" alignItems='center'>
+            <Grid container spacing={2} bgColor="light" display="flex" justifyContent="flex-start" alignItems='center'>
               {data?.map((elem, index)=>{
 
                     return (
 
-                      <Grid key={elem?._id} item xs={12} md={4} lg={3} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{width: '100%',height: 'auto'}}>
+                      <Grid key={elem?._id} item xs={12} md={4} lg={4} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{width: '100%',height: 'auto'}}>
                       
+                          <Card sx={{ 
+                            minWidth: '100%', 
+                            cursor: 'pointer',
+                            transition: 'transform 0.3s cubic-bezier(0.25, 0.1, 0.25, 1), box-shadow 0.3s cubic-bezier(0.25, 0.1, 0.25, 1)',
+                            '&:hover': {
+                                transform: 'scale(1.025)',
+                                boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)', // Adjust the box shadow as needed
+                                }
+                            }} onClick={() => {}}
+                          >
 
-                      <Card sx={{minWidth:'100%',minHeight:360, maxHeight:360}}>
-                        <CardMedia
-                          sx={{ minHeight: 200, maxHeight:200 }}
-                          image={elem?.image?.url}
-                          title={elem?.pandit_name}
-                        />
-                        <CardContent sx={{ minHeight: 90, maxHeight:90}}>
-                          <MDTypography gutterBottom variant="h5" component="div">
-                            {elem?.pandit_name}
-                          </MDTypography>
-                          <MDTypography variant="body2" color="text.secondary">
-                            {limitStringWithEllipsis(elem?.description,45)}
-                          </MDTypography>
-                        </CardContent>
-                        <CardActions sx={{ minHeight: 50, maxHeight:50}}>
-                          <MDButton component={Link} to={{pathname:`/panditdetails`}} state={{ data: elem }} size="small">View Details</MDButton>
-                          {/* <MDButton component={Link} to={{pathname:`/poojadetails`}} state={{ data: elem }} size="small">Share</MDButton> */}
-                        </CardActions>
-                      </Card>
-                      
-                    
+                            <CardActionArea 
+                              component={Link}
+                              to={{
+                                pathname: `/panditdetails`,
+                              }}
+                              state={{data: elem}}>
+                              <Grid container lg={12} md={4} xs={12} display='flex' justifyContent='center' alignItems='center' >
+                                <Grid item xs={12} md={4} lg={4} display='flex' justifyContent='center' style={{ maxWidth: '100%', height: 'auto' }}>
+                                  <MDAvatar
+                                      src={elem?.photo?.url ? elem?.photo?.url : DefaultPanditImage}
+                                      alt={elem?.pandit_name}
+                                      size="lg"
+                                      sx={({ borders: { borderWidth }, palette: { white } }) => ({
+                                        border: `${borderWidth[2]} solid ${white.main}`,
+                                        cursor: "pointer",
+                                        position: "relative",
+                                        ml:2,
+
+                                        "&:hover, &:focus": {
+                                          zIndex: "10",
+                                        },
+                                      })}
+                                  />
+                                  {/* <img src={elem?.photo?.url ? elem?.photo?.url : DefaultPanditImage} style={{ maxWidth: '100%', height: 'auto', borderTopLeftRadius: 10, borderTopRightRadius: 10 }} /> */}
+                                </Grid>
+                                <Grid item xs={12} md={4} lg={8} display='flex' justifyContent='flex-start' style={{ maxWidth: '100%', height: 'auto' }}>
+                                <CardContent display='flex' justifyContent='flex-start' style={{ maxWidth: '100%', height: 'auto' }}>
+                                    <MDBox display='flex' justifyContent='flex-start' style={{ width: '100%'}}>
+                                        <MDTypography variant="h6" style={{ textAlign: 'center', fontFamily: 'Itim' }}>
+                                            {elem?.pandit_name}
+                                        </MDTypography>
+                                    </MDBox>
+                                    <MDBox display='flex' justifyContent='flex-start' style={{ maxWidth: '100%', height: 'auto' }}>
+                                        <MDTypography variant="caption" style={{ textAlign: 'justify', fontFamily: 'Itim' }}>
+                                            {elem?.address_details?.city}
+                                        </MDTypography>
+                                    </MDBox>
+                                    <MDBox mb={-1.5} display='flex' justifyContent='flex-start'>
+                                      <MDTypography variant="button" color='success' style={{ textAlign: 'center', fontFamily: 'Itim' }}>View Details</MDTypography>
+                                    </MDBox>
+                                </CardContent>
+                                </Grid>
+                              </Grid>
+                            </CardActionArea>
+                          </Card>
+
                       </Grid>   
                     )
               })}
