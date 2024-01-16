@@ -49,10 +49,10 @@ function Index() {
       city: prevData?.address_details?.city,
       state: prevData?.address_details?.state,
       country: prevData?.address_details?.country,
-      morning_opening_time: dayjs(new Date()).set('hour', 0).set('minute', 0).set('second', 0),
-      morning_closing_time: dayjs(new Date()).set('hour', 0).set('minute', 0).set('second', 0),
-      evening_opening_time: dayjs(new Date()).set('hour', 0).set('minute', 0).set('second', 0),
-      evening_closing_time: dayjs(new Date()).set('hour', 0).set('minute', 0).set('second', 0)
+      morning_opening_time: dayjs(prevData?.morning_opening_time) || dayjs(new Date()).set('hour', 0).set('minute', 0).set('second', 0),
+      morning_closing_time: dayjs(prevData?.morning_closing_time) || dayjs(new Date()).set('hour', 0).set('minute', 0).set('second', 0),
+      evening_opening_time: dayjs(prevData?.evening_opening_time) || dayjs(new Date()).set('hour', 0).set('minute', 0).set('second', 0),
+      evening_closing_time: dayjs(prevData?.evening_closing_time) || dayjs(new Date()).set('hour', 0).set('minute', 0).set('second', 0)
   
     }
      || {
