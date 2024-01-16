@@ -2,13 +2,13 @@ import React, {useState, useContext, useEffect} from "react"
 import { useMediaQuery } from '@mui/material'
 import theme from '../../HomePage/utils/theme/index'; 
 import { ThemeProvider } from 'styled-components';
-import ReactGA from "react-ga"
+// import ReactGA from "react-ga"
 import axios from "axios";
 import playstore from '../../../assets/images/playstore.png'
 import Navbar from '../../HomePage/components/Navbars/Navbar';
 import background from '../../../assets/images/background.jpg'
 import logo from '../../../assets/images/logo.png'
-import {Stack} from "@mui/material";
+// import {Stack} from "@mui/material";
 // import Autocomplete from 'react-google-autocomplete';
 
 
@@ -21,14 +21,14 @@ import Grid from "@mui/material/Grid";
 // Material Dashboard 2 React components
 import MDBox from "../../../components/MDBox";
 import MDTypography from "../../../components/MDTypography";
-import MDButton from "../../../components/MDButton";
+// import MDButton from "../../../components/MDButton";
 
 
 // Images
-import { userContext } from '../../../AuthContext';
+// import { userContext } from '../../../AuthContext';
 import Footer from "../components/Footer";
 import { apiUrl } from '../../../constants/constants';
-import { CgOverflow } from "react-icons/cg";
+// import { CgOverflow } from "react-icons/cg";
 import HomePageMandirCard from './homePageMandirCards'
 import HomePagePoojaServicesCard from './homePagePoojaServicesCards'
 import HomePagePoojaSamagriCard from './homePagePoojaSamagriCards'
@@ -40,27 +40,45 @@ import Dhams from './dhams'
 import PopularMandirNearMe from './popularmandirNearMe'
 
 function Cover(props) {
-  const navigate = useNavigate();
-  const location = useLocation();
-  const [count, setCount] = useState(0);
+  // const navigate = useNavigate();
+  // const location = useLocation();
+  // const [count, setCount] = useState(0);
   const [isLoading,setIsLoading] = useState(false);
   const [data,setDham] = useState([]);
   const [dham,setPopular] = useState([]);
   const [popular,setData] = useState([]);
   const [pooja,setPooja] = useState([]);
   const [scrollPosition, setScrollPosition] = useState(0);
-  // const GOOGLE_MAPS_API_KEY = 'AIzaSyC3aviU6KHXAjoSnxcw6qbOhjnFctbxPkE';
-  const handlePlaceSelected = (place) => {
-    // Handle the selected place data (e.g., extract latitude and longitude)
-    console.log('Selected Place:', place);
-  };
-  const [center, setCenter] = useState({ lat: 0, lng: 0 });
-  const [markerPosition, setMarkerPosition] = useState(null);
-  const [value, setValue] = React.useState(null);
-  const [inputValue, setInputValue] = React.useState('');
-  const [options, setOptions] = React.useState([]);
+  // const [center, setCenter] = useState({ lat: 0, lng: 0 });
+  // const [markerPosition, setMarkerPosition] = useState(null);
+  // const [value, setValue] = React.useState(null);
+  // const [inputValue, setInputValue] = React.useState('');
+  // const [options, setOptions] = React.useState([]);
 
 
+  const [locationData, setLocation] = useState(null);
+
+  useEffect(() => {
+    // Check if geolocation is supported
+    console.log("get location above")
+    if (navigator.geolocation) {
+      console.log("get location in if", navigator.geolocation)
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          console.log("get location current", latitude, longitude)
+          const { latitude, longitude } = position.coords;
+          setLocation({ latitude, longitude });
+        },
+        (error) => {
+          console.error('Error getting location:', error.message);
+        }
+      );
+    } else {
+      console.error('Geolocation is not supported by this browser.');
+    }
+  }, []);
+
+  console.log("locationData", locationData)
   useEffect(()=>{
     let call1 = axios.get(`${apiUrl}usermandir/home`,{
                 withCredentials: false,
