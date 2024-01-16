@@ -10,6 +10,7 @@ const Pandit = new mongoose.Schema({
         type: String,
         required: true,
     },
+    photo: {url:String,name:String},
     email: {
         type: String,
         required: true,

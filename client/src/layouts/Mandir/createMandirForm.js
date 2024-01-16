@@ -670,6 +670,7 @@ function Index() {
                 >
                   <MenuItem value="Active">Active</MenuItem>
                   <MenuItem value="Inactive">Inactive</MenuItem>
+                  <MenuItem value="Draft">Draft</MenuItem>
                 </Select>
               </FormControl>
             </Grid>

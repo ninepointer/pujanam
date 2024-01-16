@@ -25,7 +25,7 @@ const [isLoading,setIsLoading] = useState(false);
 const [data,setData] = useState([]);
 
   useEffect(()=>{
-    let call1 = axios.get(`${apiUrl}pooja/active/?skip=${skip}&limit=${limitSetting}`,{
+    let call1 = axios.get(`${apiUrl}pooja/draft/?skip=${skip}&limit=${limitSetting}`,{
                 withCredentials: true,
                 headers: {
                     Accept: "application/json",
@@ -54,7 +54,7 @@ const [data,setData] = useState([]);
     setSkip(prev => prev-limitSetting);
     setData([]);
     setIsLoading(true)
-    axios.get(`${apiUrl}pooja/active/?skip=${skip}&limit=${limitSetting}`,{
+    axios.get(`${apiUrl}pooja/draft/?skip=${skip}&limit=${limitSetting}`,{
         withCredentials: true,
         headers: {
             Accept: "application/json",
@@ -81,7 +81,7 @@ const [data,setData] = useState([]);
     setSkip(prev => prev+limitSetting);
     setData([]);
     setIsLoading(true)
-    axios.get(`${apiUrl}pooja/active/?skip=${skip}&limit=${limitSetting}`,{
+    axios.get(`${apiUrl}pooja/draft/?skip=${skip}&limit=${limitSetting}`,{
         withCredentials: true,
         headers: {
             Accept: "application/json",
@@ -181,7 +181,7 @@ const [data,setData] = useState([]);
           :
          <Grid container spacing={1} xs={12} md={6} lg={12}>
           <Grid item mt={2} xs={6} md={3} lg={12} display="flex" justifyContent="center">
-            <MDTypography color="light">No pooja(s) in published state</MDTypography>
+            <MDTypography color="success">No pooja(s) in draft state</MDTypography>
           </Grid>
          </Grid>
          } 

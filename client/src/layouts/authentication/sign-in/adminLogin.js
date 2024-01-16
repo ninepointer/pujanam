@@ -342,7 +342,7 @@ function AdminLogin() {
           textAlign="center"
         >
           <MDTypography variant="h4" fontWeight="medium" color="white" mt={1}>
-            Welcome to StoxHero!
+            Welcome to punyam!
           </MDTypography>
           <MDTypography variant="h4" fontWeight="medium" color="white" mt={1}>
             Sign In

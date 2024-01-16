@@ -122,13 +122,6 @@ function Cover(props) {
     const newTab = window.open(`/pooja/${elem?.slug}`, '_blank');
     // await fetchDeviceDetail(elem?._id);
   };
-
-  function limitStringWithEllipsis(inputString, maxLength) {
-    if (inputString.length > maxLength) {
-      return inputString.slice(0, maxLength) + '...';
-    }
-    return inputString;
-  }
   
   useEffect(() => {
     const handleScroll = () => {

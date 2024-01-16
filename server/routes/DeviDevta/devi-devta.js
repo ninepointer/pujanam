@@ -14,12 +14,12 @@ const upload = multer({
 });
 
 router.use("/user", user)
-router.post('/', Authenticate, restrictTo('Admin', 'SuperAdmin'),  upload.single("devImage"), deviDevtaController.create);
+router.post('/', Authenticate, restrictTo('Admin', 'SuperAdmin'),  upload.single("devImage"), deviDevtaController.resizePhoto, deviDevtaController.create);
 router.get('/', Authenticate, restrictTo('Admin', 'SuperAdmin'), deviDevtaController.getAllDevta);
 router.get('/active', Authenticate, restrictTo('Admin', 'SuperAdmin'), deviDevtaController.getActiveDevta);
 router.get('/inactive', Authenticate, restrictTo('Admin', 'SuperAdmin'), deviDevtaController.getInActiveDevta);
 router.get('/:id', Authenticate, restrictTo('Admin', 'SuperAdmin'), deviDevtaController.getDevtaById);
-router.patch('/:id', Authenticate, restrictTo('Admin', 'SuperAdmin'),  upload.single("devImage"), deviDevtaController.edit);
+router.patch('/:id', Authenticate, restrictTo('Admin', 'SuperAdmin'),  upload.single("devImage"), deviDevtaController.resizePhoto, deviDevtaController.edit);
 router.patch('/othername/:id', Authenticate, restrictTo('Admin', 'SuperAdmin'), deviDevtaController.addOtherDevta);
 router.patch('/associate/:id', Authenticate, restrictTo('Admin', 'SuperAdmin'), deviDevtaController.addAssociateDevta);
 router.patch('/geography/:id', Authenticate, restrictTo('Admin', 'SuperAdmin'), deviDevtaController.addGeography);

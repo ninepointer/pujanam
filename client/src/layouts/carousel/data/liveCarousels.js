@@ -122,9 +122,9 @@ function Delete(id){
 }
 
   return (
-    <MDBox bgColor="dark" color="light" mb={1} borderRadius={10} minWidth='100%' minHeight='auto'>
-      <MDTypography fontSize={15} color='light' p={1} sx={{textAlign:'center'}}>Live - Carousels</MDTypography>
-      <Grid container spacing={2} p={2}>
+    <MDBox borderRadius={10} minWidth='100%' minHeight='auto'>
+      {/* <MDTypography fontSize={15} color='light' p={1} sx={{textAlign:'center'}}>Live - Carousels</MDTypography> */}
+      <Grid container spacing={2}>
         {!isLoading ?
              carouselData?.map((elem, index)=>{    
                 return(    

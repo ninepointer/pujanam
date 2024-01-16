@@ -16,12 +16,14 @@ const upload = multer({
 
 router.use('/user', user)
 
-router.post('/', Authenticate, restrictTo('Admin', 'SuperAdmin'),  upload.single("poojaImage"), poojaController.createPooja);
+router.post('/', Authenticate, restrictTo('Admin', 'SuperAdmin'),  upload.single("poojaImage"), poojaController.resizePhoto, poojaController.createPooja);
 router.get('/', Authenticate, restrictTo('Admin', 'SuperAdmin'), poojaController.getAllPoojas);
 router.get('/home', poojaController.getHomePoojas);
 router.get('/active', Authenticate, restrictTo('Admin', 'SuperAdmin'), poojaController.getActivePoojas);
+router.get('/unpublished', Authenticate, restrictTo('Admin', 'SuperAdmin'), poojaController.getUnpublishedPoojas);
+router.get('/draft', Authenticate, restrictTo('Admin', 'SuperAdmin'), poojaController.getDraftPoojas);
 router.get('/:id', Authenticate, restrictTo('Admin', 'SuperAdmin'), poojaController.getPoojaById);
-router.patch('/:id', Authenticate, restrictTo('Admin', 'SuperAdmin'),  upload.single("poojaImage"), poojaController.editPooja);
+router.patch('/:id', Authenticate, restrictTo('Admin', 'SuperAdmin'),  upload.single("poojaImage"), poojaController.resizePhoto, poojaController.editPooja);
 router.patch('/purpose/:id', Authenticate, restrictTo('Admin', 'SuperAdmin'), poojaController.addPurpose);
 router.patch('/include/:id', Authenticate, restrictTo('Admin', 'SuperAdmin'), poojaController.addPoojaInclude);
 

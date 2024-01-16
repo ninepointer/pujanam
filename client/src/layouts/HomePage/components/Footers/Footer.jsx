@@ -106,7 +106,7 @@ const Footer = () => {
               </OutlinedButton>
               </a>
               <Typography ml={1} variant="body2" color="rgba(255, 255, 255, 0.6)" marginBottom={2}>
-                <strong>Stoxhero Games Technologies Private Limited<br/></strong>
+                <strong>punyam<br/></strong>
                 S-77, NRI Colony, Sec-24, Pratap Nagar, Sanganer, Pratap Nagar Housing Board, Jaipur-302033
               </Typography>
 
@@ -125,19 +125,19 @@ const Footer = () => {
                 ))} */}
 
                 <IconButton>
-                <a href="https://www.linkedin.com/company/stoxhero" target="_blank" ><LinkedInIcon color="white"/></a>
+                <a href="https://www.linkedin.com/company/punyam" target="_blank" ><LinkedInIcon color="white"/></a>
                 </IconButton>
 
                 <IconButton>
-                <a href="https://instagram.com/stoxhero_official?igshid=NTc4MTlwNjQ2YQ==" target="_blank" ><InstagramIcon color="white"/></a>
+                <a href="https://instagram.com/punyam" target="_blank" ><InstagramIcon color="white"/></a>
                 </IconButton>
 
                 <IconButton>
-                 <a href="https://twitter.com/" target="_blank"><TwitterIcon color="white"/></a>
+                 <a href="https://twitter.com/punyam" target="_blank"><TwitterIcon color="white"/></a>
                  </IconButton>
 
                 <IconButton>
-                <a href="https://www.facebook.com/profile.php?id=100091564856087" target="_blank"><FacebookIcon color="white"/></a>
+                <a href="https://www.facebook.com/punyam" target="_blank"><FacebookIcon color="white"/></a>
                 </IconButton>
 
 
@@ -156,11 +156,11 @@ const Footer = () => {
           sx={{ pb: 6 }}
         >
           <Typography variant="body2" color="rgba(255, 255, 255, 0.6)">
-          © 2023, STOXHERO GAMES TECHNOLOGIES PRIVATE LIMITED.All rights reserved.
+          © 2023, Punyam. All rights reserved.
           </Typography >
           <Typography variant="body2" color="rgba(255, 255, 255, 0.6)">Made with ❤️
 by
- StoxHero 
+ Punyam 
 for a better trading experience.</Typography>
 
           {/* <Typography variant="body2" color="rgba(255, 255, 255, 0.6)">
