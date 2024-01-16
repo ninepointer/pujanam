@@ -56,7 +56,10 @@ function Cover(props) {
   // const [options, setOptions] = React.useState([]);
 
 
-  const [locationData, setLocation] = useState(null);
+  const [currentLocation, setCurrentLocation] = useState({
+    latitude: 0,
+    longitude: 0
+  });
 
   useEffect(() => {
     // Check if geolocation is supported
@@ -67,7 +70,7 @@ function Cover(props) {
         (position) => {
           console.log("get location current", latitude, longitude)
           const { latitude, longitude } = position.coords;
-          setLocation({ latitude, longitude });
+          setCurrentLocation({ latitude, longitude });
         },
         (error) => {
           console.error('Error getting location:', error.message);
@@ -78,7 +81,7 @@ function Cover(props) {
     }
   }, []);
 
-  console.log("locationData", locationData)
+  console.log("currentLocation", currentLocation)
   useEffect(()=>{
     let call1 = axios.get(`${apiUrl}usermandir/home`,{
                 withCredentials: false,
@@ -134,12 +137,6 @@ function Cover(props) {
     // Open google.com in a new tab
     window.open('https://play.google.com/store/apps/details?id=com.stoxhero.app', '_blank');
   };
-
-  const handleOpenNewTab = async (elem) => {
-    
-    const newTab = window.open(`/pooja/${elem?.slug}`, '_blank');
-    // await fetchDeviceDetail(elem?._id);
-  };
   
   useEffect(() => {
     const handleScroll = () => {
@@ -191,7 +188,7 @@ function Cover(props) {
           </Grid>
           <Grid item xs={12} md={12} lg={12} display='flex' justifyContent='center' alignItems='center' style={{overflow: 'visible'}}>
             <MDBox mb={2} display='flex' justifyContent='center' alignItems='center' style={{overflow: 'visible'}}>
-              <MapSearch />
+              <MapSearch currentLocation={currentLocation} />
             </MDBox>
           </Grid>
           <Grid item xs={12} md={12} lg={12} display='flex' justifyContent='center' alignItems='center'>
