@@ -54,6 +54,7 @@ async function singleProcess() {
     app.use('/api/v1/carousels', require("./routes/carousel/carouselRoutes"));
     app.use('/api/v1/mandir', require("./routes/Mandir/mandir"));
     app.use('/api/v1/usermandir', require("./routes/Mandir/userMandir"));
+    app.use('/api/v1/location', require("./routes/Location/locationRoutes"));
 
     app.use('/api/v1/dailycontest', require("./routes/DailyContest/dailyContestRoutes"))
     app.use('/api/v1/user', require("./routes/user/userRoutes"));
