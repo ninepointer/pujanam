@@ -489,7 +489,7 @@ exports.varifyOtp = async (req, res) => {
     })
   }
   //removed email otp check
-  if (user.mobile_otp != mobile_otp) {
+  if ( (user.mobile_otp != mobile_otp)) {
     return res.status(400).json({
       status: 'error',
       message: "OTPs don't match, please try again!"

@@ -162,6 +162,9 @@ exports.editPandit = async (req, res) => {
         const updatedPandit = await Pandit.findByIdAndUpdate(req.params.id, req.body, { new: true });
         const image = req.file;
 
+        if (!updatedPandit) {
+            return ApiResponse.notFound(res, 'Pandit not found');
+        }
         let photo;
 
         if (image) {
@@ -172,9 +175,7 @@ exports.editPandit = async (req, res) => {
         update.last_modified_by = req?.user?._id;
         update.last_modified_on = new Date();
 
-        if (!updatedPandit) {
-            return ApiResponse.notFound(res, 'Pandit not found');
-        }
+        await updatedPandit.save({validateBeforeSave: true})
         ApiResponse.success(res, updatedPandit, 'Pandit updated successfully');
     } catch (error) {
         ApiResponse.error(res,'Something went wrong', 500, error.message);
