@@ -16,6 +16,8 @@ router.get('/bysearch',  mandirController.getBySearch);
 
 router.patch('/count/:id', Authenticate,  mandirController.addToFavourite);
 router.patch('/addfavourite/:id', Authenticate,  mandirController.addToFavourite);
+router.patch('/unfavourite/:id', Authenticate,  mandirController.unfavouriteTemple);
+
 router.patch('/sharedby/:id', Authenticate,  mandirController.sharedBy);
 router.patch('/addCount/:id', Authenticate,  mandirController.viewCount);
 

@@ -1419,3 +1419,22 @@ exports.editAddress = async (req, res) => {
     ApiResponse.error(res, 'Something went wrong', 500, error.message);
   }
 }
+
+exports.saveCurrentLocation = async (req, res) => {
+  try {
+    const { latitude, longitude } = req.body;
+    const userLocation = await UserDetail.findOneAndUpdate({ _id: new ObjectId(req.user._id) }, {
+      $set: {
+        current_location: {
+          latitude: latitude,
+          longitude: longitude
+        }
+      }
+    }, {new: true}).select('current_location');
+
+    ApiResponse.success(res, userLocation); 
+  } catch (error) {
+    console.log(error)
+    ApiResponse.error(res, 'Something went wrong', 500, error.message);
+  }
+}

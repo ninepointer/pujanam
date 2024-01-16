@@ -142,6 +142,21 @@ exports.sharedBy = async (req, res) => {
     }
 };
 
+exports.unfavouriteTemple = async (req, res) => {
+    const {id} = req.params;
+    try {
+        const mandir = await Mandir.findOneAndUpdate({ _id: new ObjectId(id) }, {
+            $pull: {
+                favourite: req.user._id
+            }
+        })
+        .select('favourite');
+        ApiResponse.success(res, mandir);
+    } catch (error) {
+        ApiResponse.error(res, 'Something went wrong', 500, error.message);
+    }
+};
+
 exports.getByDistance = async (req, res) => {
     const {lat, long, search} = req.query;
     const matchStage = search ? {
