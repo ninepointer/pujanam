@@ -39,9 +39,11 @@ import MapSearch from "./mapSearch";
 import Dhams from './dhams'
 import PopularMandirNearMe from './popularmandirNearMe'
 import {settingContext} from '../../../settingContext';
+import {LocationContext} from "../../../locationContext";
 
 
 function Cover() {
+  const locationContextData = useContext(LocationContext)
   const [isLoading,setIsLoading] = useState(false);
   const [data,setData] = useState([]);
   const [dham,setDham] = useState([]);
@@ -49,29 +51,12 @@ function Cover() {
   const [pooja,setPooja] = useState([]);
   const [scrollPosition, setScrollPosition] = useState(0);
 
-  const [currentLocation, setCurrentLocation] = useState({
-    latitude: 0,
-    longitude: 0
+  const currentLocation = ({
+    latitude: locationContextData.locationState.latitude,
+    longitude: locationContextData.locationState.longitude
   });
 
   const setting = useContext(settingContext)
-
-  useEffect(() => {
-    // Check if geolocation is supported
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const { latitude, longitude } = position.coords;
-          setCurrentLocation({ latitude, longitude });
-        },
-        (error) => {
-          console.error('Error getting location:', error.message);
-        }
-      );
-    } else {
-      console.error('Geolocation is not supported by this browser.');
-    }
-  }, []);
 
   useEffect(()=>{
     let call1 = axios.get(`${apiUrl}mandir/user/home?lat=${currentLocation.latitude}&long=${currentLocation.longitude}`,{
@@ -120,7 +105,7 @@ function Cover() {
     .catch((error) => {
       // Handle errors here
     });
-  },[currentLocation])
+  },[locationContextData.locationState])
   
   const isMobile = useMediaQuery(theme.breakpoints.down("lg"))
 
@@ -179,7 +164,7 @@ function Cover() {
           </Grid>
           <Grid item xs={12} md={12} lg={12} display='flex' justifyContent='center' alignItems='center' style={{overflow: 'visible'}}>
             <MDBox mb={2} display='flex' justifyContent='center' alignItems='center' style={{overflow: 'visible'}}>
-              <MapSearch currentLocation={currentLocation} />
+              <MapSearch  />
             </MDBox>
           </Grid>
           <Grid item xs={12} md={12} lg={12} display='flex' justifyContent='center' alignItems='center'>

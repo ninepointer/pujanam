@@ -120,6 +120,7 @@ exports.edit = (async (req, res, next) => {
         // const { title } = req.body;
         const update = req.body;
 
+        // console.log("update", update)
         update.address_details = {
             location: {
                 type: "Point",

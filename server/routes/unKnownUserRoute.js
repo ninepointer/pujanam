@@ -4,7 +4,7 @@ const router = express.Router({mergeParams: true});
 const Controller = require('../controllers/unKnownUserController');
 
 
-router.post('/mandir', Authenticate,  Controller.createUnknownMandir);
-router.post('/pooja', Authenticate,  Controller.createUnknownPooja);
+router.post('/mandir',  Controller.createUnknownMandir);
+router.post('/pooja',  Controller.createUnknownPooja);
 
 module.exports=router;

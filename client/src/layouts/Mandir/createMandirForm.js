@@ -41,7 +41,7 @@ function Index() {
   const [imagesPreviewUrl, setImagesPreviewUrl] = useState(null);
   const [imageData, setImageData] = useState(prevData || null);
   const [coverImage, setTitleImage] = useState(null);
-  const [editingBlogData,setEditingBlogData] = useState(prevData ? false : true)
+  // const [editing,setEditingBlogData] = useState(prevData ? false : true)
 
   const [formstate, setFormState] = useState(
     {
@@ -147,9 +147,9 @@ function Index() {
         }
       }
 
-      if(value){
-        formData.append("desciption", value);
-      }
+      // if(value){
+      //   formData.append("description", value);
+      // }
 
       for(let elem in formstate){
         if(elem === "devi_devta"){
@@ -198,9 +198,10 @@ function Index() {
         }
       }
 
-      if(value){
-        formData.append("desciption", value);
-      }
+      // console.log("value", value)
+      // if(value){
+      //   formData.append("description", value);
+      // }
 
       for(let elem in formstate){
         if(elem === "devi_devta"){
@@ -346,7 +347,7 @@ function Index() {
 
   const config = React.useMemo(
     () => ({
-      disabled: editingBlogData ? false : true,
+      disabled: editing ? false : true,
       readonly: false,
       enableDragAndDropFileToEditor: false,
       toolbarAdaptive: false,
@@ -355,8 +356,9 @@ function Index() {
       useSearch: false,
       hidePoweredByJodit: true,
       placeholder: 'Write description...',
+      // autofocus: false,
     }),
-    [editingBlogData],
+    [editing],
   )
 
   return (
@@ -885,8 +887,13 @@ function Index() {
           <JoditEditor
             ref={editor}
             config={config}
-            value={value}
-            onChange={newContent => setValue(newContent)}
+            value={formstate.description}
+            onChange={(e) => {
+              setFormState(prevState => ({
+                ...prevState,
+                description: e
+              }))
+            }}
             disabled={true}
             style={{ height: "100%" }}
           />
@@ -901,7 +908,7 @@ function Index() {
             size="small"
             sx={{mr:1, ml:1}} 
             disabled={isfileSizeExceed}
-            onClick={(prevData && !editing) ? ()=>{setEditing(true); setEditingBlogData(true)} : (prevData && editing) ? edit : handleUpload}
+            onClick={(prevData && !editing) ? ()=>{setEditing(true)} : (prevData && editing) ? edit : handleUpload}
           >
             {(prevData && !editing) ? "Edit" : (prevData && editing) ? "Save" : "Next"}
           </MDButton>

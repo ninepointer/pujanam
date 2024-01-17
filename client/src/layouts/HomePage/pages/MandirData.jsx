@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react'
+import React, {useEffect, useState, useContext} from 'react'
 import axios from "axios";
 import {apiUrl} from "../../../constants/constants.js"
 import MDBox from '../../../components/MDBox';
@@ -22,15 +22,49 @@ import { IoMoonOutline } from "react-icons/io5";
 import { RxAccessibility } from "react-icons/rx";
 import { GiPrayer } from "react-icons/gi";
 import { BsPersonCircle } from "react-icons/bs";
+import getInfo from './unknownUserIPV4Info.js';
+import {LocationContext} from "../../../locationContext";
 
-export default function BlogCard() {
+export default function MandirData() {
   const [mandirData, setMandirData] = useState();
   const location = useLocation();
   const [isLoading, setIsLoading] = useState(true);
+  const locationContextData = useContext(LocationContext)
 
-  // console.log("location", location, location?.pathname?.split("/"))
+  // console.log("locationContextData", locationContextData.locationState)
+  useEffect(()=>{
+    if(mandirData?._id){
+      storeUnknownUserInfo();
+    }
+    
+  }, [mandirData])
+
+  async function storeUnknownUserInfo(){
+    const data = await getInfo();
+
+    const { ip, country, isMobile } = data;
+
+    const res = await fetch(`${apiUrl}unknown/mandir`, {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "content-type": "application/json",
+        "Access-Control-Allow-Credentials": true
+      },
+      body: JSON.stringify({
+        ip, country, is_mobile: isMobile, mandirId: mandirData?._id, 
+        address: locationContextData.locationState.address,
+        longitude: locationContextData.locationState.longitude,
+        latitude: locationContextData.locationState.latitude
+      })
+    });
+
+    const getData = await res.json();
+    console.log(getData);
+  }
+
   useEffect(() => {
-    let call1 = axios.get(`${apiUrl}usermandir/bytitle/${location?.pathname?.split("/")[2]}`, {
+    let call1 = axios.get(`${apiUrl}mandir/user/byslug/${location?.pathname?.split("/")[2]}`, {
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",

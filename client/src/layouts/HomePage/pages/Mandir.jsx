@@ -16,34 +16,37 @@ import MDTypography from '../../../components/MDTypography';
 import {Typography, CardActionArea, CardContent, Card, Divider, CircularProgress} from '@mui/material';
 import MandirCard from './MandirCard'
 import { PowerInput } from '@mui/icons-material';
+import {LocationContext} from "../../../locationContext";
 
 
 const LinkButton = ({ children, ...props }) => (
-    <Stack
-      direction="row"
-      alignItems="center"
-      spacing={0.2}
-      sx={{
-        cursor: "pointer",
-        color: "#315c45",
-        "&:hover": { color: '#65BA0D'},
-      }}
-      {...props}
-    >
-      {children}
-    </Stack>
-  );
+  <Stack
+    direction="row"
+    alignItems="center"
+    spacing={0.2}
+    sx={{
+      cursor: "pointer",
+      color: "#315c45",
+      "&:hover": { color: '#65BA0D' },
+    }}
+    {...props}
+  >
+    {children}
+  </Stack>
+);
 
 const About = () => {
-    console.log(theme);
     const [scrollPosition, setScrollPosition] = useState(0);
     const [data,setData] = useState([]);
     const [dham,setDham] = useState([]);
     const [popular,setPopular] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
-
+    const locationContextData = useContext(LocationContext);
+    const lat = locationContextData.locationState.latitude;
+    const long = locationContextData.locationState.longitude;
+  
     useEffect(()=>{
-        let call1 = axios.get(`${apiUrl}usermandir/allhome`,{
+        let call1 = axios.get(`${apiUrl}mandir/user/allhome?lat=${lat}&long=${long}`,{
                     withCredentials: false,
                     headers: {
                         Accept: "application/json",
@@ -51,7 +54,7 @@ const About = () => {
                         "Access-Control-Allow-Credentials": true
                       },
                     })
-        let call2 = axios.get(`${apiUrl}usermandir/homedham`,{
+        let call2 = axios.get(`${apiUrl}mandir/user/homedham?lat=${lat}&long=${long}`,{
           withCredentials: false,
           headers: {
               Accept: "application/json",
@@ -59,7 +62,7 @@ const About = () => {
               "Access-Control-Allow-Credentials": true
             },
           })
-        let call3 = axios.get(`${apiUrl}usermandir/allhomepopular`,{
+        let call3 = axios.get(`${apiUrl}mandir/user/allhomepopular?lat=${lat}&long=${long}`,{
           withCredentials: false,
           headers: {
               Accept: "application/json",
@@ -80,7 +83,7 @@ const About = () => {
         .catch((error) => {
           // Handle errors here
         });
-      },[])
+      },[locationContextData.locationState])
 
     useEffect(()=>{
         ReactGA.pageview(window.location.pathname)
