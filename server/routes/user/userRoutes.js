@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router({mergeParams: true});
 const {getUsers, changePassword, editUser, deactivateUser, 
     getdeactivateUser, checkUserExist, addAddress,
-    removeAddress, editAddress
+    removeAddress, editAddress, saveCurrentLocation
 } = require('../../controllers/userController');
 
 const Authenticate = require('../../authentication/authentication');
@@ -18,6 +18,8 @@ router.route('/').patch(Authenticate, restrictTo('Admin', 'SuperAdmin'), editUse
 router.route('/deactivate').post(Authenticate, restrictTo('Admin', 'SuperAdmin'), deactivateUser).get(Authenticate, restrictTo('Admin', 'SuperAdmin'), getdeactivateUser)
 router.route('/searchuser').get(Authenticate, restrictTo('Admin', 'SuperAdmin'), getUsers);
 router.route('/address').patch(Authenticate, addAddress);
+router.route('/currentlocation').patch(Authenticate, saveCurrentLocation);
+
 router.route('/removeaddress/:id').patch(Authenticate, removeAddress);
 router.route('/address/:id').patch(Authenticate, editAddress);
 

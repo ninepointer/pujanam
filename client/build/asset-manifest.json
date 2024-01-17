@@ -1,6 +1,6 @@
 {
   "files": {
-    "main.js": "/static/js/main.e6bded0d.js",
+    "main.js": "/static/js/main.04864fd4.js",
     "static/media/bgBanner1.jpg": "/static/media/bgBanner1.c9ad6246a3bebeb04615.jpg",
     "static/media/main-bg-3.png": "/static/media/main-bg-3.c46dd2d7751431a8e006.png",
     "static/media/trading.jpg": "/static/media/trading.37a53048ea613a761226.jpg",
@@ -30,14 +30,17 @@
     "static/media/mandirs.jpg": "/static/media/mandirs.8330b0244a277ccf5339.jpg",
     "static/media/poojawaste.jpg": "/static/media/poojawaste.15cb30c919d32d8b1f3e.jpg",
     "static/media/pooja.jpg": "/static/media/pooja.7918d22b9f49788ea45b.jpg",
+    "static/media/defaultpanditimage.png": "/static/media/defaultpanditimage.a9e0b0e8eba31ccefa9b.png",
     "static/media/main-bg-2_1.webp": "/static/media/main-bg-2_1.badcdca57b48fc341ba7.webp",
     "static/media/purse.png": "/static/media/purse.3bdcf4948b4673ae0853.png",
     "static/media/about4.png": "/static/media/about4.dba46fdc20acf86d2a4f.png",
     "static/media/discord.webp": "/static/media/discord.941e3603547494c02f75.webp",
     "static/media/reddit.webp": "/static/media/reddit.157d61434c78a75c0ead.webp",
     "static/media/twitter.webp": "/static/media/twitter.6f157b8030dd5b66a747.webp",
+    "static/media/defaultcarousel.png": "/static/media/defaultcarousel.518a4bf0478a1dcea4ca.png",
     "static/media/default-profile.png": "/static/media/default-profile.04fa960999505dcd5a7e.png",
     "static/media/logo.png": "/static/media/logo.9d1a7dd6f196d4acf1c5.png",
+    "static/media/defaultpoojaupload.png": "/static/media/defaultpoojaupload.06cf1d199877402a7c98.png",
     "static/media/galaxy-digital.svg": "/static/media/galaxy-digital.7099e053d7e9f5d190abc2e7ea475d3f.svg",
     "static/media/dragonfly-capital.svg": "/static/media/dragonfly-capital.e7d4f58586eda1155dc208adf24b0071.svg",
     "static/media/about3.webp": "/static/media/about3.80a61c124263d29b23e9.webp",
@@ -72,9 +75,9 @@
     "static/media/pantera.svg": "/static/media/pantera.afc41d6669aa442f2a3b0167df2de4fc.svg",
     "index.html": "/index.html",
     "static/media/mew.svg": "/static/media/mew.abd579786274219a78079f023ed7b335.svg",
-    "main.e6bded0d.js.map": "/static/js/main.e6bded0d.js.map"
+    "main.04864fd4.js.map": "/static/js/main.04864fd4.js.map"
   },
   "entrypoints": [
-    "static/js/main.e6bded0d.js"
+    "static/js/main.04864fd4.js"
   ]
 }

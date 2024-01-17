@@ -32,22 +32,18 @@ const Mandir = new mongoose.Schema({
     morning_opening_time: {
         type: Date,
         required: true,
-        get: (val) => moment(val).format("HH:mm"),
     },
     morning_closing_time: {
         type: Date,
         required: true,
-        get: (val) => moment(val).format("HH:mm"),
     },
     evening_opening_time: {
         type: Date,
         required: true,
-        get: (val) => moment(val).format("HH:mm"),
     },
     evening_closing_time: {
         type: Date,
         required: true,
-        get: (val) => moment(val).format("HH:mm"),
     },
     devi_devta: {
         type: Schema.Types.ObjectId,

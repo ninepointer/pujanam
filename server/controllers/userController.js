@@ -489,7 +489,7 @@ exports.varifyOtp = async (req, res) => {
     })
   }
   //removed email otp check
-  if (user.mobile_otp != mobile_otp) {
+  if ( (user.mobile_otp != mobile_otp)) {
     return res.status(400).json({
       status: 'error',
       message: "OTPs don't match, please try again!"
@@ -1416,6 +1416,25 @@ exports.editAddress = async (req, res) => {
       }
     }
   } catch (error) {
+    ApiResponse.error(res, 'Something went wrong', 500, error.message);
+  }
+}
+
+exports.saveCurrentLocation = async (req, res) => {
+  try {
+    const { latitude, longitude } = req.body;
+    const userLocation = await UserDetail.findOneAndUpdate({ _id: new ObjectId(req.user._id) }, {
+      $set: {
+        current_location: {
+          latitude: latitude,
+          longitude: longitude
+        }
+      }
+    }, {new: true}).select('current_location');
+
+    ApiResponse.success(res, userLocation); 
+  } catch (error) {
+    console.log(error)
     ApiResponse.error(res, 'Something went wrong', 500, error.message);
   }
 }

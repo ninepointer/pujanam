@@ -158,24 +158,26 @@ exports.getPanditById = async (req, res) => {
 // Edit a Pandit
 exports.editPandit = async (req, res) => {
     try {
+        const {id} = req.params;
         const update = req.body;
         const updatedPandit = await Pandit.findByIdAndUpdate(req.params.id, req.body, { new: true });
         const image = req.file;
 
+        if (!updatedPandit) {
+            return ApiResponse.notFound(res, 'Pandit not found');
+        }
         let photo;
 
         if (image) {
             photo = await Promise.all(await processUpload([image], s3, update.route));
-            update.image = photo[0];
+            update.photo = photo[0];
         }
 
         update.last_modified_by = req?.user?._id;
         update.last_modified_on = new Date();
 
-        if (!updatedPandit) {
-            return ApiResponse.notFound(res, 'Pandit not found');
-        }
-        ApiResponse.success(res, updatedPandit, 'Pandit updated successfully');
+        const panditUpdate = await Pandit.findOneAndUpdate({_id: new ObjectId(id)}, update, {new: true})
+        ApiResponse.success(res, panditUpdate, 'Pandit updated successfully');
     } catch (error) {
         ApiResponse.error(res,'Something went wrong', 500, error.message);
     }

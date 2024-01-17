@@ -409,11 +409,11 @@ function Index() {
                           label="Onboarding Date"
                           disabled={((isSubmitted || panditPrevDetail) && (!editing || saving))}
                           value={formState?.onboarding_date 
-                            || dayjs(panditData?.onboarding_date)
+                            || dayjs(panditPrevDetail?.onboarding_date)
                           }
                           onChange={(newValue) => {
                             if (newValue && newValue.isValid()) {
-                              setFormState(prevState => ({ ...prevState, dob: newValue }))
+                              setFormState(prevState => ({ ...prevState, onboarding_date: newValue }))
                             }
                           }}
                           minDateTime={null}

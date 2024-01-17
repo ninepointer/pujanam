@@ -36,6 +36,7 @@ exports.autoComplete = async (req, res) => {
         ApiResponse.error(res,"Something went wrong.", 500, error?.message);
     }
 }
+
 exports.placeDetails = async (req, res) => {
     try {
         const placeId = req.query.place_id;
@@ -49,6 +50,20 @@ exports.placeDetails = async (req, res) => {
 
         ApiResponse.success(res,response?.data?.result);
     } catch (error) {
+        ApiResponse.error(res,"Something went wrong.", 500, error?.message);
+    }
+}
+
+exports.currentPlace = async (req, res) => {
+    try {
+        const {lat, long} = req.query;
+        console.log(lat, long, Number(lat), Number(long))
+
+        const response = await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${Number(lat)},${Number(long)}&key=${API_KEY}`);
+
+        ApiResponse.success(res,response?.data);
+    } catch (error) {
+        // console.log(error);
         ApiResponse.error(res,"Something went wrong.", 500, error?.message);
     }
 }

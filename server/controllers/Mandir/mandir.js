@@ -138,7 +138,8 @@ exports.edit = (async (req, res, next) => {
         update.images = mandir?.images;
         update.cover_image = mandir?.cover_image;
         update.favourite = mandir?.favourite;
-        update.share = mandir?.share
+        update.share = mandir?.share;
+        update.uniqueCount = mandir?.uniqueCount
 
         if(uploadedFiles?.files){
             otherImages = await Promise.all(await processUpload(uploadedFiles.files, s3, update.name));
