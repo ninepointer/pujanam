@@ -291,6 +291,25 @@ exports.getBySearch = async (req, res) => {
     }
 };
 
+exports.getMandirByTitle = async (req, res) => {
+    const { name } = req.params;
+    try {
+        const mandir = await Mandir.findOne({slug: name})
+        .populate('devi_devta', 'name')
+        res.status(201).json({
+            status: 'success',
+            data: mandir
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            status: 'error',
+            message: "Something went wrong",
+            error: error.message
+        });
+    }
+};
+
 exports.viewCount = async (req, res) => {
 
     try{

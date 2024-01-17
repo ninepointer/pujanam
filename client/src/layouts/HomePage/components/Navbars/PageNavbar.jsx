@@ -1,19 +1,15 @@
-import { AppBar, Box, Container, IconButton, List, ListItemButton, ListItemText, Stack, Typography, useMediaQuery } from '@mui/material'
+import { AppBar, Container, IconButton, Stack, useMediaQuery } from '@mui/material'
 import React, { useState } from 'react'
 
 import useScrollPosition from '../../hooks/useScrollPosition'
 
 import logo from '../../../../assets/images/punyamapp.png'
 import background from '../../../../assets/images/background.jpg'
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { CallMade, Language, Menu } from '@mui/icons-material'
 import LaunchButton from '../Buttons/LaunchButton'
 import { useTheme } from 'styled-components'
-import MDTypography from '../../../../components/MDTypography';
 import MDBox from '../../../../components/MDBox'
-import { Grid } from '@mui/material'
 import MapSearch from "../../../../layouts/authentication/sign-up/mapSearch"
-import { CgOrganisation } from "react-icons/cg";
 
 const NAVBAR_HIEGHT = 80;
 const LinkButton = ({ children, ...props }) => (

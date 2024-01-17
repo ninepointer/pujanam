@@ -15,7 +15,7 @@ router.get('/popular', Authenticate,  mandirController.getPopular);
 router.get('/bydistance',  mandirController.getByDistance);
 router.get('/bydevta',  mandirController.getBydevta);
 router.get('/bysearch',  mandirController.getBySearch);
-
+router.route('/bytitle/:name').get(mandirController.getMandirByTitle);
 router.patch('/count/:id', Authenticate,  mandirController.addToFavourite);
 router.patch('/addfavourite/:id', Authenticate,  mandirController.addToFavourite);
 router.patch('/unfavourite/:id', Authenticate,  mandirController.unfavouriteTemple);

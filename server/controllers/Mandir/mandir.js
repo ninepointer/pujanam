@@ -71,7 +71,6 @@ exports.create = (async (req, res, next) => {
             construction_year, pandit_mobile_number, pandit_full_name, slug: slug,
             status
         });
-        console.log("Mandir:",mandir)
         ApiResponse.created(res, mandir, 'Mandir updated successfully');
     } catch (error) {
         console.error(error);
@@ -149,8 +148,8 @@ exports.edit = (async (req, res, next) => {
             coverImage = await Promise.all(await processUpload(uploadedFiles.coverFiles, s3, update.name, true));
             update.cover_image = coverImage[0];
         }
-        if(uploadedFiles.name){
-            update.slug = mandir?.name?.replace(/ /g, "-").toLowerCase();
+        if(update?.name){
+            update.slug = update?.name?.replace(/ /g, "-").toLowerCase();
         }
 
         update.lastModifiedBy = req?.user?._id;
@@ -162,7 +161,6 @@ exports.edit = (async (req, res, next) => {
             }
           }
         const mandirUpdate = await Mandir.findOneAndUpdate({_id: new ObjectId(id)}, update, {new: true})
-        console.log("Mandir Update:",mandirUpdate)
         ApiResponse.success(res, mandirUpdate, 'Mandir edited successfully');
     } catch (error) {
         console.error(error);
