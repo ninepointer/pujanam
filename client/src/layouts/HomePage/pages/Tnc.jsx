@@ -26,7 +26,7 @@ const TermsAndConditions = () => {
                                     TERMS AND CONDITIONS
                                 </Title>
                                 <Title variant={{ xs: 'h6', sm: 'h4', md: 'h3' }} sx={{ letterSpacing: "0.02em", mb: 1, p: 0 }} style={{ color: "#315c45" }}>
-                                    Welcome to StoxHero!
+                                    Welcome to punyam!
                                 </Title>
                                 <Title variant={{ xs: 'body2', sm: 'body2', md: "body2" }} sx={{ fontWeight: 500, letterSpacing: "0.05em", mb: 6, color: "#65BA0D" }}>
                                     Last Updated: 24 June, 2023

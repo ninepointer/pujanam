@@ -7,9 +7,34 @@ const Mandir = new mongoose.Schema({
         type: String,
         required: true,
     },
+    tags: {
+        type: String,
+        // required:true
+    },
     description: {
         type: String,
         required: true,
+    },
+    slug:{
+        type: String,
+        required: true,
+    },
+    tags:{
+        type: String,
+        required: true,
+    },
+    meta_description:{
+        type: String,
+        required: true,
+    },
+    meta_title:{
+        type: String,
+        required: true,
+    },
+    accessibility:{
+        type: String,
+        enum: ['Open to all', 'Members only'],
+        required: true
     },
     cover_image: {
         url: {type: String},
@@ -25,25 +50,29 @@ const Mandir = new mongoose.Schema({
         required: true,
         default: false
     },
+    morning_aarti_time: {
+        type: Date,
+        required: true,
+    },
+    evening_aarti_time: {
+        type: Date,
+        required: true,
+    },
     morning_opening_time: {
         type: Date,
         required: true,
-        get: (val) => moment(val).format("HH:mm"),
     },
     morning_closing_time: {
         type: Date,
         required: true,
-        get: (val) => moment(val).format("HH:mm"),
     },
     evening_opening_time: {
         type: Date,
         required: true,
-        get: (val) => moment(val).format("HH:mm"),
     },
     evening_closing_time: {
         type: Date,
         required: true,
-        get: (val) => moment(val).format("HH:mm"),
     },
     devi_devta: {
         type: Schema.Types.ObjectId,
@@ -92,12 +121,12 @@ const Mandir = new mongoose.Schema({
         type: Schema.Types.ObjectId,
         ref: 'user'
     }],
-    uniqueCount: [{
-       ip: {type: String},
-       isMobile: {type: Boolean},
-       country: {type: String},
-       time: {type: Date}
-    }],
+    // uniqueCount: [{
+    //    ip: {type: String},
+    //    isMobile: {type: Boolean},
+    //    country: {type: String},
+    //    time: {type: Date}
+    // }],
     viewCount: {
         type: Number,
         // required: true

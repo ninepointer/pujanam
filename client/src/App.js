@@ -43,6 +43,7 @@ import Cookies from 'js-cookie';
 import homeRoutes from "./homeRoute";
 import SignUp from './layouts/authentication/sign-up'
 import About from "../src/layouts/HomePage/pages/About";
+import Mandir from "../src/layouts/HomePage/pages/Mandir";
 import ResetPassword from './layouts/authentication/reset-password/cover';
 import { adminRole } from "./variables";
 import { userRole } from "./variables";
@@ -52,6 +53,7 @@ import Privacy from "./layouts/HomePage/pages/Privacy";
 import Terms from "./layouts/HomePage/pages/Tnc";
 import ProtectedRoute from "./ProtectedRoute";
 import AdminLogin from "./layouts/authentication/sign-in/adminLogin";
+import MandirData from "./layouts/HomePage/pages/MandirData";
 
 const TRACKING_ID = "UA-264098426-2"
 ReactGA.initialize(TRACKING_ID);
@@ -113,11 +115,7 @@ export default function App() {
       setIsLoading(false);
 
     }).catch((err)=>{
-      console.log("Fail to fetch data of user");
       noCookie = true;
-      console.log(err);
-      // pathname === '/contest' ? navigate("/") : pathname === '/collegecontest' ? navigate("/") : navigate(pathname);
-      // navigate("/")
       setIsLoading(false);
     })
 
@@ -232,10 +230,6 @@ export default function App() {
                 // brandName="StoxHero"
                 routes={(detailUser.role?.roleName === adminRole || getDetails?.userDetails?.role?.roleName === adminRole)
                 ? routes
-                //  : (detailUser.role?.roleName === Affiliate || getDetails?.userDetails?.role?.roleName === Affiliate) 
-                // ? routesAffiliate : (detailUser.role?.roleName === userRole || getDetails?.userDetails?.role?.roleName === userRole) 
-                // ? ((isCollegeRoute) ? routesCollege : userRoutes) : (detailUser.role?.roleName === "data" || getDetails?.userDetails?.role?.roleName === "data") 
-                // ? analyticsRoutes
                  : homeRoutes
                 }  
                   onMouseEnter={handleOnMouseEnter}
@@ -266,10 +260,6 @@ export default function App() {
               routes={
                 (detailUser.role?.roleName === adminRole || getDetails?.userDetails?.role?.roleName === adminRole)
                 ? routes 
-                // : (detailUser.role?.roleName === userRole || getDetails?.userDetails?.role?.roleName === userRole) 
-                // ? ((isCollegeRoute) ? routesCollege : userRoutes) : (detailUser.role?.roleName === Affiliate || getDetails?.userDetails?.role?.roleName === Affiliate) 
-                // ? routesAffiliate : (detailUser.role?.roleName === "data" || getDetails?.userDetails?.role?.roleName === "data") 
-                // ? analyticsRoutes
                  : homeRoutes
               }
               onMouseEnter={handleOnMouseEnter}
@@ -287,10 +277,6 @@ export default function App() {
         <Routes>
         {(detailUser.role?.roleName === adminRole || getDetails?.userDetails?.role?.roleName === adminRole) 
         ? getRoutes(routes) : 
-        // (detailUser.role?.roleName === Affiliate || getDetails?.userDetails?.role?.roleName === Affiliate) 
-        // ? getRoutes(routesAffiliate) : (detailUser.role?.roleName === userRole || getDetails?.userDetails?.role?.roleName === userRole) 
-        // ? ((isCollegeRoute) ? getRoutes(routesCollege) : getRoutes(userRoutes)) : (detailUser.role?.roleName === "data" || getDetails?.userDetails?.role?.roleName === "data") 
-        // ? getRoutes(analyticsRoutes)] : 
         getRoutes(homeRoutes)
         }
 {/* 65659e451aac3cb5490d2e526579442a7a6c4ec430d7b219 overallpnlDailyContest */}
@@ -325,7 +311,8 @@ export default function App() {
             />}/>
           <Route path='/adminlogin' element={<AdminLogin />}/>
           <Route path='/about' element={<About/>}/>
-          
+          <Route path='/mandir' element={<Mandir/>}/>
+          <Route path='/mandir/:id' element={<MandirData/>}/>
           <Route path='/contact' element={<Contact/>}/>
           <Route path="*" element={<NotFound />} />
 

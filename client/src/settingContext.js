@@ -11,7 +11,7 @@ export default function SettingContext({children}) {
   useEffect(() => {
     axios.get(`${apiUrl}usersetting`, {withCredentials: true})
       .then((res) => {
-        setSetting(res.data.data)
+        setSetting(res.data.data[0])
       });
   }, []);
 

@@ -80,24 +80,24 @@ const Navbar = () => {
             flexWrap="wrap"
             color="white"
           >
-            <a href="/careers">
+            <a href="/mandir">
             <LinkButton>
               <MdOutlineTempleHindu fontSize="small" />
-              <Typography fontWeight="bold" variant="body2" style={{fontFamily:'Itim'}}>Mandirs</Typography>
+              <Typography fontWeight="bold" variant="body2" style={{fontFamily:'Itim'}}>Mandir</Typography>
             </LinkButton>
             </a>
 
             <a href="/workshops">
             <LinkButton>
               <LiaPrayingHandsSolid fontSize="small" />
-              <Typography fontWeight="bold" variant="body2" style={{fontFamily:'Itim'}}>Pooja Service</Typography>
+              <Typography fontWeight="bold" variant="body2" style={{fontFamily:'Itim'}}>Pooja</Typography>
             </LinkButton>
             </a>
 
             <a href="/workshops">
             <LinkButton>
               <LiaPrayingHandsSolid fontSize="small" />
-              <Typography fontWeight="bold" variant="body2" style={{fontFamily:'Itim'}}>Pooja Samagri</Typography>
+              <Typography fontWeight="bold" variant="body2" style={{fontFamily:'Itim'}}>Store</Typography>
             </LinkButton>
             </a>
 
@@ -139,23 +139,23 @@ const Navbar = () => {
             >
             < img src ="https://icon-library.com/images/x-button-icon/x-button-icon-3.jpg" style={{height:"40px",position:"absolute",top:"8px",color:"#fff", right:"14px", zIndex:999}} sx={{fontSize:"100px"}} onClick={()=>setOpen(false)}/>
 
-            <a href="/careers">
+            <a href="/mandir">
             <LinkButton>
-              <MDTypography variant="body2" style={{fontFamily:'Itim', color: "#9c4722"}}>Mandirs</MDTypography>
+              <MDTypography variant="body2" style={{fontFamily:'Itim', color: "#9c4722"}}>Mandir</MDTypography>
               
             </LinkButton>
             </a>
 
             <a href="/workshops">
             <LinkButton>
-              <MDTypography variant="body2" style={{fontFamily:'Itim', color: "#9c4722"}}>Pooja Service</MDTypography>
+              <MDTypography variant="body2" style={{fontFamily:'Itim', color: "#9c4722"}}>Pooja</MDTypography>
               
             </LinkButton>
             </a>
 
             <a href="/workshops">
             <LinkButton>
-              <MDTypography variant="body2" style={{fontFamily:'Itim', color: "#9c4722"}}>Pooja Samagri</MDTypography>
+              <MDTypography variant="body2" style={{fontFamily:'Itim', color: "#9c4722"}}>Store</MDTypography>
               
             </LinkButton>
             </a>

@@ -17,6 +17,17 @@ exports.getAllPooja = async (req, res) => {
     }
 };
 
+exports.getHomePoojas = async (req, res) => {
+    try {
+        const poojas = await Pooja.find()
+        .limit(4)
+        .populate('category', 'product_name');
+        ApiResponse.success(res, poojas);
+    } catch (error) {
+        ApiResponse.error(res, 'Something went wrong', 500, error.message);
+    }
+};
+
 exports.getPoojaById = async (req, res) => {
     const {id} = req.params;
     try {

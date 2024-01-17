@@ -6,46 +6,62 @@ import { Link } from 'react-router-dom';
 import MDButton from '../../../components/MDButton';
 // import { Navigate, useNavigate } from 'react-router-dom';
 import moment from 'moment'
+import MDBox from '../../../components/MDBox';
+import MDTypography from '../../../components/MDTypography';
+import {Card, CardActionArea, CardContent } from '@mui/material';
 
 const CarouselBox = ({ image, elem }) => {
 
-  // console.log( "dates checking", elem?.carouselStartDate, elem?.carouselEndDate)
+  function limitStringWithEllipsis(inputString, maxLength) {
+    if (inputString.length > maxLength) {
+      return inputString.slice(0, maxLength) + '...';
+    }
+    return inputString;
+  }
+
   return (
     <Grid container lg={12} md={4} xs={12} spacing={1} display='flex' justifyContent='center' alignItems='center'>
       <Grid item lg={12} md={4} xs={12} display='flex' justifyContent='center'>
-          <MDButton 
-            style={{padding:0}} 
-            disableRipple
-            component={Link}
-            to={{
-              pathname: `/carouseldetails`,
-            }}
-            state={{data: elem}}
-          >
-            <div style={{position: 'relative'}}>
-              <img src={image} width='270px' height='180px' alt="Box" />
-              <div style={{position: 'absolute', bottom: 10, right: 10}}>
-                <span style={{backgroundColor: 'green', padding: '2px 4px', color:'white', fontSize: 10, borderRadius:3}}>
-                  {moment.utc(elem?.carouselEndDate).utcOffset('+05:30').format("DD-MMM HH:mm")}
-                </span>
-              </div>
-              <div style={{position: 'absolute', bottom: 10, left: 10}}>
-                <span style={{backgroundColor: 'green', padding: '2px 4px', color:'white', fontSize: 10, borderRadius:3}}>
-                  {moment.utc(elem?.carouselStartDate).utcOffset('+05:30').format("DD-MMM HH:mm")}
-                </span>
-              </div>
-              <div style={{position: 'absolute', bottom: 35, right: 10}}>
-                <span style={{backgroundColor: 'green', padding: '2px 4px', color:'white', fontSize: 10, borderRadius:3}}>
-                  {elem?.status}
-                </span>
-              </div>
-              <div style={{position: 'absolute', bottom: 35, left: 10}}>
-                <span style={{backgroundColor: 'green', padding: '2px 4px', color:'white', fontSize: 10, borderRadius:3}}>
-                  {elem?.visibility}
-                </span>
-              </div>
-            </div>
-          </MDButton>
+          <Card sx={{ 
+                minWidth: '100%', 
+                cursor: 'pointer',
+                transition: 'transform 0.3s cubic-bezier(0.25, 0.1, 0.25, 1), box-shadow 0.3s cubic-bezier(0.25, 0.1, 0.25, 1)',
+                '&:hover': {
+                    transform: 'scale(1.025)',
+                    boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)', // Adjust the box shadow as needed
+                    }
+                }} onClick={() => {}}>
+
+            <CardActionArea 
+              component={Link}
+              to={{
+                pathname: `/carouseldetails`,
+              }}
+              state={{data: elem}}>
+              <Grid container lg={12} md={4} xs={12} display='flex' justifyContent='flex-start' alignItems='center' >
+                <Grid item xs={12} md={4} lg={12} display='flex' justifyContent='flex-start' style={{ maxWidth: '100%', height: 'auto' }}>
+                  <img src={image} style={{ maxWidth: '100%', height: 'auto', borderTopLeftRadius: 10, borderTopRightRadius: 10 }} />
+                </Grid>
+                <Grid item xs={12} md={4} lg={12} display='flex' justifyContent='flex-start' style={{ maxWidth: '100%', height: 'auto' }}>
+                <CardContent display='flex' justifyContent='flex-start' style={{ maxWidth: '100%', height: 'auto' }}>
+                    <MDBox display='flex' justifyContent='flex-start' style={{ width: '100%'}}>
+                        <MDTypography variant="h6" style={{ textAlign: 'center', fontFamily: 'Itim' }}>
+                            {elem?.carouselName}
+                        </MDTypography>
+                    </MDBox>
+                    <MDBox display='flex' justifyContent='flex-start' style={{ maxWidth: '100%', height: 'auto' }}>
+                        <MDTypography variant="caption" style={{ textAlign: 'justify', fontFamily: 'Itim' }}>
+                            {limitStringWithEllipsis(elem?.description,70)}
+                        </MDTypography>
+                    </MDBox>
+                    <MDBox display='flex' justifyContent='flex-start'>
+                      <MDTypography variant="button" color='success' style={{ textAlign: 'center', fontFamily: 'Itim' }}>View Details</MDTypography>
+                    </MDBox>
+                </CardContent>
+                </Grid>
+              </Grid>
+            </CardActionArea>
+          </Card>
       </Grid>
 
     </Grid>

@@ -14,6 +14,7 @@ import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import { CardActionArea, Divider } from '@mui/material';
 import CardContent from '@mui/material/CardContent';
+import moment from 'moment'
 
 function HomeCard({elem}) {
     // const [pooja,setPooja] = useState([]);
@@ -37,7 +38,7 @@ function HomeCard({elem}) {
                 }} 
                 onClick={() => {}}>
 
-            <CardActionArea>
+            {/* <CardActionArea>
                 <Grid item xs={12} md={4} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
                     <img src={elem?.cover_image?.url} style={{ maxWidth: '100%', height: 'auto', borderTopLeftRadius: 10, borderTopRightRadius: 10 }} />
                     <MDTypography variant="h6" fontSize={10} fontWeight={400} style={{ position: 'absolute', top: 0, right: 0, margin: '8px', textAlign: 'center', color: 'black', backgroundColor: "white", borderRadius: "15px", padding: "2px 10px 2px 10px", marginTop: "10px", fontFamily: 'Itim' }}>
@@ -61,7 +62,59 @@ function HomeCard({elem}) {
                     </MDBox>
                 </CardContent>
                 </Grid>
-            </CardActionArea>
+            </CardActionArea> */}
+
+<CardActionArea>
+                        <Grid item xs={12} md={4} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
+                            <img src={elem?.cover_image?.url} style={{ maxWidth: '100%', height: 'auto', borderTopLeftRadius: 10, borderTopRightRadius: 10 }} />
+                            {elem?.dham && <MDTypography color='success' variant="caption" style={{ position: 'absolute', top: 0, right: 0, margin: '8px', textAlign: 'center', backgroundColor: "lightgrey", borderRadius: "15px", padding: "2px 10px 2px 10px", marginTop: "10px", fontFamily: 'Itim' }}>
+                                Dham
+                            </MDTypography>}
+                            {elem?.popular && <MDTypography color='dark' variant="caption" style={{ position: 'absolute', top: 0, right: elem?.dham ? 55 : 0, margin: '8px', textAlign: 'center', backgroundColor: "lightgrey", borderRadius: "15px", padding: "2px 10px 2px 10px", marginTop: "10px", fontFamily: 'Itim' }}>
+                                Popular
+                            </MDTypography>}
+                        </Grid>
+                        <Grid item xs={12} md={4} lg={12} display='flex' justifyContent='flex-start' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
+                            <CardContent display='flex' justifyContent='flex-start' alignContent='center' alignItems='center' style={{ minWidth: '100%', height: 'auto' }}>
+
+                                <MDBox display='flex' justifyContent='flex-start' alignContent='center' alignItems='center' style={{ width: '100%' }}>
+                                    <MDTypography variant='h6'>
+                                        {limitStringWithEllipsis(elem?.name, 25)}
+                                    </MDTypography>
+                                </MDBox>
+
+                                <MDBox display='flex' justifyContent='flex-start' alignContent='center' alignItems='center' style={{ width: '100%' }}>
+                                    <MDTypography variant='caption'>
+                                        {limitStringWithEllipsis(`${elem?.address_details?.address + ', ' + elem?.address_details?.city + ', ' + elem?.address_details?.state + ', ' + elem?.address_details?.country}`, 35)}
+                                    </MDTypography>
+                                </MDBox>
+
+                                <MDBox mt={0.5} display='flex' justifyContent='flex-start' alignContent='center' alignItems='center' style={{ width: '100%' }}>
+                                    <Grid container xs={12} md={12} lg={12} display='flex' justifyContent='space-between' alignContent='center' alignItems='center' style={{ minWidth: '100%' }}>
+                                        <Grid item xs={6} md={6} lg={6} display='flex' justifyContent='flex-start' alignContent='center' alignItems='center'>
+                                            <MDTypography variant='caption' color='success'>Opens at {moment.utc(elem?.morning_opening_time).utcOffset('+05:30').format('HH:mm a')}</MDTypography>
+                                        </Grid>
+                                        <Grid item xs={6} md={6} lg={6} display='flex' justifyContent='flex-end' alignContent='center' alignItems='center'>
+                                            <MDTypography variant='caption' color='success'>{elem?.devi_devta}</MDTypography>
+                                        </Grid>
+                                    </Grid>
+                                </MDBox>
+
+                                <MDBox mt={0.5} mb={-1} display='flex' justifyContent='flex-start' alignContent='center' alignItems='center' style={{ width: '100%' }}>
+                                    <Grid container xs={12} md={12} lg={12} display='flex' justifyContent='space-between' alignContent='center' alignItems='center' style={{ minWidth: '100%' }}>
+                                        <Grid item xs={8} md={8} lg={8} display='flex' justifyContent='flex-start' alignContent='center' alignItems='center'>
+                                            <MDTypography variant='caption' color='success'>Aarti Time: Happening Now</MDTypography>
+                                        </Grid>
+                                        <Grid item xs={4} md={4} lg={4} display='flex' justifyContent='flex-end' alignContent='center' alignItems='center'>
+                                            <MDTypography variant='caption' color='success'>{(elem?.distance / 1000)?.toFixed(2)} km</MDTypography>
+                                        </Grid>
+                                    </Grid>
+                                </MDBox>
+
+                            </CardContent>
+                        </Grid>
+                    </CardActionArea>
+
             </Card>
             </Grid>
         </Grid>

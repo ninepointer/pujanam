@@ -1,4 +1,4 @@
-import React ,{useEffect, useState} from "react";
+import React ,{useEffect, useState, useRef} from "react";
 import MDTypography from "../../components/MDTypography";
 import MDBox from "../../components/MDBox";
 import MDButton from "../../components/MDButton"
@@ -19,6 +19,7 @@ import { MobileDateTimePicker } from '@mui/x-date-pickers/MobileDateTimePicker';
 import { Checkbox, FormControlLabel, FormGroup } from "@mui/material";
 import OutlinedInput from '@mui/material/OutlinedInput';
 import axios from "axios";
+import JoditEditor from 'jodit-react';
 
 const ITEM_HEIGHT = 30;
 const ITEM_PADDING_TOP = 10;
@@ -40,8 +41,11 @@ function Index() {
   const [imagesPreviewUrl, setImagesPreviewUrl] = useState(null);
   const [imageData, setImageData] = useState(prevData || null);
   const [coverImage, setTitleImage] = useState(null);
+  const [editingBlogData,setEditingBlogData] = useState(prevData ? false : true)
+
   const [formstate, setFormState] = useState(
-    {...prevData,
+    {
+      ...prevData,
       latitude: prevData?.address_details?.location?.coordinates[0],
       longitude: prevData?.address_details?.location?.coordinates[1],
       address: prevData?.address_details?.address,
@@ -49,22 +53,24 @@ function Index() {
       city: prevData?.address_details?.city,
       state: prevData?.address_details?.state,
       country: prevData?.address_details?.country,
+      morning_opening_time: dayjs(prevData?.morning_opening_time) || dayjs(new Date()).set('hour', 0).set('minute', 0).set('second', 0),
+      morning_closing_time: dayjs(prevData?.morning_closing_time) || dayjs(new Date()).set('hour', 0).set('minute', 0).set('second', 0),
+      evening_opening_time: dayjs(prevData?.evening_opening_time) || dayjs(new Date()).set('hour', 0).set('minute', 0).set('second', 0),
+      morning_aarti_time: dayjs(prevData?.morning_aarti_time) || dayjs(new Date()).set('hour', 0).set('minute', 0).set('second', 0),
+      evening_aarti_time: dayjs(prevData?.evening_aarti_time) || dayjs(new Date()).set('hour', 0).set('minute', 0).set('second', 0)
+    }
+    || {
       morning_opening_time: dayjs(new Date()).set('hour', 0).set('minute', 0).set('second', 0),
       morning_closing_time: dayjs(new Date()).set('hour', 0).set('minute', 0).set('second', 0),
       evening_opening_time: dayjs(new Date()).set('hour', 0).set('minute', 0).set('second', 0),
       evening_closing_time: dayjs(new Date()).set('hour', 0).set('minute', 0).set('second', 0)
-  
     }
-     || {
-    morning_opening_time: dayjs(new Date()).set('hour', 0).set('minute', 0).set('second', 0),
-    morning_closing_time: dayjs(new Date()).set('hour', 0).set('minute', 0).set('second', 0),
-    evening_opening_time: dayjs(new Date()).set('hour', 0).set('minute', 0).set('second', 0),
-    evening_closing_time: dayjs(new Date()).set('hour', 0).set('minute', 0).set('second', 0)
-  }
   )
   const [isfileSizeExceed, setIsFileExceed] = useState(false);
   const [file, setFile] = useState(null);
   const [deviDevtas, setDeviDevtas] = useState([]);
+  const [value, setValue] = useState(prevData?.description || '');
+  const editor = useRef(null);
 
   useEffect(() => {
     axios.get(`${apiUrl}devta/active`, {withCredentials: true})
@@ -123,8 +129,6 @@ function Index() {
   };
 
   const handleUpload = async () => {
-
-
     if (!coverImage) {
       openSuccessSB('error', 'Please select a file to upload');
       return;
@@ -141,6 +145,10 @@ function Index() {
         for (let i = 0; i < file.length; i++) {
           formData.append("files", file[i]);
         }
+      }
+
+      if(value){
+        formData.append("desciption", value);
       }
 
       for(let elem in formstate){
@@ -188,6 +196,10 @@ function Index() {
         for (let i = 0; i < file.length; i++) {
           formData.append("files", file[i]);
         }
+      }
+
+      if(value){
+        formData.append("desciption", value);
       }
 
       for(let elem in formstate){
@@ -302,6 +314,51 @@ function Index() {
     }));
   };
 
+  // async function saveBlogData(value) {
+  //   if (!value) {
+  //     openSuccessSB('error', 'Please type text.');
+  //     return;
+  //   }
+  //   // setSaving(true)
+
+  //   const res = await fetch(`${apiUrl}mandir/${prevData?._id || imageData?._id}/blogData`, {
+  //     method: "PATCH",
+  //     credentials: "include",
+  //     headers: {
+  //       "content-type": "application/json",
+  //       "Access-Control-Allow-Credentials": true
+  //     },
+  //     body: JSON.stringify({
+  //       blogData: value
+  //     })
+
+  //   });
+
+  //   const data = await res.json();
+  //   const updatedData = data?.data
+  //   if (updatedData || res.status === 200) {
+  //     openSuccessSB("success", data.message)
+  //     setEditingBlogData(false);
+  //   } else {
+  //     openSuccessSB("error", data.message)
+  //   }
+  // }
+
+  const config = React.useMemo(
+    () => ({
+      disabled: editingBlogData ? false : true,
+      readonly: false,
+      enableDragAndDropFileToEditor: false,
+      toolbarAdaptive: false,
+      toolbarSticky: true,
+      addNewLine: false,
+      useSearch: false,
+      hidePoweredByJodit: true,
+      placeholder: 'Write description...',
+    }),
+    [editingBlogData],
+  )
+
   return (
     <>
       <MDBox pl={2} pr={2} mt={4} mb={2}>
@@ -329,7 +386,7 @@ function Index() {
               />
             </Grid>
 
-            <Grid item xs={12} md={12} xl={3}>
+            {/* <Grid item xs={12} md={12} xl={3}>
               <TextField
                 disabled={((imageData || prevData) && (!editing))}
                 id="outlined-required"
@@ -343,7 +400,7 @@ function Index() {
                   }))
                 }}
               />
-            </Grid>
+            </Grid> */}
 
             <Grid item xs={12} md={6} xl={3} mt={-1} mb={1}>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -420,6 +477,48 @@ function Index() {
                       onChange={(newValue) => {
                         if (newValue && newValue.isValid()) {
                           setFormState(prevState => ({ ...prevState, evening_closing_time: newValue }))
+                        }
+                      }}
+                      minDateTime={null}
+                      sx={{ width: '100%' }}
+                    />
+                  </DemoItem>
+                </DemoContainer>
+              </LocalizationProvider>
+            </Grid>
+
+            <Grid item xs={12} md={6} xl={3} mt={-1} mb={1}>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DemoContainer components={['MobileDateTimePicker']}>
+                  <DemoItem>
+                    <MobileDateTimePicker
+                      label="Morning Aarti Time"
+                      disabled={((imageData || prevData) && (!editing))}
+                      value={dayjs(formstate?.morning_aarti_time) || dayjs(prevData?.morning_aarti_time)}
+                      onChange={(newValue) => {
+                        if (newValue && newValue.isValid()) {
+                          setFormState(prevState => ({ ...prevState, morning_aarti_time: newValue }))
+                        }
+                      }}
+                      minDateTime={null}
+                      sx={{ width: '100%' }}
+                    />
+                  </DemoItem>
+                </DemoContainer>
+              </LocalizationProvider>
+            </Grid>
+
+            <Grid item xs={12} md={6} xl={3} mt={-1} mb={1}>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DemoContainer components={['MobileDateTimePicker']}>
+                  <DemoItem>
+                    <MobileDateTimePicker
+                      label="Evening Aarti Time"
+                      disabled={((imageData || prevData) && (!editing))}
+                      value={dayjs(formstate?.evening_aarti_time) || dayjs(prevData?.evening_aarti_time)}
+                      onChange={(newValue) => {
+                        if (newValue && newValue.isValid()) {
+                          setFormState(prevState => ({ ...prevState, evening_aarti_time: newValue }))
                         }
                       }}
                       minDateTime={null}
@@ -650,6 +749,78 @@ function Index() {
               </FormGroup>
             </Grid>
 
+            <Grid item xs={12} md={12} xl={3}>
+              <TextField
+                disabled={((imageData || prevData) && (!editing))}
+                id="outlined-required"
+                label='Meta Title *'
+                fullWidth
+                value={formstate?.meta_title}
+                onChange={(e) => {
+                  setFormState(prevState => ({
+                    ...prevState,
+                    meta_title: e.target.value
+                  }))
+                }}
+              />
+            </Grid>
+
+            <Grid item xs={12} md={12} xl={3}>
+              <TextField
+                disabled={((imageData || prevData) && (!editing))}
+                id="outlined-required"
+                label='Meta Description *'
+                fullWidth
+                value={formstate?.meta_description}
+                onChange={(e) => {
+                  setFormState(prevState => ({
+                    ...prevState,
+                    meta_description: e.target.value
+                  }))
+                }}
+              />
+            </Grid>
+
+            <Grid item xs={12} md={12} xl={3}>
+              <TextField
+                disabled={((imageData || prevData) && (!editing))}
+                id="outlined-required"
+                label='Tags *'
+                fullWidth
+                value={formstate?.tags}
+                onChange={(e) => {
+                  setFormState(prevState => ({
+                    ...prevState,
+                    tags: e.target.value
+                  }))
+                }}
+              />
+            </Grid>
+
+            <Grid item xs={12} md={6} xl={3}>
+              <FormControl sx={{ width: "100%" }}>
+                <InputLabel id="demo-simple-select-autowidth-label">Status *</InputLabel>
+                <Select
+                  labelId="demo-simple-select-autowidth-label"
+                  id="demo-simple-select-autowidth"
+                  name='accessibility'
+                  value={formstate?.accessibility}
+                  disabled={((imageData || prevData) && (!editing))}
+                  onChange={(e) => {
+                    setFormState(prevState => ({
+                      ...prevState,
+                      accessibility: e.target.value
+                    }))
+                  }}
+                  label="Accessibility"
+                  sx={{ minHeight: 43 }}
+                >
+                  <MenuItem value="Open to all">Open to all</MenuItem>
+                  <MenuItem value="Members only">Members only</MenuItem>
+                </Select>
+              </FormControl>
+            </Grid>
+
             <Grid item xs={12} md={6} xl={3}>
               <FormControl sx={{ width: "100%" }}>
                 <InputLabel id="demo-simple-select-autowidth-label">Status *</InputLabel>
@@ -670,6 +841,7 @@ function Index() {
                 >
                   <MenuItem value="Active">Active</MenuItem>
                   <MenuItem value="Inactive">Inactive</MenuItem>
+                  <MenuItem value="Draft">Draft</MenuItem>
                 </Select>
               </FormControl>
             </Grid>
@@ -709,6 +881,17 @@ function Index() {
           </Grid>
         </Grid>
 
+        <MDBox mt={2} >
+          <JoditEditor
+            ref={editor}
+            config={config}
+            value={value}
+            onChange={newContent => setValue(newContent)}
+            disabled={true}
+            style={{ height: "100%" }}
+          />
+        </MDBox>
+
         
         <Grid container mt={2} xs={12} md={12} xl={12} >
           <Grid item display="flex" justifyContent="flex-end" xs={12} md={12} xl={12}>
@@ -718,7 +901,7 @@ function Index() {
             size="small"
             sx={{mr:1, ml:1}} 
             disabled={isfileSizeExceed}
-            onClick={(prevData && !editing) ? ()=>{setEditing(true)} : (prevData && editing) ? edit : handleUpload}
+            onClick={(prevData && !editing) ? ()=>{setEditing(true); setEditingBlogData(true)} : (prevData && editing) ? edit : handleUpload}
           >
             {(prevData && !editing) ? "Edit" : (prevData && editing) ? "Save" : "Next"}
           </MDButton>
@@ -883,7 +1066,6 @@ function Index() {
             )
           })}
         </Grid> 
-
           {renderSuccessSB}
       </MDBox>
     </>

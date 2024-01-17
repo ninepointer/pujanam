@@ -16,9 +16,79 @@ exports.getActive = async (req, res) => {
 };
 
 exports.getActiveHome = async (req, res) => {
+    const {lat, long} = req.query;
+
+    try {
+        const mandir = await Mandir.aggregate([
+            {
+              $geoNear: {
+                near: {
+                  type: "Point",
+                  coordinates: [Number(lat), Number(long)],
+                },
+                distanceField: "distance",
+                spherical: true,
+                key: "address_details.location",
+              },
+            },
+            {
+                $match: {
+                    status: "Active"
+                }
+            },
+            {
+              $lookup: {
+                from: "devi-devtas",
+                localField: "devi_devta",
+                foreignField: "_id",
+                as: "devtas",
+              },
+            },
+            {
+              $unwind: {
+                path: "$devtas",
+              },
+            },
+            {
+              $project: {
+                devi_devta: "$devtas.name",
+                _id: 0,
+                name: 1,
+                description: 1,
+                cover_image: 1,
+                images: 1,
+                dham: 1,
+                popular: 1,
+                morning_closing_time: 1,
+                evening_opening_time: 1,
+                evening_closing_time: 1,
+                morning_opening_time: 1,
+                address_details: 1,
+                construction_year: 1,
+                distance: 1,
+                slug: 1,
+                morning_aarti_time: 1,
+                evening_aarti_time: 1
+              },
+            },
+            {
+              $sort: {
+                distance: 1,
+              },
+            },
+            {
+                $limit: 4
+            }
+          ])
+        ApiResponse.success(res, mandir);
+    } catch (error) {
+        ApiResponse.error(res, 'Something went wrong', 500, error.message);
+    }
+};
+
+exports.getActiveAllHome = async (req, res) => {
     try {
         const activeMandir = await Mandir.find({ status: 'Active' })
-        .limit(4)
         .populate('devi_devta', 'name')
         .select('-created_on -created_by -last_modified_on -last_modified_by -__v -favourite -share');
         ApiResponse.success(res, activeMandir);
@@ -62,25 +132,158 @@ exports.getPopular = async (req, res) => {
 };
 
 exports.getPopularMandirHomeActive = async (req, res) => {
-  try {
-      const activeMandir = await Mandir.find({ status: 'Active', popular: true })
-      .limit(4)
-      .populate('devi_devta', 'name');
-      ApiResponse.success(res, activeMandir);
-  } catch (error) {
-      ApiResponse.error(res, 'Something went wrong', 500, error.message);
-  }
+    const {lat, long} = req.query;
+
+    try {
+        const mandir = await Mandir.aggregate([
+            {
+              $geoNear: {
+                near: {
+                  type: "Point",
+                  coordinates: [Number(lat), Number(long)],
+                },
+                distanceField: "distance",
+                spherical: true,
+                key: "address_details.location",
+              },
+            },
+            {
+                $match: {
+                    status: "Active",
+                    popular: true
+                }
+            },
+            {
+              $lookup: {
+                from: "devi-devtas",
+                localField: "devi_devta",
+                foreignField: "_id",
+                as: "devtas",
+              },
+            },
+            {
+              $unwind: {
+                path: "$devtas",
+              },
+            },
+            {
+              $project: {
+                devi_devta: "$devtas.name",
+                _id: 0,
+                name: 1,
+                description: 1,
+                cover_image: 1,
+                images: 1,
+                dham: 1,
+                popular: 1,
+                morning_closing_time: 1,
+                evening_opening_time: 1,
+                evening_closing_time: 1,
+                morning_opening_time: 1,
+                address_details: 1,
+                construction_year: 1,
+                distance: 1,
+                slug: 1,
+                morning_aarti_time: 1,
+                evening_aarti_time: 1
+              },
+            },
+            {
+              $sort: {
+                distance: 1,
+              },
+            },
+            {
+                $limit: 4
+            }
+          ])
+        ApiResponse.success(res, mandir);
+    } catch (error) {
+        ApiResponse.error(res, 'Something went wrong', 500, error.message);
+    }
+};
+
+exports.getAllPopularMandirHomeActive = async (req, res) => {
+    try {
+        const activeMandir = await Mandir.find({ status: 'Active', popular: true })
+        .limit(8)
+        .populate('devi_devta', 'name');
+        ApiResponse.success(res, activeMandir);
+    } catch (error) {
+        ApiResponse.error(res, 'Something went wrong', 500, error.message);
+    }
 };
 
 exports.getDhamHomeActive = async (req, res) => {
-  try {
-      const activeMandir = await Mandir.find({ status: 'Active', dham: true })
-      .limit(4)
-      .populate('devi_devta', 'name');
-      ApiResponse.success(res, activeMandir);
-  } catch (error) {
-      ApiResponse.error(res, 'Something went wrong', 500, error.message);
-  }
+    const {lat, long} = req.query;
+
+    try {
+        const mandir = await Mandir.aggregate([
+            {
+              $geoNear: {
+                near: {
+                  type: "Point",
+                  coordinates: [Number(lat), Number(long)],
+                },
+                distanceField: "distance",
+                spherical: true,
+                key: "address_details.location",
+              },
+            },
+            {
+                $match: {
+                    status: "Active",
+                    dham: true
+                }
+            },
+            {
+              $lookup: {
+                from: "devi-devtas",
+                localField: "devi_devta",
+                foreignField: "_id",
+                as: "devtas",
+              },
+            },
+            {
+              $unwind: {
+                path: "$devtas",
+              },
+            },
+            {
+              $project: {
+                devi_devta: "$devtas.name",
+                _id: 0,
+                name: 1,
+                description: 1,
+                cover_image: 1,
+                images: 1,
+                dham: 1,
+                popular: 1,
+                morning_closing_time: 1,
+                evening_opening_time: 1,
+                evening_closing_time: 1,
+                morning_opening_time: 1,
+                address_details: 1,
+                construction_year: 1,
+                distance: 1,
+                slug: 1,
+                morning_aarti_time: 1,
+                evening_aarti_time: 1
+              },
+            },
+            {
+              $sort: {
+                distance: 1,
+              },
+            },
+            {
+                $limit: 4
+            }
+          ])
+        ApiResponse.success(res, mandir);
+    } catch (error) {
+        ApiResponse.error(res, 'Something went wrong', 500, error.message);
+    }
 };
 
 exports.addToFavourite = async (req, res) => {
@@ -96,7 +299,7 @@ exports.addToFavourite = async (req, res) => {
         })
 
         if(find){
-            ApiResponse.error(res, 'This mandir is already added in your favourite.', 500, error.message);
+            return ApiResponse.error(res, 'This mandir is already added in your favourite.', 500);
         }
 
         const favUser = await User.findOneAndUpdate(
@@ -119,6 +322,7 @@ exports.addToFavourite = async (req, res) => {
 
         ApiResponse.success(res, favUser);
     } catch (error) {
+        console.log(error)
         await session.abortTransaction();
         session.endSession();
 
@@ -135,6 +339,21 @@ exports.sharedBy = async (req, res) => {
             }
         })
         .select('-created_on -created_by -last_modified_on -last_modified_by -__v -favourite -share');
+        ApiResponse.success(res, mandir);
+    } catch (error) {
+        ApiResponse.error(res, 'Something went wrong', 500, error.message);
+    }
+};
+
+exports.unfavouriteTemple = async (req, res) => {
+    const {id} = req.params;
+    try {
+        const mandir = await Mandir.findOneAndUpdate({ _id: new ObjectId(id) }, {
+            $pull: {
+                favourite: req.user._id
+            }
+        })
+        .select('favourite');
         ApiResponse.success(res, mandir);
     } catch (error) {
         ApiResponse.error(res, 'Something went wrong', 500, error.message);
@@ -207,6 +426,9 @@ exports.getByDistance = async (req, res) => {
                 address_details: 1,
                 construction_year: 1,
                 distance: 1,
+                slug: 1,
+                morning_aarti_time: 1,
+                evening_aarti_time: 1
               },
             },
             {
@@ -249,6 +471,25 @@ exports.getBySearch = async (req, res) => {
         ApiResponse.success(res, mandir);
     } catch (error) {
         ApiResponse.error(res, 'Something went wrong', 500, error.message);
+    }
+};
+
+exports.getMandirByTitle = async (req, res) => {
+    const { name } = req.params;
+    try {
+        const mandir = await Mandir.findOne({slug: name})
+        .populate('devi_devta', 'name')
+        res.status(201).json({
+            status: 'success',
+            data: mandir
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            status: 'error',
+            message: "Something went wrong",
+            error: error.message
+        });
     }
 };
 

@@ -264,10 +264,9 @@ function Index() {
         </MDTypography>
         </MDBox>
 
-        <Grid container display="flex" flexDirection="row" justifyContent="space-between">
-            <Grid container spacing={1} mt={0.5} mb={0} xs={12} md={9} xl={9}>
+            <Grid container spacing={1} mt={1} xs={12} md={12} xl={12} display='flex' justifyContent='center' alignContent='center' alignItems='center'>
                 
-                <Grid item xs={12} md={6} xl={3}>
+                <Grid item xs={12} md={3} xl={3} mt={1} display='flex' justifyContent='center' alignContent='center' alignItems='center'>
                   <TextField
                       disabled={((isSubmitted || id) && (!editing || saving))}
                       id="outlined-required"
@@ -282,7 +281,7 @@ function Index() {
                     />
                 </Grid>
 
-                <Grid item xs={12} md={6} xl={6}>
+                <Grid item xs={12} md={6} xl={6} mt={1} display='flex' justifyContent='center' alignContent='center' alignItems='center'>
                   <TextField
                       disabled={((isSubmitted || id) && (!editing || saving))}
                       id="outlined-required"
@@ -297,31 +296,7 @@ function Index() {
                     />
                 </Grid>
 
-                {/* <Grid item xs={12} md={6} xl={3}>
-                    <FormControl sx={{width: "100%" }}>
-                      <InputLabel id="demo-simple-select-autowidth-label">Visibility *</InputLabel>
-                      <Select
-                      labelId="demo-simple-select-autowidth-label"
-                      id="demo-simple-select-autowidth"
-                      value={formState?.visibility}
-                      defaultValue="All"
-                      // value={oldObjectId ? contestData?.status : formState?.status}
-                      disabled={((isSubmitted || id) && (!editing || saving))}
-                      onChange={(e) => {setFormState(prevState => ({
-                          ...prevState,
-                          visibility: e.target.value
-                      }))}}
-                      label="Visibility"
-                      sx={{ minHeight:43 }}
-                      >
-                      <MenuItem value="Infinity">Infinity</MenuItem>
-                      <MenuItem value="StoxHero">StoxHero</MenuItem>
-                      <MenuItem value="All">All</MenuItem>
-                      </Select>
-                    </FormControl>
-                </Grid> */}
-
-                <Grid item xs={12} md={6} xl={3} mt={1}>
+                <Grid item xs={12} md={3} xl={3} mt={1} display='flex' justifyContent='center' alignContent='center' alignItems='center'>
                   <TextField
                       disabled={((isSubmitted || id) && (!editing || saving))}
                       id="outlined-required"
@@ -336,9 +311,9 @@ function Index() {
                     />
                 </Grid>
 
-                <Grid item xs={12} md={6} xl={3}>
+                <Grid item xs={12} md={3} xl={3} display='flex' justifyContent='center' alignContent='center' alignItems='center'>
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
-                      <DemoContainer components={['MobileDateTimePicker']}>
+                      <DemoContainer components={['MobileDateTimePicker']} sx={{ width: '100%' }}>
                         <DemoItem>
                           <MobileDateTimePicker 
                             label="Carousel Start Date"
@@ -351,16 +326,15 @@ function Index() {
                               }))
                             }}
                             minDateTime={null}
-                            sx={{ width: '100%' }}
                           />
                         </DemoItem>
                       </DemoContainer>
                     </LocalizationProvider>
                 </Grid>
 
-                <Grid item xs={12} md={6} xl={3}>
+                <Grid item xs={12} md={3} xl={3} display='flex' justifyContent='center' alignContent='center' alignItems='center'>
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
-                      <DemoContainer components={['MobileDateTimePicker']}>
+                      <DemoContainer components={['MobileDateTimePicker']} sx={{ width: '100%' }}>
                         <DemoItem>
                           <MobileDateTimePicker 
                             label="Contest End Date"
@@ -374,14 +348,13 @@ function Index() {
                                 }))
                             }}
                             minDateTime={null}
-                            sx={{ width: '100%' }}
                           />
                         </DemoItem>
                       </DemoContainer>
                     </LocalizationProvider>
                 </Grid>
 
-                <Grid item xs={12} md={6} xl={3} mt={1}>
+                <Grid item xs={12} md={3} xl={3} mt={1} display='flex' justifyContent='center' alignContent='center' alignItems='center'>
                     <FormControl sx={{width: "100%" }}>
                       <InputLabel id="demo-simple-select-autowidth-label">Clicklable *</InputLabel>
                       <Select
@@ -389,14 +362,13 @@ function Index() {
                       id="demo-simple-select-autowidth"
                       value={formState?.clickable}
                       defaultValue={false}
-                      // value={oldObjectId ? contestData?.status : formState?.status}
                       disabled={((isSubmitted || id) && (!editing || saving))}
                       onChange={(e) => {setFormState(prevState => ({
                           ...prevState,
                           clickable: e.target.value
                       }))}}
                       label="Clickable"
-                      sx={{ minHeight:43 }}
+                      sx={{ height: 43}}
                       >
                       <MenuItem value={true}>True</MenuItem>
                       <MenuItem value={false}>False</MenuItem>
@@ -404,7 +376,7 @@ function Index() {
                     </FormControl>
                 </Grid>
 
-                <Grid item xs={12} md={6} xl={3} mt={1}>
+                <Grid item xs={12} md={3} xl={3} mt={1} display='flex' justifyContent='center' alignContent='center' alignItems='center'>
                     <FormControl sx={{width: "100%" }}>
                       <InputLabel id="demo-simple-select-autowidth-label">Window *</InputLabel>
                       <Select
@@ -426,7 +398,7 @@ function Index() {
                     </FormControl>
                 </Grid>
 
-                <Grid item xs={12} md={6} xl={3} mt={1}>
+                <Grid item xs={12} md={3} xl={3} mt={1} display='flex' justifyContent='center' alignContent='center' alignItems='center'>
                     <FormControl sx={{width: "100%" }}>
                       <InputLabel id="demo-simple-select-autowidth-label">Position *</InputLabel>
                       <Select
@@ -451,7 +423,7 @@ function Index() {
                     </FormControl>
                 </Grid>
                 
-                <Grid item xs={12} md={6} xl={3} mt={1}>
+                <Grid item xs={12} md={3} xl={3} mt={1} display='flex' justifyContent='center' alignContent='center' alignItems='center'>
                     <FormControl sx={{width: "100%" }}>
                       <InputLabel id="demo-simple-select-autowidth-label">Status *</InputLabel>
                       <Select
@@ -473,7 +445,7 @@ function Index() {
                     </FormControl>
                 </Grid>
 
-                <Grid item xs={12} md={6} xl={3} mt={1}>
+                <Grid item xs={12} md={3} xl={3} mt={1} display='flex' justifyContent='center' alignContent='center' alignItems='center'>
                     <MDButton variant="outlined" style={{fontSize:10}} fullWidth color="success" component="label">
                       {!formState?.carouselImage?.name ? "Upload Carousel Image" : "Upload Another File?"}
                       <input 
@@ -493,7 +465,7 @@ function Index() {
                     </MDButton>
                 </Grid>
 
-                <Grid item xs={12} md={6} xl={3} mt={.75} display="flex" justifyContent="center" alignContent="center" alignItems="center">
+                <Grid item xs={12} md={3} xl={3} mt={1} display="flex" justifyContent="center" alignContent="center" alignItems="center">
                   <TextField
                           disabled
                           id="outlined-required"
@@ -504,13 +476,14 @@ function Index() {
                       />
                 </Grid>
 
-                <Grid item xs={12} md={6} xl={12} mt={2}>
+                <Grid item xs={12} md={12} xl={12} mt={1} display='flex' justifyContent='center' alignContent='center' alignItems='center'>
                   <TextField
                       disabled={((isSubmitted || id) && (!editing || saving))}
                       id="outlined-required"
                       label='Description *'
                       fullWidth
                       multiline
+                      rows={10}
                       // defaultValue={portfolioData?.portfolioName}
                       value={formState?.description}
                       onChange={(e) => {setFormState(prevState => ({
@@ -522,76 +495,94 @@ function Index() {
                 
             </Grid>
 
-        <Grid container spacing={1} mt={0.5} mb={0} xs={12} md={3} xl={3}>
-            <Grid item xs={12} md={6} lg={12}>
-            {previewUrl ? 
-              <img src={previewUrl} style={{height:"250px", width:"250px",borderRadius:"5px", border:"1px #ced4da solid"}}/>
-            :
-              <img src={imageFile} style={{height:"250px", width:"250px",borderRadius:"5px", border:"1px #ced4da solid"}}/>
-            }
+            <Grid container spacing={1} mt={1} xs={12} md={12} xl={12} display='flex' justifyContent='flex-end' alignContent='center' alignItems='center'>
+              <Grid item display="flex" justifyContent="space-around" xs={8} md={3} xl={2} style={{width:'100%'}}>
+                      {!isSubmitted && !id && (
+                      <>
+                      <MDButton 
+                        variant="contained" 
+                        color="success" 
+                        size="small" 
+                        // sx={{mr:1, ml:2}} 
+                        disabled={creating} 
+                        onClick={(e)=>{onSubmit(e,formState)}}
+                        >
+                        {creating ? <CircularProgress size={20} color="inherit" /> : "Save"}
+                      </MDButton>
+                      <MDButton 
+                        variant="contained" 
+                        color="error" 
+                        size="small" 
+                        disabled={creating} 
+                        onClick={()=>{navigate("/carousel")}}
+                      >
+                        Cancel
+                      </MDButton>
+                      </>
+                      )}
+                      {(isSubmitted || id) && !editing && (
+                      <>
+                      <MDButton 
+                        variant="contained" 
+                        color="warning" 
+                        size="small" 
+                        // sx={{mr:1, ml:2}} 
+                        onClick={()=>{setEditing(true)}}
+                      >
+                        Edit
+                      </MDButton>
+                      <MDButton 
+                        variant="contained" 
+                        color="info" 
+                        size="small" 
+                        onClick={()=>{id ? navigate("/carousel") : setIsSubmitted(false)}}
+                      >
+                        Back
+                      </MDButton>
+                      </>
+                      )}
+                      {(isSubmitted || id) && editing && (
+                      <>
+                      <MDButton 
+                          variant="contained" 
+                          color="warning" 
+                          size="small" 
+                          sx={{mr:1, ml:2}} 
+                          disabled={saving} 
+                          // onClick={()=>{navigate("/carousel")}}
+                          onClick={(e)=>{onEdit(e,formState)}}
+                          >
+                          {saving ? <CircularProgress size={20} color="inherit" /> : "Save"}
+                      </MDButton>
+                      <MDButton 
+                          variant="contained" 
+                          color="error" 
+                          size="small" 
+                          disabled={saving} 
+                          onClick={()=>{setEditing(false)}}
+                          >
+                          Cancel
+                      </MDButton>
+                      </>
+                      )}
+              </Grid>
             </Grid>
-        </Grid>
-        </Grid>
 
-        <Grid container mt={2} xs={12} md={12} xl={12} >
-          <Grid item display="flex" justifyContent="flex-end" xs={12} md={6} xl={12}>
-                  {!isSubmitted && !id && (
-                  <>
-                  <MDButton 
-                      variant="contained" 
-                      color="success" 
-                      size="small" 
-                      sx={{mr:1, ml:2}} 
-                      disabled={creating} 
-                      onClick={(e)=>{onSubmit(e,formState)}}
-                      >
-                      {creating ? <CircularProgress size={20} color="inherit" /> : "Save"}
-                  </MDButton>
-                  <MDButton variant="contained" color="error" size="small" disabled={creating} onClick={()=>{navigate("/carousel")}}>
-                      Cancel
-                  </MDButton>
-                  </>
-                  )}
-                  {(isSubmitted || id) && !editing && (
-                  <>
-                  <MDButton variant="contained" color="warning" size="small" sx={{mr:1, ml:2}} onClick={()=>{setEditing(true)}}>
-                      Edit
-                  </MDButton>
-                  <MDButton variant="contained" color="info" size="small" onClick={()=>{id ? navigate("/carousel") : setIsSubmitted(false)}}>
-                      Back
-                  </MDButton>
-                  </>
-                  )}
-                  {(isSubmitted || id) && editing && (
-                  <>
-                  <MDButton 
-                      variant="contained" 
-                      color="warning" 
-                      size="small" 
-                      sx={{mr:1, ml:2}} 
-                      disabled={saving} 
-                      // onClick={()=>{navigate("/carousel")}}
-                      onClick={(e)=>{onEdit(e,formState)}}
-                      >
-                      {saving ? <CircularProgress size={20} color="inherit" /> : "Save"}
-                  </MDButton>
-                  <MDButton 
-                      variant="contained" 
-                      color="error" 
-                      size="small" 
-                      disabled={saving} 
-                      onClick={()=>{setEditing(false)}}
-                      >
-                      Cancel
-                  </MDButton>
-                  </>
-                  )}
-          </Grid>
-        </Grid>
+            <Grid container spacing={1} mt={1} xs={12} md={12} xl={12} display='flex' justifyContent='center' alignContent='center' alignItems='center'>
+                <Grid item xs={12} md={12} lg={12} display='flex' justifyContent='center' alignItems='center' style={{width:"100%"}}>
+                {previewUrl ? 
+                  <img src={previewUrl} style={{width:"100%",borderRadius:"5px", border:"1px #ced4da solid"}}/>
+                :
+                  <img src={imageFile} style={{width:"100%",borderRadius:"5px", border:"1px #ced4da solid"}}/>
+                }
+                </Grid>
+            </Grid>
 
-        <Grid container mt={1} xs={12} md={12} lg={12}>
-          <CarouselClickedBy carousel={carousel}/>
-        </Grid>
+            <Grid container spacing={1} mt={1} mb={2} xs={12} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center'>
+              <Grid item xs={12} md={12} lg={12} display='flex' justifyContent='center' alignItems='center' style={{width:"100%"}}>
+                <CarouselClickedBy carousel={carousel}/>
+              </Grid>
+            </Grid>
 
           {renderSuccessSB}
           {renderErrorSB}

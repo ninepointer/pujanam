@@ -1,6 +1,7 @@
 const Pooja = require('../../models/Pooja/poojaSchema');
 const ApiResponse = require('../../helpers/apiResponse');
 const AWS = require('aws-sdk');
+const sharp = require('sharp');
 const { ObjectId } = require('mongodb');
 
 AWS.config.update({
@@ -13,6 +14,25 @@ const s3 = new AWS.S3({
     accessKeyId: process.env.AWS_ACCESS_KEY_ID,
     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
 });
+
+exports.resizePhoto = (req, res, next) => {
+    if (!req.file) {
+        // no file uploaded, skip to next middleware
+        console.log('no file');
+        next();
+        return;
+    }
+    sharp(req.file.buffer).resize({ width: 786, height: 512 }).toBuffer()
+        .then((resizedImageBuffer) => {
+            req.file.buffer = resizedImageBuffer;
+            // console.log("Resized:",resizedImageBuffer)
+            next();
+        })
+        .catch((err) => {
+            console.error(err);
+            res.status(500).send({ message: "Error resizing photo" });
+        });
+};
 
 const processUpload = async (uploadedFiles, s3, route) => {
     const MAX_LIMIT = 5 * 1024 * 1024;
@@ -58,7 +78,7 @@ exports.createPooja = async (req, res) => {
             price,
             _id
         } = req.body;
-
+  
         // console.log(req.body)
         const image = req.file;
         const poojaImage = image && await Promise.all(await processUpload([image], s3, name, true));
@@ -132,19 +152,9 @@ exports.editPooja = async (req, res) => {
 exports.getAllPoojas = async (req, res) => {
     try {
         const poojas = await Pooja.find()
-        .populate('category', 'product_name');
-        ApiResponse.success(res, poojas);
-    } catch (error) {
-        ApiResponse.error(res, 'Something went wrong', 500, error.message);
-    }
-};
-
-exports.getHomePoojas = async (req, res) => {
-    try {
-        const poojas = await Pooja.find()
-        .limit(4)
-        .populate('category', 'product_name');
-        ApiResponse.success(res, poojas);
+        .populate('category', 'product_name')
+        const count = poojas?.length;
+        ApiResponse.success(res, poojas, count);
     } catch (error) {
         ApiResponse.error(res, 'Something went wrong', 500, error.message);
     }
@@ -156,7 +166,32 @@ exports.getActivePoojas = async (req, res) => {
         const activePoojas = await Pooja.find({ status: 'Published' })
         .populate('packages.tier', 'tier_name')
         .populate('category', 'product_name');
-        ApiResponse.success(res, activePoojas);
+        const count = activePoojas?.length;
+        ApiResponse.success(res, activePoojas, count);
+    } catch (error) {
+        ApiResponse.error(res, 'Something went wrong', 500, error.message);
+    }
+};
+
+exports.getUnpublishedPoojas = async (req, res) => {
+    try {
+        const activePoojas = await Pooja.find({ status: 'Unpublished' })
+        .populate('packages.tier', 'tier_name')
+        .populate('category', 'product_name');
+        const count = activePoojas?.length;
+        ApiResponse.success(res, activePoojas, count);
+    } catch (error) {
+        ApiResponse.error(res, 'Something went wrong', 500, error.message);
+    }
+};
+
+exports.getDraftPoojas = async (req, res) => {
+    try {
+        const activePoojas = await Pooja.find({ status: 'Draft' })
+        .populate('packages.tier', 'tier_name')
+        .populate('category', 'product_name');
+        const count = activePoojas?.length;
+        ApiResponse.success(res, activePoojas, count);
     } catch (error) {
         ApiResponse.error(res, 'Something went wrong', 500, error.message);
     }

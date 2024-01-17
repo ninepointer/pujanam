@@ -48,8 +48,8 @@ function Index() {
     gender: '' || prevDevData?.gender,
     description: '' || prevDevData?.description,
     image: {
-      name: '' || prevDevData?.image.name,
-      url: '' || prevDevData?.image.url
+      name: '' || prevDevData?.image?.name,
+      url: '' || prevDevData?.image?.url
     },
     status: '' || prevDevData?.status,
   });

@@ -150,6 +150,10 @@ const userSchema = new mongoose.Schema({
         type: Schema.Types.ObjectId,
         ref: 'devi-devta',
     }],
+    current_location: {
+       latitude: {type: Number},
+       longitude: {type: Number}
+    }
 })
 
 userSchema.methods.generateAuthToken = async function(){

@@ -9,6 +9,9 @@ import MDBox from '../../../components/MDBox';
 import MDButton from '../../../components/MDButton';
 import {Link} from 'react-router-dom'
 import Active from '../data/activeMandir'
+import Inactive from '../data/inactiveMandir'
+import Draft from '../data/draftMandir'
+import MDTypography from '../../../components/MDTypography';
 
 
 export default function LabTabs() {
@@ -24,33 +27,24 @@ export default function LabTabs() {
   };
 
   return (
-    <MDBox bgColor="dark" color="light" mt={2} mb={1} p={2} borderRadius={10} minHeight='auto'>
+    <MDBox bgColor="light" color="light" mt={2} mb={1} p={2} borderRadius={10} minHeight='auto'>
     <MDBox mb={2} display="flex" justifyContent="space-between">
-    <MDButton 
-    variant="outlined" 
-    color="warning" 
-    size="small"
-    component={Link}
-    to='/dashboard'
-    >
-        Back to Dashboard
-    </MDButton>
-    <MDButton 
-    variant="outlined" 
-    color="warning" 
-    size="small"
-    component={Link}
-    to='/mandirdetails'
-    >
-        Create Mandir
+      <MDButton 
+        variant="outlined" 
+        color="success" 
+        size="small"
+        component={Link}
+        to='/mandirdetails'
+      >
+        <MDTypography fontFamily='Itim' variant='caption'>Create Mandir</MDTypography>
     </MDButton>
     </MDBox>
       <TabContext value={value}>
-        <MDBox sx={{ borderBottom: 1, borderColor: 'divider'}}>
+        <MDBox sx={{ border: 1, borderRadius:2, borderColor: 'divider'}}>
           <TabList onChange={handleChange} aria-label="lab API tabs example">
-            <Tab label="Active" value="1" />
-            <Tab label="Inactive" value="2" />
-            <Tab label="Draft" value="3" />
+            <Tab style={{fontFamily:'Itim'}} label="Active" value="1" />
+            <Tab style={{fontFamily:'Itim'}} label="Inactive" value="2" />
+            <Tab style={{fontFamily:'Itim'}} label="Draft" value="3" />
           </TabList>
         </MDBox>
           <TabPanel value="1">
@@ -61,7 +55,7 @@ export default function LabTabs() {
           </MDBox>
           : 
           <MDBox style={{minWidth:'100%'}}>
-          <Active/>
+            <Active/>
           </MDBox>
           }
           </TabPanel>
@@ -73,7 +67,7 @@ export default function LabTabs() {
           </MDBox>
           : 
           <MDBox style={{minWidth:'100%'}}>
-          <Active/>
+            <Inactive/>
           </MDBox>
           }
           </TabPanel>
@@ -85,7 +79,7 @@ export default function LabTabs() {
           </MDBox>
           : 
           <MDBox style={{minWidth:'100%'}}>
-          <Active/>
+            <Draft/>
           </MDBox>
    
           }

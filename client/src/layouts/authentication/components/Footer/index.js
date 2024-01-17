@@ -43,7 +43,7 @@ function Footer({ light }) {
                 </Icon>
               </MDBox>
               by
-              <Link href="https://www.punyam.app/" target="_blank">
+              <Link href="https://punyam.app/" target="_blank">
                 <MDTypography variant="button" fontWeight="medium" style={{fontFamily: 'Itim'}} color={light ? "dark" : "white"}>
                   &nbsp;punyam&nbsp;
                 </MDTypography>
@@ -54,23 +54,28 @@ function Footer({ light }) {
 
           <Grid item xs={12} md={12} lg={4} mt={1} display='flex' justifyContent='center' alignItems='center'>
             <MDBox lineHeight={1}>
-              <Link href="https://www.youtube.com/@punyamapp" target="_blank">
+              <Link href="https://youtube.com/@punyamapp" target="_blank">
                 <YoutubeIcon color='white'/>
               </Link>
             </MDBox>
             <MDBox pl={2} lineHeight={1}>
-              <Link href="https://www.linkedin.com/company/punyamapp" target="_blank">
+              <Link href="https://linkedin.com/company/punyamapp" target="_blank">
                 <LinkedInIcon color='white'/>
               </Link>
             </MDBox>
             <MDBox pl={2} lineHeight={1}>
-              <Link href="https://www.instagram.com/punyamapp/" target="_blank">
+              <Link href="https://instagram.com/punyamapp/" target="_blank">
                 <InstagramIcon color='white'/>
               </Link>
             </MDBox>
             <MDBox pl={2} lineHeight={1}>
-              <Link href="https://www.facebook.com/punyamapp" target="_blank">
+              <Link href="https://facebook.com/punyamapp" target="_blank">
                 <FacebookIcon color='white'/>
+              </Link>
+            </MDBox>
+            <MDBox pl={2} lineHeight={1}>
+              <Link href="https://twitter.com/punyamapp" target="_blank">
+                <TwitterIcon color='white'/>
               </Link>
             </MDBox>
           </Grid>

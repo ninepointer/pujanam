@@ -15,11 +15,6 @@ import aboutuspage from '../../../assets/images/aboutuspage.png'
 import cofounder_prateek from '../../../assets/images/cofounder_prateek.png'
 import cofounder_kush from '../../../assets/images/cofounder_kush.png'
 import cofounder_manish from '../../../assets/images/cofounder_manish.png'
-import about1 from '../assets/images/About/about1.png'
-import about2 from '../assets/images/About/about2.png'
-import about3 from '../assets/images/About/about3.webp'
-import about4 from '../assets/images/About/about4.png'
-import about5 from '../assets/images/About/about5.webp'
 import MDAvatar from '../../../components/MDAvatar';
 import MDTypography from '../../../components/MDTypography';
 import MDBox from '../../../components/MDBox';
@@ -65,10 +60,10 @@ const About = () => {
                         <Grid item xs={12} md={6} lg={12} display='flex' justifyContent='center' alignItems="flex-start">
                             <Stack>
                                 <Title fontSize={20} sx={{ letterSpacing: "0.02em", mb: 1, textAlign:'center' }} style={{ color:'#315c45'}} >The goal of a successful trader is to make the best trades. Money is secondary.</Title>
-                                <Title fontSize={15} sx={{ letterSpacing: "0.02em", mb: 1, textAlign:'center' }} style={{ color:'grey'}} >At StoxHero, our mission is to reduce the number of individual traders incurring losses in the equity F&O segment, striving for a more successful trading community.</Title>
+                                <Title fontSize={15} sx={{ letterSpacing: "0.02em", mb: 1, textAlign:'center' }} style={{ color:'grey'}} >At punyam, our mission is to reduce the number of individual traders incurring losses in the equity F&O segment, striving for a more successful trading community.</Title>
                                 <Title fontSize={20} sx={{ letterSpacing: "0.02em", mb: 1, textAlign:'center' }} style={{ color:'#315c45'}} >The Team</Title>
                                 <Title fontSize={15} sx={{ fontWeight: 400, letterSpacing: "0.05em", mb: 6, textAlign:'center', color: "black" }} >
-                                StoxHero is led by a dynamic co-founding team with second-time startup founders and impressive educational backgrounds, 
+                                punyam is led by a dynamic co-founding team with second-time startup founders and impressive educational backgrounds, 
                                 including <span style={{color:'#65BA0D', fontWeight:'bold'}}>IIT, IIM, and NIT</span>. Their diverse expertise spans derivatives trading, stock exchanges, and leadership roles 
                                 at top tech startups like <span style={{color:'#65BA0D', fontWeight:'bold'}}>Unacademy, OLA, Mu-Sigma, JAYPEE Capital, NCDEX, and NeoStencil</span>. All three co-founders share 
                                 a history of working as a team at Unacademy and NeoStencil and committed to one cause - to make individual traders better traders!
@@ -96,7 +91,7 @@ const About = () => {
                                     </MDBox>
                                     <MDBox display='flex' justifyContent='center' alignItems='flex-start'>
                                         <MDTypography fontSize={13} sx={{ letterSpacing: "0.02em", textAlign: 'justify', color: '#315c45' }} >
-                                            StoxHero is my 2nd startup having previously built NeoStencil, a successful and profitable edtech platform acquired by India’s leading edtech company Unacademy in 2020. As VP, Business at Unacademy, I launched new business segments. In earlier roles, I worked as a Derivatives Trader for a leading prop-trading desk for 2.5 years. I hold degrees from IIT Bombay & IIM Calcutta.
+                                            punyam is my 2nd startup having previously built NeoStencil, a successful and profitable edtech platform acquired by India’s leading edtech company Unacademy in 2020. As VP, Business at Unacademy, I launched new business segments. In earlier roles, I worked as a Derivatives Trader for a leading prop-trading desk for 2.5 years. I hold degrees from IIT Bombay & IIM Calcutta.
                                         </MDTypography>
                                     </MDBox>
                                     </MDBox>
@@ -119,7 +114,7 @@ const About = () => {
                                     </MDBox>
                                     <MDBox display='flex' justifyContent='center' alignItems='flex-start'>
                                         <MDTypography fontSize={13} sx={{ letterSpacing: "0.02em", textAlign: 'justify', color: '#315c45' }} >
-                                            StoxHero is my 2nd startup. I previously built a food-tech startup MBL Foods Services, a leading chain in terms of orders for North Indian food on Zomato & Swiggy in Bangalore region. I have worked with Unacademy to set up new business lines. At Ninjacart, I handled operations in Delhi region, and prior to that, I worked as a Data Analyst with MuSigma & TCS. I am a Computer Science Engineer from NIT Rourkela.
+                                            punyam is my 2nd startup. I previously built a food-tech startup MBL Foods Services, a leading chain in terms of orders for North Indian food on Zomato & Swiggy in Bangalore region. I have worked with Unacademy to set up new business lines. At Ninjacart, I handled operations in Delhi region, and prior to that, I worked as a Data Analyst with MuSigma & TCS. I am a Computer Science Engineer from NIT Rourkela.
                                         </MDTypography>
                                     </MDBox>
                                     </MDBox>

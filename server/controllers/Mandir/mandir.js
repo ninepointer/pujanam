@@ -12,6 +12,26 @@ AWS.config.update({
     region: process.env.AWS_REGION
 
 });
+
+exports.resizePhoto = (req, res, next) => {
+    if (!req.file) {
+        // no file uploaded, skip to next middleware
+        console.log('no file');
+        next();
+        return;
+    }
+    sharp(req.file.buffer).resize({ width: 786, height: 512 }).toBuffer()
+        .then((resizedImageBuffer) => {
+            req.file.buffer = resizedImageBuffer;
+            // console.log("Resized:",resizedImageBuffer)
+            next();
+        })
+        .catch((err) => {
+            console.error(err);
+            res.status(500).send({ message: "Error resizing photo" });
+        });
+};
+
 const s3 = new AWS.S3({
     accessKeyId: process.env.AWS_ACCESS_KEY_ID,
     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
@@ -21,11 +41,15 @@ const s3 = new AWS.S3({
 exports.create = (async (req, res, next) => {
     
     try {
-        const { name, description, dham, popular, morning_opening_time, 
+        const {morning_aarti_time, evening_aarti_time, accessibility, meta_title, 
+            meta_description, tags, name, description, dham, popular, morning_opening_time, 
             morning_closing_time, evening_opening_time, evening_closing_time,
             devi_devta, longitude, latitude, address, pincode, city, state, country,
             construction_year, pandit_mobile_number, pandit_full_name,
             status  } = req.body;
+        
+        const count = await Mandir.countDocuments();
+        const slug = name?.replace(/ /g, "-").toLowerCase() + "-" +(count+1);
 
         const address_details = {
             location: {
@@ -46,10 +70,10 @@ exports.create = (async (req, res, next) => {
             name, description, dham, popular, morning_opening_time, 
             morning_closing_time, evening_opening_time, evening_closing_time,
             devi_devta, address_details, images: otherImages, cover_image: coverImage[0],
-            construction_year, pandit_mobile_number, pandit_full_name,
-            status
+            construction_year, pandit_mobile_number, pandit_full_name, slug: slug,
+            status, morning_aarti_time, evening_aarti_time, accessibility, meta_title, 
+            meta_description, tags
         });
-       
         ApiResponse.created(res, mandir, 'Mandir updated successfully');
     } catch (error) {
         console.error(error);
@@ -59,7 +83,7 @@ exports.create = (async (req, res, next) => {
 });
 
 const processUpload = async(uploadedFiles, s3, title, isTitleImage)=>{
-    const MAX_LIMIT = 5*1024*1024;
+    const MAX_LIMIT = 5*1080*720;
     const fileUploadPromises = uploadedFiles.map(async (file) => {
         
         if(file.size > MAX_LIMIT){
@@ -116,7 +140,11 @@ exports.edit = (async (req, res, next) => {
         update.images = mandir?.images;
         update.cover_image = mandir?.cover_image;
         update.favourite = mandir?.favourite;
-        update.share = mandir?.share
+        update.share = mandir?.share;
+        update.uniqueCount = mandir?.uniqueCount
+
+        const splitSlug = mandir.slug.split('-');
+        update.slug = update.name?.replace(/ /g, "-").toLowerCase() + "-" +(splitSlug[splitSlug.length - 1]);
 
         if(uploadedFiles?.files){
             otherImages = await Promise.all(await processUpload(uploadedFiles.files, s3, update.name));
@@ -169,7 +197,30 @@ exports.getActive = async (req, res) => {
     try {
         const activeMandir = await Mandir.find({ status: 'Active' })
         .populate('devi_devta', 'name');
-        ApiResponse.success(res, activeMandir);
+        const count = activeMandir?.length;
+        ApiResponse.success(res, activeMandir, count);
+    } catch (error) {
+        ApiResponse.error(res, 'Something went wrong', 500, error.message);
+    }
+};
+
+exports.getInactive = async (req, res) => {
+    try {
+        const inactiveMandir = await Mandir.find({ status: 'Inactive' })
+        .populate('devi_devta', 'name');
+        const count = inactiveMandir?.length;
+        ApiResponse.success(res, inactiveMandir, count);
+    } catch (error) {
+        ApiResponse.error(res, 'Something went wrong', 500, error.message);
+    }
+};
+
+exports.getDraft = async (req, res) => {
+    try {
+        const draftMandir = await Mandir.find({ status: 'Draft' })
+        .populate('devi_devta', 'name');
+        const count = draftMandir?.length;
+        ApiResponse.success(res, draftMandir, count);
     } catch (error) {
         ApiResponse.error(res, 'Something went wrong', 500, error.message);
     }

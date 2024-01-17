@@ -7,7 +7,9 @@ const cors = require('cors');
 const helmet = require("helmet");
 const mongoSanitize = require('express-mongo-sanitize');
 const xssClean = require("xss-clean");
-const hpp = require("hpp")
+const hpp = require("hpp");
+const LanguageSchema = require("./models/language");
+const Setting = require("./models/setting");
 
 async function singleProcess() {
 
@@ -41,6 +43,9 @@ async function singleProcess() {
     app.use(xssClean());
     app.use(hpp());
     app.get('/api/v1/product', async (req, res, next) => { res.json({ status: 'success', data: await Product.find() }) })
+    app.get('/api/v1/language', async (req, res, next) => { res.json({ status: 'success', data: await LanguageSchema.find() }) })
+    app.get('/api/v1/usersetting', async (req, res, next) => { res.json({ status: 'success', data: await Setting.find() }) })
+    app.use('/api/v1/unknown', require("./routes/unKnownUserRoute"));
 
     app.use('/api/v1', require("./routes/user/signedUpUser"))
     app.use('/api/v1', require("./routes/user/userLogin"));
@@ -54,6 +59,7 @@ async function singleProcess() {
     app.use('/api/v1/carousels', require("./routes/carousel/carouselRoutes"));
     app.use('/api/v1/mandir', require("./routes/Mandir/mandir"));
     app.use('/api/v1/usermandir', require("./routes/Mandir/userMandir"));
+    app.use('/api/v1/location', require("./routes/Location/locationRoutes"));
 
     app.use('/api/v1/dailycontest', require("./routes/DailyContest/dailyContestRoutes"))
     app.use('/api/v1/user', require("./routes/user/userRoutes"));

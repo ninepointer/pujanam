@@ -104,7 +104,7 @@ export default function BlogCard() {
                   <meta property="og:title" content={blogData?.metaTitle} />
                   <meta property="og:description" content={blogData?.metaDescription} />
                   <meta property="og:image" content={blogData?.thumbnailImage?.url} />
-                  <meta property="og:url" content={`https://stoxhero.com/blogs/${location?.pathname?.split("/")[2]}`} />
+                  <meta property="og:url" content={`https://punyam.app/blogs/${location?.pathname?.split("/")[2]}`} />
 
                 </Helmet>
                 {/* } */}

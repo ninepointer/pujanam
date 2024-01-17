@@ -1,6 +1,7 @@
 const DeviDevta = require('../../models/Devi-Devta/devi-devta');
 const ApiResponse = require('../../helpers/apiResponse');
 const AWS = require('aws-sdk');
+const sharp = require('sharp');
 const { ObjectId } = require('mongodb');
 
 AWS.config.update({
@@ -9,10 +10,30 @@ AWS.config.update({
     region: process.env.AWS_REGION
 
 });
+
 const s3 = new AWS.S3({
     accessKeyId: process.env.AWS_ACCESS_KEY_ID,
     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-});
+}); 
+
+exports.resizePhoto = (req, res, next) => {
+    if (!req.file) {
+        // no file uploaded, skip to next middleware
+        console.log('no file');
+        next();
+        return;
+    }
+    sharp(req.file.buffer).resize({ width: 512, height: 512 }).toBuffer()
+        .then((resizedImageBuffer) => {
+            req.file.buffer = resizedImageBuffer;
+            // console.log("Resized:",resizedImageBuffer)
+            next();
+        })
+        .catch((err) => {
+            console.error(err);
+            res.status(500).send({ message: "Error resizing photo" });
+        });
+};
 
 const processUpload = async (uploadedFiles, s3, route) => {
     const MAX_LIMIT = 5 * 1024 * 1024;

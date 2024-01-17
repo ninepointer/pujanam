@@ -19,17 +19,32 @@ import { useMediaQuery } from '@mui/material'
 import theme from '../../HomePage/utils/theme/index'; 
 
 
-function MapSearch() {
+function MapSearch({currentLocation}) {
     const [value, setValue] = React.useState(null);
     const [inputValue, setInputValue] = React.useState('');
     const [templeValue, setTempleValue] = useState();
     const [options, setOptions] = React.useState([]);
     const [templeData, setTempleData] = useState([]);
     const [templeInputValue, setTempleInputValue] = useState([]);
+    const [currentPlace, setCurrentPlace] = useState("");
     const [coordinates, setCoordinates] = React.useState({
         lat: 0,
         long: 0
     })
+
+    useEffect(()=>{
+        getCurrentPlace()
+    }, [currentLocation])
+
+    async function getCurrentPlace(){
+        if(currentLocation.latitude && currentLocation.longitude){
+            const data = await axios(`${apiUrl}location/currentplace?lat=${currentLocation.latitude}&long=${currentLocation.longitude}`);
+            setCurrentPlace(data.data.data?.results[0].formatted_address);
+            const templeData = await axios(`${apiUrl}mandir/user/bydistance?lat=${data.data.data?.results[0]?.geometry.location.lat}&long=${data.data.data?.results[0]?.geometry.location.lng}&search=${templeInputValue}`,
+            { withCredentials: true });
+            setTempleData(templeData?.data?.data);  
+        }
+    }
 
     async function getCoordinates() {
         if (value?.place_id) {
@@ -174,11 +189,12 @@ function MapSearch() {
                                 autoComplete
                                 includeInputInList
                                 filterSelectedOptions
-                                value={value}
+                                value={currentPlace || value}
                                 noOptionsText="Search your location"
                                 onChange={(event, newValue) => {
                                     setOptions(newValue ? [newValue, ...options] : options);
                                     setValue(newValue);
+                                
                                 }}
                                 onInputChange={(event, newInputValue) => {
                                     setInputValue(newInputValue);
@@ -190,15 +206,17 @@ function MapSearch() {
                                     placeholder="Select your location"    
                                     InputProps={{
                                             ...params.InputProps,
+                                            endAdornment: null,
+                                            // border:'none',
                                             style: {
-                                                color: '#ED9121',
+                                                // color: '#ED9121',
                                                 height: 50,
-                                                outline: "none",
-                                                borderWidth: 0,
-                                                '&:hover': {
-                                                    borderWidth: 0, // Adjust the styles for hover if needed
-                                                },
-                                                border: "none"
+                                                // outline: "none",
+                                                // borderWidth: 0,
+                                                // '&:hover': {
+                                                //     borderWidth: 0, // Adjust the styles for hover if needed
+                                                // },
+                                                borderBottom: 'none !important',
                                             },
                                         }}
                                     />
@@ -289,6 +307,9 @@ function MapSearch() {
                             noOptionsText= {templeInputValue ? "No Temple Found!" : "Search for temples"}
                             onChange={(event, newValue) => {
                                 setTempleValue(newValue);
+                                if(newValue){
+                                    window.open(`/mandir/${newValue?.slug}`, '_blank');
+                                }
                             }}
                             onInputChange={(event, newInputValue) => {
                                 setTempleInputValue(newInputValue);
@@ -336,6 +357,7 @@ function MapSearch() {
                                     // label="Search for temples"
                                     InputProps={{
                                         ...params.InputProps,
+                                        endAdornment: null,
                                         style: {
                                             color: '#ED9121',
                                             height: 50,
