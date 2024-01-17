@@ -53,6 +53,7 @@ import Privacy from "./layouts/HomePage/pages/Privacy";
 import Terms from "./layouts/HomePage/pages/Tnc";
 import ProtectedRoute from "./ProtectedRoute";
 import AdminLogin from "./layouts/authentication/sign-in/adminLogin";
+import MandirData from "./layouts/HomePage/pages/MandirData";
 
 const TRACKING_ID = "UA-264098426-2"
 ReactGA.initialize(TRACKING_ID);
@@ -311,7 +312,7 @@ export default function App() {
           <Route path='/adminlogin' element={<AdminLogin />}/>
           <Route path='/about' element={<About/>}/>
           <Route path='/mandir' element={<Mandir/>}/>
-          
+          <Route path='/mandir/:id' element={<MandirData/>}/>
           <Route path='/contact' element={<Contact/>}/>
           <Route path="*" element={<NotFound />} />
 

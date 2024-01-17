@@ -40,21 +40,12 @@ import Dhams from './dhams'
 import PopularMandirNearMe from './popularmandirNearMe'
 
 function Cover(props) {
-  // const navigate = useNavigate();
-  // const location = useLocation();
-  // const [count, setCount] = useState(0);
   const [isLoading,setIsLoading] = useState(false);
   const [data,setData] = useState([]);
   const [dham,setDham] = useState([]);
   const [popular,setPopular] = useState([]);
   const [pooja,setPooja] = useState([]);
   const [scrollPosition, setScrollPosition] = useState(0);
-  // const [center, setCenter] = useState({ lat: 0, lng: 0 });
-  // const [markerPosition, setMarkerPosition] = useState(null);
-  // const [value, setValue] = React.useState(null);
-  // const [inputValue, setInputValue] = React.useState('');
-  // const [options, setOptions] = React.useState([]);
-
 
   const [currentLocation, setCurrentLocation] = useState({
     latitude: 0,
@@ -63,12 +54,9 @@ function Cover(props) {
 
   useEffect(() => {
     // Check if geolocation is supported
-    console.log("get location above")
     if (navigator.geolocation) {
-      console.log("get location in if", navigator.geolocation)
       navigator.geolocation.getCurrentPosition(
         (position) => {
-          console.log("get location current", latitude, longitude)
           const { latitude, longitude } = position.coords;
           setCurrentLocation({ latitude, longitude });
         },
@@ -81,7 +69,6 @@ function Cover(props) {
     }
   }, []);
 
-  console.log("currentLocation", currentLocation)
   useEffect(()=>{
     let call1 = axios.get(`${apiUrl}usermandir/home`,{
                 withCredentials: false,

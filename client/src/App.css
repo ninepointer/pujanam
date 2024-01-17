@@ -7,6 +7,16 @@
   pointer-events: none;
 }
 
+.zoom-image {
+  cursor: pointer;
+  transition: transform 0.3s ease-in-out;
+}
+
+.zoom-image:hover {
+  transform: scale(1.1);
+}
+
+
 .body {
   font-family: 'Itim', cursive;
 }
