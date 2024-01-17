@@ -1,6 +1,6 @@
 import { Grid } from '@mui/material'
 import { ThemeProvider } from 'styled-components';
-import React, {useState, useEffect} from "react"
+import React, {useState, useContext, useEffect} from "react"
 import ReactGA from "react-ga";
 import axios from "axios";
 import PageNavbar from '../components/Navbars/PageNavbar'
@@ -278,7 +278,7 @@ const About = () => {
             :
             <TabPanel1 value={value} index={0} dir={theme.direction}>
             <MDBox display='flex' justifyContent='center' alignContent='center' alignItems='center'>
-              <MDTypography>Hi</MDTypography>
+              <MDTypography></MDTypography>
             </MDBox>
             </TabPanel1>
             }
