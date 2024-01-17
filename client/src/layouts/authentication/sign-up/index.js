@@ -44,9 +44,9 @@ function Cover(props) {
   const location = useLocation();
   const [count, setCount] = useState(0);
   const [isLoading,setIsLoading] = useState(false);
-  const [data,setDham] = useState([]);
-  const [dham,setPopular] = useState([]);
-  const [popular,setData] = useState([]);
+  const [data,setData] = useState([]);
+  const [dham,setDham] = useState([]);
+  const [popular,setPopular] = useState([]);
   const [pooja,setPooja] = useState([]);
   const [scrollPosition, setScrollPosition] = useState(0);
   // const GOOGLE_MAPS_API_KEY = 'AIzaSyC3aviU6KHXAjoSnxcw6qbOhjnFctbxPkE';
