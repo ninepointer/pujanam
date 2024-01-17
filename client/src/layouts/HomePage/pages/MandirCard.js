@@ -96,7 +96,7 @@ function HomeCard({elem, name, description}) {
                                 <MDTypography variant='caption' color='success'>Aarti Time: {moment.utc(elem?.morning_aarti_time).format('HH:mm a')}</MDTypography>
                             </Grid>
                             <Grid item xs={4} md={4} lg={4} display='flex' justifyContent='flex-end' alignContent='center' alignItems='center'>
-                                <MDTypography variant='caption' color='success'>{(elem?.distance/1000)?.toFixed()} km</MDTypography>
+                                <MDTypography variant='caption' color='success'>{(elem?.distance/1000)?.toFixed(2)} km</MDTypography>
                             </Grid>
                         </Grid>
                     </MDBox>

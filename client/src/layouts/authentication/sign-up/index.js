@@ -8,12 +8,6 @@ import playstore from '../../../assets/images/playstore.png'
 import Navbar from '../../HomePage/components/Navbars/Navbar';
 import background from '../../../assets/images/background.jpg'
 import logo from '../../../assets/images/logo.png'
-// import {Stack} from "@mui/material";
-// import Autocomplete from 'react-google-autocomplete';
-
-
-// react-router-dom components
-// import { useLocation, useNavigate } from "react-router-dom";
 
 // @mui material components
 import Grid from "@mui/material/Grid";
@@ -21,14 +15,11 @@ import Grid from "@mui/material/Grid";
 // Material Dashboard 2 React components
 import MDBox from "../../../components/MDBox";
 import MDTypography from "../../../components/MDTypography";
-// import MDButton from "../../../components/MDButton";
 
 
 // Images
-// import { userContext } from '../../../AuthContext';
 import Footer from "../components/Footer";
 import { apiUrl } from '../../../constants/constants';
-// import { CgOverflow } from "react-icons/cg";
 import HomePageMandirCard from './homePageMandirCards'
 import HomePagePoojaServicesCard from './homePagePoojaServicesCards'
 import HomePagePoojaSamagriCard from './homePagePoojaSamagriCards'
