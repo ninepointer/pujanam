@@ -1,23 +1,25 @@
 import React, {useState, useContext, useEffect} from "react"
-import { useMediaQuery } from '@mui/material'
-import theme from '../utils/theme/index'; 
-import { ThemeProvider } from 'styled-components';
-import background from '../../../assets/images/poojawaste.jpg'
+// import { useMediaQuery } from '@mui/material'
+// import theme from '../utils/theme/index'; 
+// import { ThemeProvider } from 'styled-components';
+// import background from '../../../assets/images/poojawaste.jpg'
 // @mui material components
 import Grid from "@mui/material/Grid";
 
 // Material Dashboard 2 React components
 import MDBox from "../../../components/MDBox";
 import MDTypography from "../../../components/MDTypography";
-import MDButton from "../../../components/MDButton";
+// import MDButton from "../../../components/MDButton";
 import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
+// import CardActions from '@mui/material/CardActions';
 import { CardActionArea, Divider, Typography } from '@mui/material';
 import CardContent from '@mui/material/CardContent';
 import moment from 'moment'
+import { useNavigate } from "react-router-dom"; 
 
 function HomeCard({elem, name, description}) {
     // const [pooja,setPooja] = useState([]);
+    const navigate = useNavigate();
     function limitStringWithEllipsis(inputString, maxLength) {
         if (inputString.length > maxLength) {
           return inputString.slice(0, maxLength) + '...';
@@ -27,8 +29,16 @@ function HomeCard({elem, name, description}) {
 
     const handleOpenNewTab = async (elem) => {
 
-    const newTab = window.open(`/mandir/${elem?.slug}`, '_blank');
-    // await fetchDeviceDetail(elem?._id);
+        // const newTab = window.open(`/mandir/${elem?.slug}`, '_blank');
+        // await fetchDeviceDetail(elem?._id);
+        navigate(`/mandir/${elem?.slug}`)
+        // const newTab = window.open(`/mandir/${elem?.slug}`, '_blank');
+
+        // // Assuming dataToSend is the data you want to send
+        // const dataToSend = { key1: 'value1', key2: 'value2' };
+
+        // // Use postMessage to send data to the new tab
+        // newTab.postMessage(dataToSend, window.location.origin);
     };
     return(
         <Grid item xs={12} md={4} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
@@ -75,7 +85,7 @@ function HomeCard({elem, name, description}) {
                                 <MDTypography variant='caption' color='success'>Opens at {moment.utc(elem?.morning_opening_time).utcOffset('+05:30').format('HH:mm a')}</MDTypography>
                             </Grid>
                             <Grid item xs={6} md={6} lg={6} display='flex' justifyContent='flex-end' alignContent='center' alignItems='center'>
-                                <MDTypography variant='caption' color='success'>{elem?.devi_devta?.name}</MDTypography>
+                                <MDTypography variant='caption' color='success'>{elem?.devi_devta}</MDTypography>
                             </Grid>
                         </Grid>
                     </MDBox>
@@ -83,10 +93,10 @@ function HomeCard({elem, name, description}) {
                     <MDBox mt={0.5} mb={-1} display='flex' justifyContent='flex-start' alignContent='center' alignItems='center' style={{ width: '100%'}}>
                         <Grid container xs={12} md={12} lg={12} display='flex' justifyContent='space-between' alignContent='center' alignItems='center' style={{ minWidth: '100%'}}>
                             <Grid item xs={8} md={8} lg={8} display='flex' justifyContent='flex-start' alignContent='center' alignItems='center'>
-                                <MDTypography variant='caption' color='success'>Aarti Time: Happening Now</MDTypography>
+                                <MDTypography variant='caption' color='success'>Aarti Time: {moment.utc(elem?.morning_aarti_time).format('HH:mm a')}</MDTypography>
                             </Grid>
                             <Grid item xs={4} md={4} lg={4} display='flex' justifyContent='flex-end' alignContent='center' alignItems='center'>
-                                <MDTypography variant='caption' color='success'>1.2 km</MDTypography>
+                                <MDTypography variant='caption' color='success'>{(elem?.distance/1000)?.toFixed()} km</MDTypography>
                             </Grid>
                         </Grid>
                     </MDBox>

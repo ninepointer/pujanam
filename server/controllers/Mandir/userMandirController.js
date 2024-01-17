@@ -16,26 +16,142 @@ exports.getActive = async (req, res) => {
 };
 
 exports.getActiveHome = async (req, res) => {
+    const {lat, long} = req.query;
+
     try {
-        const activeMandir = await Mandir.find({ status: 'Active' })
-        .limit(4)
-        .populate('devi_devta', 'name')
-        .select('-created_on -created_by -last_modified_on -last_modified_by -__v -favourite -share');
-        ApiResponse.success(res, activeMandir);
+        const mandir = await Mandir.aggregate([
+            {
+              $geoNear: {
+                near: {
+                  type: "Point",
+                  coordinates: [Number(lat), Number(long)],
+                },
+                distanceField: "distance",
+                spherical: true,
+                key: "address_details.location",
+              },
+            },
+            {
+                $match: {
+                    status: "Active"
+                }
+            },
+            {
+              $lookup: {
+                from: "devi-devtas",
+                localField: "devi_devta",
+                foreignField: "_id",
+                as: "devtas",
+              },
+            },
+            {
+              $unwind: {
+                path: "$devtas",
+              },
+            },
+            {
+              $project: {
+                devi_devta: "$devtas.name",
+                _id: 0,
+                name: 1,
+                description: 1,
+                cover_image: 1,
+                images: 1,
+                dham: 1,
+                popular: 1,
+                morning_closing_time: 1,
+                evening_opening_time: 1,
+                evening_closing_time: 1,
+                morning_opening_time: 1,
+                address_details: 1,
+                construction_year: 1,
+                distance: 1,
+                slug: 1,
+                morning_aarti_time: 1,
+                evening_aarti_time: 1
+              },
+            },
+            {
+              $sort: {
+                distance: 1,
+              },
+            },
+            {
+                $limit: 4
+            }
+          ])
+        ApiResponse.success(res, mandir);
     } catch (error) {
         ApiResponse.error(res, 'Something went wrong', 500, error.message);
     }
 };
 
 exports.getActiveAllHome = async (req, res) => {
-    try {
-        const activeMandir = await Mandir.find({ status: 'Active' })
-        .populate('devi_devta', 'name')
-        .select('-created_on -created_by -last_modified_on -last_modified_by -__v -favourite -share');
-        ApiResponse.success(res, activeMandir);
-    } catch (error) {
-        ApiResponse.error(res, 'Something went wrong', 500, error.message);
-    }
+  const {lat, long} = req.query;
+
+  try {
+      const mandir = await Mandir.aggregate([
+          {
+            $geoNear: {
+              near: {
+                type: "Point",
+                coordinates: [Number(lat), Number(long)],
+              },
+              distanceField: "distance",
+              spherical: true,
+              key: "address_details.location",
+            },
+          },
+          {
+              $match: {
+                  status: "Active"
+              }
+          },
+          {
+            $lookup: {
+              from: "devi-devtas",
+              localField: "devi_devta",
+              foreignField: "_id",
+              as: "devtas",
+            },
+          },
+          {
+            $unwind: {
+              path: "$devtas",
+            },
+          },
+          {
+            $project: {
+              devi_devta: "$devtas.name",
+              _id: 0,
+              name: 1,
+              description: 1,
+              cover_image: 1,
+              images: 1,
+              dham: 1,
+              popular: 1,
+              morning_closing_time: 1,
+              evening_opening_time: 1,
+              evening_closing_time: 1,
+              morning_opening_time: 1,
+              address_details: 1,
+              construction_year: 1,
+              distance: 1,
+              slug: 1,
+              morning_aarti_time: 1,
+              evening_aarti_time: 1
+            },
+          },
+          {
+            $sort: {
+              distance: 1,
+            },
+          }
+        ])
+      ApiResponse.success(res, mandir);
+  } catch (error) {
+      ApiResponse.error(res, 'Something went wrong', 500, error.message);
+  }
 };
 
 exports.getDham = async (req, res) => {
@@ -73,37 +189,219 @@ exports.getPopular = async (req, res) => {
 };
 
 exports.getPopularMandirHomeActive = async (req, res) => {
-  try {
-      const activeMandir = await Mandir.find({ status: 'Active', popular: true })
-      .limit(4)
-      .populate('devi_devta', 'name');
-      ApiResponse.success(res, activeMandir);
-  } catch (error) {
-      ApiResponse.error(res, 'Something went wrong', 500, error.message);
-  }
-};
+    const {lat, long} = req.query;
 
-exports.getAllPopularMandirHomeActive = async (req, res) => {
     try {
-        const activeMandir = await Mandir.find({ status: 'Active', popular: true })
-        .limit(8)
-        .populate('devi_devta', 'name');
-        ApiResponse.success(res, activeMandir);
+        const mandir = await Mandir.aggregate([
+            {
+              $geoNear: {
+                near: {
+                  type: "Point",
+                  coordinates: [Number(lat), Number(long)],
+                },
+                distanceField: "distance",
+                spherical: true,
+                key: "address_details.location",
+              },
+            },
+            {
+                $match: {
+                    status: "Active",
+                    popular: true
+                }
+            },
+            {
+              $lookup: {
+                from: "devi-devtas",
+                localField: "devi_devta",
+                foreignField: "_id",
+                as: "devtas",
+              },
+            },
+            {
+              $unwind: {
+                path: "$devtas",
+              },
+            },
+            {
+              $project: {
+                devi_devta: "$devtas.name",
+                _id: 0,
+                name: 1,
+                description: 1,
+                cover_image: 1,
+                images: 1,
+                dham: 1,
+                popular: 1,
+                morning_closing_time: 1,
+                evening_opening_time: 1,
+                evening_closing_time: 1,
+                morning_opening_time: 1,
+                address_details: 1,
+                construction_year: 1,
+                distance: 1,
+                slug: 1,
+                morning_aarti_time: 1,
+                evening_aarti_time: 1
+              },
+            },
+            {
+              $sort: {
+                distance: 1,
+              },
+            },
+            {
+                $limit: 4
+            }
+          ])
+        ApiResponse.success(res, mandir);
     } catch (error) {
         ApiResponse.error(res, 'Something went wrong', 500, error.message);
     }
 };
 
-exports.getDhamHomeActive = async (req, res) => {
+exports.getAllPopularMandirHomeActive = async (req, res) => {
+  const {lat, long} = req.query;
+
   try {
-      const activeMandir = await Mandir.find({ status: 'Active', dham: true })
-      .limit(4)
-      .populate('devi_devta', 'name');
-      console.log(activeMandir?.length)
-      ApiResponse.success(res, activeMandir);
+      const mandir = await Mandir.aggregate([
+          {
+            $geoNear: {
+              near: {
+                type: "Point",
+                coordinates: [Number(lat), Number(long)],
+              },
+              distanceField: "distance",
+              spherical: true,
+              key: "address_details.location",
+            },
+          },
+          {
+              $match: {
+                  status: "Active",
+                  popular: true
+              }
+          },
+          {
+            $lookup: {
+              from: "devi-devtas",
+              localField: "devi_devta",
+              foreignField: "_id",
+              as: "devtas",
+            },
+          },
+          {
+            $unwind: {
+              path: "$devtas",
+            },
+          },
+          {
+            $project: {
+              devi_devta: "$devtas.name",
+              _id: 0,
+              name: 1,
+              description: 1,
+              cover_image: 1,
+              images: 1,
+              dham: 1,
+              popular: 1,
+              morning_closing_time: 1,
+              evening_opening_time: 1,
+              evening_closing_time: 1,
+              morning_opening_time: 1,
+              address_details: 1,
+              construction_year: 1,
+              distance: 1,
+              slug: 1,
+              morning_aarti_time: 1,
+              evening_aarti_time: 1
+            },
+          },
+          {
+            $sort: {
+              distance: 1,
+            },
+          },
+          {
+              $limit: 8
+          }
+        ])
+      ApiResponse.success(res, mandir);
   } catch (error) {
       ApiResponse.error(res, 'Something went wrong', 500, error.message);
   }
+};
+
+exports.getDhamHomeActive = async (req, res) => {
+    const {lat, long} = req.query;
+
+    try {
+        const mandir = await Mandir.aggregate([
+            {
+              $geoNear: {
+                near: {
+                  type: "Point",
+                  coordinates: [Number(lat), Number(long)],
+                },
+                distanceField: "distance",
+                spherical: true,
+                key: "address_details.location",
+              },
+            },
+            {
+                $match: {
+                    status: "Active",
+                    dham: true
+                }
+            },
+            {
+              $lookup: {
+                from: "devi-devtas",
+                localField: "devi_devta",
+                foreignField: "_id",
+                as: "devtas",
+              },
+            },
+            {
+              $unwind: {
+                path: "$devtas",
+              },
+            },
+            {
+              $project: {
+                devi_devta: "$devtas.name",
+                _id: 0,
+                name: 1,
+                description: 1,
+                cover_image: 1,
+                images: 1,
+                dham: 1,
+                popular: 1,
+                morning_closing_time: 1,
+                evening_opening_time: 1,
+                evening_closing_time: 1,
+                morning_opening_time: 1,
+                address_details: 1,
+                construction_year: 1,
+                distance: 1,
+                slug: 1,
+                morning_aarti_time: 1,
+                evening_aarti_time: 1
+              },
+            },
+            {
+              $sort: {
+                distance: 1,
+              },
+            },
+            {
+                $limit: 4
+            }
+          ])
+        ApiResponse.success(res, mandir);
+    } catch (error) {
+        ApiResponse.error(res, 'Something went wrong', 500, error.message);
+    }
 };
 
 exports.addToFavourite = async (req, res) => {
@@ -246,6 +544,9 @@ exports.getByDistance = async (req, res) => {
                 address_details: 1,
                 construction_year: 1,
                 distance: 1,
+                slug: 1,
+                morning_aarti_time: 1,
+                evening_aarti_time: 1
               },
             },
             {

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { Grid } from '@mui/material';
 import MDBox from '../../../components/MDBox';
 import { debounce } from '@mui/material/utils';
@@ -12,41 +12,30 @@ import { apiUrl } from '../../../constants/constants';
 import MDAvatar from "../../../components/MDAvatar";
 import logo from "../../../assets/images/logo.png";
 import SearchIcon from '@mui/icons-material/Search';
-import { Divider } from '@mui/material';
-import { Box } from '@mui/system';
-import InputLabel from '@mui/material/InputLabel';
+// import { Divider } from '@mui/material';
+// import { Box } from '@mui/system';
+// import InputLabel from '@mui/material/InputLabel';
 import { useMediaQuery } from '@mui/material'
 import theme from '../../HomePage/utils/theme/index'; 
+import {LocationContext} from "../../../locationContext";
+import {useNavigate} from 'react-router-dom';
 
-
-function MapSearch({currentLocation}) {
+function MapSearch() {
+    const navigate = useNavigate();
+    const locationContextData = useContext(LocationContext)
     const [value, setValue] = React.useState(null);
     const [inputValue, setInputValue] = React.useState('');
     const [templeValue, setTempleValue] = useState();
     const [options, setOptions] = React.useState([]);
     const [templeData, setTempleData] = useState([]);
     const [templeInputValue, setTempleInputValue] = useState([]);
-    const [currentPlace, setCurrentPlace] = useState("");
+    // const [currentPlace, setCurrentPlace] = useState("");
     const [coordinates, setCoordinates] = React.useState({
         lat: 0,
         long: 0
     })
 
-    useEffect(()=>{
-        getCurrentPlace()
-    }, [currentLocation])
-
-    async function getCurrentPlace(){
-        if(currentLocation.latitude && currentLocation.longitude){
-            const data = await axios(`${apiUrl}location/currentplace?lat=${currentLocation.latitude}&long=${currentLocation.longitude}`);
-            setCurrentPlace(data.data.data?.results[0].formatted_address);
-            const templeData = await axios(`${apiUrl}mandir/user/bydistance?lat=${data.data.data?.results[0]?.geometry.location.lat}&long=${data.data.data?.results[0]?.geometry.location.lng}&search=${templeInputValue}`,
-            { withCredentials: true });
-            setTempleData(templeData?.data?.data);  
-        }
-    }
-
-    console.log("currentPlace", currentPlace)
+    const currentPlace = locationContextData.locationState.address;
 
     async function getCoordinates() {
         if (value?.place_id) {
@@ -196,6 +185,7 @@ function MapSearch({currentLocation}) {
                                 onChange={(event, newValue) => {
                                     setOptions(newValue ? [newValue, ...options] : options);
                                     setValue(newValue);
+                                
                                 }}
                                 onInputChange={(event, newInputValue) => {
                                     setInputValue(newInputValue);
@@ -308,6 +298,10 @@ function MapSearch({currentLocation}) {
                             noOptionsText= {templeInputValue ? "No Temple Found!" : "Search for temples"}
                             onChange={(event, newValue) => {
                                 setTempleValue(newValue);
+                                if(newValue){
+                                    navigate(`/mandir/${newValue?.slug}`)
+                                    // window.open(`/mandir/${newValue?.slug}`, '_blank');
+                                }
                             }}
                             onInputChange={(event, newInputValue) => {
                                 setTempleInputValue(newInputValue);

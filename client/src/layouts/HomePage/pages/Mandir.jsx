@@ -23,6 +23,7 @@ import PropTypes from 'prop-types';
 import SwipeableViews from 'react-swipeable-views';
 import TabPanel from '@mui/lab/TabPanel';
 import MDAvatar from '../../../components/MDAvatar';
+import {LocationContext} from "../../../locationContext";
 
 function TabPanel1(props) {
   const { children, value, index, ...other } = props;
@@ -65,7 +66,9 @@ const About = () => {
     const [dham,setDham] = useState([]);
     const [popular,setPopular] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
-
+    const locationContextData = useContext(LocationContext);
+    const lat = locationContextData.locationState.latitude;
+    const long = locationContextData.locationState.longitude;
     const handleChange = (event, newValue) => {
       setValue(newValue);
     };
@@ -75,8 +78,9 @@ const About = () => {
     };
   
 
+  
     useEffect(()=>{
-        let call1 = axios.get(`${apiUrl}usermandir/allhome`,{
+        let call1 = axios.get(`${apiUrl}mandir/user/allhome?lat=${lat}&long=${long}`,{
                     withCredentials: false,
                     headers: {
                         Accept: "application/json",
@@ -84,7 +88,7 @@ const About = () => {
                         "Access-Control-Allow-Credentials": true
                       },
                     })
-        let call2 = axios.get(`${apiUrl}usermandir/homedham`,{
+        let call2 = axios.get(`${apiUrl}mandir/user/homedham?lat=${lat}&long=${long}`,{
           withCredentials: false,
           headers: {
               Accept: "application/json",
@@ -92,7 +96,7 @@ const About = () => {
               "Access-Control-Allow-Credentials": true
             },
           })
-        let call3 = axios.get(`${apiUrl}usermandir/allhomepopular`,{
+        let call3 = axios.get(`${apiUrl}mandir/user/allhomepopular?lat=${lat}&long=${long}`,{
           withCredentials: false,
           headers: {
               Accept: "application/json",
@@ -113,7 +117,7 @@ const About = () => {
         .catch((error) => {
           // Handle errors here
         });
-      },[])
+      },[locationContextData.locationState])
 
     useEffect(()=>{
         ReactGA.pageview(window.location.pathname)
@@ -360,122 +364,6 @@ const About = () => {
             </TabPanel1>
           </SwipeableViews>
               </Grid>
-          
-          {/* {!isLoading ?
-            <>
-            <Grid container mt={12} mb={2} display='flex' justifyContent='center' alignContent='center' alignItems='center' xs={12} md={12} lg={12} style={{ maxWidth: '100%', height: 'auto', flexGrow: 1, overflowY: 'auto', zIndex:3, overflow: 'visible' }}>
-
-                <Grid item xs={12} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '95%', height: 'auto' }}>
-                    <Grid container spacing={2} xs={12} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center'>
-
-                        <Grid item mt={1} xs={12} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ width: '100%' }}>
-                        <Grid container xs={12} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
-                            <Grid ml={2} item xs={12} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
-                            <MDBox display='flex' justifyContent='center' alignContent='flext-start' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
-                                <MDTypography variant="h5" color="dark">All About the Char Dham Mandir of India!</MDTypography>
-                            </MDBox>
-                            </Grid>
-
-                            {dham?.length > 0 ?
-                                <Grid item xs={12} mt={2} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
-
-                                <MDBox display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
-                                    <Grid container spacing={4} xs={12} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ width: '100%', height: 'auto' }}>
-                                    {dham?.map((elem) => {
-                                        return (
-                                        <Grid key={elem?._id} item xs={12} md={4} lg={3} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ width: '100%', height: 'auto' }}>
-                                            <MandirCard elem={elem}/>
-                                        </Grid>
-                                        )
-                                    })}
-                                    </Grid>
-                                </MDBox>
-
-                                </Grid>
-                                :
-                                <>
-                                
-                                </>
-                            }
-
-                        </Grid>
-                        </Grid>
-
-                        <Grid item mt={1} xs={12} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ width: '100%' }}>
-                        <Grid container xs={12} md={12} lg={12} display='flex' justifyContent='flex-start' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
-                            <Grid ml={2} item xs={12} md={12} lg={12} display='flex' justifyContent='flex-start' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
-                            <MDBox display='flex' justifyContent='center' alignContent='flext-start' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
-                            <MDTypography variant="h5" color="dark">Popular Mandir near you!</MDTypography>
-                            </MDBox>
-                            </Grid>
-
-                            {popular?.length > 0 ?
-                                <Grid item xs={12} mt={2} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
-
-                                <MDBox display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
-                                    <Grid container spacing={4} xs={12} md={12} lg={12} display='flex' justifyContent='flex-start' alignContent='center' alignItems='center' style={{ width: '100%', height: 'auto' }}>
-                                    {popular?.map((elem) => {
-                                        return (
-                                        <Grid key={elem?._id} item xs={12} md={4} lg={3} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ width: '100%', height: 'auto' }}>
-                                            <MandirCard elem={elem}/>
-                                        </Grid>
-                                        )
-                                    })}
-                                    </Grid>
-                                </MDBox>
-
-                                </Grid>
-                                :
-                                <>
-                                
-                                </>
-                            }
-
-                        </Grid>
-                        </Grid>
-
-                        <Grid item mt={1} xs={12} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ width: '100%' }}>
-                        <Grid container xs={12} md={12} lg={12} display='flex' justifyContent='flex-start' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
-                            <Grid ml={2} item xs={12} md={12} lg={12} display='flex' justifyContent='flex-start' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
-                            <MDBox display='flex' justifyContent='center' alignContent='flext-start' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
-                            <MDTypography variant="h5" color="dark">All Mandir near you!</MDTypography>
-                            </MDBox>
-                            </Grid>
-
-                            {data?.length > 0 ?
-                                <Grid item xs={12} mt={2} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
-
-                                <MDBox display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
-                                    <Grid container spacing={4} xs={12} md={12} lg={12} display='flex' justifyContent='flex-start' alignContent='center' alignItems='center' style={{ width: '100%', height: 'auto' }}>
-                                    {data?.map((elem) => {
-                                        return (
-                                        <Grid key={elem?._id} item xs={12} md={4} lg={3} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ width: '100%', height: 'auto' }}>
-                                            <MandirCard elem={elem}/>
-                                        </Grid>
-                                        )
-                                    })}
-                                    </Grid>
-                                </MDBox>
-
-                                </Grid>
-                                :
-                                <>
-                                
-                                </>
-                            }
-
-                        </Grid>
-                        </Grid>
-
-                    </Grid>
-                </Grid>
-            </Grid>
-            </>
-            :
-            <MDBox mt={35} mb={35} display="flex" width="100%" justifyContent="center" alignItems="center">
-                <CircularProgress color='success' />
-            </MDBox>
-         } */}
         </ThemeProvider>
       </MDBox>
 
