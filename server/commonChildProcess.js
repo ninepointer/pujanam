@@ -7,6 +7,7 @@ const xssClean = require("xss-clean");
 const hpp = require("hpp")
 const { zerodhaAccountType } = require("./constant")
 const Product = require('./models/Product/product');
+const LanguageSchema = require('./models/language');
 async function commonProcess() {
     // await setIOValue();
 
@@ -34,6 +35,7 @@ async function commonProcess() {
 
     app.get('/api/v1/servertime', (req, res, next) => { res.json({ status: 'success', data: new Date() }) })
     app.get('/api/v1/product', async (req, res, next) => { res.json({ status: 'success', data: await Product.find() }) })
+    app.get('/api/v1/language', async (req, res, next) => { res.json({ status: 'success', data: await LanguageSchema.find() }) })
 
     app.use('/api/v1', require("./routes/user/signedUpUser"))
     app.use('/api/v1', require("./routes/user/userLogin"));

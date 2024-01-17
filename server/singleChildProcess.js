@@ -7,7 +7,8 @@ const cors = require('cors');
 const helmet = require("helmet");
 const mongoSanitize = require('express-mongo-sanitize');
 const xssClean = require("xss-clean");
-const hpp = require("hpp")
+const hpp = require("hpp");
+const LanguageSchema = require("./models/language");
 
 async function singleProcess() {
 
@@ -41,6 +42,7 @@ async function singleProcess() {
     app.use(xssClean());
     app.use(hpp());
     app.get('/api/v1/product', async (req, res, next) => { res.json({ status: 'success', data: await Product.find() }) })
+    app.get('/api/v1/language', async (req, res, next) => { res.json({ status: 'success', data: await LanguageSchema.find() }) })
 
     app.use('/api/v1', require("./routes/user/signedUpUser"))
     app.use('/api/v1', require("./routes/user/userLogin"));

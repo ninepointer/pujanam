@@ -100,10 +100,15 @@ function Index() {
 
 
   useEffect(() => {
-    setLanguage([{
-      _id: "659d6f9a30fa1324fb3d2674",
-      language_name: "English"
-    }])
+
+    axios.get(`${apiUrl}language`)
+    .then((res)=>{
+      setLanguage(res?.data?.data)
+    })
+    // setLanguage([{
+    //   _id: "659d6f9a30fa1324fb3d2674",
+    //   language_name: "English"
+    // }])
   }, [])
 
 
