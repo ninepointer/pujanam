@@ -13,7 +13,7 @@ import logo from '../../../assets/images/logo.png'
 
 
 // react-router-dom components
-import { useLocation, useNavigate } from "react-router-dom";
+// import { useLocation, useNavigate } from "react-router-dom";
 
 // @mui material components
 import Grid from "@mui/material/Grid";
@@ -38,8 +38,10 @@ import TemplesNearMe from './templesNearMe'
 import MapSearch from "./mapSearch";
 import Dhams from './dhams'
 import PopularMandirNearMe from './popularmandirNearMe'
+import {settingContext} from '../../../settingContext';
 
-function Cover(props) {
+
+function Cover() {
   const [isLoading,setIsLoading] = useState(false);
   const [data,setData] = useState([]);
   const [dham,setDham] = useState([]);
@@ -51,6 +53,8 @@ function Cover(props) {
     latitude: 0,
     longitude: 0
   });
+
+  const setting = useContext(settingContext)
 
   useEffect(() => {
     // Check if geolocation is supported
@@ -70,7 +74,7 @@ function Cover(props) {
   }, []);
 
   useEffect(()=>{
-    let call1 = axios.get(`${apiUrl}usermandir/home`,{
+    let call1 = axios.get(`${apiUrl}mandir/user/home?lat=${currentLocation.latitude}&long=${currentLocation.longitude}`,{
                 withCredentials: false,
                 headers: {
                     Accept: "application/json",
@@ -78,7 +82,7 @@ function Cover(props) {
                     "Access-Control-Allow-Credentials": true
                   },
                 })
-    let call2 = axios.get(`${apiUrl}pooja/home`,{
+    let call2 = axios.get(`${apiUrl}pooja/user/home`,{
       withCredentials: false,
       headers: {
           Accept: "application/json",
@@ -86,7 +90,7 @@ function Cover(props) {
           "Access-Control-Allow-Credentials": true
         },
       })
-    let call3 = axios.get(`${apiUrl}usermandir/homedham`,{
+    let call3 = axios.get(`${apiUrl}mandir/user/homedham?lat=${currentLocation.latitude}&long=${currentLocation.longitude}`,{
       withCredentials: false,
       headers: {
           Accept: "application/json",
@@ -94,7 +98,7 @@ function Cover(props) {
           "Access-Control-Allow-Credentials": true
         },
       })
-    let call4 = axios.get(`${apiUrl}usermandir/homepopular`,{
+    let call4 = axios.get(`${apiUrl}mandir/user/homepopular?lat=${currentLocation.latitude}&long=${currentLocation.longitude}`,{
       withCredentials: false,
       headers: {
           Accept: "application/json",
@@ -116,13 +120,13 @@ function Cover(props) {
     .catch((error) => {
       // Handle errors here
     });
-  },[])
+  },[currentLocation])
   
   const isMobile = useMediaQuery(theme.breakpoints.down("lg"))
 
-  const handleImageClick = () => {
+  const handlePlaystoreNavigate = () => {
     // Open google.com in a new tab
-    window.open('https://play.google.com/store/apps/details?id=com.stoxhero.app', '_blank');
+    window.open(`${setting.playstore_link}`, '_blank');
   };
   
   useEffect(() => {
@@ -185,7 +189,7 @@ function Cover(props) {
           </Grid>
           <Grid item xs={12} md={12} lg={4} mb={isMobile ? 8 : 10} display='flex' justifyContent='center' alignItems='center'>
             <MDBox display='flex' justifyContent='center' alignItems='center'>   
-              <img src={playstore} style={{cursor:'pointer', maxWidth: '80%', maxHeight: '10%', width: 'auto', height: 'auto' }} onClick={handleImageClick}/>
+              <img src={playstore} style={{cursor:'pointer', maxWidth: '80%', maxHeight: '10%', width: 'auto', height: 'auto' }} onClick={handlePlaystoreNavigate}/>
             </MDBox>
           </Grid>
         </Grid>

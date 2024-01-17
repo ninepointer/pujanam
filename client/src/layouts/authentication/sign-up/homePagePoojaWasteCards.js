@@ -14,8 +14,15 @@ import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import { CardActionArea, Divider } from '@mui/material';
 import CardContent from '@mui/material/CardContent';
+import {settingContext} from '../../../settingContext';
 
 function HomeCard() {
+    const setting = useContext(settingContext)
+
+    const handlePlaystoreNavigate = () => {
+        // Open google.com in a new tab
+        window.open(`${setting.playstore_link}`, '_blank');
+      };
     return(
         <Grid item xs={12} md={4} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto', overflow: 'visible' }}>
             <Grid container xs={12} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto', overflow: 'visible' }}>
@@ -46,7 +53,9 @@ function HomeCard() {
                         </MDTypography>
                     </MDBox>
                     <MDBox mb={-2} display='flex' justifyContent='flex-end' alignContent='center' alignItems='center' style={{ width: '100%'}}>
-                        <MDButton size='small' variant='contained' style={{fontFamily:'Itim'}}>Get collected</MDButton>
+                        <MDButton size='small' variant='contained' style={{fontFamily:'Itim'}}
+                        onClick={handlePlaystoreNavigate}
+                        >Get collected</MDButton>
                     </MDBox>
                 </CardContent>
                 </Grid>

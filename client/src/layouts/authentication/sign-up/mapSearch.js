@@ -46,8 +46,6 @@ function MapSearch({currentLocation}) {
         }
     }
 
-    console.log("currentPlace", currentPlace)
-
     async function getCoordinates() {
         if (value?.place_id) {
             const data = await axios(`${apiUrl}location/placedetails?place_id=${value.place_id}`);
@@ -196,6 +194,7 @@ function MapSearch({currentLocation}) {
                                 onChange={(event, newValue) => {
                                     setOptions(newValue ? [newValue, ...options] : options);
                                     setValue(newValue);
+                                
                                 }}
                                 onInputChange={(event, newInputValue) => {
                                     setInputValue(newInputValue);
@@ -308,6 +307,9 @@ function MapSearch({currentLocation}) {
                             noOptionsText= {templeInputValue ? "No Temple Found!" : "Search for temples"}
                             onChange={(event, newValue) => {
                                 setTempleValue(newValue);
+                                if(newValue){
+                                    window.open(`/mandir/${newValue?.slug}`, '_blank');
+                                }
                             }}
                             onInputChange={(event, newInputValue) => {
                                 setTempleInputValue(newInputValue);

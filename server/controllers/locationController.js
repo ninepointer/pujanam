@@ -59,7 +59,7 @@ exports.currentPlace = async (req, res) => {
         const {lat, long} = req.query;
         console.log(lat, long, Number(lat), Number(long))
 
-        const response = await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${Number(lat)},${Number(long)}&result_type=street_address&key=${API_KEY}`);
+        const response = await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${Number(lat)},${Number(long)}&key=${API_KEY}`);
 
         ApiResponse.success(res,response?.data);
     } catch (error) {

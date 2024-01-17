@@ -41,13 +41,15 @@ const s3 = new AWS.S3({
 exports.create = (async (req, res, next) => {
     
     try {
-        const { name, description, dham, popular, morning_opening_time, 
+        const {morning_aarti_time, evening_aarti_time, accessibility, meta_title, 
+            meta_description, tags, name, description, dham, popular, morning_opening_time, 
             morning_closing_time, evening_opening_time, evening_closing_time,
             devi_devta, longitude, latitude, address, pincode, city, state, country,
             construction_year, pandit_mobile_number, pandit_full_name,
             status  } = req.body;
         
-        const slug = name?.replace(/ /g, "-").toLowerCase();
+        const count = await Mandir.countDocuments();
+        const slug = name?.replace(/ /g, "-").toLowerCase() + "-" +(count+1);
 
         const address_details = {
             location: {
@@ -69,7 +71,8 @@ exports.create = (async (req, res, next) => {
             morning_closing_time, evening_opening_time, evening_closing_time,
             devi_devta, address_details, images: otherImages, cover_image: coverImage[0],
             construction_year, pandit_mobile_number, pandit_full_name, slug: slug,
-            status
+            status, morning_aarti_time, evening_aarti_time, accessibility, meta_title, 
+            meta_description, tags
         });
         ApiResponse.created(res, mandir, 'Mandir updated successfully');
     } catch (error) {
@@ -140,6 +143,9 @@ exports.edit = (async (req, res, next) => {
         update.share = mandir?.share;
         update.uniqueCount = mandir?.uniqueCount
 
+        const splitSlug = mandir.slug.split('-');
+        update.slug = update.name?.replace(/ /g, "-").toLowerCase() + "-" +(splitSlug[splitSlug.length - 1]);
+
         if(uploadedFiles?.files){
             otherImages = await Promise.all(await processUpload(uploadedFiles.files, s3, update.name));
             update.images = mandir.images.concat(otherImages);
@@ -147,9 +153,6 @@ exports.edit = (async (req, res, next) => {
         if(uploadedFiles?.coverFiles){
             coverImage = await Promise.all(await processUpload(uploadedFiles.coverFiles, s3, update.name, true));
             update.cover_image = coverImage[0];
-        }
-        if(update?.name){
-            update.slug = update?.name?.replace(/ /g, "-").toLowerCase();
         }
 
         update.lastModifiedBy = req?.user?._id;

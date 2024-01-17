@@ -19,6 +19,23 @@ const Mandir = new mongoose.Schema({
         type: String,
         required: true,
     },
+    tags:{
+        type: String,
+        required: true,
+    },
+    meta_description:{
+        type: String,
+        required: true,
+    },
+    meta_title:{
+        type: String,
+        required: true,
+    },
+    accessibility:{
+        type: String,
+        enum: ['Open to all', 'Members only'],
+        required: true
+    },
     cover_image: {
         url: {type: String},
         name: {type: String}
@@ -32,6 +49,14 @@ const Mandir = new mongoose.Schema({
         type: Boolean,
         required: true,
         default: false
+    },
+    morning_aarti_time: {
+        type: Date,
+        required: true,
+    },
+    evening_aarti_time: {
+        type: Date,
+        required: true,
     },
     morning_opening_time: {
         type: Date,
@@ -96,12 +121,12 @@ const Mandir = new mongoose.Schema({
         type: Schema.Types.ObjectId,
         ref: 'user'
     }],
-    uniqueCount: [{
-       ip: {type: String},
-       isMobile: {type: Boolean},
-       country: {type: String},
-       time: {type: Date}
-    }],
+    // uniqueCount: [{
+    //    ip: {type: String},
+    //    isMobile: {type: Boolean},
+    //    country: {type: String},
+    //    time: {type: Date}
+    // }],
     viewCount: {
         type: Number,
         // required: true
