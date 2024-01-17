@@ -15,11 +15,6 @@ import aboutuspage from '../../../assets/images/aboutuspage.png'
 import cofounder_prateek from '../../../assets/images/cofounder_prateek.png'
 import cofounder_kush from '../../../assets/images/cofounder_kush.png'
 import cofounder_manish from '../../../assets/images/cofounder_manish.png'
-import about1 from '../assets/images/About/about1.png'
-import about2 from '../assets/images/About/about2.png'
-import about3 from '../assets/images/About/about3.webp'
-import about4 from '../assets/images/About/about4.png'
-import about5 from '../assets/images/About/about5.webp'
 import MDAvatar from '../../../components/MDAvatar';
 import MDTypography from '../../../components/MDTypography';
 import MDBox from '../../../components/MDBox';

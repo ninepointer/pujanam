@@ -11,6 +11,10 @@ const Mandir = new mongoose.Schema({
         type: String,
         required: true,
     },
+    slug:{
+        type: String,
+        required: true,
+    },
     cover_image: {
         url: {type: String},
         name: {type: String}

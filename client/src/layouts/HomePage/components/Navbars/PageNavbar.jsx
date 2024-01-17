@@ -10,11 +10,9 @@ import { CallMade, Language, Menu } from '@mui/icons-material'
 import LaunchButton from '../Buttons/LaunchButton'
 import { useTheme } from 'styled-components'
 import MDTypography from '../../../../components/MDTypography';
-import theme from '../../utils/theme/index';
-import { Link } from 'react-router-dom';
-import { MdOutlineTempleHindu } from "react-icons/md";
-import { LiaPrayingHandsSolid } from "react-icons/lia";
-import { GrBlog } from "react-icons/gr";
+import MDBox from '../../../../components/MDBox'
+import { Grid } from '@mui/material'
+import MapSearch from "../../../../layouts/authentication/sign-up/mapSearch"
 import { CgOrganisation } from "react-icons/cg";
 
 const NAVBAR_HIEGHT = 80;
@@ -80,40 +78,11 @@ const Navbar = () => {
             flexWrap="wrap"
             color="white"
           >
-            <a href="/mandir">
-            <LinkButton>
-              <MdOutlineTempleHindu fontSize="small" />
-              <Typography fontWeight="bold" variant="body2" style={{fontFamily:'Itim'}}>Mandir</Typography>
-            </LinkButton>
-            </a>
-
-            <a href="/workshops">
-            <LinkButton>
-              <LiaPrayingHandsSolid fontSize="small" />
-              <Typography fontWeight="bold" variant="body2" style={{fontFamily:'Itim'}}>Pooja</Typography>
-            </LinkButton>
-            </a>
-
-            <a href="/workshops">
-            <LinkButton>
-              <LiaPrayingHandsSolid fontSize="small" />
-              <Typography fontWeight="bold" variant="body2" style={{fontFamily:'Itim'}}>Store</Typography>
-            </LinkButton>
-            </a>
-
-            <a href="/blogs">
-            <LinkButton>
-              <GrBlog fontSize="small" />
-              <Typography fontWeight="bold" variant="body2" style={{fontFamily:'Itim'}}>Blogs</Typography>
-            </LinkButton>
-            </a>
-
-            <a href="/about">
-            <LinkButton spacing={0.5}>
-              <CgOrganisation fontSize="small" />
-              <Typography fontWeight="bold" variant="body2" style={{fontFamily:'Itim'}}>About Us</Typography>
-            </LinkButton>
-            </a>
+            {/* <Grid item xs={12} md={12} lg={12} display='flex' justifyContent='center' alignItems='center' style={{overflow: 'visible'}}> */}
+              <MDBox display='flex' justifyContent='center' alignItems='center' style={{overflow: 'visible'}}>
+                <MapSearch />
+              </MDBox>
+            {/* </Grid> */}
 
           </Stack>)}
 
@@ -139,47 +108,7 @@ const Navbar = () => {
             >
             < img src ="https://icon-library.com/images/x-button-icon/x-button-icon-3.jpg" style={{height:"40px",position:"absolute",top:"8px",color:"#fff", right:"14px", zIndex:999}} sx={{fontSize:"100px"}} onClick={()=>setOpen(false)}/>
 
-            <a href="/mandir">
-            <LinkButton>
-              <MDTypography variant="body2" style={{fontFamily:'Itim', color: "#9c4722"}}>Mandir</MDTypography>
-              
-            </LinkButton>
-            </a>
-
-            <a href="/workshops">
-            <LinkButton>
-              <MDTypography variant="body2" style={{fontFamily:'Itim', color: "#9c4722"}}>Pooja</MDTypography>
-              
-            </LinkButton>
-            </a>
-
-            <a href="/workshops">
-            <LinkButton>
-              <MDTypography variant="body2" style={{fontFamily:'Itim', color: "#9c4722"}}>Store</MDTypography>
-              
-            </LinkButton>
-            </a>
-
-
-            <a href="/blogs">
-            <LinkButton>
-              <MDTypography variant="body2" style={{fontFamily:'Itim', color: "#9c4722"}}>Blogs</MDTypography>
-              
-            </LinkButton>
-            </a>
-
-            <a href="/about">
-            <LinkButton spacing={0.5}>
-              <MDTypography variant="body2" style={{fontFamily:'Itim', color: "#9c4722"}}>About us</MDTypography>
-            </LinkButton>
-            </a>
-
-            <a href="/about">
-            <LinkButton spacing={0.5}>
-              <Language fontSize="small" />
-              <MDTypography variant="body2" style={{fontFamily:'Itim', color: "#9c4722"}}>Hindi</MDTypography>
-            </LinkButton>
-            </a>
+            <></>
 
             </Stack>
           )}
@@ -193,10 +122,6 @@ const Navbar = () => {
             </IconButton>
           ) : (
           <Stack direction="row" spacing={5} alignItems="center">
-            <LinkButton spacing={1} sx={{color: scrollPosition >10 ? '#9c4722' : '#9c4722'}}>
-              <Language fontSize="small" />
-              <Typography variant="body2" style={{fontFamily:'Itim',}}>Hindi</Typography>
-            </LinkButton>
 
             <a href="https://play.google.com/store/apps/details?id=com.stoxhero.app" target='_blank'>
               <LaunchButton sx={{ borderRadius: 3, color: 'light' }} />

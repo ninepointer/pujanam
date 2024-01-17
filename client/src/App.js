@@ -43,6 +43,7 @@ import Cookies from 'js-cookie';
 import homeRoutes from "./homeRoute";
 import SignUp from './layouts/authentication/sign-up'
 import About from "../src/layouts/HomePage/pages/About";
+import Mandir from "../src/layouts/HomePage/pages/Mandir";
 import ResetPassword from './layouts/authentication/reset-password/cover';
 import { adminRole } from "./variables";
 import { userRole } from "./variables";
@@ -309,6 +310,7 @@ export default function App() {
             />}/>
           <Route path='/adminlogin' element={<AdminLogin />}/>
           <Route path='/about' element={<About/>}/>
+          <Route path='/mandir' element={<Mandir/>}/>
           
           <Route path='/contact' element={<Contact/>}/>
           <Route path="*" element={<NotFound />} />

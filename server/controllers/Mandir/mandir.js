@@ -46,6 +46,8 @@ exports.create = (async (req, res, next) => {
             devi_devta, longitude, latitude, address, pincode, city, state, country,
             construction_year, pandit_mobile_number, pandit_full_name,
             status  } = req.body;
+        
+        const slug = name?.replace(/ /g, "-").toLowerCase();
 
         const address_details = {
             location: {
@@ -66,10 +68,10 @@ exports.create = (async (req, res, next) => {
             name, description, dham, popular, morning_opening_time, 
             morning_closing_time, evening_opening_time, evening_closing_time,
             devi_devta, address_details, images: otherImages, cover_image: coverImage[0],
-            construction_year, pandit_mobile_number, pandit_full_name,
+            construction_year, pandit_mobile_number, pandit_full_name, slug: slug,
             status
         });
-       
+        console.log("Mandir:",mandir)
         ApiResponse.created(res, mandir, 'Mandir updated successfully');
     } catch (error) {
         console.error(error);
@@ -79,7 +81,7 @@ exports.create = (async (req, res, next) => {
 });
 
 const processUpload = async(uploadedFiles, s3, title, isTitleImage)=>{
-    const MAX_LIMIT = 5*1024*1024;
+    const MAX_LIMIT = 5*1080*720;
     const fileUploadPromises = uploadedFiles.map(async (file) => {
         
         if(file.size > MAX_LIMIT){
@@ -147,6 +149,9 @@ exports.edit = (async (req, res, next) => {
             coverImage = await Promise.all(await processUpload(uploadedFiles.coverFiles, s3, update.name, true));
             update.cover_image = coverImage[0];
         }
+        if(uploadedFiles.name){
+            update.slug = mandir?.name?.replace(/ /g, "-").toLowerCase();
+        }
 
         update.lastModifiedBy = req?.user?._id;
         update.lastModifiedOn = new Date();
@@ -157,6 +162,7 @@ exports.edit = (async (req, res, next) => {
             }
           }
         const mandirUpdate = await Mandir.findOneAndUpdate({_id: new ObjectId(id)}, update, {new: true})
+        console.log("Mandir Update:",mandirUpdate)
         ApiResponse.success(res, mandirUpdate, 'Mandir edited successfully');
     } catch (error) {
         console.error(error);

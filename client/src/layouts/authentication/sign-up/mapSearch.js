@@ -207,15 +207,17 @@ function MapSearch({currentLocation}) {
                                     placeholder="Select your location"    
                                     InputProps={{
                                             ...params.InputProps,
+                                            endAdornment: null,
+                                            // border:'none',
                                             style: {
-                                                color: '#ED9121',
+                                                // color: '#ED9121',
                                                 height: 50,
-                                                outline: "none",
-                                                borderWidth: 0,
-                                                '&:hover': {
-                                                    borderWidth: 0, // Adjust the styles for hover if needed
-                                                },
-                                                border: "none"
+                                                // outline: "none",
+                                                // borderWidth: 0,
+                                                // '&:hover': {
+                                                //     borderWidth: 0, // Adjust the styles for hover if needed
+                                                // },
+                                                borderBottom: 'none !important',
                                             },
                                         }}
                                     />
@@ -353,6 +355,7 @@ function MapSearch({currentLocation}) {
                                     // label="Search for temples"
                                     InputProps={{
                                         ...params.InputProps,
+                                        endAdornment: null,
                                         style: {
                                             color: '#ED9121',
                                             height: 50,
