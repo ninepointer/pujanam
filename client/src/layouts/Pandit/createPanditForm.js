@@ -175,9 +175,9 @@ function Index() {
 
       for (let elem in formState) {
         if (elem !== "photo") {
-          if (typeof (formState[elem]) === "object") {
+          // if (typeof (formState[elem]) === "object") {
             formData.append(`${elem}`, formState[elem]);
-        }
+        // }
       }
       }
 
@@ -270,6 +270,21 @@ function Index() {
       language: selectedIds
     }));
   };
+
+  const imagetoshow = () => {
+    if(filepreview){
+      return filepreview
+    }
+    if(newData?.photo?.url) {
+      return newData?.photo?.url
+    }
+    if(prevData?.photo?.url) {
+      return prevData?.photo?.url
+    }
+    else {
+      return DefaultPoojaUpload
+    }
+  }
 
   return (
     <>
@@ -471,7 +486,7 @@ function Index() {
                 </Grid>
 
                 <Grid item xs={12} md={12} xl={9} display="flex" justifyContent="flex-end" alignContent="center" alignItems="center">
-                  <MDAvatar src={filepreview ? filepreview : ((!newData || !panditPrevDetail) ? (newData?.photo?.url || panditPrevDetail?.photo?.url) : DefaultPoojaUpload)}/>
+                  <MDAvatar src={imagetoshow()}/>
                 </Grid>
 
                 <Grid item xs={12} md={6} xl={12} display="flex" justifyContent="center" alignContent="center" alignItems="center">

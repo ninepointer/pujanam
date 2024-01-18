@@ -61,8 +61,6 @@ const processUpload = async (uploadedFiles, s3, route) => {
 // Create a Pandit
 exports.createPandit = async (req, res) => {
     try {
-        console.log(req.body)
-        console.log(req.file)
         const {
             pandit_name,
             mobile,
@@ -162,14 +160,26 @@ exports.getPanditById = async (req, res) => {
 // Edit a Pandit
 exports.editPandit = async (req, res) => {
     try {
-        console.log(req.body)
-        console.log(req.file)
         const {id} = req.params;
         const update = req.body;
-        const updatedPandit = await Pandit.findByIdAndUpdate(req.params.id, req.body, { new: true });
+        const updatePandit = await Pandit.findById(req.params.id);
         const image = req.file;
 
-        if (!updatedPandit) {
+        update.address_details = {
+            location: {
+                type: "Point",
+                coordinates: [update?.latitude, update?.longitude]
+            },
+            address: update?.address,
+            pincode: update?.pincode,
+            locality: update?.locality,
+            landmark: update?.landmark,
+            city: update?.city,
+            state: update?.state,
+            country: update?.country
+        }
+
+        if (!updatePandit) {
             return ApiResponse.notFound(res, 'Pandit not found');
         }
         let photo;
@@ -188,7 +198,7 @@ exports.editPandit = async (req, res) => {
         ApiResponse.error(res,'Something went wrong', 500, error.message);
     }
 };
-
+ 
 // Edit a Pandit additional_information
 exports.additionalInformationPandit = async (req, res) => {
     const id = req.params.id;
