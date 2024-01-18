@@ -49,6 +49,8 @@ function Index() {
       latitude: prevData?.address_details?.location?.coordinates[0],
       longitude: prevData?.address_details?.location?.coordinates[1],
       address: prevData?.address_details?.address,
+      locality: prevData?.address_details?.locality,
+      landmark: prevData?.address_details?.landmark,
       pincode: prevData?.address_details?.pincode,
       city: prevData?.address_details?.city,
       state: prevData?.address_details?.state,
@@ -67,7 +69,7 @@ function Index() {
     }
   )
   const [isfileSizeExceed, setIsFileExceed] = useState(false);
-  const [file, setFile] = useState(null);
+  const [file, setFile] = useState([]);
   const [deviDevtas, setDeviDevtas] = useState([]);
   const [value, setValue] = useState(prevData?.description || '');
   const editor = useRef(null);
@@ -95,18 +97,42 @@ function Index() {
     }
   },[file])
   
+  // const handleFileChange = (event) => {
+  //   // setFile(event.target.files);
+  //   setFile(prevFiles => [...prevFiles, ...event.target.files]);
+  //   let previewUrls = [];
+  //   const files = file.concat(event.target.files);
+  //   console.log("Files:",files)
+  //   for (const file of files) {
+  //     const reader = new FileReader();
+  //     reader.onload = () => {
+  //       // Add the preview URL to the array
+  //       previewUrls.push(reader.result);
+  
+  //       // If all files have been processed, update the state with the array of preview URLs
+  //       if (previewUrls.length === files.length) {
+  //         setImagesPreviewUrl(previewUrls);
+  //         // console.log("Title Preview URLs:", previewUrls);
+  //       }
+  //     };
+  //     reader.readAsDataURL(file);
+  //   }
+  // };
+
   const handleFileChange = (event) => {
-    setFile(event.target.files);
+    setFile(prevFiles => [...prevFiles, ...event.target.files]);
+  
     let previewUrls = [];
-    const files = event.target.files;
-    for (const file of files) {
+    const updatedFiles = [...file, ...event.target.files];
+  
+    for (const file of updatedFiles) {
       const reader = new FileReader();
       reader.onload = () => {
         // Add the preview URL to the array
         previewUrls.push(reader.result);
   
         // If all files have been processed, update the state with the array of preview URLs
-        if (previewUrls.length === files.length) {
+        if (previewUrls.length === updatedFiles.length) {
           setImagesPreviewUrl(previewUrls);
           // console.log("Title Preview URLs:", previewUrls);
         }
@@ -114,6 +140,7 @@ function Index() {
       reader.readAsDataURL(file);
     }
   };
+  
 
   const handleCoverImage = (event) => {
     const file = event.target.files[0];
@@ -146,10 +173,6 @@ function Index() {
           formData.append("files", file[i]);
         }
       }
-
-      // if(value){
-      //   formData.append("description", value);
-      // }
 
       for(let elem in formstate){
         if(elem === "devi_devta"){
@@ -197,11 +220,6 @@ function Index() {
           formData.append("files", file[i]);
         }
       }
-
-      // console.log("value", value)
-      // if(value){
-      //   formData.append("description", value);
-      // }
 
       for(let elem in formstate){
         if(elem === "devi_devta"){
@@ -315,36 +333,6 @@ function Index() {
     }));
   };
 
-  // async function saveBlogData(value) {
-  //   if (!value) {
-  //     openSuccessSB('error', 'Please type text.');
-  //     return;
-  //   }
-  //   // setSaving(true)
-
-  //   const res = await fetch(`${apiUrl}mandir/${prevData?._id || imageData?._id}/blogData`, {
-  //     method: "PATCH",
-  //     credentials: "include",
-  //     headers: {
-  //       "content-type": "application/json",
-  //       "Access-Control-Allow-Credentials": true
-  //     },
-  //     body: JSON.stringify({
-  //       blogData: value
-  //     })
-
-  //   });
-
-  //   const data = await res.json();
-  //   const updatedData = data?.data
-  //   if (updatedData || res.status === 200) {
-  //     openSuccessSB("success", data.message)
-  //     setEditingBlogData(false);
-  //   } else {
-  //     openSuccessSB("error", data.message)
-  //   }
-  // }
-
   const config = React.useMemo(
     () => ({
       disabled: editing ? false : true,
@@ -363,16 +351,16 @@ function Index() {
 
   return (
     <>
-      <MDBox pl={2} pr={2} mt={4} mb={2}>
+      <MDBox pl={2} pr={2} mt={2} mb={2}>
         <MDBox display="flex" justifyContent="space-between" alignItems="center">
           <MDTypography variant="caption" fontWeight="bold" color="text" textTransform="uppercase">
             Fill Mandir Details
           </MDTypography>
         </MDBox>
-        <Grid container display="flex" flexDirection="row" justifyContent="space-between">
+        <Grid mt={2} container xs={12} md={12} xl={12} display="flex" flexDirection="row" justifyContent="space-between">
           <Grid container spacing={2} mt={0.5} mb={0} xs={12} md={9} xl={12}>
 
-            <Grid item xs={12} md={12} xl={3}>
+            <Grid item xs={12} md={3} xl={3}>
               <TextField
                 disabled={((imageData || prevData) && (!editing))}
                 id="outlined-required"
@@ -388,23 +376,7 @@ function Index() {
               />
             </Grid>
 
-            {/* <Grid item xs={12} md={12} xl={3}>
-              <TextField
-                disabled={((imageData || prevData) && (!editing))}
-                id="outlined-required"
-                label='Description *'
-                fullWidth
-                value={formstate?.description}
-                onChange={(e) => {
-                  setFormState(prevState => ({
-                    ...prevState,
-                    description: e.target.value
-                  }))
-                }}
-              />
-            </Grid> */}
-
-            <Grid item xs={12} md={6} xl={3} mt={-1} mb={1}>
+            <Grid item xs={12} md={3} xl={3} mt={-1} mb={1}>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DemoContainer components={['MobileDateTimePicker']}>
                   <DemoItem>
@@ -418,7 +390,11 @@ function Index() {
                           setFormState(prevState => ({ ...prevState, morning_opening_time: newValue }))
                         }
                       }}
-                      minDateTime={null}
+                      // minDateTime={null}
+                      minDateTime={dayjs().startOf('day')}
+                      format="HH:mm"
+                      ampm={true}
+                      openTo="hours"
                       sx={{ width: '100%' }}
                     />
                   </DemoItem>
@@ -426,7 +402,7 @@ function Index() {
               </LocalizationProvider>
             </Grid>
 
-            <Grid item xs={12} md={6} xl={3} mt={-1} mb={1}>
+            <Grid item xs={12} md={3} xl={3} mt={-1} mb={1}>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DemoContainer components={['MobileDateTimePicker']}>
                   <DemoItem>
@@ -439,7 +415,11 @@ function Index() {
                           setFormState(prevState => ({ ...prevState, morning_closing_time: newValue }))
                         }
                       }}
-                      minDateTime={null}
+                      // minDateTime={null}
+                      minDateTime={dayjs().startOf('day')}
+                      format="HH:mm"
+                      ampm={true}
+                      openTo="hours"
                       sx={{ width: '100%' }}
                     />
                   </DemoItem>
@@ -447,7 +427,7 @@ function Index() {
               </LocalizationProvider>
             </Grid>
 
-            <Grid item xs={12} md={6} xl={3} mt={-1} mb={1}>
+            <Grid item xs={12} md={3} xl={3} mt={-1} mb={1}>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DemoContainer components={['MobileDateTimePicker']}>
                   <DemoItem>
@@ -460,7 +440,11 @@ function Index() {
                           setFormState(prevState => ({ ...prevState, evening_opening_time: newValue }))
                         }
                       }}
-                      minDateTime={null}
+                      // minDateTime={null}
+                      minDateTime={dayjs().startOf('day')}
+                      format="HH:mm"
+                      ampm={true}
+                      openTo="hours"
                       sx={{ width: '100%' }}
                     />
                   </DemoItem>
@@ -468,7 +452,7 @@ function Index() {
               </LocalizationProvider>
             </Grid>
 
-            <Grid item xs={12} md={6} xl={3} mt={-1} mb={1}>
+            <Grid item xs={12} md={3} xl={3} mt={-1} mb={1}>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DemoContainer components={['MobileDateTimePicker']}>
                   <DemoItem>
@@ -481,7 +465,11 @@ function Index() {
                           setFormState(prevState => ({ ...prevState, evening_closing_time: newValue }))
                         }
                       }}
-                      minDateTime={null}
+                      // minDateTime={null}
+                      minDateTime={dayjs().startOf('day')}
+                      format="HH:mm"
+                      ampm={true}
+                      openTo="hours"
                       sx={{ width: '100%' }}
                     />
                   </DemoItem>
@@ -489,7 +477,7 @@ function Index() {
               </LocalizationProvider>
             </Grid>
 
-            <Grid item xs={12} md={6} xl={3} mt={-1} mb={1}>
+            <Grid item xs={12} md={3} xl={3} mt={-1} mb={1}>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DemoContainer components={['MobileDateTimePicker']}>
                   <DemoItem>
@@ -502,7 +490,11 @@ function Index() {
                           setFormState(prevState => ({ ...prevState, morning_aarti_time: newValue }))
                         }
                       }}
-                      minDateTime={null}
+                      // minDateTime={null}
+                      minDateTime={dayjs().startOf('day')}
+                      format="HH:mm"
+                      ampm={true}
+                      openTo="hours"
                       sx={{ width: '100%' }}
                     />
                   </DemoItem>
@@ -510,7 +502,7 @@ function Index() {
               </LocalizationProvider>
             </Grid>
 
-            <Grid item xs={12} md={6} xl={3} mt={-1} mb={1}>
+            <Grid item xs={12} md={3} xl={3} mt={-1} mb={1}>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DemoContainer components={['MobileDateTimePicker']}>
                   <DemoItem>
@@ -523,7 +515,11 @@ function Index() {
                           setFormState(prevState => ({ ...prevState, evening_aarti_time: newValue }))
                         }
                       }}
-                      minDateTime={null}
+                      // minDateTime={null}
+                      minDateTime={dayjs().startOf('day')}
+                      format="HH:mm"
+                      ampm={true}
+                      openTo="hours"
                       sx={{ width: '100%' }}
                     />
                   </DemoItem>
@@ -531,121 +527,7 @@ function Index() {
               </LocalizationProvider>
             </Grid>
 
-            <Grid item xs={12} md={12} xl={3}>
-              <TextField
-                disabled={((imageData || prevData) && (!editing))}
-                id="outlined-required"
-                label='Latitude *'
-                fullWidth
-                type='number'
-                value={formstate?.latitude}
-                onChange={(e) => {
-                  setFormState(prevState => ({
-                    ...prevState,
-                    latitude: e.target.value
-                  }))
-                }}
-              />
-            </Grid>
-
-            <Grid item xs={12} md={12} xl={3}>
-              <TextField
-                disabled={((imageData || prevData) && (!editing))}
-                id="outlined-required"
-                label='Longitude *'
-                fullWidth
-                type='number'
-                value={formstate?.longitude}
-                onChange={(e) => {
-                  setFormState(prevState => ({
-                    ...prevState,
-                    longitude: e.target.value
-                  }))
-                }}
-              />
-            </Grid>
-
-            <Grid item xs={12} md={12} xl={3}>
-              <TextField
-                disabled={((imageData || prevData) && (!editing))}
-                id="outlined-required"
-                label='Address *'
-                fullWidth
-                value={formstate?.address}
-                onChange={(e) => {
-                  setFormState(prevState => ({
-                    ...prevState,
-                    address: e.target.value
-                  }))
-                }}
-              />
-            </Grid>
-
-            <Grid item xs={12} md={12} xl={3}>
-              <TextField
-                disabled={((imageData || prevData) && (!editing))}
-                id="outlined-required"
-                label='Pincode *'
-                fullWidth
-                value={formstate?.pincode}
-                onChange={(e) => {
-                  setFormState(prevState => ({
-                    ...prevState,
-                    pincode: e.target.value
-                  }))
-                }}
-              />
-            </Grid>
-
-            <Grid item xs={12} md={12} xl={3}>
-              <TextField
-                disabled={((imageData || prevData) && (!editing))}
-                id="outlined-required"
-                label='City *'
-                fullWidth
-                value={formstate?.city}
-                onChange={(e) => {
-                  setFormState(prevState => ({
-                    ...prevState,
-                    city: e.target.value
-                  }))
-                }}
-              />
-            </Grid>
-
-            <Grid item xs={12} md={12} xl={3}>
-              <TextField
-                disabled={((imageData || prevData) && (!editing))}
-                id="outlined-required"
-                label='State *'
-                fullWidth
-                value={formstate?.state}
-                onChange={(e) => {
-                  setFormState(prevState => ({
-                    ...prevState,
-                    state: e.target.value
-                  }))
-                }}
-              />
-            </Grid>
-
-            <Grid item xs={12} md={12} xl={3}>
-              <TextField
-                disabled={((imageData || prevData) && (!editing))}
-                id="outlined-required"
-                label='Country *'
-                fullWidth
-                value={formstate?.country}
-                onChange={(e) => {
-                  setFormState(prevState => ({
-                    ...prevState,
-                    country: e.target.value
-                  }))
-                }}
-              />
-            </Grid>
-
-            <Grid item xs={12} md={12} xl={3}>
+            <Grid item xs={12} md={3} xl={3}>
               <TextField
                 disabled={((imageData || prevData) && (!editing))}
                 id="outlined-required"
@@ -661,7 +543,7 @@ function Index() {
               />
             </Grid>
 
-            <Grid item xs={12} md={12} xl={3}>
+            <Grid item xs={12} md={3} xl={3}>
               <TextField
                 disabled={((imageData || prevData) && (!editing))}
                 id="outlined-required"
@@ -677,7 +559,7 @@ function Index() {
               />
             </Grid>
 
-            <Grid item xs={12} md={12} xl={3}>
+            <Grid item xs={12} md={3} xl={3}>
               <TextField
                 disabled={((imageData || prevData) && (!editing))}
                 id="outlined-required"
@@ -693,7 +575,7 @@ function Index() {
               />
             </Grid>
 
-            <Grid item xs={12} md={6} xl={3}>
+            <Grid item xs={12} md={3} xl={3}>
               <FormControl sx={{ width: '100%' }}>
                 <InputLabel id="demo-multiple-name-label">Devi Devta</InputLabel>
                 <Select
@@ -719,89 +601,9 @@ function Index() {
               </FormControl>
             </Grid>
 
-            <Grid item xs={12} md={6} xl={3}>
-              <FormGroup>
-                <FormControlLabel
-                  checked={(prevData?.dham !== undefined && !editing && formstate?.dham === undefined) ? prevData?.dham : formstate?.dham}
-                  disabled={((imageData || prevData) && (!editing))}
-                  control={<Checkbox />}
-                  onChange={(e) => {
-                    setFormState(prevState => ({
-                      ...prevState,
-                      dham: e.target.checked
-                    }))
-                  }}
-                  label="Dham" />
-              </FormGroup>
-            </Grid>
-
-            <Grid item xs={12} md={6} xl={3}>
-              <FormGroup>
-                <FormControlLabel
-                  checked={(prevData?.popular !== undefined && !editing && formstate?.popular === undefined) ? prevData?.popular : formstate?.popular}
-                  disabled={((imageData || prevData) && (!editing))}
-                  control={<Checkbox />}
-                  onChange={(e) => {
-                    setFormState(prevState => ({
-                      ...prevState,
-                      popular: e.target.checked
-                    }))
-                  }}
-                  label="Popular" />
-              </FormGroup>
-            </Grid>
-
-            <Grid item xs={12} md={12} xl={3}>
-              <TextField
-                disabled={((imageData || prevData) && (!editing))}
-                id="outlined-required"
-                label='Meta Title *'
-                fullWidth
-                value={formstate?.meta_title}
-                onChange={(e) => {
-                  setFormState(prevState => ({
-                    ...prevState,
-                    meta_title: e.target.value
-                  }))
-                }}
-              />
-            </Grid>
-
-            <Grid item xs={12} md={12} xl={3}>
-              <TextField
-                disabled={((imageData || prevData) && (!editing))}
-                id="outlined-required"
-                label='Meta Description *'
-                fullWidth
-                value={formstate?.meta_description}
-                onChange={(e) => {
-                  setFormState(prevState => ({
-                    ...prevState,
-                    meta_description: e.target.value
-                  }))
-                }}
-              />
-            </Grid>
-
-            <Grid item xs={12} md={12} xl={3}>
-              <TextField
-                disabled={((imageData || prevData) && (!editing))}
-                id="outlined-required"
-                label='Tags *'
-                fullWidth
-                value={formstate?.tags}
-                onChange={(e) => {
-                  setFormState(prevState => ({
-                    ...prevState,
-                    tags: e.target.value
-                  }))
-                }}
-              />
-            </Grid>
-
-            <Grid item xs={12} md={6} xl={3}>
+            <Grid item xs={12} md={3} xl={3}>
               <FormControl sx={{ width: "100%" }}>
-                <InputLabel id="demo-simple-select-autowidth-label">Status *</InputLabel>
+                <InputLabel id="demo-simple-select-autowidth-label">Accessibility *</InputLabel>
                 <Select
                   labelId="demo-simple-select-autowidth-label"
                   id="demo-simple-select-autowidth"
@@ -823,7 +625,7 @@ function Index() {
               </FormControl>
             </Grid>
 
-            <Grid item xs={12} md={6} xl={3}>
+            <Grid item xs={12} md={3} xl={3}>
               <FormControl sx={{ width: "100%" }}>
                 <InputLabel id="demo-simple-select-autowidth-label">Status *</InputLabel>
                 <Select
@@ -848,9 +650,57 @@ function Index() {
               </FormControl>
             </Grid>
 
-            <Grid item xs={12} md={6} xl={3}>
-              <MDButton variant="outlined" style={{ fontSize: 10 }} fullWidth color={(imageData?.cover_image?.url && !coverImage) ? "warning" : ((imageData?.cover_image?.url && coverImage) || coverImage) ? "error" : "success"} component="label">
-                Upload Cover Image
+            <Grid item xs={12} md={9} xl={9}>
+              <TextField
+                disabled={((imageData || prevData) && (!editing))}
+                id="outlined-required"
+                label='Tags *'
+                fullWidth
+                value={formstate?.tags}
+                onChange={(e) => {
+                  setFormState(prevState => ({
+                    ...prevState,
+                    tags: e.target.value
+                  }))
+                }}
+              />
+            </Grid>
+
+            <Grid item xs={12} md={3} xl={3}>
+              <FormGroup>
+                <FormControlLabel
+                  checked={(prevData?.dham !== undefined && !editing && formstate?.dham === undefined) ? prevData?.dham : formstate?.dham}
+                  disabled={((imageData || prevData) && (!editing))}
+                  control={<Checkbox />}
+                  onChange={(e) => {
+                    setFormState(prevState => ({
+                      ...prevState,
+                      dham: e.target.checked
+                    }))
+                  }}
+                  label="Dham" />
+              </FormGroup>
+            </Grid>
+
+            <Grid item xs={12} md={3} xl={3}>
+              <FormGroup>
+                <FormControlLabel
+                  checked={(prevData?.popular !== undefined && !editing && formstate?.popular === undefined) ? prevData?.popular : formstate?.popular}
+                  disabled={((imageData || prevData) && (!editing))}
+                  control={<Checkbox />}
+                  onChange={(e) => {
+                    setFormState(prevState => ({
+                      ...prevState,
+                      popular: e.target.checked
+                    }))
+                  }}
+                  label="Popular" />
+              </FormGroup>
+            </Grid>
+
+            <Grid item xs={12} md={3} xl={3}>
+              <MDButton variant="outlined" style={{ fontSize: 10 }} fullWidth color={((imageData || prevData) && (!editing)) ? "warning" : "dark"} component="label">
+                {prevData?.cover_image || coverImage ? "Update Cover Image[2X1]" : "Upload Cover Image[2X1]"}
                 <input
                   hidden
                   disabled={((imageData || prevData) && (!editing))}
@@ -867,9 +717,9 @@ function Index() {
               </MDButton>
             </Grid>
 
-            <Grid item xs={12} md={6} xl={3}>
-              <MDButton variant="outlined" style={{ fontSize: 10 }} fullWidth color={(imageData?.images?.length && !file) ? "warning" : ((imageData?.images?.length && file) || file) ? "error" : "success"} component="label">
-                Upload Mandir Images
+            <Grid item xs={12} md={3} xl={3}>
+              <MDButton variant="outlined" style={{ fontSize: 10 }} fullWidth color={((imageData || prevData) && (!editing)) ? "warning" : "dark"} component="label">
+                {imageData?.images?.length ? "Upload More Images[2X1]" : "Upload Mandir Images[2X1]"}
                 <input
                   hidden
                   disabled={((imageData || prevData) && (!editing))}
@@ -880,81 +730,308 @@ function Index() {
                 />
               </MDButton>
             </Grid>
+
           </Grid>
         </Grid>
 
-        <MDBox mt={2} >
-          <JoditEditor
-            ref={editor}
-            config={config}
-            value={formstate.description}
-            onChange={(e) => {
-              setFormState(prevState => ({
-                ...prevState,
-                description: e
-              }))
-            }}
-            disabled={true}
-            style={{ height: "100%" }}
-          />
-        </MDBox>
-
-        
-        <Grid container mt={2} xs={12} md={12} xl={12} >
+        <Grid mt={2} container xs={12} md={12} xl={12} display="flex" flexDirection="row" justifyContent="space-between">
           <Grid item display="flex" justifyContent="flex-end" xs={12} md={12} xl={12}>
-          <MDButton
-            variant="contained"
-            color= {(prevData && !editing) ? "warning" : (prevData && editing) ? "warning" : "success"}
-            size="small"
-            sx={{mr:1, ml:1}} 
-            disabled={isfileSizeExceed}
-            onClick={(prevData && !editing) ? ()=>{setEditing(true)} : (prevData && editing) ? edit : handleUpload}
-          >
-            {(prevData && !editing) ? "Edit" : (prevData && editing) ? "Save" : "Next"}
-          </MDButton>
-          {(isSubmitted || prevData) && !editing && <MDButton 
-            variant="contained" 
-            color="info" 
-            size="small" 
-            sx={{mr:1, ml:1}} 
-            onClick={()=>{navigate('/mandir')}}
-          >
-              Back
-          </MDButton>}
-          {(isSubmitted || prevData) && editing && <MDButton 
-            variant="contained" 
-            color="info" 
-            size="small" 
-            sx={{mr:1, ml:1}} 
-            // onClick={()=>{navigate('/allblogs')}}
-            onClick={()=>{setEditing(false)}}
-          >
-              Cancel
-          </MDButton>}
-          {!prevData && editing && <MDButton 
-            variant="contained" 
-            color="info" 
-            size="small" 
-            sx={{mr:1, ml:1}} 
-            onClick={()=>{navigate('/allblogs')}}
-            // onClick={()=>{setEditing(false)}}
-          >
-              Cancel
-          </MDButton>}
+            <MDButton
+              variant="contained"
+              color= {(prevData && !editing) ? "dark" : (prevData && editing) ? "dark" : "success"}
+              size="small"
+              sx={{mr:1, ml:1}} 
+              disabled={isfileSizeExceed}
+              onClick={(prevData && !editing) ? ()=>{setEditing(true)} : (prevData && editing) ? edit : handleUpload}
+            >
+              {(prevData && !editing) ? "Edit" : (prevData && editing) ? "Save" : "Next"}
+            </MDButton>
+            {(isSubmitted || prevData) && !editing && 
+            <MDButton 
+              variant="contained" 
+              color="info" 
+              size="small" 
+              sx={{mr:1, ml:1}} 
+              onClick={()=>{navigate('/mandir')}}
+            >
+                Back
+            </MDButton>}
+            {(isSubmitted || prevData) && editing && 
+            <MDButton 
+              variant="contained" 
+              color="info" 
+              size="small" 
+              sx={{mr:1, ml:1}} 
+              onClick={()=>{setEditing(false)}}
+            >
+                Cancel
+            </MDButton>}
+            {!prevData && editing && 
+            <MDButton 
+              variant="contained" 
+              color="info" 
+              size="small" 
+              sx={{mr:1, ml:1}} 
+              onClick={()=>{navigate('/mandir')}}
+            >
+                Cancel
+            </MDButton>}
           </Grid>
         </Grid>
 
-        <Grid container mb={2} spacing={2} xs={12} md={12} xl={12} mt={1} display="flex" justifyContent='flex-start' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
+        <Grid mt={2} container xs={12} md={12} xl={12} display="flex" flexDirection="row" justifyContent="space-between">
+          <MDBox display="flex" justifyContent="space-between" alignItems="center">
+            <MDTypography variant="caption" fontWeight="bold" color="text" textTransform="uppercase">
+              Mandir Address Details
+            </MDTypography>
+          </MDBox>
+          <Grid container spacing={2} mt={0.5} mb={0} xs={12} md={9} xl={12}>
+              <Grid item xs={12} md={3} xl={3}>
+                <TextField
+                  disabled={((imageData || prevData) && (!editing))}
+                  id="outlined-required"
+                  label='Latitude *'
+                  fullWidth
+                  type='number'
+                  value={formstate?.latitude}
+                  onChange={(e) => {
+                    setFormState(prevState => ({
+                      ...prevState,
+                      latitude: e.target.value
+                    }))
+                  }}
+                />
+              </Grid>
+
+              <Grid item xs={12} md={3} xl={3}>
+                <TextField
+                  disabled={((imageData || prevData) && (!editing))}
+                  id="outlined-required"
+                  label='Longitude *'
+                  fullWidth
+                  type='number'
+                  value={formstate?.longitude}
+                  onChange={(e) => {
+                    setFormState(prevState => ({
+                      ...prevState,
+                      longitude: e.target.value
+                    }))
+                  }}
+                />
+              </Grid>
+
+              <Grid item xs={12} md={3} xl={3}>
+                <TextField
+                  disabled={((imageData || prevData) && (!editing))}
+                  id="outlined-required"
+                  label='Address *'
+                  fullWidth
+                  value={formstate?.address}
+                  onChange={(e) => {
+                    setFormState(prevState => ({
+                      ...prevState,
+                      address: e.target.value
+                    }))
+                  }}
+                />
+              </Grid>
+
+              <Grid item xs={12} md={3} xl={3}>
+                <TextField
+                  disabled={((imageData || prevData) && (!editing))}
+                  id="outlined-required"
+                  label='Locality *'
+                  fullWidth
+                  value={formstate?.locality}
+                  onChange={(e) => {
+                    setFormState(prevState => ({
+                      ...prevState,
+                      locality: e.target.value
+                    }))
+                  }}
+                />
+              </Grid>
+
+              <Grid item xs={12} md={3} xl={3}>
+                <TextField
+                  disabled={((imageData || prevData) && (!editing))}
+                  id="outlined-required"
+                  label='Landmark *'
+                  fullWidth
+                  value={formstate?.landmark}
+                  onChange={(e) => {
+                    setFormState(prevState => ({
+                      ...prevState,
+                      landmark: e.target.value
+                    }))
+                  }}
+                />
+              </Grid>
+
+              <Grid item xs={12} md={3} xl={3}>
+                <TextField
+                  disabled={((imageData || prevData) && (!editing))}
+                  id="outlined-required"
+                  label='Pincode *'
+                  fullWidth
+                  value={formstate?.pincode}
+                  onChange={(e) => {
+                    setFormState(prevState => ({
+                      ...prevState,
+                      pincode: e.target.value
+                    }))
+                  }}
+                />
+              </Grid>
+
+              <Grid item xs={12} md={3} xl={3}>
+                <TextField
+                  disabled={((imageData || prevData) && (!editing))}
+                  id="outlined-required"
+                  label='City *'
+                  fullWidth
+                  value={formstate?.city}
+                  onChange={(e) => {
+                    setFormState(prevState => ({
+                      ...prevState,
+                      city: e.target.value
+                    }))
+                  }}
+                />
+              </Grid>
+
+              <Grid item xs={12} md={3} xl={3}>
+                <TextField
+                  disabled={((imageData || prevData) && (!editing))}
+                  id="outlined-required"
+                  label='State *'
+                  fullWidth
+                  value={formstate?.state}
+                  onChange={(e) => {
+                    setFormState(prevState => ({
+                      ...prevState,
+                      state: e.target.value
+                    }))
+                  }}
+                />
+              </Grid>
+
+              <Grid item xs={12} md={3} xl={3}>
+                <TextField
+                  disabled={((imageData || prevData) && (!editing))}
+                  id="outlined-required"
+                  label='Country *'
+                  fullWidth
+                  value={formstate?.country}
+                  onChange={(e) => {
+                    setFormState(prevState => ({
+                      ...prevState,
+                      country: e.target.value
+                    }))
+                  }}
+                />
+              </Grid>
+
+          </Grid>
+        </Grid>
+
+        <Grid mt={2} container xs={12} md={12} xl={12} display="flex" flexDirection="row" justifyContent="space-between">
+            
+            <MDBox display="flex" justifyContent="space-between" alignItems="center">
+              <MDTypography variant="caption" fontWeight="bold" color="text" textTransform="uppercase">
+                About the mandir
+              </MDTypography>
+            </MDBox>
+            <Grid container spacing={2} mt={0.5} mb={0} xs={12} md={12} xl={12}>
+              <Grid item xs={12} md={12} xl={12}>
+                <JoditEditor
+                  ref={editor}
+                  config={config}
+                  value={formstate.description}
+                  onChange={(e) => {
+                    setFormState(prevState => ({
+                      ...prevState,
+                      description: e
+                    }))
+                  }}
+                  disabled={true}
+                  style={{ maxWidth: '100%', height: "100%" }}
+                />
+              </Grid>
+            </Grid>
+
+        </Grid>
+
+        <Grid mt={2} container xs={12} md={12} xl={12} display="flex" flexDirection="row" justifyContent="space-between">
+            <MDBox display="flex" justifyContent="space-between" alignItems="center">
+              <MDTypography variant="caption" fontWeight="bold" color="text" textTransform="uppercase">
+                SEO Details
+              </MDTypography>
+            </MDBox>
+            <Grid container spacing={2} mt={0.5} mb={0} xs={12} md={9} xl={12}>
+                <Grid item xs={12} md={3} xl={3}>
+                  <TextField
+                    disabled={((imageData || prevData) && (!editing))}
+                    id="outlined-required"
+                    label='Meta Title *'
+                    fullWidth
+                    value={formstate?.meta_title}
+                    onChange={(e) => {
+                      setFormState(prevState => ({
+                        ...prevState,
+                        meta_title: e.target.value
+                      }))
+                    }}
+                  />
+                </Grid>
+
+                <Grid item xs={12} md={9} xl={9}>
+                  <TextField
+                    disabled={((imageData || prevData) && (!editing))}
+                    id="outlined-required"
+                    label='Meta Keywords *'
+                    fullWidth
+                    value={formstate?.keywords}
+                    onChange={(e) => {
+                      setFormState(prevState => ({
+                        ...prevState,
+                        keywords: e.target.value
+                      }))
+                    }}
+                  />
+                </Grid>
+
+                <Grid item xs={12} md={12} xl={12}>
+                  <TextField
+                    disabled={((imageData || prevData) && (!editing))}
+                    id="outlined-required"
+                    label='Meta Description *'
+                    fullWidth
+                    multiline
+                    rows={5}
+                    value={formstate?.meta_description}
+                    onChange={(e) => {
+                      setFormState(prevState => ({
+                        ...prevState,
+                        meta_description: e.target.value
+                      }))
+                    }}
+                  />
+                </Grid>
+            </Grid>
+        </Grid>
+
+        <Grid mt={2} container xs={12} md={12} xl={12} display="flex" justifyContent='flex-start' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
           {coverPreviewUrl ?
 
-            <Grid item xs={12} md={12} xl={3} style={{ maxWidth: '100%', height: 'auto' }}>
+            <Grid item xs={12} md={12} xl={12} style={{ maxWidth: '100%', height: 'auto' }}>
               <Grid container xs={12} md={12} xl={12} style={{ maxWidth: '100%', height: 'auto' }}>
                 <Grid item xs={12} md={12} xl={12} style={{ maxWidth: '100%', height: 'auto' }}>
                   <Card sx={{ minWidth: '100%', cursor: 'pointer' }}>
                     <CardActionArea>
                       <Grid item xs={12} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
                         <CardContent display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
-                          <MDBox mb={-2} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ width: '100%', height: 'auto' }}>
+                          <MDBox display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ width: '100%', height: 'auto' }}>
                             <Typography variant="caption" fontFamily='Segoe UI' fontWeight={600} style={{ textAlign: 'center' }}>
                               Cover Image
                             </Typography>
@@ -970,7 +1047,7 @@ function Index() {
               </Grid>
             </Grid>
             :
-            <Grid item xs={12} md={12} xl={3} style={{ maxWidth: '100%', height: 'auto' }}>
+            <Grid item xs={12} md={12} xl={12} style={{ maxWidth: '100%', height: 'auto' }}>
               <Grid container xs={12} md={12} xl={12} style={{ maxWidth: '100%', height: 'auto' }}>
                 <Grid item xs={12} md={12} xl={12} style={{ maxWidth: '100%', height: 'auto' }}>
                   <Card sx={{ minWidth: '100%', cursor: 'pointer' }}>
@@ -995,83 +1072,69 @@ function Index() {
           }
         </Grid>
 
-        <Grid container mb={2} spacing={2} xs={12} md={12} xl={12} mt={1} display="flex" justifyContent='flex-start' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
-          {imageData?.images?.map((elem) => {
-            return (
-              <>
-                <Grid item xs={12} md={12} xl={2} style={{ maxWidth: '100%', height: 'auto' }}>
-                  <Grid container xs={12} md={12} xl={12} style={{ maxWidth: '100%', height: 'auto' }}>
-                    <Grid item xs={12} md={12} xl={12} style={{ maxWidth: '100%', height: 'auto' }}>
-                      <Card sx={{ minWidth: '100%', cursor: 'pointer' }}>
-                        <CardActionArea>
-                          <Grid item xs={12} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
-                            <img src={elem?.url} style={{ maxWidth: '100%', height: 'auto', borderTopLeftRadius: 10, borderTopRightRadius: 10 }} />
-                          </Grid>
-                          <Grid item xs={12} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
-                            <CardContent
-                            //  display='flex' justifyContent='space-between' alignContent='center' style={{maxWidth: '100%',height: 'auto'}}
-                            >
-                              <MDBox
-                                mb={-2}
-                                display='flex' flexDirection='column' justifyContent='space-between' alignContent='center' style={{ width: '100%', height: 'auto' }}
-                              >
-                              
-                                <Divider />
-                                <Typography
-                                  mt={-1.5} variant="caption" fontFamily='Segoe UI' fontWeight={400} style={{ textAlign: 'center', display: "flex", justifyContent: "center", alignItems: 'center', alignContent: 'center' }}
-                                  onClick={() => { removeImage(imageData?._id, elem?._id) }}
-                                >
-                                  Delete <DeleteIcon />
-                                </Typography>
-                              </MDBox>
-                            </CardContent>
-                          </Grid>
-                        </CardActionArea>
-                      </Card>
+        <Grid container mt={2} xs={12} md={12} xl={12} display="flex" justifyContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
+          <Grid item xs={12} md={12} xl={12} display="flex" justifyContent='center' alignItems='center'>
+            <Grid container spacing={2} xs={12} md={12} xl={12} display="flex" justifyContent='flex-start' alignItems='center'>
+            {imageData?.images?.map((elem) => {
+              return (
+                <>
+                  <Grid item xs={12} md={12} xl={4} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
+                    <Grid container xs={12} md={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' xl={12} style={{ maxWidth: '100%', height: 'auto' }}>
+                      <Grid item xs={12} md={12} xl={12} style={{ maxWidth: '100%', height: 'auto' }}>
+                        <Card sx={{ minWidth: '100%', cursor: 'pointer' }}>
+                          <CardActionArea>
+                            <Grid item xs={12} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
+                              <img src={elem?.url} style={{ maxWidth: '100%', height: 'auto', borderTopLeftRadius: 10, borderTopRightRadius: 10 }} />
+                            </Grid>
+                            <Grid item xs={12} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
+                              <CardContent>
+                                <MDBox display='flex' flexDirection='column' justifyContent='space-between' alignContent='center' style={{ width: '100%', height: 'auto' }}>
+                                  <MDTypography mb={-2} variant="caption" style={{ textAlign: 'center', display: "flex", justifyContent: "center", alignItems: 'center', alignContent: 'center' }} onClick={() => { removeImage(imageData?._id, elem?._id) }}>
+                                    Delete <DeleteIcon />
+                                  </MDTypography>
+                                </MDBox>
+                              </CardContent>
+                            </Grid>
+                          </CardActionArea>
+                        </Card>
+                      </Grid>
                     </Grid>
                   </Grid>
-                </Grid>
-              </>
-            )
-          })}
-          {imagesPreviewUrl?.map((elem) => {
-            return (
-              <>
-                <Grid item xs={12} md={12} xl={2} style={{ maxWidth: '100%', height: 'auto' }}>
-                  <Grid container xs={12} md={12} xl={12} style={{ maxWidth: '100%', height: 'auto' }}>
-                    <Grid item xs={12} md={12} xl={12} style={{ maxWidth: '100%', height: 'auto' }}>
-                      <Card sx={{ minWidth: '100%', cursor: 'pointer' }}>
-                        <CardActionArea>
-                          <Grid item xs={12} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
-                            <img src={elem} style={{ maxWidth: '100%', height: 'auto', borderTopLeftRadius: 10, borderTopRightRadius: 10 }} />
-                          </Grid>
-                          <Grid item xs={12} md={12} lg={12} display='flex' justifyContent='space-between' alignContent='center' style={{ maxWidth: '100%', height: 'auto' }}>
-                            <CardContent
-                            //  display='flex' justifyContent='space-between' alignContent='center' style={{maxWidth: '100%',height: 'auto'}}
-                            >
-                              <MDBox
-                                mb={-2}
-                                display='flex' flexDirection='column' justifyContent='space-between' alignContent='center' style={{ width: '100%', height: 'auto' }}
-                              >
-                                <Divider />
-                                <Typography
-                                  mt={-1.5} variant="caption" fontFamily='Segoe UI' fontWeight={400} style={{ textAlign: 'center', display: "flex", justifyContent: "center", alignItems: 'center', alignContent: 'center' }}
-                                  onClick={() => { setImagesPreviewUrl(imagesPreviewUrl.filter(item => item !== elem)) }}
-                                >
-                                  Delete <DeleteIcon />
-                                </Typography>
-                              </MDBox>
-                            </CardContent>
-                          </Grid>
+                </>
+              )
+            })}
+            {imagesPreviewUrl?.map((elem) => {
+              return (
+                <>
+                  <Grid item xs={12} md={12} xl={4} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
+                    <Grid container display='flex' justifyContent='flex-start' alignContent='center' alignItems='center' xs={12} md={12} xl={12} style={{ maxWidth: '100%', height: 'auto' }}>
+                      <Grid item xs={12} md={12} xl={12} style={{ maxWidth: '100%', height: 'auto' }}>
+                        <Card sx={{ minWidth: '100%', cursor: 'pointer' }}>
+                          <CardActionArea>
+                            <Grid item xs={12} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
+                              <img src={elem} style={{ maxWidth: '100%', height: 'auto', borderTopLeftRadius: 10, borderTopRightRadius: 10 }} />
+                            </Grid>
+                            <Grid item xs={12} md={12} lg={12} display='flex' justifyContent='space-between' alignContent='center' style={{ maxWidth: '100%', height: 'auto' }}>
+                              <CardContent>
+                                <MDBox display='flex' flexDirection='column' justifyContent='space-between' alignContent='center' style={{ width: '100%', height: 'auto' }}>
+                                  <Divider />
+                                  <MDTypography mb={-2} variant="caption" style={{ textAlign: 'center', display: "flex", justifyContent: "center", alignItems: 'center', alignContent: 'center' }} onClick={() => { setImagesPreviewUrl(imagesPreviewUrl.filter(item => item !== elem)) }}>
+                                    Delete <DeleteIcon />
+                                  </MDTypography>
+                                </MDBox>
+                              </CardContent>
+                            </Grid>
 
-                        </CardActionArea>
-                      </Card>
+                          </CardActionArea>
+                        </Card>
+                      </Grid>
                     </Grid>
                   </Grid>
-                </Grid>
-              </>
-            )
-          })}
+                </>
+              )
+            })}
+            </Grid>
+          </Grid>
         </Grid> 
           {renderSuccessSB}
       </MDBox>

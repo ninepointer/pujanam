@@ -239,13 +239,13 @@ const About = () => {
                 <Grid item mt={2} mb={1} xs={12} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ width: '100%', height: 'auto' }}>
                 <Grid container xs={12} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
                     <Grid ml={2} item xs={12} md={12} lg={12} display='flex' justifyContent='flex-start' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
-                      <MDBox display='flex' justifyContent='flex-start' alignContent='flext-start' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
+                      <MDBox display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
                         <MDTypography variant="h4" color="dark">All about 4 dham mandir!</MDTypography>
                       </MDBox>
                     </Grid>
 
-                    <Grid mt={1} ml={2} item xs={12} md={12} lg={12} display='flex' justifyContent='flex-start' alignContent='center' alignItems='center' style={{backgroundColor:'white', borderRadius:10 ,maxWidth: '100%', height: 'auto' }}>
-                      <MDBox p={2} display='flex' justifyContent='center' alignContent='flext-start' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
+                    <Grid mt={1} ml={2} item xs={12} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{backgroundColor:'white', borderRadius:10 ,maxWidth: '100%', height: 'auto' }}>
+                      <MDBox p={2} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
                         <MDTypography variant="body2" color="dark">Char Dham are the four places in India with high pilgrimage importance. These four places are namely Rameshwaram, Jaganath-Puri, Badrinath-Kedarnath and Dwarka. Adi Shankaracharya defined the term Char Dham as the three Vaishnavite, than one Shaivite and the last a state of mixed ones. It is some of the most holy places that a Hindu should visit, at least once in a lifetime. The origin of these four temples here is still not well known and has remained to be a mysterious fact. Shankaracharya is said to have established the Advaita school of Hinduism, which was also accountable for the origin of the Char Dham. The four Hindu temples are lying across the four corners of India. The Badrinath temple is in the north, followed by the east temple of Jaganath Puri, the Dwarkadhish Temple located at Dwarka in the west, and Rameswaram in the south, the Ramanathaswamy Temple.</MDTypography>
                       </MDBox>
                     </Grid>
@@ -253,17 +253,17 @@ const About = () => {
                     {dham?.length > 0 ?
                         <Grid item xs={12} mt={2} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
 
-                        <MDBox display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
-                            <Grid container spacing={4} xs={12} md={12} lg={12} display='flex' justifyContent='flex-start' alignContent='center' alignItems='center' style={{ width: '100%', height: 'auto' }}>
-                            {dham?.map((elem) => {
-                                return (
-                                <Grid key={elem?._id} item xs={12} md={4} lg={3} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ width: '100%', height: 'auto' }}>
-                                    <MandirCard elem={elem}/>
-                                </Grid>
-                                )
-                            })}
-                            </Grid>
-                        </MDBox>
+                          <MDBox display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
+                              <Grid container spacing={4} xs={12} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ width: '100%', height: 'auto' }}>
+                              {dham?.map((elem) => {
+                                  return (
+                                  <Grid key={elem?._id} item xs={12} md={4} lg={3} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ width: '100%', height: 'auto' }}>
+                                      <MandirCard elem={elem}/>
+                                  </Grid>
+                                  )
+                              })}
+                              </Grid>
+                          </MDBox>
 
                         </Grid>
                         :
