@@ -31,7 +31,6 @@ export default function MandirData() {
   const [isLoading, setIsLoading] = useState(true);
   const locationContextData = useContext(LocationContext)
 
-  // console.log("locationContextData", locationContextData.locationState)
   useEffect(()=>{
     if(mandirData?._id){
       storeUnknownUserInfo();
@@ -118,7 +117,7 @@ export default function MandirData() {
       <MDBox display='flex' justifyContent='center' alignContent='center' alignItems='flex-start' style={{ backgroundColor: 'white', height: 'auto', width: 'auto', maxWidth: '100vW' }}>
         <ThemeProvider theme={theme}>
           <Navbar />
-          <Grid container p={5} xs={12} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='flex-start' style={{width:'100%'}}>
+          <Grid container p={0} mt={10} xs={12} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='flex-start' style={{width:'100%'}}>
           {isLoading ?
             
               <Grid container mt={35} display='flex' justifyContent='center' alignContent='center' alignItems='flex-start' xs={12} md={12} lg={12} style={{ maxWidth: '100%', height: 'auto' }}>
@@ -128,18 +127,18 @@ export default function MandirData() {
             :
               <>
                 <Helmet>
-                  <title>{mandirData?.name}</title>
-                  <meta name='description' content={mandirData?.description} />
-                  <meta name='keywords' content={mandirData?.tags} />
-                  <meta name="twitter:card" content="summary_large_image" />
-                  <meta name="twitter:title" content={mandirData?.name} />
-                  <meta name="twitter:description" content={mandirData?.description} />
+                  <title>{mandirData?.meta_title}</title>
+                  <meta name='description' content={mandirData?.meta_description} />
+                  <meta name='keywords' content={mandirData?.keywords} />
+                  <meta name="twitter:card" content={mandirData?.cover_image?.url} />
+                  <meta name="twitter:title" content={mandirData?.meta_title} />
+                  <meta name="twitter:description" content={mandirData?.meta_description} />
                   <meta name="twitter:image" content={mandirData?.cover_image?.url} />
                   <meta itemprop="image" content={mandirData?.cover_image?.url}></meta>
-                  <meta property="og:title" content={mandirData?.name} />
-                  <meta property="og:description" content={mandirData?.description} />
+                  <meta property="og:title" content={mandirData?.meta_title} />
+                  <meta property="og:description" content={mandirData?.meta_description} />
                   <meta property="og:image" content={mandirData?.cover_image?.url} />
-                  <meta property="og:url" content={`https://stoxhero.com/mandir/${location?.pathname?.split("/")[2]}`} />
+                  <meta property="og:url" content={`https://punyam.app/mandir/${location?.pathname?.split("/")[2]}`} />
 
                 </Helmet>
                 {/* } */}
@@ -158,18 +157,15 @@ export default function MandirData() {
                     position: 'fixed',
                     top: 0,
                     left: 0,
-                    // filter: backdropFilter,
-                    // backgroundColor: backgroundColor,
-                    // overflow: 'visible'
                     }}>
                 </Grid>
 
-                <Grid container xs={12} md={12} lg={10} mt={5} display='flex' justifyContent='center' alignContent='center' alignItems='flex-start' style={{ maxWidth: '100%', height: 'auto', zIndex:1 }}>
-                  <Grid item xs={12} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='flex-start' style={{ maxWidth: '100%', height: 'auto' }}>
-                    <Grid container spacing={1} xs={12} md={12} lg={12} mb={5} display='flex' justifyContent='center' alignContent='center' alignItems='flex-start' style={{ maxWidth: '100%', height: 'auto' }}>
+                <Grid container xs={12} md={12} lg={12} mt={5} display='flex' justifyContent='center' alignContent='center' alignItems='flex-start' style={{ maxWidth: '90%', height: 'auto', zIndex:1 }}>
+                  <Grid item xs={12} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
+                    <Grid container spacing={0} xs={12} md={12} lg={12} mb={2} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
 
                       <Grid item xs={12} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: '100%' }}>
-                        <Grid container spacing={3} xs={12} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ width: '100%', height: '100%' }}>
+                        <Grid container spacing={2} xs={12} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ width: '100%', height: '100%' }}>
                             <Grid item xs={12} md={12} lg={6} style={{ maxWidth: '100%', height: '100%' }}>
                             <img src={mandirData?.cover_image?.url} width='100%' />
                             </Grid>
@@ -191,9 +187,17 @@ export default function MandirData() {
                             </Grid>
                         </Grid>
                       </Grid>
+                    
+                    </Grid>
+                  
+                  </Grid>
 
-                      <Grid item xs={12} md={12} lg={12} display='flex' justifyContent='flex-start' alignContent='center' alignItems='flex-start' style={{ maxWidth: '100%', height: 'auto' }}>
-                        <MDBox display='flex' justifyContent='flex-start' alignContent='center' alignItems='flex-start'>
+                  <Grid p={4} item xs={12} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{backgroundColor:'white', borderRadius:10 ,maxWidth: '100%', height: 'auto' }}>
+
+                    <Grid container spacing={2} xs={12} md={12} lg={12} mb={2} display='flex' justifyContent='center' alignContent='center' alignItems='flex-start' style={{ maxWidth: '100%', height: 'auto' }}>
+
+                      <Grid item xs={12} md={12} lg={12} display='flex' justifyContent='flex-start' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
+                        <MDBox display='flex' justifyContent='center' alignContent='center' alignItems='center'>
                           <MDTypography variant="h5">{mandirData?.name}</MDTypography>
                         </MDBox>
                       </Grid>
@@ -253,7 +257,7 @@ export default function MandirData() {
 
                       <Grid item xs={12} md={12} lg={6} display='flex' justifyContent='flex-start' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
                         <MDBox display='flex' justifyContent='flex-start' alignContent='center' alignItems='center'>
-                          <MDTypography variant="body2" style={{ display: 'flex', alignItems: 'center', alignContent: 'center' }}><RxAccessibility /> &nbsp;Accessibility: Open to all/Members only</MDTypography>
+                          <MDTypography variant="body2" style={{ display: 'flex', alignItems: 'center', alignContent: 'center' }}><RxAccessibility /> &nbsp;Accessibility: {mandirData?.accessibility}</MDTypography>
                         </MDBox>
                       </Grid>
 
@@ -263,17 +267,25 @@ export default function MandirData() {
                         </MDBox>
                       </Grid>
 
-                      <Grid item xs={12} md={12} lg={12} display='flex' justifyContent='flex-start' alignContent='center' alignItems='flex-start' style={{ maxWidth: '100%', height: 'auto' }}>
-                        <MDBox display='flex' justifyContent='flex-start' alignContent='center' alignItems='flex-start'>
-                          <MDTypography variant="body2">{mandirData?.description}</MDTypography>
-                        </MDBox>
+                      <Grid item xs={12} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
+                          <MDBox style={{ maxWidth: '100%', width: '100%', height: 'auto' }}>
+                              <div dangerouslySetInnerHTML={{ __html: mandirData?.description }} />
+                              <style>
+                                {`
+                                img {
+                                  max-width: 80%;
+                                  height: auto;
+                                }
+                              `}
+                              </style>
+                            </MDBox>
                       </Grid>
 
                     </Grid>
                   </Grid>
                 </Grid>
 
-                <Grid container mt={2} mb={2} display='flex' justifyContent='center' alignContent='center' alignItems='center' xs={12} md={12} lg={12} style={{ minWidth: '100%', height: 'auto', flexGrow: 1, overflowY: 'auto', zIndex:3, overflow: 'visible' }}>
+                <Grid container mt={2} display='flex' justifyContent='center' alignContent='center' alignItems='center' xs={12} md={12} lg={12} style={{ minWidth: '100%', height: 'auto', flexGrow: 1, overflowY: 'auto', zIndex:1, overflow: 'visible' }}>
                     <Grid item xs={12} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '95%', height: 'auto' }}>
                         <Footer/>
                     </Grid>

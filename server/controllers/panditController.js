@@ -73,6 +73,8 @@ exports.createPandit = async (req, res) => {
             latitude, 
             address,
             pincode, 
+            locality,
+            landmark,
             city, 
             state, 
             country,
@@ -92,6 +94,8 @@ exports.createPandit = async (req, res) => {
             },
             address,
             pincode,
+            locality,
+            landmark,
             city,
             state,
             country
@@ -158,6 +162,8 @@ exports.getPanditById = async (req, res) => {
 // Edit a Pandit
 exports.editPandit = async (req, res) => {
     try {
+        console.log(req.body)
+        console.log(req.file)
         const {id} = req.params;
         const update = req.body;
         const updatedPandit = await Pandit.findByIdAndUpdate(req.params.id, req.body, { new: true });

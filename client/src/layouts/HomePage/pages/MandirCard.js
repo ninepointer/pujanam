@@ -28,17 +28,7 @@ function HomeCard({elem, name, description}) {
       }
 
     const handleOpenNewTab = async (elem) => {
-
-        // const newTab = window.open(`/mandir/${elem?.slug}`, '_blank');
-        // await fetchDeviceDetail(elem?._id);
         navigate(`/mandir/${elem?.slug}`)
-        // const newTab = window.open(`/mandir/${elem?.slug}`, '_blank');
-
-        // // Assuming dataToSend is the data you want to send
-        // const dataToSend = { key1: 'value1', key2: 'value2' };
-
-        // // Use postMessage to send data to the new tab
-        // newTab.postMessage(dataToSend, window.location.origin);
     };
     return(
         <Grid item xs={12} md={4} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
