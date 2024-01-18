@@ -9,6 +9,10 @@ const { zerodhaAccountType } = require("./constant")
 const Product = require('./models/Product/product');
 const LanguageSchema = require('./models/language');
 const Setting = require('./models/setting');
+const dbBackup = require("./Backup/mongoDbBackUp")
+
+
+
 async function commonProcess() {
     // await setIOValue();
 
@@ -33,7 +37,11 @@ async function commonProcess() {
     app.use(xssClean());
     app.use(hpp());
 
-
+    app.get("/api/v1/dbbackup", async (req, res) => {
+        // const sourceUri = process.env.STAGINGDB
+        // const targetUri = process.env.DATABASE
+        // await dbBackup.backupDatabase(sourceUri, targetUri, res);
+    })
     app.get('/api/v1/servertime', (req, res, next) => { res.json({ status: 'success', data: new Date() }) })
     app.get('/api/v1/product', async (req, res, next) => { res.json({ status: 'success', data: await Product.find() }) })
     app.get('/api/v1/language', async (req, res, next) => { res.json({ status: 'success', data: await LanguageSchema.find() }) })

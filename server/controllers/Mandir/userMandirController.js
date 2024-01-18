@@ -154,7 +154,7 @@ exports.getActiveAllHome = async (req, res) => {
   }
 };
 
-exports.getDham = async (req, res) => {
+exports.getNewDham = async (req, res) => {
   const {lat, long, search} = req.query;
   const matchStage = search ? {
       $and: [
@@ -242,6 +242,17 @@ exports.getDham = async (req, res) => {
   }
 };
 
+exports.getDham = async (req, res) => {
+  try {
+      const activeMandir = await Mandir.find({ dham: true, status: 'Active' })
+      .populate('devi_devta', 'name')
+      .select('-created_on -created_by -last_modified_on -last_modified_by -__v -favourite -share');
+      ApiResponse.success(res, activeMandir);
+  } catch (error) {
+      ApiResponse.error(res, 'Something went wrong', 500, error.message);
+  }
+};
+
 exports.getBydevta = async (req, res) => {
     const {devtaId} = req.query;
     try {
@@ -254,7 +265,7 @@ exports.getBydevta = async (req, res) => {
     }
 };
 
-exports.getPopular = async (req, res) => {
+exports.getNewPopular = async (req, res) => {
   const {lat, long, search} = req.query;
   const matchStage = search ? {
       $and: [
@@ -337,6 +348,17 @@ exports.getPopular = async (req, res) => {
           }
         ])
       ApiResponse.success(res, mandir);
+  } catch (error) {
+      ApiResponse.error(res, 'Something went wrong', 500, error.message);
+  }
+};
+
+exports.getPopular = async (req, res) => {
+  try {
+      const activeMandir = await Mandir.find({ popular: true, status: 'Active' })
+      .populate('devi_devta', 'name')
+      .select('-created_on -created_by -last_modified_on -last_modified_by -__v -favourite -share');
+      ApiResponse.success(res, activeMandir);
   } catch (error) {
       ApiResponse.error(res, 'Something went wrong', 500, error.message);
   }

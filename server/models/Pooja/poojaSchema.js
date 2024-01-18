@@ -10,6 +10,14 @@ const Pooja = new mongoose.Schema({
         type: String,
         required: true,
     },
+    meta_title: {
+        type: String,
+        required: true,
+    },
+    meta_description: {
+        type: String,
+        required: true,
+    },
     featured: {
         type: Boolean,
         required: true,
