@@ -1340,7 +1340,9 @@ exports.checkUserExist = async(req, res)=>{
 
 exports.addAddress = async(req, res)=>{
   try{
-    const {latitude, longitude, address, pincode, city, state, country} = req.body;
+    const {latitude, longitude, address, house_or_flat_no, floor,
+      pincode, city, state, country, tag, locality, landmark, contact_name, contact_number} = req.body;
+    
     const address_details = {
       location: {
         type: "Point",
@@ -1350,7 +1352,10 @@ exports.addAddress = async(req, res)=>{
       pincode: pincode,
       city: city,
       state: state,
-      country: country
+      country: country,
+      tag, locality, landmark,
+      house_or_flat_no, floor,
+      contact_name, contact_number
     };
   
     const updateAddress = await UserDetail.findOneAndUpdate({_id: new ObjectId(req.user._id)}, {
@@ -1385,11 +1390,12 @@ exports.editAddress = async (req, res) => {
   try {
     const { id } = req.params;
     let address_details = {};
-    const { latitude, longitude, address, pincode, city, state, country } = req.body;
+    const {latitude, longitude, address, house_or_flat_no, floor,
+      pincode, city, state, country, tag, locality, landmark, contact_name, contact_number} = req.body;
+    
     const userAddress = await UserDetail.findOne({ _id: new ObjectId(req.user._id) }).select('address_details');
     for (let elem of userAddress.address_details) {
       if (elem?._id?.toString() === id?.toString()) {
-        console.log("in if", elem._id);
         const prevLatitude = elem.location.coordinates[0];
         const prevLongitude = elem.location.coordinates[1];
 
@@ -1402,7 +1408,14 @@ exports.editAddress = async (req, res) => {
           pincode: pincode || elem?.pincode,
           city: city || elem?.city,
           state: state || elem?.state,
-          country: country || elem?.country
+          country: country || elem?.country,
+          tag: tag || elem?.tag,
+          landmark: landmark || elem?.landmark,
+          locality: locality || elem?.locality,
+          house_or_flat_no: house_or_flat_no || elem?.house_or_flat_no,
+          floor: floor || elem?.floor,
+          contact_name: contact_name || elem?.contact_name,
+          contact_number: contact_number || elem?.contact_number,
         };
 
         console.log("address_details", address_details);

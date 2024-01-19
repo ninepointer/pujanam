@@ -4,6 +4,29 @@ const ApiResponse = require('../../helpers/apiResponse');
 const User = require('../../models/User/userSchema');
 const mongoose = require("mongoose");
 
+
+const projectStage = {
+  devi_devta: "$devtas.name",
+  _id: 1,
+  name: 1,
+  description: 1,
+  cover_image: 1,
+  images: 1,
+  dham: 1,
+  popular: 1,
+  morning_closing_time: 1,
+  evening_opening_time: 1,
+  evening_closing_time: 1,
+  morning_opening_time: 1,
+  address_details: 1,
+  construction_year: 1,
+  distance: 1,
+  slug: 1,
+  morning_aarti_time: 1,
+  evening_aarti_time: 1
+}
+
+
 exports.getActive = async (req, res) => {
     try {
         const activeMandir = await Mandir.find({ status: 'Active' })
@@ -50,26 +73,7 @@ exports.getActiveHome = async (req, res) => {
               },
             },
             {
-              $project: {
-                devi_devta: "$devtas.name",
-                _id: 1,
-                name: 1,
-                description: 1,
-                cover_image: 1,
-                images: 1,
-                dham: 1,
-                popular: 1,
-                morning_closing_time: 1,
-                evening_opening_time: 1,
-                evening_closing_time: 1,
-                morning_opening_time: 1,
-                address_details: 1,
-                construction_year: 1,
-                distance: 1,
-                slug: 1,
-                morning_aarti_time: 1,
-                evening_aarti_time: 1
-              },
+              $project: projectStage,
             },
             {
               $sort: {
@@ -121,26 +125,7 @@ exports.getActiveAllHome = async (req, res) => {
             },
           },
           {
-            $project: {
-              devi_devta: "$devtas.name",
-              _id: 1,
-              name: 1,
-              description: 1,
-              cover_image: 1,
-              images: 1,
-              dham: 1,
-              popular: 1,
-              morning_closing_time: 1,
-              evening_opening_time: 1,
-              evening_closing_time: 1,
-              morning_opening_time: 1,
-              address_details: 1,
-              construction_year: 1,
-              distance: 1,
-              slug: 1,
-              morning_aarti_time: 1,
-              evening_aarti_time: 1
-            },
+            $project: projectStage,
           },
           {
             $sort: {
@@ -206,26 +191,7 @@ exports.getNewDham = async (req, res) => {
             },
           },
           {
-            $project: {
-              devi_devta: "$devtas.name",
-              _id: 1,
-              name: 1,
-              description: 1,
-              cover_image: 1,
-              images: 1,
-              dham: 1,
-              popular: 1,
-              morning_closing_time: 1,
-              evening_opening_time: 1,
-              evening_closing_time: 1,
-              morning_opening_time: 1,
-              address_details: 1,
-              construction_year: 1,
-              distance: 1,
-              slug: 1,
-              morning_aarti_time: 1,
-              evening_aarti_time: 1
-            },
+            $project: projectStage,
           },
           {
             $sort: {
@@ -305,26 +271,7 @@ exports.getBydevta = async (req, res) => {
               },
             },
             {
-              $project: {
-                devi_devta: "$devtas.name",
-                _id: 1,
-                name: 1,
-                description: 1,
-                cover_image: 1,
-                images: 1,
-                dham: 1,
-                popular: 1,
-                morning_closing_time: 1,
-                evening_opening_time: 1,
-                evening_closing_time: 1,
-                morning_opening_time: 1,
-                address_details: 1,
-                construction_year: 1,
-                distance: 1,
-                slug: 1,
-                morning_aarti_time: 1,
-                evening_aarti_time: 1
-              },
+              $project: projectStage,
             },
             {
               $sort: {
@@ -393,26 +340,7 @@ exports.getNewPopular = async (req, res) => {
             },
           },
           {
-            $project: {
-              devi_devta: "$devtas.name",
-              _id: 1,
-              name: 1,
-              description: 1,
-              cover_image: 1,
-              images: 1,
-              dham: 1,
-              popular: 1,
-              morning_closing_time: 1,
-              evening_opening_time: 1,
-              evening_closing_time: 1,
-              morning_opening_time: 1,
-              address_details: 1,
-              construction_year: 1,
-              distance: 1,
-              slug: 1,
-              morning_aarti_time: 1,
-              evening_aarti_time: 1
-            },
+            $project: projectStage,
           },
           {
             $sort: {
@@ -476,26 +404,7 @@ exports.getPopularMandirHomeActive = async (req, res) => {
               },
             },
             {
-              $project: {
-                devi_devta: "$devtas.name",
-                _id: 1,
-                name: 1,
-                description: 1,
-                cover_image: 1,
-                images: 1,
-                dham: 1,
-                popular: 1,
-                morning_closing_time: 1,
-                evening_opening_time: 1,
-                evening_closing_time: 1,
-                morning_opening_time: 1,
-                address_details: 1,
-                construction_year: 1,
-                distance: 1,
-                slug: 1,
-                morning_aarti_time: 1,
-                evening_aarti_time: 1
-              },
+              $project: projectStage,
             },
             {
               $sort: {
@@ -548,26 +457,7 @@ exports.getAllPopularMandirHomeActive = async (req, res) => {
             },
           },
           {
-            $project: {
-              devi_devta: "$devtas.name",
-              _id: 1,
-              name: 1,
-              description: 1,
-              cover_image: 1,
-              images: 1,
-              dham: 1,
-              popular: 1,
-              morning_closing_time: 1,
-              evening_opening_time: 1,
-              evening_closing_time: 1,
-              morning_opening_time: 1,
-              address_details: 1,
-              construction_year: 1,
-              distance: 1,
-              slug: 1,
-              morning_aarti_time: 1,
-              evening_aarti_time: 1
-            },
+            $project: projectStage,
           },
           {
             $sort: {
@@ -620,26 +510,7 @@ exports.getDhamHomeActive = async (req, res) => {
               },
             },
             {
-              $project: {
-                devi_devta: "$devtas.name",
-                _id: 1,
-                name: 1,
-                description: 1,
-                cover_image: 1,
-                images: 1,
-                dham: 1,
-                popular: 1,
-                morning_closing_time: 1,
-                evening_opening_time: 1,
-                evening_closing_time: 1,
-                morning_opening_time: 1,
-                address_details: 1,
-                construction_year: 1,
-                distance: 1,
-                slug: 1,
-                morning_aarti_time: 1,
-                evening_aarti_time: 1
-              },
+              $project: projectStage,
             },
             {
               $sort: {
@@ -780,26 +651,7 @@ exports.getByDistance = async (req, res) => {
               },
             },
             {
-              $project: {
-                devi_devta: "$devtas.name",
-                _id: 1,
-                name: 1,
-                description: 1,
-                cover_image: 1,
-                images: 1,
-                dham: 1,
-                popular: 1,
-                morning_closing_time: 1,
-                evening_opening_time: 1,
-                evening_closing_time: 1,
-                morning_opening_time: 1,
-                address_details: 1,
-                construction_year: 1,
-                distance: 1,
-                slug: 1,
-                morning_aarti_time: 1,
-                evening_aarti_time: 1
-              },
+              $project: projectStage,
             },
             {
               $sort: {
@@ -867,29 +719,29 @@ exports.viewCount = async (req, res) => {
 
     try{
         const mandirId = req.params.id;
-        const {ip, isMobile, country} = req.body;
-        const mandir = await Mandir.findOne({_id: new ObjectId(mandirId)});
-        let flag = false;
+        // const {ip, isMobile, country} = req.body;
+        // const mandir = await Mandir.findOne({_id: new ObjectId(mandirId)});
+        // let flag = false;
     
-        await Promise.all(mandir.uniqueCount.map((elem)=>{
-            if(elem.ip === ip){
-                flag = true
-            }
-        }))
+        // await Promise.all(mandir.uniqueCount.map((elem)=>{
+        //     if(elem.ip === ip){
+        //         flag = true
+        //     }
+        // }))
     
-        if(!flag){
-            const updatedMandir = await Mandir.findOneAndUpdate({_id: new ObjectId(mandirId)}, {
-                $push: {
-                    uniqueCount: {
-                        ip: ip,
-                        isMobile: isMobile,
-                        country: country,
-                        time: new Date()
-                    }
-                },
-                $inc: {viewCount: 1}
-            }, { new: true } )
-        }
+        // if(!flag){
+        //     const updatedMandir = await Mandir.findOneAndUpdate({_id: new ObjectId(mandirId)}, {
+        //         $push: {
+        //             uniqueCount: {
+        //                 ip: ip,
+        //                 isMobile: isMobile,
+        //                 country: country,
+        //                 time: new Date()
+        //             }
+        //         },
+        //         $inc: {viewCount: 1}
+        //     }, { new: true } )
+        // }
     
         const updatedMandir = await Mandir.findOneAndUpdate({_id: new ObjectId(mandirId)}, {
             $inc: {viewCount: 1}
