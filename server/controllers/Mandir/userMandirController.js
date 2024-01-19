@@ -23,7 +23,8 @@ const projectStage = {
   distance: 1,
   slug: 1,
   morning_aarti_time: 1,
-  evening_aarti_time: 1
+  evening_aarti_time: 1,
+  accessibility
 }
 
 
