@@ -62,7 +62,9 @@ function Index() {
       id: "" || prevPoojaData?.category?._id,
       name: "" || prevPoojaData?.category?.product_name
     },
-    featured: "" || prevPoojaData?.featured
+    featured: "" || prevPoojaData?.featured,
+    meta_title: "" || prevPoojaData?.meta_title,
+    meta_description: "" || prevPoojaData?.meta_description
   });
 
   const [file, setFile] = useState(null);
@@ -421,7 +423,7 @@ function Index() {
                 </FormGroup>
               </Grid>
  
-              <Grid item xs={12} md={12} xl={8}>
+              <Grid item xs={12} md={12} xl={12}>
                 <TextField
                   disabled={((newData || prevData) && (!editing))}
                   id="outlined-required"
@@ -434,6 +436,40 @@ function Index() {
                     setFormState(prevState => ({
                       ...prevState,
                       description: e.target.value
+                    }))
+                  }}
+                />
+              </Grid>
+
+              <Grid item xs={12} md={12} xl={6}>
+                <TextField
+                  disabled={((newData || prevData) && (!editing))}
+                  id="outlined-required"
+                  label='Meta Title *'
+                  fullWidth
+                  rows={1}
+                  value={formState?.meta_title}
+                  onChange={(e) => {
+                    setFormState(prevState => ({
+                      ...prevState,
+                      meta_title: e.target.value
+                    }))
+                  }}
+                />
+              </Grid>
+
+              <Grid item xs={12} md={12} xl={6}>
+                <TextField
+                  disabled={((newData || prevData) && (!editing))}
+                  id="outlined-required"
+                  label='Meta Description *'
+                  fullWidth
+                  rows={1}
+                  value={formState?.meta_description}
+                  onChange={(e) => {
+                    setFormState(prevState => ({
+                      ...prevState,
+                      meta_description: e.target.value
                     }))
                   }}
                 />

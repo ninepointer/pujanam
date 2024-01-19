@@ -22,9 +22,10 @@ import { DemoContainer, DemoItem } from '@mui/x-date-pickers/internals/demo';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { MobileDateTimePicker } from '@mui/x-date-pickers/MobileDateTimePicker';
-import DefaultPoojaUpload from "../../assets/images/defaultpoojaupload.png"
+import DefaultPoojaUpload from "../../assets/images/defaultpanditimage.png"
 import AdditionalInfo from './data/addAdditionalInfo/additionalInfo';
 import {apiUrl} from  '../../constants/constants';
+import MDAvatar from '../../components/MDAvatar';
 
 const ITEM_HEIGHT = 30;
 const ITEM_PADDING_TOP = 10;
@@ -67,6 +68,8 @@ function Index() {
     },
     description: '' || panditPrevDetail?.description,
     pincode: '' || panditPrevDetail?.address_details?.pincode,
+    locality: '' || panditPrevDetail?.address_details?.locality,
+    landmark: '' || panditPrevDetail?.address_details?.landmark,
     address: '' || panditPrevDetail?.address_details?.address,
     city: '' || panditPrevDetail?.address_details?.city,
     state: '' || panditPrevDetail?.address_details?.state,
@@ -105,10 +108,6 @@ function Index() {
     .then((res)=>{
       setLanguage(res?.data?.data)
     })
-    // setLanguage([{
-    //   _id: "659d6f9a30fa1324fb3d2674",
-    //   language_name: "English"
-    // }])
   }, [])
 
 
@@ -130,7 +129,6 @@ function Index() {
     }
 
     try {
-      // const {name, slogan, route, event, address, status} = formState;
       const formData = new FormData();
       if (file) {
         formData.append("photo", file[0]);
@@ -177,9 +175,9 @@ function Index() {
 
       for (let elem in formState) {
         if (elem !== "photo") {
-          if (typeof (formState[elem]) === "object") {
+          // if (typeof (formState[elem]) === "object") {
             formData.append(`${elem}`, formState[elem]);
-        }
+        // }
       }
       }
 
@@ -273,6 +271,21 @@ function Index() {
     }));
   };
 
+  const imagetoshow = () => {
+    if(filepreview){
+      return filepreview
+    }
+    if(newData?.photo?.url) {
+      return newData?.photo?.url
+    }
+    if(prevData?.photo?.url) {
+      return prevData?.photo?.url
+    }
+    else {
+      return DefaultPoojaUpload
+    }
+  }
+
   return (
     <>
       {isLoading ? (
@@ -289,8 +302,8 @@ function Index() {
               </MDTypography>
             </MDBox>
 
-              <Grid container spacing={2} mt={0.5} xs={12} md={12} xl={12} display="flex" justifyContent="center" alignContent="center" alignItems="center">
-                <Grid item xs={12} md={6} xl={2.4} display="flex" justifyContent="center" alignContent="center" alignItems="center">
+              <Grid container spacing={2} mt={0.5} xs={12} md={12} xl={12} display="flex" justifyContent="flex-start" alignContent="center" alignItems="center">
+                <Grid item xs={12} md={6} xl={3} display="flex" justifyContent="center" alignContent="center" alignItems="center">
                   <TextField
                     disabled={((isSubmitted || panditPrevDetail) && (!editing || saving))}
                     id="outlined-required"
@@ -307,7 +320,7 @@ function Index() {
                   />
                 </Grid>
 
-                <Grid item xs={12} md={6} xl={2.4} mt={-1} display="flex" justifyContent="center" alignContent="center" alignItems="center">
+                <Grid item xs={12} md={6} xl={3} mt={-1} display="flex" justifyContent="center" alignContent="center" alignItems="center">
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DemoContainer components={['MobileDateTimePicker']} sx={{ width: '100%' }}>
                       <DemoItem>
@@ -329,7 +342,7 @@ function Index() {
                   </LocalizationProvider>
                 </Grid>
                 
-                <Grid item xs={12} md={6} xl={2.4} display="flex" justifyContent="center" alignContent="center" alignItems="center">
+                <Grid item xs={12} md={6} xl={3} display="flex" justifyContent="center" alignContent="center" alignItems="center">
                   <TextField
                     disabled={((isSubmitted || panditPrevDetail) && (!editing || saving))}
                     id="outlined-required"
@@ -348,7 +361,7 @@ function Index() {
                   />
                 </Grid>
 
-                <Grid item xs={12} md={6} xl={2.4} display="flex" justifyContent="center" alignContent="center" alignItems="center">
+                <Grid item xs={12} md={6} xl={3} display="flex" justifyContent="center" alignContent="center" alignItems="center">
                   <TextField
                     disabled={((isSubmitted || panditPrevDetail) && (!editing || saving))}
                     id="outlined-required"
@@ -366,7 +379,7 @@ function Index() {
                   />
                 </Grid>
 
-                <Grid item xs={12} md={6} xl={2.4} display="flex" justifyContent="center" alignContent="center" alignItems="center">
+                <Grid item xs={12} md={6} xl={3} display="flex" justifyContent="center" alignContent="center" alignItems="center">
                   <TextField
                     disabled={((isSubmitted || panditPrevDetail) && (!editing || saving))}
                     id="outlined-required"
@@ -385,128 +398,7 @@ function Index() {
                   />
                 </Grid>
 
-                <Grid item xs={12} md={6} xl={12} display="flex" justifyContent="center" alignContent="center" alignItems="center">
-                  <TextField
-                    disabled={((isSubmitted || panditPrevDetail) && (!editing || saving))}
-                    id="outlined-required"
-                    label='About *'
-                    name='description'
-                    fullWidth
-                    multiline
-                    rows={5}
-                    defaultValue={editing ? formState?.description : panditPrevDetail?.description}
-                    onChange={handleChange}
-                  />
-                </Grid>
-              </Grid>
-
-                
-              <Grid container spacing={2} mt={0.5} xs={12} md={12} xl={12} display="flex" justifyContent="center" alignContent="center" alignItems="center">
-                <Grid item xs={12} md={12} xl={12} mb={1} display="flex" justifyContent="flex-start" alignContent="center" alignItems="center">
-                  <MDTypography variant='caption' color="success">Address & Other Details</MDTypography>
-                </Grid>
-
-                <Grid item xs={12} md={6} xl={3} mt={-1} display="flex" justifyContent="center" alignContent="center" alignItems="center">
-                  <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DemoContainer components={['MobileDateTimePicker']} sx={{ width: '100%' }}>
-                      <DemoItem>
-                        <MobileDateTimePicker
-                          label="Onboarding Date"
-                          disabled={((isSubmitted || panditPrevDetail) && (!editing || saving))}
-                          value={formState?.onboarding_date 
-                            || dayjs(panditPrevDetail?.onboarding_date)
-                          }
-                          onChange={(newValue) => {
-                            if (newValue && newValue.isValid()) {
-                              setFormState(prevState => ({ ...prevState, onboarding_date: newValue }))
-                            }
-                          }}
-                          minDateTime={null}
-                        />
-                      </DemoItem>
-                    </DemoContainer>
-                  </LocalizationProvider>
-                </Grid>
-
-                <Grid item xs={12} md={6} xl={3} display="flex" justifyContent="center" alignContent="center" alignItems="center">
-                  <TextField
-                    disabled={((isSubmitted || panditPrevDetail) && (!editing || saving))}
-                    id="outlined-required"
-                    label='City *'
-                    name='city'
-                    fullWidth
-                    type='text'
-                    defaultValue={editing ? formState?.city : panditPrevDetail?.address_details?.city}
-                    // onChange={handleChange}
-                    onChange={(e) => {
-                      setFormState(prevState => ({
-                        ...prevState,
-                        city: (e.target.value)
-                      }))
-                    }}
-                  />
-                </Grid>
-
-                <Grid item xs={12} md={6} xl={3} display="flex" justifyContent="center" alignContent="center" alignItems="center">
-                  <TextField
-                    disabled={((isSubmitted || panditPrevDetail) && (!editing || saving))}
-                    id="outlined-required"
-                    label='Pincode *'
-                    name='pincode'
-                    fullWidth
-                    type='number'
-                    defaultValue={editing ? formState?.pincode : panditPrevDetail?.address_details?.pincode}
-                    // onChange={handleChange}
-                    onChange={(e) => {
-                      setFormState(prevState => ({
-                        ...prevState,
-                        pincode: (e.target.value)
-                      }))
-                    }}
-                  />
-                </Grid>
-
-                <Grid item xs={12} md={6} xl={3} display="flex" justifyContent="center" alignContent="center" alignItems="center">
-                  <TextField
-                    disabled={((isSubmitted || panditPrevDetail) && (!editing || saving))}
-                    id="outlined-required"
-                    label='State *'
-                    name='state'
-                    fullWidth
-                    type='text'
-                    defaultValue={editing ? formState?.state : panditPrevDetail?.address_details?.state}
-                    // onChange={handleChange}
-                    onChange={(e) => {
-                      setFormState(prevState => ({
-                        ...prevState,
-                        state: (e.target.value)
-                      }))
-                    }}
-                  />
-                </Grid>
-
-                <Grid item xs={12} md={12} xl={12} display="flex" justifyContent="center" alignContent="center" alignItems="center">
-                  <TextField
-                    disabled={((isSubmitted || panditPrevDetail) && (!editing || saving))}
-                    id="outlined-required"
-                    label='Full Address *'
-                    name='address'
-                    fullWidth
-                    multiline
-                    rows={3}
-                    type='text'
-                    defaultValue={editing ? formState?.address : panditPrevDetail?.address_details?.address}
-                    // onChange={handleChange}address_details?.
-                    onChange={(e) => {
-                      setFormState(prevState => ({
-                        ...prevState,
-                        address: (e.target.value)
-                      }))
-                    }}
-                  />
-                </Grid>
-
-                <Grid item xs={12} md={3} xl={2.4} display="flex" justifyContent="center" alignContent="center" alignItems="center">
+                <Grid item xs={12} md={3} xl={3} display="flex" justifyContent="center" alignContent="center" alignItems="center">
                   <FormControl sx={{ width: '100%' }}>
                     <InputLabel id="demo-multiple-checkbox-label">Language</InputLabel>
                     <Select
@@ -533,44 +425,29 @@ function Index() {
                   </FormControl>
                 </Grid> 
 
-                <Grid item xs={12} md={3} xl={2.4} display="flex" justifyContent="center" alignContent="center" alignItems="center">
-                  <TextField
-                    disabled={((isSubmitted || panditPrevDetail) && (!editing || saving))}
-                    id="outlined-required"
-                    label='Longitude *'
-                    name='longitude'
-                    fullWidth
-                    type='number'
-                    defaultValue={editing ? formState?.longitude : panditPrevDetail?.address_details?.location?.coordinates[1]}
-                    onChange={(e) => {
-                      setFormState(prevState => ({
-                        ...prevState,
-                        longitude: (e.target.value)
-                      }))
-                    }}
-                  />
+                <Grid item xs={12} md={6} xl={3} mt={-1} display="flex" justifyContent="center" alignContent="center" alignItems="center">
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DemoContainer components={['MobileDateTimePicker']} sx={{ width: '100%' }}>
+                      <DemoItem>
+                        <MobileDateTimePicker
+                          label="Onboarding Date"
+                          disabled={((isSubmitted || panditPrevDetail) && (!editing || saving))}
+                          value={formState?.onboarding_date 
+                            || dayjs(panditPrevDetail?.onboarding_date)
+                          }
+                          onChange={(newValue) => {
+                            if (newValue && newValue.isValid()) {
+                              setFormState(prevState => ({ ...prevState, onboarding_date: newValue }))
+                            }
+                          }}
+                          minDateTime={null}
+                        />
+                      </DemoItem>
+                    </DemoContainer>
+                  </LocalizationProvider>
                 </Grid>
 
-                <Grid item xs={12} md={3} xl={2.4} display="flex" justifyContent="center" alignContent="center" alignItems="center">
-                  <TextField
-                    disabled={((isSubmitted || panditPrevDetail) && (!editing || saving))}
-                    id="outlined-required"
-                    label='Latitude *'
-                    name='latitude'
-                    fullWidth
-                    type='number'
-                    value={formState?.latitude}
-                    defaultValue={editing ? formState?.latitude : panditPrevDetail?.address_details?.location?.coordinates[0]}
-                    onChange={(e) => {
-                      setFormState(prevState => ({
-                        ...prevState,
-                        latitude: (e.target.value)
-                      }))
-                    }}
-                  />
-                </Grid>
-
-                <Grid item xs={12} md={3} xl={2.4} display="flex" justifyContent="center" alignContent="center" alignItems="center">
+                <Grid item xs={12} md={3} xl={3} display="flex" justifyContent="center" alignContent="center" alignItems="center">
                   <FormControl sx={{ width: "100%" }}>
                     <InputLabel id="demo-simple-select-autowidth-label">Status *</InputLabel>
                     <Select
@@ -594,9 +471,9 @@ function Index() {
                   </FormControl>
                 </Grid>
 
-                <Grid item xs={12} md={3} xl={2.4} display="flex" justifyContent="center" alignContent="center" alignItems="center">
-                  <MDButton variant="outlined" style={{ fontSize: 10 }} fullWidth color={(newData?.images?.length && !file) ? "warning" : ((newData?.images?.length && file) || file) ? "error" : "success"} component="label">
-                    Upload Image
+                <Grid item xs={12} md={3} xl={3} display="flex" justifyContent="center" alignContent="center" alignItems="center">
+                  <MDButton variant="outlined" style={{ fontSize: 10 }} fullWidth color={((newData || prevData) && (!editing)) ? "warning" : "dark"} component="label">
+                    Upload Pandit Photo (512 X 512)
                     <input
                       hidden
                       disabled={((newData || prevData) && (!editing))}
@@ -608,68 +485,203 @@ function Index() {
                   </MDButton>
                 </Grid>
 
-                <Grid item xs={12} md={4} xl={4} display="flex" justifyContent="center" alignContent="center" alignItems="center">
-                <Grid container xs={12} md={12} xl={12} display="flex" justifyContent='center' alignItems='center' style={{minWidth:'100%'}}>
-                  {filepreview ?
-
-                    <Grid item xs={12} md={12} xl={12} style={{minWidth:'100%'}}>
-                      <Card sx={{ width: "100%", height: "auto", minWidth: "100%", maxHeight: "auto", cursor: 'pointer' }}>
-                        <CardActionArea>
-                          <Grid item xs={12} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' >
-                            <img src={filepreview} style={{ width: "100%", height: "auto", borderRadius:10 }} />
-                          </Grid>
-                        </CardActionArea>
-                      </Card>
-                    </Grid>
-                    :
-                    <>
-                      {(newData || panditPrevDetail) ?
-                        
-                        <Grid item xs={12} md={12} xl={12} style={{minWidth:'100%'}}>
-                          <Card sx={{ width: "100%", height: "auto", minWidth: "100%", maxHeight: "auto", cursor: 'pointer' }}>
-                            <CardActionArea
-                              sx={{
-                                width: "100%", height: "auto", minWidth: "100%", maxHeight: "auto"
-                              }}
-                            >
-                                  {!newData || !panditPrevDetail && 
-                                  <>
-                                  <Grid item xs={12} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{}}>
-                                  <MDBox display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ width: '100%', height: 'auto',  minWidth:'100%', minHeight:'auto' }}>
-                                    <MDTypography variant="caption" fontFamily='Itim' style={{ textAlign: 'center' }}>
-                                      Image
-                                    </MDTypography>
-                                  </MDBox>
-                                  </Grid>
-                                  </>
-                                  }
-                                  <Grid item xs={12} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{}}>
-                                    <img src={newData?.photo?.url || panditPrevDetail?.photo?.url} style={{ textAlign: 'center', width: "100%", height: "auto", minWidth:'100%', minHeight:'auto', borderRadius:10 }} />
-                                  </Grid>
-                            </CardActionArea>
-                          </Card>
-                        </Grid>
-                        
-                        :
-                        <Grid item xs={12} md={12} xl={12} style={{minWidth:'100%'}}>
-                          <Card sx={{ width: "100%", height: "auto", minWidth: "100%", maxHeight: "auto", cursor: 'pointer' }}>
-                            <CardActionArea>
-                              <Grid item xs={12} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{}}>
-                                <MDBox display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ width: '100%', height: 'auto', minWidth:'100%', minHeight:'auto' }}>
-                                  <img src={DefaultPoojaUpload} style={{ textAlign: 'center', width: "100%", height: "auto", minWidth:'100%', minHeight:'auto', borderRadius:10 }} />
-                                </MDBox>
-                              </Grid>
-                            </CardActionArea>
-                          </Card>
-                        </Grid>
-                      }
-                    </>
-                  }
+                <Grid item xs={12} md={12} xl={9} display="flex" justifyContent="flex-end" alignContent="center" alignItems="center">
+                  <MDAvatar src={imagetoshow()}/>
                 </Grid>
+
+                <Grid item xs={12} md={6} xl={12} display="flex" justifyContent="center" alignContent="center" alignItems="center">
+                  <TextField
+                    disabled={((isSubmitted || panditPrevDetail) && (!editing || saving))}
+                    id="outlined-required"
+                    label='About *'
+                    name='description'
+                    fullWidth
+                    multiline
+                    rows={5}
+                    defaultValue={editing ? formState?.description : panditPrevDetail?.description}
+                    onChange={handleChange}
+                  />
                 </Grid>
               </Grid>
 
-            
+                
+              <Grid container spacing={2} mt={0.5} xs={12} md={12} xl={12} display="flex" justifyContent="flex-start" alignContent="center" alignItems="center">
+                <Grid item xs={12} md={12} xl={12} mb={1} display="flex" justifyContent="flex-start" alignContent="center" alignItems="center">
+                  <MDTypography variant='caption' color="success">Address & Other Details</MDTypography>
+                </Grid>
+
+                <Grid item xs={12} md={3} xl={3} display="flex" justifyContent="center" alignContent="center" alignItems="center">
+                  <TextField
+                    disabled={((isSubmitted || panditPrevDetail) && (!editing || saving))}
+                    id="outlined-required"
+                    label='Longitude *'
+                    name='longitude'
+                    fullWidth
+                    type='number'
+                    defaultValue={editing ? formState?.longitude : panditPrevDetail?.address_details?.location?.coordinates[1]}
+                    onChange={(e) => {
+                      setFormState(prevState => ({
+                        ...prevState,
+                        longitude: (e.target.value)
+                      }))
+                    }}
+                  />
+                </Grid>
+
+                <Grid item xs={12} md={3} xl={3} display="flex" justifyContent="center" alignContent="center" alignItems="center">
+                  <TextField
+                    disabled={((isSubmitted || panditPrevDetail) && (!editing || saving))}
+                    id="outlined-required"
+                    label='Latitude *'
+                    name='latitude'
+                    fullWidth
+                    type='number'
+                    value={formState?.latitude}
+                    defaultValue={editing ? formState?.latitude : panditPrevDetail?.address_details?.location?.coordinates[0]}
+                    onChange={(e) => {
+                      setFormState(prevState => ({
+                        ...prevState,
+                        latitude: (e.target.value)
+                      }))
+                    }}
+                  />
+                </Grid>
+
+                <Grid item xs={12} md={6} xl={3} display="flex" justifyContent="center" alignContent="center" alignItems="center">
+                  <TextField
+                    disabled={((isSubmitted || panditPrevDetail) && (!editing || saving))}
+                    id="outlined-required"
+                    label='Locality *'
+                    name='locality'
+                    fullWidth
+                    type='text'
+                    defaultValue={editing ? formState?.locality : panditPrevDetail?.address_details?.locality}
+                    // onChange={handleChange}
+                    onChange={(e) => {
+                      setFormState(prevState => ({
+                        ...prevState,
+                        locality: (e.target.value)
+                      }))
+                    }}
+                  />
+                </Grid>
+
+                <Grid item xs={12} md={6} xl={3} display="flex" justifyContent="center" alignContent="center" alignItems="center">
+                  <TextField
+                    disabled={((isSubmitted || panditPrevDetail) && (!editing || saving))}
+                    id="outlined-required"
+                    label='Landmark *'
+                    name='landmark'
+                    fullWidth
+                    type='text'
+                    defaultValue={editing ? formState?.landmark : panditPrevDetail?.address_details?.landmark}
+                    // onChange={handleChange}
+                    onChange={(e) => {
+                      setFormState(prevState => ({
+                        ...prevState,
+                        landmark: (e.target.value)
+                      }))
+                    }}
+                  />
+                </Grid>
+
+                <Grid item xs={12} md={6} xl={3} display="flex" justifyContent="center" alignContent="center" alignItems="center">
+                  <TextField
+                    disabled={((isSubmitted || panditPrevDetail) && (!editing || saving))}
+                    id="outlined-required"
+                    label='City *'
+                    name='city'
+                    fullWidth
+                    type='text'
+                    defaultValue={editing ? formState?.city : panditPrevDetail?.address_details?.city}
+                    // onChange={handleChange}
+                    onChange={(e) => {
+                      setFormState(prevState => ({
+                        ...prevState,
+                        city: (e.target.value)
+                      }))
+                    }}
+                  />
+                </Grid>
+
+                <Grid item xs={12} md={6} xl={3} display="flex" justifyContent="center" alignContent="center" alignItems="center">
+                  <TextField
+                    disabled={((isSubmitted || panditPrevDetail) && (!editing || saving))}
+                    id="outlined-required"
+                    label='State *'
+                    name='state'
+                    fullWidth
+                    type='text'
+                    defaultValue={editing ? formState?.state : panditPrevDetail?.address_details?.state}
+                    // onChange={handleChange}
+                    onChange={(e) => {
+                      setFormState(prevState => ({
+                        ...prevState,
+                        state: (e.target.value)
+                      }))
+                    }}
+                  />
+                </Grid>
+
+                <Grid item xs={12} md={6} xl={3} display="flex" justifyContent="center" alignContent="center" alignItems="center">
+                  <TextField
+                    disabled={((isSubmitted || panditPrevDetail) && (!editing || saving))}
+                    id="outlined-required"
+                    label='Country *'
+                    name='country'
+                    fullWidth
+                    type='text'
+                    defaultValue={editing ? formState?.country : panditPrevDetail?.address_details?.country}
+                    // onChange={handleChange}
+                    onChange={(e) => {
+                      setFormState(prevState => ({
+                        ...prevState,
+                        country: (e.target.value)
+                      }))
+                    }}
+                  />
+                </Grid>
+
+                <Grid item xs={12} md={6} xl={3} display="flex" justifyContent="center" alignContent="center" alignItems="center">
+                  <TextField
+                    disabled={((isSubmitted || panditPrevDetail) && (!editing || saving))}
+                    id="outlined-required"
+                    label='Pincode *'
+                    name='pincode'
+                    fullWidth
+                    type='number'
+                    defaultValue={editing ? formState?.pincode : panditPrevDetail?.address_details?.pincode}
+                    // onChange={handleChange}
+                    onChange={(e) => {
+                      setFormState(prevState => ({
+                        ...prevState,
+                        pincode: (e.target.value)
+                      }))
+                    }}
+                  />
+                </Grid>
+
+                <Grid item xs={12} md={12} xl={12} display="flex" justifyContent="center" alignContent="center" alignItems="center">
+                  <TextField
+                    disabled={((isSubmitted || panditPrevDetail) && (!editing || saving))}
+                    id="outlined-required"
+                    label='Full Address *'
+                    name='address'
+                    fullWidth
+                    multiline
+                    rows={3}
+                    type='text'
+                    defaultValue={editing ? formState?.address : panditPrevDetail?.address_details?.address}
+                    // onChange={handleChange}address_details?.
+                    onChange={(e) => {
+                      setFormState(prevState => ({
+                        ...prevState,
+                        address: (e.target.value)
+                      }))
+                    }}
+                  />
+                </Grid>
+              </Grid> 
 
             <Grid container mt={2} xs={12} md={12} xl={12} >
               <Grid item display="flex" justifyContent="flex-end" xs={12} md={6} xl={12}>
@@ -692,7 +704,7 @@ function Index() {
                 )}
                 {(isSubmitted || panditPrevDetail) && !editing && (
                   <>
-                    <MDButton variant="contained" color="warning" size="small" sx={{ mr: 1, ml: 2 }} onClick={() => { setEditing(true) }}>
+                    <MDButton variant="contained" color="dark" size="small" sx={{ mr: 1, ml: 2 }} onClick={() => { setEditing(true) }}>
                       Edit
                     </MDButton>
                     <MDButton variant="contained" color="info" size="small" onClick={() => { navigate('/pandit') }}>
@@ -704,7 +716,7 @@ function Index() {
                   <>
                     <MDButton
                       variant="contained"
-                      color="warning"
+                      color="dark"
                       size="small"
                       sx={{ mr: 1, ml: 2 }}
                       disabled={saving}

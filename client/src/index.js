@@ -9,20 +9,22 @@ import { MaterialUIControllerProvider } from "./context";
 import AuthContext, { userContext } from "./AuthContext";
 import RenderContext from "./renderContext";
 import SettingContext from "./settingContext"
+import LocationContext from "./locationContext"
 
 
 ReactDOM.render(
+  <LocationContext>
   <AuthContext>
-
-        <RenderContext >
-            <SettingContext>
-            <BrowserRouter>
-              <MaterialUIControllerProvider>
-                <App />
-              </MaterialUIControllerProvider>
-            </BrowserRouter>
-            </SettingContext>
-        </RenderContext>
-  </AuthContext>,
+    <RenderContext >
+      <SettingContext>
+          <BrowserRouter>
+            <MaterialUIControllerProvider>
+              <App />
+            </MaterialUIControllerProvider>
+          </BrowserRouter>
+      </SettingContext>
+    </RenderContext>
+  </AuthContext>
+  </LocationContext>,
   document.getElementById("root")
 );

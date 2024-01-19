@@ -7,7 +7,7 @@ const Mandir = new mongoose.Schema({
         type: String,
         required: true,
     },
-    tags: {
+    keywords: {
         type: String,
         // required:true
     },
@@ -96,6 +96,14 @@ const Mandir = new mongoose.Schema({
             // required: true,
         },
         pincode: {
+            type: String,
+            // required: true,
+        },
+        locality: {
+            type: String,
+            // required: true,
+        },
+        landmark: {
             type: String,
             // required: true,
         },

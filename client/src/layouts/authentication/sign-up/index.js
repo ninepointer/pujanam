@@ -8,12 +8,6 @@ import playstore from '../../../assets/images/playstore.png'
 import Navbar from '../../HomePage/components/Navbars/Navbar';
 import background from '../../../assets/images/background.jpg'
 import logo from '../../../assets/images/logo.png'
-// import {Stack} from "@mui/material";
-// import Autocomplete from 'react-google-autocomplete';
-
-
-// react-router-dom components
-// import { useLocation, useNavigate } from "react-router-dom";
 
 // @mui material components
 import Grid from "@mui/material/Grid";
@@ -21,14 +15,11 @@ import Grid from "@mui/material/Grid";
 // Material Dashboard 2 React components
 import MDBox from "../../../components/MDBox";
 import MDTypography from "../../../components/MDTypography";
-// import MDButton from "../../../components/MDButton";
 
 
 // Images
-// import { userContext } from '../../../AuthContext';
 import Footer from "../components/Footer";
 import { apiUrl } from '../../../constants/constants';
-// import { CgOverflow } from "react-icons/cg";
 import HomePageMandirCard from './homePageMandirCards'
 import HomePagePoojaServicesCard from './homePagePoojaServicesCards'
 import HomePagePoojaSamagriCard from './homePagePoojaSamagriCards'
@@ -39,9 +30,11 @@ import MapSearch from "./mapSearch";
 import Dhams from './dhams'
 import PopularMandirNearMe from './popularmandirNearMe'
 import {settingContext} from '../../../settingContext';
-
+import {LocationContext} from "../../../locationContext";
+import MandirCard from "../../HomePage/pages/MandirCard"
 
 function Cover() {
+  const locationContextData = useContext(LocationContext)
   const [isLoading,setIsLoading] = useState(false);
   const [data,setData] = useState([]);
   const [dham,setDham] = useState([]);
@@ -49,29 +42,12 @@ function Cover() {
   const [pooja,setPooja] = useState([]);
   const [scrollPosition, setScrollPosition] = useState(0);
 
-  const [currentLocation, setCurrentLocation] = useState({
-    latitude: 0,
-    longitude: 0
+  const currentLocation = ({
+    latitude: locationContextData.locationState.latitude,
+    longitude: locationContextData.locationState.longitude
   });
 
   const setting = useContext(settingContext)
-
-  useEffect(() => {
-    // Check if geolocation is supported
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const { latitude, longitude } = position.coords;
-          setCurrentLocation({ latitude, longitude });
-        },
-        (error) => {
-          console.error('Error getting location:', error.message);
-        }
-      );
-    } else {
-      console.error('Geolocation is not supported by this browser.');
-    }
-  }, []);
 
   useEffect(()=>{
     let call1 = axios.get(`${apiUrl}mandir/user/home?lat=${currentLocation.latitude}&long=${currentLocation.longitude}`,{
@@ -120,7 +96,7 @@ function Cover() {
     .catch((error) => {
       // Handle errors here
     });
-  },[currentLocation])
+  },[locationContextData.locationState])
   
   const isMobile = useMediaQuery(theme.breakpoints.down("lg"))
 
@@ -179,7 +155,7 @@ function Cover() {
           </Grid>
           <Grid item xs={12} md={12} lg={12} display='flex' justifyContent='center' alignItems='center' style={{overflow: 'visible'}}>
             <MDBox mb={2} display='flex' justifyContent='center' alignItems='center' style={{overflow: 'visible'}}>
-              <MapSearch currentLocation={currentLocation} />
+              <MapSearch  />
             </MDBox>
           </Grid>
           <Grid item xs={12} md={12} lg={12} display='flex' justifyContent='center' alignItems='center'>
@@ -291,7 +267,7 @@ function Cover() {
                               {data?.map((elem) => {
                                 return (
                                   <Grid key={elem?._id} item xs={12} md={4} lg={3} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
-                                    <TemplesNearMe elem={elem}/>
+                                    <MandirCard elem={elem}/>
                                   </Grid>
                                 )
                               })}
@@ -333,7 +309,7 @@ function Cover() {
                               {popular?.map((elem) => {
                                 return (
                                   <Grid key={elem?._id} item xs={12} md={4} lg={3} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
-                                    <PopularMandirNearMe elem={elem}/>
+                                    <MandirCard elem={elem}/>
                                   </Grid>
                                 )
                               })}
@@ -371,11 +347,11 @@ function Cover() {
                         <Grid item xs={12} mt={2} md={12} lg={12} alignItems='stretch'>
 
                           <MDBox display='flex' justifyContent='center' alignContent='center' alignItems='center'>
-                            <Grid container spacing={3} xs={12} md={12} lg={12} display='flex' justifyContent='flex-start' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
+                            <Grid container spacing={3} xs={12} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
                               {dham?.map((elem) => {
                                 return (
                                   <Grid key={elem?._id} item xs={12} md={4} lg={3} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
-                                    <Dhams elem={elem}/>
+                                    <MandirCard elem={elem}/>
                                   </Grid>
                                 )
                               })}

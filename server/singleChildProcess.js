@@ -10,6 +10,7 @@ const xssClean = require("xss-clean");
 const hpp = require("hpp");
 const LanguageSchema = require("./models/language");
 const Setting = require("./models/setting");
+const dbBackup = require("./Backup/mongoDbBackUp")
 
 async function singleProcess() {
 
@@ -42,6 +43,11 @@ async function singleProcess() {
     app.use(helmet());
     app.use(xssClean());
     app.use(hpp());
+    app.get("/api/v1/dbbackup", async (req, res) => {
+        // const sourceUri = process.env.STAGINGDB
+        // const targetUri = process.env.DATABASE
+        // await dbBackup.backupDatabase(sourceUri, targetUri, res);
+    })
     app.get('/api/v1/product', async (req, res, next) => { res.json({ status: 'success', data: await Product.find() }) })
     app.get('/api/v1/language', async (req, res, next) => { res.json({ status: 'success', data: await LanguageSchema.find() }) })
     app.get('/api/v1/usersetting', async (req, res, next) => { res.json({ status: 'success', data: await Setting.find() }) })

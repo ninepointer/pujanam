@@ -42,9 +42,9 @@ exports.create = (async (req, res, next) => {
     
     try {
         const {morning_aarti_time, evening_aarti_time, accessibility, meta_title, 
-            meta_description, tags, name, description, dham, popular, morning_opening_time, 
+            meta_description, keywords, tags, name, description, dham, popular, morning_opening_time, 
             morning_closing_time, evening_opening_time, evening_closing_time,
-            devi_devta, longitude, latitude, address, pincode, city, state, country,
+            devi_devta, longitude, latitude, address, locality, landmark, pincode, city, state, country,
             construction_year, pandit_mobile_number, pandit_full_name,
             status  } = req.body;
         
@@ -57,6 +57,8 @@ exports.create = (async (req, res, next) => {
                 coordinates: [latitude, longitude]
             },
             address,
+            locality,
+            landmark,
             pincode,
             city,
             state,
@@ -72,7 +74,7 @@ exports.create = (async (req, res, next) => {
             devi_devta, address_details, images: otherImages, cover_image: coverImage[0],
             construction_year, pandit_mobile_number, pandit_full_name, slug: slug,
             status, morning_aarti_time, evening_aarti_time, accessibility, meta_title, 
-            meta_description, tags
+            meta_description, tags, keywords
         });
         ApiResponse.created(res, mandir, 'Mandir updated successfully');
     } catch (error) {
@@ -120,6 +122,7 @@ exports.edit = (async (req, res, next) => {
         // const { title } = req.body;
         const update = req.body;
 
+        // console.log("update", update)
         update.address_details = {
             location: {
                 type: "Point",
@@ -127,6 +130,8 @@ exports.edit = (async (req, res, next) => {
             },
             address: update?.address,
             pincode: update?.pincode,
+            locality: update?.locality,
+            landmark: update?.landmark,
             city: update?.city,
             state: update?.state,
             country: update?.country
