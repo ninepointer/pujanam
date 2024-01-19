@@ -52,7 +52,7 @@ exports.getActiveHome = async (req, res) => {
             {
               $project: {
                 devi_devta: "$devtas.name",
-                _id: 0,
+                _id: 1,
                 name: 1,
                 description: 1,
                 cover_image: 1,
@@ -123,7 +123,7 @@ exports.getActiveAllHome = async (req, res) => {
           {
             $project: {
               devi_devta: "$devtas.name",
-              _id: 0,
+              _id: 1,
               name: 1,
               description: 1,
               cover_image: 1,
@@ -208,7 +208,7 @@ exports.getNewDham = async (req, res) => {
           {
             $project: {
               devi_devta: "$devtas.name",
-              _id: 0,
+              _id: 1,
               name: 1,
               description: 1,
               cover_image: 1,
@@ -254,12 +254,88 @@ exports.getDham = async (req, res) => {
 };
 
 exports.getBydevta = async (req, res) => {
-    const {devtaId} = req.query;
+    const {lat, long, search, devtaId} = req.query;
+    const matchStage = search ? {
+        $and: [
+            {
+              $or: [
+                { name: { $regex: search, $options: 'i' } },
+                { "address_details.city": { $regex: search, $options: 'i' } },
+                { "address_details.state": { $regex: search, $options: 'i' } },
+                { "address_details.pincode": { $regex: search, $options: 'i' } },
+              ]
+            },
+            {
+              status: 'Active',
+              devi_devta: new ObjectId(devtaId)
+            },
+          ]
+    } :
+    {
+        status: 'Active',
+        devi_devta: new ObjectId(devtaId)
+    }
     try {
-        const activeMandir = await Mandir.find({ devi_devta: new ObjectId(devtaId) })
-        .populate('devi_devta', 'name')
-        .select('-created_on -created_by -last_modified_on -last_modified_by -__v -favourite -share');
-        ApiResponse.success(res, activeMandir);
+        const mandir = await Mandir.aggregate([
+            {
+              $geoNear: {
+                near: {
+                  type: "Point",
+                  coordinates: [Number(lat), Number(long)],
+                },
+                distanceField: "distance",
+                spherical: true,
+                key: "address_details.location",
+              },
+            },
+            {
+                $match: matchStage
+            },
+            {
+              $lookup: {
+                from: "devi-devtas",
+                localField: "devi_devta",
+                foreignField: "_id",
+                as: "devtas",
+              },
+            },
+            {
+              $unwind: {
+                path: "$devtas",
+              },
+            },
+            {
+              $project: {
+                devi_devta: "$devtas.name",
+                _id: 1,
+                name: 1,
+                description: 1,
+                cover_image: 1,
+                images: 1,
+                dham: 1,
+                popular: 1,
+                morning_closing_time: 1,
+                evening_opening_time: 1,
+                evening_closing_time: 1,
+                morning_opening_time: 1,
+                address_details: 1,
+                construction_year: 1,
+                distance: 1,
+                slug: 1,
+                morning_aarti_time: 1,
+                evening_aarti_time: 1
+              },
+            },
+            {
+              $sort: {
+                distance: 1,
+              },
+            },
+            {
+              $limit: 5
+            }
+          ])
+        ApiResponse.success(res, mandir);
     } catch (error) {
         ApiResponse.error(res, 'Something went wrong', 500, error.message);
     }
@@ -319,7 +395,7 @@ exports.getNewPopular = async (req, res) => {
           {
             $project: {
               devi_devta: "$devtas.name",
-              _id: 0,
+              _id: 1,
               name: 1,
               description: 1,
               cover_image: 1,
@@ -402,7 +478,7 @@ exports.getPopularMandirHomeActive = async (req, res) => {
             {
               $project: {
                 devi_devta: "$devtas.name",
-                _id: 0,
+                _id: 1,
                 name: 1,
                 description: 1,
                 cover_image: 1,
@@ -474,7 +550,7 @@ exports.getAllPopularMandirHomeActive = async (req, res) => {
           {
             $project: {
               devi_devta: "$devtas.name",
-              _id: 0,
+              _id: 1,
               name: 1,
               description: 1,
               cover_image: 1,
@@ -546,7 +622,7 @@ exports.getDhamHomeActive = async (req, res) => {
             {
               $project: {
                 devi_devta: "$devtas.name",
-                _id: 0,
+                _id: 1,
                 name: 1,
                 description: 1,
                 cover_image: 1,
@@ -706,7 +782,7 @@ exports.getByDistance = async (req, res) => {
             {
               $project: {
                 devi_devta: "$devtas.name",
-                _id: 0,
+                _id: 1,
                 name: 1,
                 description: 1,
                 cover_image: 1,
