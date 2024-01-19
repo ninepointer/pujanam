@@ -31,7 +31,7 @@ import Dhams from './dhams'
 import PopularMandirNearMe from './popularmandirNearMe'
 import {settingContext} from '../../../settingContext';
 import {LocationContext} from "../../../locationContext";
-
+import MandirCard from "../../HomePage/pages/MandirCard"
 
 function Cover() {
   const locationContextData = useContext(LocationContext)
@@ -267,7 +267,7 @@ function Cover() {
                               {data?.map((elem) => {
                                 return (
                                   <Grid key={elem?._id} item xs={12} md={4} lg={3} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
-                                    <TemplesNearMe elem={elem}/>
+                                    <MandirCard elem={elem}/>
                                   </Grid>
                                 )
                               })}
@@ -309,7 +309,7 @@ function Cover() {
                               {popular?.map((elem) => {
                                 return (
                                   <Grid key={elem?._id} item xs={12} md={4} lg={3} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
-                                    <PopularMandirNearMe elem={elem}/>
+                                    <MandirCard elem={elem}/>
                                   </Grid>
                                 )
                               })}
@@ -347,11 +347,11 @@ function Cover() {
                         <Grid item xs={12} mt={2} md={12} lg={12} alignItems='stretch'>
 
                           <MDBox display='flex' justifyContent='center' alignContent='center' alignItems='center'>
-                            <Grid container spacing={3} xs={12} md={12} lg={12} display='flex' justifyContent='flex-start' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
+                            <Grid container spacing={3} xs={12} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
                               {dham?.map((elem) => {
                                 return (
                                   <Grid key={elem?._id} item xs={12} md={4} lg={3} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
-                                    <Dhams elem={elem}/>
+                                    <MandirCard elem={elem}/>
                                   </Grid>
                                 )
                               })}

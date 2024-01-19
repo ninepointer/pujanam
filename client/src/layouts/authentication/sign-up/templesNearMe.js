@@ -1,8 +1,4 @@
 import React, {useState, useContext, useEffect} from "react"
-// import { useMediaQuery } from '@mui/material'
-// import theme from '../../HomePage/utils/theme/index'; 
-// import { ThemeProvider } from 'styled-components';
-// import background from '../../../assets/images/poojawaste.jpg'
 // @mui material components
 import Grid from "@mui/material/Grid";
 import moment from 'moment'
@@ -24,6 +20,8 @@ function HomeCard({elem}) {
         }
         return inputString;
       }
+
+
     return(
         <Grid item xs={12} md={4} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
             <Grid container xs={12} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
@@ -36,7 +34,7 @@ function HomeCard({elem}) {
                     boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)', // Adjust the box shadow as needed
                     }
                 }} 
-                onClick={() => {}}>
+                onClick={() => { }}>
 
             {/* <CardActionArea>
                 <Grid item xs={12} md={4} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
