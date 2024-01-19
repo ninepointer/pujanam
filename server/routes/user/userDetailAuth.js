@@ -7,7 +7,7 @@ const UserDetail = require("../../models/User/userSchema")
 const authController = require("../../controllers/authController");
 const multer = require('multer');
 const AWS = require('aws-sdk');
-// const sharp = require('sharp');
+const sharp = require('sharp');
 const Authenticate = require("../../authentication/authentication");
 const { ObjectId } = require("mongodb");
 const Role = require("../../models/User/everyoneRoleSchema");
@@ -69,12 +69,12 @@ const resizePhoto = async (req, res, next) => {
     const { profilePhoto, aadhaarCardFrontImage, aadhaarCardBackImage, panCardFrontImage, 
         passportPhoto, addressProofDocument, incomeProofDocument } = (req.files);
 
-    // if (profilePhoto && profilePhoto[0].buffer) {
-    //     const resizedProfilePhoto = await sharp(profilePhoto[0].buffer)
-    //       .resize({ width: 500, height: 500 })
-    //       .toBuffer();
-    //     (req.files).profilePhotoBuffer = resizedProfilePhoto;
-    //   }
+    if (profilePhoto && profilePhoto[0].buffer) {
+        const resizedProfilePhoto = await sharp(profilePhoto[0].buffer)
+          .resize({ width: 500, height: 500 })
+          .toBuffer();
+        (req.files).profilePhotoBuffer = resizedProfilePhoto;
+      }
     
     //   if (aadhaarCardFrontImage && aadhaarCardFrontImage[0].buffer) {
     //     const resizedAadhaarCardFrontImage = await sharp(aadhaarCardFrontImage[0].buffer)
@@ -637,11 +637,11 @@ router.patch('/userdetail/me', authController.protect, currentUser, uploadMultip
         // if((req).passportPhotoUrl) filteredBody.passportPhoto = (req).passportPhotoUrl;
         
         if (req.profilePhotoUrl) {
-          if (!filteredBody.profilePhoto) {
-            filteredBody.profilePhoto = {};
+          if (!filteredBody.profile_photo) {
+            filteredBody.profile_photo = {};
           }
-          filteredBody.profilePhoto.url = req.profilePhotoUrl;
-          filteredBody.profilePhoto.name = (req.files).profilePhoto[0].originalname;
+          filteredBody.profile_photo.url = req.profilePhotoUrl;
+          filteredBody.profile_photo.name = (req.files).profilePhoto[0].originalname;
         }
 
         if (req.aadhaarCardFrontImageUrl) {

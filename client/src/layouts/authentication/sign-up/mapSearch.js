@@ -299,6 +299,7 @@ function MapSearch() {
                             onChange={(event, newValue) => {
                                 setTempleValue(newValue);
                                 if(newValue){
+                                    console.log("New Route:",newValue?.slug)
                                     navigate(`/mandir/${newValue?.slug}`)
                                     // window.open(`/mandir/${newValue?.slug}`, '_blank');
                                 }

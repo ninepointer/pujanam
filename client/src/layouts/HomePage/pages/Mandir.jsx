@@ -284,39 +284,39 @@ const About = () => {
             }
             <TabPanel1 value={value} index={1} dir={theme.direction}>
                 <Grid item mt={2} mb={1} xs={12} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ width: '100%' }}>
-                <Grid container xs={12} md={12} lg={12} display='flex' justifyContent='flex-start' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
+                <Grid container xs={12} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
                     <Grid ml={2} item xs={12} md={12} lg={12} display='flex' justifyContent='flex-start' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
                       <MDBox display='flex' justifyContent='center' alignContent='flext-start' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
                         <MDTypography variant="h4" color="dark">Popular Mandir near you!</MDTypography>
                       </MDBox>
                     </Grid>
 
-                    <Grid ml={2} item xs={12} md={12} lg={12} display='flex' justifyContent='flex-start' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
-                      <MDBox display='flex' justifyContent='center' alignContent='flext-start' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
-                        <MDTypography variant="body2" color="dark">All Mandir near you!</MDTypography>
+                    <Grid mt={1} ml={2} item xs={12} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{backgroundColor:'white', borderRadius:10 ,maxWidth: '100%', height: 'auto' }}>
+                      <MDBox p={2} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
+                        <MDTypography variant="body2" color="dark">Embark on a journey to discover the tranquility of a sacred and popular mandir right in your vicinity. Immerse yourself in the divine atmosphere, where beautiful architecture meets spiritual energy. Whether you're seeking moments of reflection or eager to partake in religious ceremonies, our mandir provides a haven for all. Join us in experiencing the cultural richness and spiritual bliss that this sacred place offers. Find solace and connection in the heart of your city.</MDTypography>
                       </MDBox>
                     </Grid>
 
                     {popular?.length > 0 ?
-                        <Grid item xs={12} mt={2} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
+                    <Grid item xs={12} mt={2} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
 
-                        <MDBox display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
-                            <Grid container spacing={4} xs={12} md={12} lg={12} display='flex' justifyContent='flex-start' alignContent='center' alignItems='center' style={{ width: '100%', height: 'auto' }}>
-                            {popular?.map((elem) => {
-                                return (
-                                <Grid key={elem?._id} item xs={12} md={4} lg={3} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ width: '100%', height: 'auto' }}>
-                                    <MandirCard elem={elem}/>
-                                </Grid>
-                                )
-                            })}
+                    <MDBox display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
+                        <Grid container spacing={4} xs={12} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ width: '100%', height: 'auto' }}>
+                        {popular?.map((elem) => {
+                            return (
+                            <Grid key={elem?._id} item xs={12} md={4} lg={3} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ width: '100%', height: 'auto' }}>
+                                <MandirCard elem={elem}/>
                             </Grid>
-                        </MDBox>
-
+                            )
+                        })}
                         </Grid>
-                        :
-                        <>
-                        {/* <img src={NoData} width='500px' height='500px' /> */}
-                        </>
+                    </MDBox>
+
+                    </Grid>
+                    :
+                    <>
+                    {/* <img src={NoData} width='500px' height='500px' /> */}
+                    </>
                     }
 
                 </Grid>
@@ -324,16 +324,16 @@ const About = () => {
             </TabPanel1>
             <TabPanel1 value={value} index={2} dir={theme.direction}>
                 <Grid item mt={2} mb={1} xs={12} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ width: '100%' }}>
-                <Grid container xs={12} md={12} lg={12} display='flex' justifyContent='flex-start' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
+                <Grid container xs={12} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
                     <Grid ml={2} item xs={12} md={12} lg={12} display='flex' justifyContent='flex-start' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
                       <MDBox display='flex' justifyContent='center' alignContent='flext-start' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
                         <MDTypography variant="h4" color="dark">All Mandir near you!</MDTypography>
                       </MDBox>
                     </Grid>
 
-                    <Grid ml={2} item xs={12} md={12} lg={12} display='flex' justifyContent='flex-start' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
-                      <MDBox display='flex' justifyContent='center' alignContent='flext-start' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
-                        <MDTypography variant="body2" color="dark">All Mandir near you!</MDTypography>
+                    <Grid mt={1} ml={2} item xs={12} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{backgroundColor:'white', borderRadius:10 ,maxWidth: '100%', height: 'auto' }}>
+                      <MDBox p={2} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
+                        <MDTypography variant="body2" color="dark">Explore the spiritual tapestry of your local community as you discover the abundance of mandirs nestled near you. Each mandir carries a unique essence, from serene sanctuaries to vibrant centers of cultural richness. Immerse yourself in the diverse architectural wonders and feel the spiritual energy that radiates from these sacred places. Whether you're seeking moments of reflection or wish to participate in religious ceremonies, the array of mandirs near you provides a haven for all. Join us in connecting with the cultural and spiritual heritage that these sacred spaces offer. Find solace and forge meaningful connections right here in your city.</MDTypography>
                       </MDBox>
                     </Grid>
 
@@ -341,7 +341,7 @@ const About = () => {
                         <Grid item xs={12} mt={2} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
 
                         <MDBox display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
-                            <Grid container spacing={4} xs={12} md={12} lg={12} display='flex' justifyContent='flex-start' alignContent='center' alignItems='center' style={{ width: '100%', height: 'auto' }}>
+                            <Grid container spacing={4} xs={12} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ width: '100%', height: 'auto' }}>
                             {data?.map((elem) => {
                                 return (
                                 <Grid key={elem?._id} item xs={12} md={4} lg={3} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ width: '100%', height: 'auto' }}>

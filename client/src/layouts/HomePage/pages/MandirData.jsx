@@ -3,7 +3,7 @@ import axios from "axios";
 import {apiUrl} from "../../../constants/constants.js"
 import MDBox from '../../../components/MDBox';
 import { ThemeProvider } from 'styled-components';
-import Navbar from '../components/Navbars/Navbar';
+import PageNavbar from '../components/Navbars/PageNavbar.jsx';
 import theme from '../utils/theme/index';
 import {useLocation} from 'react-router-dom';
 import { Helmet } from 'react-helmet';
@@ -24,12 +24,30 @@ import { GiPrayer } from "react-icons/gi";
 import { BsPersonCircle } from "react-icons/bs";
 import getInfo from './unknownUserIPV4Info.js';
 import {LocationContext} from "../../../locationContext";
+import Card from '@mui/material/Card';
+import { CardActionArea, Divider, Typography } from '@mui/material';
+import CardContent from '@mui/material/CardContent';
+import Modal from '@mui/material/Modal';
+import MDButton from '../../../components/MDButton/index.js';
+import { Tooltip } from "@mui/material";
+import MDSnackbar from "../../../components/MDSnackbar";
 
 export default function MandirData() {
   const [mandirData, setMandirData] = useState();
   const location = useLocation();
   const [isLoading, setIsLoading] = useState(true);
   const locationContextData = useContext(LocationContext)
+  const [modalOpen, setModalOpen] = useState(false);
+  const [image, setImage] = useState('');
+
+  const handleOpenModal = (image) => {
+    setModalOpen(true);
+    setImage(image);
+  };
+
+  const handleCloseModal = () => {
+    setModalOpen(false);
+  };
 
   useEffect(()=>{
     if(mandirData?._id){
@@ -87,6 +105,9 @@ export default function MandirData() {
   useEffect(()=>{
     mandirData && fetchDeviceDetail(mandirData?._id);
   }, [mandirData])
+
+  console.log("Mandir:",mandirData)
+
   const fetchDeviceDetail = async (id)=>{
     const ipData = await axios.get('https://geolocation-db.com/json/');
     console.log(ipData)
@@ -110,13 +131,71 @@ export default function MandirData() {
     const data = await res.json();
   }
 
+  const handleOpenGoogleMaps = (lat,lon) => {
+    // Open Google Maps in a new tab with the specified coordinates
+    window.open(`https://www.google.com/maps?q=${lat},${lon}`);
+  };
+
+  const handleSharePage = (elem) => {
+    let text = `https://punyam.app/${elem?.slug}\n${elem?.name}\n${elem?.address_details?.address}, ${elem?.address_details?.city}, ${elem?.address_details?.state}`
+        const textarea = document.createElement('textarea');
+        textarea.value = text;
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textarea);
+        openSuccessSB('success', 'Link Copied', 'Share it with spiritual friends & family');
+  };
+
   const isMobile = useMediaQuery(theme.breakpoints.down("lg"))
+
+  const [messageObj, setMessageObj] = useState({
+    color: '',
+    icon: '',
+    title: '',
+    content: ''
+})
+
+const [successSB, setSuccessSB] = useState(false);
+const openSuccessSB = (value, title, content) => {
+    if (value === "error") {
+        messageObj.color = 'error'
+        messageObj.icon = 'error'
+        messageObj.title = "Error";
+        messageObj.content = content;
+    };
+
+    if (value === "success") {
+        messageObj.color = 'success'
+        messageObj.icon = 'check'
+        messageObj.title = title;
+        messageObj.content = content;
+    };
+
+    setMessageObj(messageObj);
+    setSuccessSB(true);
+}
+const closeSuccessSB = () => setSuccessSB(false);
+
+const renderSuccessSB = (
+    <MDSnackbar
+        color={messageObj.color}
+        icon={messageObj.icon}
+        title={messageObj.title}
+        content={messageObj.content}
+        open={successSB}
+        onClose={closeSuccessSB}
+        close={closeSuccessSB}
+        bgWhite="success"
+        sx={{ borderLeft: `15px solid ${messageObj.icon == 'check' ? "white" : "red"}`, borderRight: `10px solid ${messageObj.icon == 'check' ? "white" : "red"}`, borderRadius: "15px", width: "auto" }}
+    />
+);
 
   return (
     <MDBox>
       <MDBox display='flex' justifyContent='center' alignContent='center' alignItems='flex-start' style={{ backgroundColor: 'white', height: 'auto', width: 'auto', maxWidth: '100vW' }}>
         <ThemeProvider theme={theme}>
-          <Navbar />
+          <PageNavbar />
           <Grid container p={0} mt={10} xs={12} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='flex-start' style={{width:'100%'}}>
           {isLoading ?
             
@@ -162,43 +241,190 @@ export default function MandirData() {
 
                 <Grid container xs={12} md={12} lg={12} mt={5} display='flex' justifyContent='center' alignContent='center' alignItems='flex-start' style={{ maxWidth: '90%', height: 'auto', zIndex:1 }}>
                   <Grid item xs={12} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
-                    <Grid container spacing={0} xs={12} md={12} lg={12} mb={2} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
+                    {/* <Grid container spacing={0} xs={12} md={12} lg={12} mb={2} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}> */}
 
-                      <Grid item xs={12} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: '100%' }}>
-                        <Grid container spacing={2} xs={12} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ width: '100%', height: '100%' }}>
-                            <Grid item xs={12} md={12} lg={6} style={{ maxWidth: '100%', height: '100%' }}>
-                            <img src={mandirData?.cover_image?.url} width='100%' />
+                      {/* <Grid item xs={12} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: '100%' }}> */}
+                        <Grid container spacing={1} xs={12} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: '100%' }}>
+                            <Grid item xs={12} md={12} lg={6} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
+                                <Card sx={{ 
+                                    minWidth: '100%', 
+                                    cursor: 'pointer', 
+                                    transition: 'transform 0.3s cubic-bezier(0.25, 0.1, 0.25, 1), box-shadow 0.3s cubic-bezier(0.25, 0.1, 0.25, 1)',
+                                    '&:hover': {
+                                        transform: 'scale(1.025)',
+                                        boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)', // Adjust the box shadow as needed
+                                        }
+                                    }} 
+                                    onClick={() => { handleOpenModal(mandirData?.cover_image?.url) }}
+                                    >
+
+                                  <CardActionArea>
+                                      <Grid item xs={12} md={4} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
+                                          <img src={mandirData?.cover_image?.url} style={{ maxWidth: '100%', height: 'auto', borderRadius: 10 }} />
+                                          
+                                      </Grid>
+                                  </CardActionArea>
+                                </Card>
                             </Grid>
-                            <Grid item xs={12} md={12} lg={6} style={{ maxWidth: '100%', height: '100%' }}>
-                            <Grid container spacing={2} xs={12} md={12} lg={12} style={{ maxWidth: '98%' }}>
-                                <Grid item xs={6} md={6} lg={6} style={{ maxWidth: '100%' }}>
-                                <img src={mandirData?.images[0]?.url} width='100%' />
+                            <Grid item xs={12} md={12} lg={6} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
+                              <Grid container spacing={2} xs={12} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: '100%' }}>
+                                
+                                <Grid item xs={12} md={12} lg={6} display='flex' justifyContent='center' alignContent='center' alignItems='center' 
+                                  style={{ maxWidth: '100%', height: 'auto' }}
+                                >
+                                  <Card sx={{ 
+                                      minWidth: '100%', 
+                                      cursor: 'pointer', 
+                                      transition: 'transform 0.3s cubic-bezier(0.25, 0.1, 0.25, 1), box-shadow 0.3s cubic-bezier(0.25, 0.1, 0.25, 1)',
+                                      '&:hover': {
+                                          transform: 'scale(1.05)',
+                                          boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)', // Adjust the box shadow as needed
+                                          }
+                                      }} 
+                                      onClick={() => { handleOpenModal(mandirData?.images[0]?.url) }}
+                                      >
+
+                                    <CardActionArea>
+                                        <Grid item xs={12} md={4} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
+                                            <img src={mandirData?.images[0]?.url} style={{ maxWidth: '100%', height: 'auto', borderRadius: 10 }} />
+                                            
+                                        </Grid>
+                                    </CardActionArea>
+                                  </Card>
                                 </Grid>
-                                <Grid item xs={6} md={6} lg={6} style={{ maxWidth: '100%' }}>
-                                <img src={mandirData?.images[1]?.url} width='100%' />
+
+                                <Grid item xs={12} md={12} lg={6} display='flex' justifyContent='center' alignContent='center' alignItems='center' 
+                                  style={{ maxWidth: '100%', height: 'auto' }}
+                                >
+                                  <Card sx={{ 
+                                      minWidth: '100%', 
+                                      cursor: 'pointer', 
+                                      transition: 'transform 0.3s cubic-bezier(0.25, 0.1, 0.25, 1), box-shadow 0.3s cubic-bezier(0.25, 0.1, 0.25, 1)',
+                                      '&:hover': {
+                                          transform: 'scale(1.05)',
+                                          boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)', // Adjust the box shadow as needed
+                                          }
+                                      }} 
+                                      onClick={() => { handleOpenModal(mandirData?.images[1]?.url) }}
+                                      >
+
+                                    <CardActionArea>
+                                        <Grid item xs={12} md={4} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
+                                            <img src={mandirData?.images[1]?.url} style={{ maxWidth: '100%', height: 'auto', borderRadius: 10 }} />
+                                            
+                                        </Grid>
+                                    </CardActionArea>
+                                  </Card>
                                 </Grid>
-                                <Grid item xs={6} md={6} lg={6} style={{ maxWidth: '100%' }}>
-                                <img src={mandirData?.images[2]?.url} width='100%' />
+
+                                <Grid item xs={12} md={12} lg={6} display='flex' justifyContent='center' alignContent='center' alignItems='center' 
+                                  style={{ maxWidth: '100%', height: 'auto' }}
+                                >
+                                  <Card sx={{ 
+                                      minWidth: '100%', 
+                                      cursor: 'pointer', 
+                                      transition: 'transform 0.3s cubic-bezier(0.25, 0.1, 0.25, 1), box-shadow 0.3s cubic-bezier(0.25, 0.1, 0.25, 1)',
+                                      '&:hover': {
+                                          transform: 'scale(1.05)',
+                                          boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)', // Adjust the box shadow as needed
+                                          }
+                                      }} 
+                                      onClick={() => { handleOpenModal(mandirData?.images[2]?.url) }}
+                                      >
+
+                                    <CardActionArea>
+                                        <Grid item xs={12} md={4} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
+                                            <img src={mandirData?.images[2]?.url} style={{ maxWidth: '100%', height: 'auto', borderRadius: 10 }} />
+                                            
+                                        </Grid>
+                                    </CardActionArea>
+                                  </Card>
                                 </Grid>
-                                <Grid item xs={6} md={6} lg={6} style={{ maxWidth: '100%' }}>
-                                <img src={mandirData?.cover_image?.url} width='100%' />
+
+                                <Grid item xs={12} md={12} lg={6} display='flex' justifyContent='center' alignContent='center' alignItems='center' 
+                                  style={{ maxWidth: '100%', height: 'auto' }}
+                                >
+                                  <Card sx={{ 
+                                      minWidth: '100%', 
+                                      cursor: 'pointer', 
+                                      transition: 'transform 0.3s cubic-bezier(0.25, 0.1, 0.25, 1), box-shadow 0.3s cubic-bezier(0.25, 0.1, 0.25, 1)',
+                                      '&:hover': {
+                                          transform: 'scale(1.05)',
+                                          boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)', // Adjust the box shadow as needed
+                                          }
+                                      }} 
+                                      onClick={() => { handleOpenModal(mandirData?.images[3]?.url) }}
+                                      >
+
+                                    <CardActionArea>
+                                      <Grid item xs={12} md={4} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
+                                        <img src={mandirData?.images[3]?.url} style={{ maxWidth: '100%', height: 'auto', borderRadius: 10 }} />
+                                          {/* <MDTypography style={{
+                                            variant:'caption',
+                                            position: 'absolute',
+                                            top: '50%',
+                                            left: '50%',
+                                            transform: 'translate(-50%, -50%)',
+                                            textAlign: 'center',
+                                            color: 'white', // You can adjust the text color
+                                            fontWeight: 'bold', // You can adjust the font weight
+                                            pointerEvents: 'none', // Allow clicks to go through the text
+                                          }}>
+                                            Open Gallery
+                                          </MDTypography>       */}
+                                      </Grid>
+                                    </CardActionArea>
+                                  </Card>
                                 </Grid>
+                              </Grid>
                             </Grid>
-                            </Grid>
+                            <Modal
+                              open={modalOpen}
+                              onClose={handleCloseModal}
+                              aria-labelledby="image-modal"
+                              aria-describedby="image-modal-description"
+                              image={image}
+                            >
+                              <div style={{
+                                position: 'absolute',
+                                top: '50%',
+                                left: '50%',
+                                transform: 'translate(-50%, -50%)',
+                                textAlign: 'center',
+                              }}>
+                                <img src={image} style={{ maxWidth: '100%', maxHeight: '100%', borderRadius: 10 }} />
+                              </div>
+                            </Modal>
                         </Grid>
-                      </Grid>
+                      {/* </Grid> */}
                     
-                    </Grid>
+                    {/* </Grid> */}
                   
                   </Grid>
 
-                  <Grid p={4} item xs={12} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{backgroundColor:'white', borderRadius:10 ,maxWidth: '100%', height: 'auto' }}>
+                  <Grid p={2} mt={2} item xs={12} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{backgroundColor:'white', borderRadius:10 ,maxWidth: '100%', height: 'auto' }}>
 
                     <Grid container spacing={2} xs={12} md={12} lg={12} mb={2} display='flex' justifyContent='center' alignContent='center' alignItems='flex-start' style={{ maxWidth: '100%', height: 'auto' }}>
 
                       <Grid item xs={12} md={12} lg={12} display='flex' justifyContent='flex-start' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
                         <MDBox display='flex' justifyContent='center' alignContent='center' alignItems='center'>
                           <MDTypography variant="h5">{mandirData?.name}</MDTypography>
+                          <MDButton 
+                            variant="outlined" 
+                            color="dark" 
+                            size="small"
+                            onClick={() => handleOpenGoogleMaps(mandirData?.address_details?.location?.coordinates[0],mandirData?.address_details?.location?.coordinates[1])} style={{ margin: '16px' }}
+                          >
+                            Direction
+                          </MDButton>
+                          <MDButton 
+                            variant="outlined" 
+                            color="dark" 
+                            size="small"
+                            onClick={() => handleSharePage(mandirData)} style={{ margin: '16px' }}
+                          >
+                            Share
+                          </MDButton>
                         </MDBox>
                       </Grid>
 
@@ -261,7 +487,7 @@ export default function MandirData() {
                         </MDBox>
                       </Grid>
 
-                      <Grid mt={5} item xs={12} md={12} lg={12} display='flex' justifyContent='flex-start' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
+                      <Grid mt={2} item xs={12} md={12} lg={12} display='flex' justifyContent='flex-start' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
                         <MDBox display='flex' justifyContent='flex-start' alignContent='center' alignItems='center'>
                           <MDTypography variant="h6" style={{ display: 'flex', alignItems: 'center', alignContent: 'center' }}>About the Mandir</MDTypography>
                         </MDBox>
@@ -290,18 +516,12 @@ export default function MandirData() {
                         <Footer/>
                     </Grid>
                 </Grid>
+                {renderSuccessSB}
               </>
-
-            
           }
 
       </Grid>
       </ThemeProvider>
-      </MDBox>
-
-
-      <MDBox>
-        <Footer />
       </MDBox>
     </MDBox>
   );

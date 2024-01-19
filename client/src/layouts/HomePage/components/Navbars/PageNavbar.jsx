@@ -75,7 +75,7 @@ const Navbar = () => {
             color="white"
           >
             {/* <Grid item xs={12} md={12} lg={12} display='flex' justifyContent='center' alignItems='center' style={{overflow: 'visible'}}> */}
-              <MDBox display='flex' justifyContent='center' alignItems='center' style={{overflow: 'visible'}}>
+              <MDBox display='flex' justifyContent='center' alignItems='center' style={{ maxWidth:'90%',overflow: 'visible'}}>
                 <MapSearch />
               </MDBox>
             {/* </Grid> */}
