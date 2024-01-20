@@ -765,7 +765,6 @@ exports.viewCount = async (req, res) => {
     }
 };
 
-
 exports.getTrendingMandir = async (req, res) => {
   const {lat, long} = req.query;
 
@@ -876,3 +875,99 @@ exports.getFavouriteMandir = async (req, res) => {
     ApiResponse.error(res, 'Something went wrong', 500, error.message);
   }
 };
+
+exports.getOpenMandirs = async (req, res) => {
+  const { lat, long } = req.query;
+
+  try {
+    const mandir = await Mandir.aggregate([
+      {
+        $geoNear: {
+          near: {
+            type: "Point",
+            coordinates: [Number(lat), Number(long)],
+          },
+          distanceField: "distance",
+          spherical: true,
+          key: "address_details.location",
+        },
+      },
+      {
+        $match: {
+          status: "Active",
+        }
+      },
+      {
+        $lookup: {
+          from: "devi-devtas",
+          localField: "devi_devta",
+          foreignField: "_id",
+          as: "devtas",
+        },
+      },
+      {
+        $unwind: {
+          path: "$devtas",
+        },
+      },
+      {
+        $project: projectStage,
+      },
+      {
+        $sort: {
+          viewCount: 1,
+          distance: 1,
+        },
+      },
+      {
+        $limit: 4
+      }
+    ])
+
+    const filteredMandirData = filterDataByTime(mandir);
+
+    console.log(filteredMandirData)
+
+    ApiResponse.success(res, mandir);
+  } catch (error) {
+    ApiResponse.error(res, 'Something went wrong', 500, error.message);
+  }
+};
+
+const getCurrentTime = () => {
+  const now = new Date();
+  const hours = now.getHours();
+  const minutes = now.getMinutes();
+  return hours * 60 + minutes; // Convert current time to minutes for easier comparison
+};
+
+const isTimeInRange = (startTime, endTime) => {
+  const currentTime = getCurrentTime();
+  return currentTime >= startTime && currentTime <= endTime;
+};
+
+const extractTime = (dateTime) => {
+  const dateObject = new Date(dateTime);
+  const hours = dateObject.getHours();
+  const minutes = dateObject.getMinutes();
+  return hours * 60 + minutes; // Convert time to minutes for easier comparison
+};
+
+const filterDataByTime = (data) => {
+  const filteredData = data.filter((mandir) => {
+    const morningOpenTime = extractTime(mandir.morning_opening_time);
+    const morningCloseTime = extractTime(mandir.morning_closing_time);
+    const eveningOpenTime = extractTime(mandir.evening_opening_time);
+    const eveningCloseTime = extractTime(mandir.evening_closing_time);
+
+    const isMorningTimeInRange = isTimeInRange(morningOpenTime, morningCloseTime);
+    const isEveningTimeInRange = isTimeInRange(eveningOpenTime, eveningCloseTime);
+
+    return isMorningTimeInRange || isEveningTimeInRange;
+  });
+
+  return filteredData;
+};
+
+//in approve case --> date, pandit asign, bookingStatus,
+// complete --> bookingStatus, paymentStatus
