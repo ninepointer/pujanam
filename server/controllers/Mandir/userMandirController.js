@@ -94,7 +94,7 @@ exports.getActiveHome = async (req, res) => {
 exports.getActiveAllHome = async (req, res) => {
   let {lat, long, page, limit} = req.query;
   page = Number(page) || 1;
-  limit = Number(limit) || 1;
+  limit = Number(limit) || 100;
   const skip = (page-1)*limit;
 
   try {

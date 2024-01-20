@@ -1,5 +1,5 @@
 import { AppBar, Container, IconButton, Stack, useMediaQuery } from '@mui/material'
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 
 import useScrollPosition from '../../hooks/useScrollPosition'
 
@@ -10,6 +10,7 @@ import LaunchButton from '../Buttons/LaunchButton'
 import { useTheme } from 'styled-components'
 import MDBox from '../../../../components/MDBox'
 import MapSearch from "../../../../layouts/authentication/sign-up/mapSearch"
+import {settingContext} from './../../../../settingContext';
 
 const NAVBAR_HIEGHT = 80;
 const LinkButton = ({ children, ...props }) => (
@@ -40,6 +41,13 @@ const Navbar = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down("lg"))
 
   const[open,setOpen] = useState(false);
+
+  const setting = useContext(settingContext)
+
+  const handlePlaystoreNavigate = () => {
+      // Open google.com in a new tab
+      window.open(`${setting.playstore_link}`, '_blank');
+  };
 
   const Handle = (e)=>{
     if(isMobile){
@@ -119,7 +127,7 @@ const Navbar = () => {
           ) : (
           <Stack direction="row" spacing={5} alignItems="center">
 
-            <a href="https://play.google.com/store/apps/details?id=com.stoxhero.app" target='_blank'>
+            <a onClick={() => (handlePlaystoreNavigate())} target='_blank'>
               <LaunchButton sx={{ borderRadius: 3, color: 'light' }} />
             </a>
           </Stack>)
