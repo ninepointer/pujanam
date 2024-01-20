@@ -1,20 +1,20 @@
 import React, {useEffect, useState, useContext} from 'react'
 import axios from "axios";
-import {apiUrl} from "../../../constants/constants.js"
-import MDBox from '../../../components/MDBox';
+import {apiUrl} from "../../../../constants/constants.js"
+import MDBox from '../../../../components/MDBox/index.js';
 import { ThemeProvider } from 'styled-components';
-import PageNavbar from '../components/Navbars/PageNavbar.jsx';
-import theme from '../utils/theme/index';
+import PageNavbar from '../../components/Navbars/PageNavbar.jsx';
+import theme from '../../utils/theme/index';
 import {useLocation} from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import { Grid, useMediaQuery } from '@mui/material';
-import MDTypography from '../../../components/MDTypography/index.js';
+import MDTypography from '../../../../components/MDTypography/index.js';
 import moment from 'moment'
 import { CiTimer } from "react-icons/ci";
 import { CiRead } from "react-icons/ci";
-import Footer from '../../authentication/components/Footer/index.js'
+import Footer from '../../../authentication/components/Footer/index.js'
 import { CircularProgress } from '@mui/material';
-import background from '../../../assets/images/background.jpg'
+import background from '../../../../assets/images/background.jpg'
 import ReactGA from "react-ga"
 import { FaTags } from "react-icons/fa";
 import { IoMdSunny } from "react-icons/io";
@@ -22,15 +22,15 @@ import { IoMoonOutline } from "react-icons/io5";
 import { RxAccessibility } from "react-icons/rx";
 import { GiPrayer } from "react-icons/gi";
 import { BsPersonCircle } from "react-icons/bs";
-import getInfo from './unknownUserIPV4Info.js';
-import {LocationContext} from "../../../locationContext";
+import getInfo from '../unknownUserIPV4Info.js';
+import {LocationContext} from "../../../../locationContext.js";
 import Card from '@mui/material/Card';
 import { CardActionArea, Divider, Typography } from '@mui/material';
 import CardContent from '@mui/material/CardContent';
 import Modal from '@mui/material/Modal';
-import MDButton from '../../../components/MDButton/index.js';
+import MDButton from '../../../../components/MDButton/index.js';
 import { Tooltip } from "@mui/material";
-import MDSnackbar from "../../../components/MDSnackbar";
+import MDSnackbar from "../../../../components/MDSnackbar/index.js";
 
 export default function MandirData() {
   const [mandirData, setMandirData] = useState();
@@ -106,7 +106,6 @@ export default function MandirData() {
     mandirData && fetchDeviceDetail(mandirData?._id);
   }, [mandirData])
 
-  console.log("Mandir:",mandirData)
 
   const fetchDeviceDetail = async (id)=>{
     const ipData = await axios.get('https://geolocation-db.com/json/');

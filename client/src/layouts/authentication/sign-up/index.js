@@ -31,7 +31,7 @@ import Dhams from './dhams'
 import PopularMandirNearMe from './popularmandirNearMe'
 import {settingContext} from '../../../settingContext';
 import {LocationContext} from "../../../locationContext";
-import MandirCard from "../../HomePage/pages/MandirCard"
+import MandirCard from "../../HomePage/pages/mandir/MandirCard"
 
 function Cover() {
   const locationContextData = useContext(LocationContext)

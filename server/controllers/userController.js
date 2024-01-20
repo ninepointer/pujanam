@@ -1433,6 +1433,17 @@ exports.editAddress = async (req, res) => {
   }
 }
 
+exports.getAddress = async (req, res) => {
+  try {
+    
+    const userAddress = await UserDetail.findOne({ _id: new ObjectId(req.user._id) }).select('address_details');
+    ApiResponse.success(res, userAddress);
+
+  } catch (error) {
+    ApiResponse.error(res, 'Something went wrong', 500, error.message);
+  }
+}
+
 exports.saveCurrentLocation = async (req, res) => {
   try {
     const { latitude, longitude } = req.body;

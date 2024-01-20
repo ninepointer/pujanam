@@ -3,16 +3,16 @@ import { ThemeProvider } from 'styled-components';
 import React, {useState, useContext, useEffect} from "react"
 import ReactGA from "react-ga";
 import axios from "axios";
-import PageNavbar from '../components/Navbars/PageNavbar'
-import theme from '../utils/theme/index'
-import background from '../../../assets/images/background.jpg'
-import dhamicon from '../../../assets/images/dham.png'
-import nearmeicon from '../../../assets/images/nearme.png'
-import popularnearmeicon from '../../../assets/images/popular.png'
-import Footer from '../../authentication/components/Footer'
-import { apiUrl } from '../../../constants/constants';
-import MDBox from '../../../components/MDBox';
-import MDTypography from '../../../components/MDTypography';
+import PageNavbar from '../../components/Navbars/PageNavbar'
+import theme from '../../utils/theme/index'
+import background from '../../../../assets/images/background.jpg'
+import dhamicon from '../../../../assets/images/dham.png'
+import nearmeicon from '../../../../assets/images/nearme.png'
+import popularnearmeicon from '../../../../assets/images/popular.png'
+import Footer from '../../../authentication/components/Footer'
+import { apiUrl } from '../../../../constants/constants';
+import MDBox from '../../../../components/MDBox';
+import MDTypography from '../../../../components/MDTypography';
 import {Typography} from '@mui/material';
 import MandirCard from './MandirCard'
 import Box from '@mui/material/Box';
@@ -22,8 +22,10 @@ import Tabs from '@mui/material/Tabs';
 import PropTypes from 'prop-types';
 import SwipeableViews from 'react-swipeable-views';
 import TabPanel from '@mui/lab/TabPanel';
-import MDAvatar from '../../../components/MDAvatar';
-import {LocationContext} from "../../../locationContext";
+import MDAvatar from '../../../../components/MDAvatar';
+import {LocationContext} from "../../../../locationContext";
+import PopularMandir from "./popularMandir";
+import MandirNearMe from "./mandirNearMe";
 
 function TabPanel1(props) {
   const { children, value, index, ...other } = props;
@@ -80,14 +82,14 @@ const About = () => {
 
   
     useEffect(()=>{
-        let call1 = axios.get(`${apiUrl}mandir/user/allhome?lat=${lat}&long=${long}`,{
-                    withCredentials: false,
-                    headers: {
-                        Accept: "application/json",
-                        "Content-Type": "application/json",
-                        "Access-Control-Allow-Credentials": true
-                      },
-                    })
+        // let call1 = axios.get(`${apiUrl}mandir/user/allhome?lat=${lat}&long=${long}`,{
+        //             withCredentials: false,
+        //             headers: {
+        //                 Accept: "application/json",
+        //                 "Content-Type": "application/json",
+        //                 "Access-Control-Allow-Credentials": true
+        //               },
+        //             })
         let call2 = axios.get(`${apiUrl}mandir/user/homedham?lat=${lat}&long=${long}`,{
           withCredentials: false,
           headers: {
@@ -96,20 +98,20 @@ const About = () => {
               "Access-Control-Allow-Credentials": true
             },
           })
-        let call3 = axios.get(`${apiUrl}mandir/user/allhomepopular?lat=${lat}&long=${long}`,{
-          withCredentials: false,
-          headers: {
-              Accept: "application/json",
-              "Content-Type": "application/json",
-              "Access-Control-Allow-Credentials": true
-            },
-          })
-        Promise.all([call1,call2,call3])
-        .then(([api1Response1,api1Response2,api1Response3]) => {
+        // let call3 = axios.get(`${apiUrl}mandir/user/allhomepopular?lat=${lat}&long=${long}`,{
+        //   withCredentials: false,
+        //   headers: {
+        //       Accept: "application/json",
+        //       "Content-Type": "application/json",
+        //       "Access-Control-Allow-Credentials": true
+        //     },
+        //   })
+        Promise.all([call2])
+        .then(([api1Response2]) => {
           // Process the responses here
-          setData(api1Response1?.data?.data)
+          // setData(api1Response1?.data?.data)
           setDham(api1Response2?.data?.data)
-          setPopular(api1Response3?.data?.data)
+          // setPopular(api1Response3?.data?.data)
           setTimeout(()=>{
             setIsLoading(false)
           },500)
@@ -144,6 +146,7 @@ const About = () => {
     const backgroundColor = scrollPosition > 10 ? 'rgba(0, 0, 0, 0.8)' : 'transparent'
     const backdropFilter = scrollPosition > 10 ? 'blur(5px)' : 'none'
 
+    console.log("dham", dham)
     return (
         <>
       <MDBox mt={-1} display='flex' justifyContent='center' flexDirection='column' alignContent='center' alignItems='center' style={{ minHeight:'auto', width: 'auto', minWidth:'100vW', overflow: 'visible'}}>
@@ -297,7 +300,7 @@ const About = () => {
                       </MDBox>
                     </Grid>
 
-                    {popular?.length > 0 ?
+                    {/* {popular?.length > 0 ?
                     <Grid item xs={12} mt={2} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
 
                     <MDBox display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
@@ -315,9 +318,10 @@ const About = () => {
                     </Grid>
                     :
                     <>
-                    {/* <img src={NoData} width='500px' height='500px' /> */}
                     </>
-                    }
+                    } */}
+
+                    <PopularMandir />
 
                 </Grid>
                 </Grid>
@@ -337,7 +341,7 @@ const About = () => {
                       </MDBox>
                     </Grid>
 
-                    {data?.length > 0 ?
+                    {/* {data?.length > 0 ?
                         <Grid item xs={12} mt={2} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
 
                         <MDBox display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
@@ -355,9 +359,10 @@ const About = () => {
                         </Grid>
                         :
                         <>
-                        {/* <img src={NoData} width='500px' height='500px' /> */}
                         </>
-                    }
+                    } */}
+
+                    <MandirNearMe />
 
                 </Grid>
                 </Grid>
