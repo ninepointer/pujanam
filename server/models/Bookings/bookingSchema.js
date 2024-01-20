@@ -91,7 +91,7 @@ const Booking = new mongoose.Schema({
     specific_product_id: {
         type: Schema.Types.ObjectId,
     },
-    paymentDetails: {
+    payment_details: {
         type: Schema.Types.ObjectId,
         ref: 'payment'
     },

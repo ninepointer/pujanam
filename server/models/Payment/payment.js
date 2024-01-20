@@ -23,6 +23,7 @@ const Payment = new mongoose.Schema({
     external_transaction_id: {
         type: String,
     },
+    transaction_document:String,
     created_on: {
         type: Date,
         default: function() {
