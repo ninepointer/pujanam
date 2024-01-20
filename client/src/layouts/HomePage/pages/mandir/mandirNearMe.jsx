@@ -15,7 +15,7 @@ const About = () => {
     const [page, setPage] = useState(1);
     const [count, setCount] = useState(2);
     const [loading, setLoading] = useState(false);
-    const limit = 8;
+    const limit = 12;
 
     useEffect(()=>{
       axios.get(`${apiUrl}mandir/user/allhome?lat=${lat}&long=${long}&page=${page}&limit=${limit}`)
