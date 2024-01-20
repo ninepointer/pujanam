@@ -15,6 +15,8 @@ const upload = multer({
 router.post('/', Authenticate, restrictTo('Admin', 'SuperAdmin'), upload.single("photo"), panditController.resizePhoto, panditController.createPandit);
 router.get('/', Authenticate, restrictTo('Admin', 'SuperAdmin'), panditController.getAllPandits);
 router.get('/active', Authenticate, restrictTo('Admin', 'SuperAdmin'), panditController.getActivePandits);
+router.get('/nearest', Authenticate, restrictTo('Admin', 'SuperAdmin'), panditController.getNearestPandit);
+
 router.get('/:id', Authenticate, restrictTo('Admin', 'SuperAdmin'), panditController.getPanditById);
 router.patch('/:id', Authenticate, restrictTo('Admin', 'SuperAdmin'), upload.single("photo"), panditController.resizePhoto, panditController.editPandit);
 router.patch('/additionalinfo/:id', Authenticate, restrictTo('Admin', 'SuperAdmin'), panditController.additionalInformationPandit);

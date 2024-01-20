@@ -48,7 +48,14 @@ exports.booking = async (req, res) => {
     try {
         const {
             latitude, longitude, address, pincode, city, state, country,
-            full_name, mobile, booking_amount, poojaId, tierId, booking_date
+            full_name, mobile, booking_amount, poojaId, tierId, booking_date,
+            tag,
+            landmark,
+            locality,
+            house_or_flat_no,
+            floor,
+            contact_name,
+            contact_number,
         } = req.body;
 
         const address_details = {
@@ -60,18 +67,24 @@ exports.booking = async (req, res) => {
             pincode: pincode,
             city: city,
             state: state,
-            country: country
+            country: country,
+            tag,
+            landmark,
+            locality,
+            house_or_flat_no,
+            floor,
+            contact_name,
+            contact_number,
         }
 
         const payment = await Payment.create([{
-            //todo-vijay
             transaction_id: generateUniqueTransactionId(), payment_status: "UnPaid", payment_mode: "PAP", created_by: req.user._id
         }], { session });
 
         const createBooking = await Booking.create([{
             user_id: req.user._id, booking_date, transaction_date: new Date(), address_details, full_name, mobile,
             booking_amount, product_id: "659e81ea30fa1324fb3d2681", sub_product_id: poojaId, tier: tierId,
-            status: "Success", created_by: req.user._id, paymentDetails: payment._id
+            created_by: req.user._id, paymentDetails: payment._id
         }], { session });
 
         const user = await User.findOneAndUpdate({_id: new ObjectId(userId)}, {
@@ -83,7 +96,7 @@ exports.booking = async (req, res) => {
         await session.commitTransaction();
         session.endSession();
 
-        ApiResponse.success(res, createBooking, 'Booked successfully!');
+        ApiResponse.success(res, createBooking);
     } catch (error) {
         await session.abortTransaction();
         session.endSession();

@@ -252,3 +252,45 @@ exports.deleteInfo = async (req, res) => {
         ApiResponse.error(res,'Something went wrong', 500, error.message);
     }
 };
+
+exports.getNearestPandit = async (req, res) => {
+    const {lat, long} = req.query;
+  
+    try {
+        const pandit = await Pandit.aggregate([
+            {
+              $geoNear: {
+                near: {
+                  type: "Point",
+                  coordinates: [Number(lat), Number(long)],
+                },
+                distanceField: "distance",
+                spherical: true,
+                key: "address_details.location",
+              },
+            },
+            {
+                $match: {
+                    status: "Active",
+                }
+            },
+            {
+              $project: {
+                created_on: 0,
+                last_modified_by: 0,
+                created_by: 0,
+                last_modified_on: 0,
+                status: 0
+              },
+            },
+            {
+              $sort: {
+                distance: 1,
+              },
+            }
+          ])
+        ApiResponse.success(res, pandit);
+    } catch (error) {
+        ApiResponse.error(res, 'Something went wrong', 500, error.message);
+    }
+  };
