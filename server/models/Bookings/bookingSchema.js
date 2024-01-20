@@ -14,6 +14,9 @@ const Booking = new mongoose.Schema({
         type: Date,
         required: true,
     },
+    reject_message: {
+        type: String,
+    },
     address_details: {
         location: {
             type: {
@@ -30,6 +33,27 @@ const Booking = new mongoose.Schema({
         address: {
             type: String,
             // required: true,
+        },
+        house_or_flat_no: {
+            type: String,
+            // required: true,
+        },
+        floor: {
+            type: String,
+            // required: true,
+        },
+        locality: {
+            type: String,
+            // required: true,
+        },
+        landmark: {
+            type: String,
+            // required: true,
+        },
+        tag: {
+            type: String,
+            required: true,
+            default: "Home"
         },
         pincode: {
             type: String,
@@ -85,8 +109,8 @@ const Booking = new mongoose.Schema({
     },
     status: {
         type: String,
-        enum: ['Success', 'Failed'],
-        default: 'Success',
+        enum: ['Pending', 'Approved', 'Confirmed', 'Completed', 'Rejected'],
+        default: 'Pending',
         required: true
     },
     created_on: {

@@ -32,6 +32,35 @@ const userSchema = new mongoose.Schema({
                 type: String,
                 // required: true,
             },
+            house_or_flat_no: {
+                type: String,
+                // required: true,
+            },
+            floor: {
+                type: String,
+                // required: true,
+            },
+            locality: {
+                type: String,
+                // required: true,
+            },
+            landmark: {
+                type: String,
+                // required: true,
+            },
+            tag: {
+                type: String,
+                required: true,
+                default: "Home"
+            },
+            contact_name: {
+                type: String,
+                // required: true,
+            },
+            contact_number: {
+                type: String,
+                // required: true,
+            },
             pincode: {
                 type: String,
                 // required: true,

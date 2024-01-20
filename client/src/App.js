@@ -43,7 +43,7 @@ import Cookies from 'js-cookie';
 import homeRoutes from "./homeRoute";
 import SignUp from './layouts/authentication/sign-up'
 import About from "../src/layouts/HomePage/pages/About";
-import Mandir from "../src/layouts/HomePage/pages/Mandir";
+import Mandir from "../src/layouts/HomePage/pages/mandir/Mandir";
 import ResetPassword from './layouts/authentication/reset-password/cover';
 import { adminRole } from "./variables";
 import { userRole } from "./variables";
@@ -53,7 +53,7 @@ import Privacy from "./layouts/HomePage/pages/Privacy";
 import Terms from "./layouts/HomePage/pages/Tnc";
 import ProtectedRoute from "./ProtectedRoute";
 import AdminLogin from "./layouts/authentication/sign-in/adminLogin";
-import MandirData from "./layouts/HomePage/pages/MandirData";
+import MandirData from "./layouts/HomePage/pages/mandir/MandirData";
 
 const TRACKING_ID = "G-N2HM9R3W60"
 ReactGA.initialize(TRACKING_ID);

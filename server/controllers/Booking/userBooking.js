@@ -8,6 +8,11 @@ exports.getAllBooking = async (req, res) => {
         const booking = await Booking.find({user_id: new ObjectId(userId)})
         .populate('paymentDetails', 'transaction_id payment_status payment_mode')
         .populate('pandits', 'pandit_name experience_in_year')
+        .populate({ 
+            path: 'specific_product_id', 
+            model: 'pooja', 
+            select: 'name'
+        })
         .populate('tier', 'tier_name pooja_items_included post_pooja_cleanUp_included min_pandit_experience max_pandit_experience number_of_main_pandit number_of_assistant_pandit')
         .select('-last_modified_by -created_by -created_on -last_modified_on -__v -status');
         ApiResponse.success(res, booking);
@@ -22,6 +27,11 @@ exports.getBookingById = async (req, res) => {
         const booking = await Booking.findOne({_id: new ObjectId(id)})
         .populate('paymentDetails', 'transaction_id payment_status payment_mode')
         .populate('pandits', 'pandit_name experience_in_year')
+        .populate({ 
+            path: 'specific_product_id', 
+            model: 'pooja', 
+            select: 'name'
+        })
         .populate('tier', 'tier_name pooja_items_included post_pooja_cleanUp_included min_pandit_experience max_pandit_experience number_of_main_pandit number_of_assistant_pandit')
         .select('-created_by -created_on -last_modified_on -last_modified_by -__v -status');
         ApiResponse.success(res, booking);

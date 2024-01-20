@@ -14,6 +14,9 @@ router.get('/dham', Authenticate,  mandirController.getDham);
 router.get('/popular', Authenticate,  mandirController.getPopular);
 router.get('/newdham', Authenticate,  mandirController.getNewDham);
 router.get('/newpopular', Authenticate,  mandirController.getNewPopular);
+router.get('/trending', Authenticate,  mandirController.getTrendingMandir);
+router.get('/myfavourite', Authenticate,  mandirController.getFavouriteMandir);
+router.get('/opennow', Authenticate,  mandirController.getOpenMandirs);
 
 router.get('/bydistance',  mandirController.getByDistance);
 router.get('/bydevta',  mandirController.getBydevta);
