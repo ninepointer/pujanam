@@ -4,10 +4,11 @@ import MDButton from '../../../components/MDButton'
 import MDTypography from '../../../components/MDTypography';
 import axios from 'axios';
 import { apiUrl } from '../../../constants/constants';
-// import ApproveModal from './approveModal';
+import ApproveModal from './approveModal';
 import RejectModal from './rejectModal';
 import MDSnackbar from '../../../components/MDSnackbar';
 import moment from 'moment';
+import ConfirmModel from "./completeModel"
 
 const KYCCard = ({ data, action, setAction }) => {
   const [open, setOpen] = useState(false);
@@ -71,7 +72,7 @@ const KYCCard = ({ data, action, setAction }) => {
 
   const approve = async () => {
     try {
-      const res = await axios.patch(`${apiUrl}KYC/approve/${data?._id}`, {},
+      const res = await axios.patch(`${apiUrl}booking/approve/${data?._id}`, {},
         { withCredentials: true });
       if (res.data.status == 'success') {
         openSuccessSB('Success', res.data.message);
@@ -116,14 +117,19 @@ const KYCCard = ({ data, action, setAction }) => {
         <MDTypography style={{ fontSize: '14px', marginBottom: '12px' }}>Booking Status:{data?.status}</MDTypography>
         <MDTypography style={{ fontSize: '14px', marginBottom: '12px' }}>Payment Status:{data?.paymentDetails?.payment_status}</MDTypography>
         <MDTypography style={{ fontSize: '14px', marginBottom: '12px' }} >Transaction Date: {data?.transaction_date ? moment.utc(data?.transaction_date).utcOffset('+05:30').format('DD-MMM-YYYY') : "N/A"}</MDTypography>
-
-
       </MDBox>
+
       {(data?.status == 'Pending') && <MDBox>
         <MDButton onClick={approve} color='success' sx={{ marginRight: '6px' }}>Approve</MDButton>
         <MDButton onClick={() => { setOpenReject(true) }} sx={{ marginRight: '6px' }} color='error'>Reject</MDButton>
       </MDBox>}
-      {/* {open && <ApproveModal open={open} handleClose={handleClose} data={data} amount={amount} action={action} setAction={setAction} withdrawalRequestDate={localRequestTime} withdrawalId={withdrawalId} />}  */}
+      {data?.status == 'Approved' && <MDBox>
+      <ApproveModal data={data} action={action} setAction={setAction} />
+      </MDBox>}
+
+      {data?.status == 'Confirmed' && <MDBox>
+      <ConfirmModel data={data} action={action} setAction={setAction} />
+      </MDBox>}
       {openReject && <RejectModal open={openReject} handleClose={handleCloseReject} data={data} action={action} setAction={setAction} />}
       {renderSuccessSB}
       {renderErrorSB}
@@ -131,4 +137,16 @@ const KYCCard = ({ data, action, setAction }) => {
   )
 }
 
-export default KYCCard
+export default KYCCard;
+
+
+// store --> delivery open time, delivery close time
+
+// category--> collection
+// status, name, descri, image(512 x 512)
+
+// item --> collection
+// name, minimum order quantity (multiples of moq), units, price, featured, sponsered, image(512 x 512), categoryId, description
+
+// user.cart
+// itemId, quantity, status

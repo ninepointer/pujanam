@@ -30,6 +30,10 @@ import MandirNearMe from "./mandirNearMe";
 function TabPanel1(props) {
   const { children, value, index, ...other } = props;
 
+  useEffect(()=>{
+    ReactGA.pageview(window.location.pathname)
+  })
+
   return (
     <div
       role="tabpanel"
@@ -175,178 +179,92 @@ const About = () => {
 
           </Grid>
 
-          <Grid container mt={15} mb={2} display='flex' justifyContent='flex-start' alignContent='center' alignItems='center' xs={12} md={12} lg={12} style={{ maxWidth: '95%', height: 'auto', flexGrow: 1, overflowY: 'auto', zIndex:3, overflow: 'visible' }}>
-          <AppBar position="static" style={{borderBottom:'0.5px solid white',backgroundColor:"rgba(0, 0, 0, 0)", color:"red", display:'flex', maxWidth: '100%'}}>
-            <Tabs
-              value={value}
-              onChange={handleChange}
-              indicatorColor="secondary"
-              textColor="inherit"
-              variant="fullWidth"
-              aria-label="full width tabs example"
-              style={{backgroundColor:"rgba(0, 0, 0, 0)", color:"red", maxWidth:'60%'}}
+          <Grid container mt={15} mb={2} display='flex' justifyContent='center' alignContent='center' alignItems='center' xs={12} md={12} lg={12} style={{ maxWidth: '95%', height: 'auto', flexGrow: 1, overflowY: 'auto', zIndex:3, overflow: 'visible' }}>
+          {/* <Grid item display='flex' justifyContent='center' alignContent='center' alignItems='center' xs={12} md={12} lg={12}> */}
+            <AppBar position="static" style={{borderBottom:'0.5px solid white',backgroundColor:"rgba(0, 0, 0, 0)", color:"red", display:'flex', justifyContent:'center', maxWidth: '100%'}}>
+              <Tabs
+                value={value}
+                onChange={handleChange}
+                indicatorColor="secondary"
+                textColor="inherit"
+                variant="fullWidth"
+                aria-label="full width tabs example"
+                style={{backgroundColor:"rgba(0, 0, 0, 0)", color:"red", display:'flex', justifyContent:'center', maxWidth:'60%'}}
+              >
+                <Tab 
+                  // label="About 4 Dham" 
+                  disableRipple="true" {...a11yProps(0)} 
+                  label={
+                    <Grid container xs={12} md={12} lg={12} display='flex' justifyContent='center' alignItems='center' alignContent='center'>
+                      <Grid xs={12} md={12} lg={12} item display='flex' justifyContent='center' alignItems='center' alignContent='center'>
+                        <MDAvatar size='md' src={dhamicon} color='success'/>
+                      </Grid>
+                      <Grid xs={12} md={12} lg={12} item display='flex' justifyContent='center' alignItems='center' alignContent='center'>
+                        About 4 Dham
+                      </Grid>   
+                    </Grid>
+                  }
+                />
+                <Tab 
+                  // label="Popular Mandir near me" 
+                  disableRipple="true" 
+                  {...a11yProps(1)}
+                  label={
+                    <Grid container xs={12} md={12} lg={12} display='flex' justifyContent='center' alignItems='center' alignContent='center'>
+                      <Grid xs={12} md={12} lg={12} item display='flex' justifyContent='center' alignItems='center' alignContent='center'>
+                        <MDAvatar size='md' src={popularnearmeicon} color='success'/>
+                      </Grid>
+                      <Grid xs={12} md={12} lg={12} item display='flex' justifyContent='center' alignItems='center' alignContent='center'>
+                        Popular Mandir near me
+                      </Grid>   
+                    </Grid>
+                  }
+                  />
+                <Tab 
+                  // label="Mandir near me" 
+                  disableRipple="true" 
+                  {...a11yProps(2)} 
+                  label={
+                    <Grid container xs={12} md={12} lg={12} display='flex' justifyContent='center' alignItems='center' alignContent='center'>
+                      <Grid xs={12} md={12} lg={12} item display='flex' justifyContent='center' alignItems='center' alignContent='center'>
+                        <MDAvatar size='md' src={nearmeicon} color='success'/>
+                      </Grid>
+                      <Grid xs={12} md={12} lg={12} item display='flex' justifyContent='center' alignItems='center' alignContent='center'>
+                        Mandir near me
+                      </Grid>   
+                    </Grid>
+                  }
+                  />
+              </Tabs>
+            </AppBar>
+            <SwipeableViews
+              // axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
+              index={value}
+              onChangeIndex={handleChangeIndex}
+              style={{display:'flex', justifyContent:'center'}}
             >
-              <Tab 
-                // label="About 4 Dham" 
-                disableRipple="true" {...a11yProps(0)} 
-                label={
-                  <Grid container xs={12} md={12} lg={12} display='flex' justifyContent='center' alignItems='center' alignContent='center'>
-                    <Grid xs={12} md={12} lg={12} item display='flex' justifyContent='center' alignItems='center' alignContent='center'>
-                      <MDAvatar size='md' src={dhamicon} color='success'/>
-                    </Grid>
-                    <Grid xs={12} md={12} lg={12} item display='flex' justifyContent='center' alignItems='center' alignContent='center'>
-                      About 4 Dham
-                    </Grid>   
-                  </Grid>
-                }
-              />
-              <Tab 
-                // label="Popular Mandir near me" 
-                disableRipple="true" 
-                {...a11yProps(1)}
-                label={
-                  <Grid container xs={12} md={12} lg={12} display='flex' justifyContent='center' alignItems='center' alignContent='center'>
-                    <Grid xs={12} md={12} lg={12} item display='flex' justifyContent='center' alignItems='center' alignContent='center'>
-                      <MDAvatar size='md' src={popularnearmeicon} color='success'/>
-                    </Grid>
-                    <Grid xs={12} md={12} lg={12} item display='flex' justifyContent='center' alignItems='center' alignContent='center'>
-                      Popular Mandir near me
-                    </Grid>   
-                  </Grid>
-                }
-                />
-              <Tab 
-                // label="Mandir near me" 
-                disableRipple="true" 
-                {...a11yProps(2)} 
-                label={
-                  <Grid container xs={12} md={12} lg={12} display='flex' justifyContent='center' alignItems='center' alignContent='center'>
-                    <Grid xs={12} md={12} lg={12} item display='flex' justifyContent='center' alignItems='center' alignContent='center'>
-                      <MDAvatar size='md' src={nearmeicon} color='success'/>
-                    </Grid>
-                    <Grid xs={12} md={12} lg={12} item display='flex' justifyContent='center' alignItems='center' alignContent='center'>
-                      Mandir near me
-                    </Grid>   
-                  </Grid>
-                }
-                />
-            </Tabs>
-          </AppBar>
-          <SwipeableViews
-            axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
-            index={value}
-            onChangeIndex={handleChangeIndex}
-          >
-            {!isLoading ? 
-            <TabPanel1 value={value} index={0} dir={theme.direction}>
-                <Grid item mt={2} mb={1} xs={12} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ width: '100%', height: 'auto' }}>
-                <Grid container xs={12} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
-                    <Grid ml={2} item xs={12} md={12} lg={12} display='flex' justifyContent='flex-start' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
-                      <MDBox display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
-                        <MDTypography variant="h4" color="dark">All about 4 dham mandir!</MDTypography>
-                      </MDBox>
-                    </Grid>
+              {!isLoading ? 
+              <TabPanel1 value={value} index={0} dir={theme.direction} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ width: '100%', height: 'auto' }}>
+                  <Grid item mt={2} mb={1} xs={12} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ width: '100%', height: 'auto' }}>
+                  <Grid container xs={12} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
+                      <Grid ml={2} item xs={12} md={12} lg={12} display='flex' justifyContent='flex-start' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
+                        <MDBox display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
+                          <MDTypography variant="h4" color="dark">All about 4 dham mandir!</MDTypography>
+                        </MDBox>
+                      </Grid>
 
-                    <Grid mt={1} ml={2} item xs={12} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{backgroundColor:'white', borderRadius:10 ,maxWidth: '100%', height: 'auto' }}>
-                      <MDBox p={2} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
-                        <MDTypography variant="body2" color="dark">Char Dham are the four places in India with high pilgrimage importance. These four places are namely Rameshwaram, Jaganath-Puri, Badrinath-Kedarnath and Dwarka. Adi Shankaracharya defined the term Char Dham as the three Vaishnavite, than one Shaivite and the last a state of mixed ones. It is some of the most holy places that a Hindu should visit, at least once in a lifetime. The origin of these four temples here is still not well known and has remained to be a mysterious fact. Shankaracharya is said to have established the Advaita school of Hinduism, which was also accountable for the origin of the Char Dham. The four Hindu temples are lying across the four corners of India. The Badrinath temple is in the north, followed by the east temple of Jaganath Puri, the Dwarkadhish Temple located at Dwarka in the west, and Rameswaram in the south, the Ramanathaswamy Temple.</MDTypography>
-                      </MDBox>
-                    </Grid>
+                      <Grid mt={1} item xs={12} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{backgroundColor:'white', borderRadius:10 ,maxWidth: '100%', height: 'auto' }}>
+                        <MDBox p={2} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
+                          <MDTypography variant="body2" color="dark">Char Dham are the four places in India with high pilgrimage importance. These four places are namely Rameshwaram, Jaganath-Puri, Badrinath-Kedarnath and Dwarka. Adi Shankaracharya defined the term Char Dham as the three Vaishnavite, than one Shaivite and the last a state of mixed ones. It is some of the most holy places that a Hindu should visit, at least once in a lifetime. The origin of these four temples here is still not well known and has remained to be a mysterious fact. Shankaracharya is said to have established the Advaita school of Hinduism, which was also accountable for the origin of the Char Dham. The four Hindu temples are lying across the four corners of India. The Badrinath temple is in the north, followed by the east temple of Jaganath Puri, the Dwarkadhish Temple located at Dwarka in the west, and Rameswaram in the south, the Ramanathaswamy Temple.</MDTypography>
+                        </MDBox>
+                      </Grid>
 
-                    {dham?.length > 0 ?
-                        <Grid item xs={12} mt={2} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
-
-                          <MDBox display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
-                              <Grid container spacing={4} xs={12} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ width: '100%', height: 'auto' }}>
-                              {dham?.map((elem) => {
-                                  return (
-                                  <Grid key={elem?._id} item xs={12} md={4} lg={3} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ width: '100%', height: 'auto' }}>
-                                      <MandirCard elem={elem}/>
-                                  </Grid>
-                                  )
-                              })}
-                              </Grid>
-                          </MDBox>
-
-                        </Grid>
-                        :
-                        <>
-                        {/* <img src={NoData} width='500px' height='500px' /> */}
-                        </>
-                    }
-
-                </Grid>
-                </Grid>
-            </TabPanel1>
-            :
-            <TabPanel1 value={value} index={0} dir={theme.direction}>
-            <MDBox display='flex' justifyContent='center' alignContent='center' alignItems='center'>
-              <MDTypography></MDTypography>
-            </MDBox>
-            </TabPanel1>
-            }
-            <TabPanel1 value={value} index={1} dir={theme.direction}>
-                <Grid item mt={2} mb={1} xs={12} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ width: '100%' }}>
-                <Grid container xs={12} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
-                    <Grid ml={2} item xs={12} md={12} lg={12} display='flex' justifyContent='flex-start' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
-                      <MDBox display='flex' justifyContent='center' alignContent='flext-start' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
-                        <MDTypography variant="h4" color="dark">Popular Mandir near you!</MDTypography>
-                      </MDBox>
-                    </Grid>
-
-                    <Grid mt={1} ml={2} item xs={12} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{backgroundColor:'white', borderRadius:10 ,maxWidth: '100%', height: 'auto' }}>
-                      <MDBox p={2} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
-                        <MDTypography variant="body2" color="dark">Embark on a journey to discover the tranquility of a sacred and popular mandir right in your vicinity. Immerse yourself in the divine atmosphere, where beautiful architecture meets spiritual energy. Whether you're seeking moments of reflection or eager to partake in religious ceremonies, our mandir provides a haven for all. Join us in experiencing the cultural richness and spiritual bliss that this sacred place offers. Find solace and connection in the heart of your city.</MDTypography>
-                      </MDBox>
-                    </Grid>
-
-                    {/* {popular?.length > 0 ?
-                    <Grid item xs={12} mt={2} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
-
-                    <MDBox display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
-                        <Grid container spacing={4} xs={12} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ width: '100%', height: 'auto' }}>
-                        {popular?.map((elem) => {
-                            return (
-                            <Grid key={elem?._id} item xs={12} md={4} lg={3} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ width: '100%', height: 'auto' }}>
-                                <MandirCard elem={elem}/>
-                            </Grid>
-                            )
-                        })}
-                        </Grid>
-                    </MDBox>
-
-                    </Grid>
-                    :
-                    <>
-                    </>
-                    } */}
-
-                    <PopularMandir />
-
-                </Grid>
-                </Grid>
-            </TabPanel1>
-            <TabPanel1 value={value} index={2} dir={theme.direction}>
-                <Grid item mt={2} mb={1} xs={12} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ width: '100%' }}>
-                <Grid container xs={12} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
-                    <Grid ml={2} item xs={12} md={12} lg={12} display='flex' justifyContent='flex-start' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
-                      <MDBox display='flex' justifyContent='center' alignContent='flext-start' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
-                        <MDTypography variant="h4" color="dark">All Mandir near you!</MDTypography>
-                      </MDBox>
-                    </Grid>
-
-                    <Grid mt={1} ml={2} item xs={12} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{backgroundColor:'white', borderRadius:10 ,maxWidth: '100%', height: 'auto' }}>
-                      <MDBox p={2} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
-                        <MDTypography variant="body2" color="dark">Explore the spiritual tapestry of your local community as you discover the abundance of mandirs nestled near you. Each mandir carries a unique essence, from serene sanctuaries to vibrant centers of cultural richness. Immerse yourself in the diverse architectural wonders and feel the spiritual energy that radiates from these sacred places. Whether you're seeking moments of reflection or wish to participate in religious ceremonies, the array of mandirs near you provides a haven for all. Join us in connecting with the cultural and spiritual heritage that these sacred spaces offer. Find solace and forge meaningful connections right here in your city.</MDTypography>
-                      </MDBox>
-                    </Grid>
-
-                    {/* {data?.length > 0 ?
-                        <Grid item xs={12} mt={2} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
+                      {dham?.length > 0 ?
+                      <Grid item xs={12} mt={2} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
 
                         <MDBox display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
                             <Grid container spacing={4} xs={12} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ width: '100%', height: 'auto' }}>
-                            {data?.map((elem) => {
+                            {dham?.map((elem) => {
                                 return (
                                 <Grid key={elem?._id} item xs={12} md={4} lg={3} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ width: '100%', height: 'auto' }}>
                                     <MandirCard elem={elem}/>
@@ -356,19 +274,106 @@ const About = () => {
                             </Grid>
                         </MDBox>
 
-                        </Grid>
-                        :
-                        <>
-                        </>
-                    } */}
+                      </Grid>
+                      :
+                      <>
+                      {/* <img src={NoData} width='500px' height='500px' /> */}
+                      </>
+                      }
 
-                    <MandirNearMe />
+                  </Grid>
+                  </Grid>
+              </TabPanel1>
+              :
+              <TabPanel1 value={value} index={0} dir={theme.direction}>
+              <MDBox display='flex' justifyContent='center' alignContent='center' alignItems='center'>
+                <MDTypography></MDTypography>
+              </MDBox>
+              </TabPanel1>
+              }
+              <TabPanel1 value={value} index={1} dir={theme.direction}>
+                  <Grid item mt={2} mb={1} xs={12} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ width: '100%' }}>
+                  <Grid container xs={12} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
+                      <Grid ml={2} item xs={12} md={12} lg={12} display='flex' justifyContent='flex-start' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
+                        <MDBox display='flex' justifyContent='center' alignContent='flext-start' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
+                          <MDTypography variant="h4" color="dark">Popular Mandir near you!</MDTypography>
+                        </MDBox>
+                      </Grid>
 
-                </Grid>
-                </Grid>
-            </TabPanel1>
-          </SwipeableViews>
-              </Grid>
+                      <Grid mt={1} item xs={12} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{backgroundColor:'white', borderRadius:10 ,maxWidth: '100%', height: 'auto' }}>
+                        <MDBox p={2} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
+                          <MDTypography variant="body2" color="dark">Embark on a journey to discover the tranquility of a sacred and popular mandir right in your vicinity. Immerse yourself in the divine atmosphere, where beautiful architecture meets spiritual energy. Whether you're seeking moments of reflection or eager to partake in religious ceremonies, our mandir provides a haven for all. Join us in experiencing the cultural richness and spiritual bliss that this sacred place offers. Find solace and connection in the heart of your city.</MDTypography>
+                        </MDBox>
+                      </Grid>
+
+                      {popular?.length > 0 ?
+                      <Grid item xs={12} mt={2} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
+
+                      <MDBox display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
+                          <Grid container spacing={4} xs={12} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ width: '100%', height: 'auto' }}>
+                          {popular?.map((elem) => {
+                              return (
+                              <Grid key={elem?._id} item xs={12} md={4} lg={3} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ width: '100%', height: 'auto' }}>
+                                  <MandirCard elem={elem}/>
+                              </Grid>
+                              )
+                          })}
+                          </Grid>
+                      </MDBox>
+
+                      </Grid>
+                      :
+                      <>
+                      {/* <img src={NoData} width='500px' height='500px' /> */}
+                      </>
+                      }
+
+                  </Grid>
+                  </Grid>
+              </TabPanel1>
+              <TabPanel1 value={value} index={2} dir={theme.direction}>
+                  <Grid item mt={2} mb={1} xs={12} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ width: '100%' }}>
+                  <Grid container xs={12} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
+                      <Grid ml={1} item xs={12} md={12} lg={12} display='flex' justifyContent='flex-start' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
+                        <MDBox display='flex' justifyContent='center' alignContent='flext-start' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
+                          <MDTypography variant="h4" color="dark">All Mandir near you!</MDTypography>
+                        </MDBox>
+                      </Grid>
+
+                      <Grid mt={1} item xs={12} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{backgroundColor:'white', borderRadius:10 ,maxWidth: '100%', height: 'auto' }}>
+                        <MDBox p={2} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
+                          <MDTypography variant="body2" color="dark">Explore the spiritual tapestry of your local community as you discover the abundance of mandirs nestled near you. Each mandir carries a unique essence, from serene sanctuaries to vibrant centers of cultural richness. Immerse yourself in the diverse architectural wonders and feel the spiritual energy that radiates from these sacred places. Whether you're seeking moments of reflection or wish to participate in religious ceremonies, the array of mandirs near you provides a haven for all. Join us in connecting with the cultural and spiritual heritage that these sacred spaces offer. Find solace and forge meaningful connections right here in your city.</MDTypography>
+                        </MDBox>
+                      </Grid>
+
+                      {data?.length > 0 ?
+                      <Grid item xs={12} mt={2} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
+
+                      <MDBox display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
+                          <Grid container spacing={4} xs={12} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ width: '100%', height: 'auto' }}>
+                          {data?.map((elem) => {
+                              return (
+                              <Grid key={elem?._id} item xs={12} md={4} lg={3} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ width: '100%', height: 'auto' }}>
+                                  <MandirCard elem={elem}/>
+                              </Grid>
+                              )
+                          })}
+                          </Grid>
+                      </MDBox>
+
+                      </Grid>
+                      :
+                      <>
+                      {/* <img src={NoData} width='500px' height='500px' /> */}
+                      </>
+                      }
+
+                  </Grid>
+                  </Grid>
+              </TabPanel1>
+            </SwipeableViews>
+          {/* </Grid> */}
+          </Grid>
         </ThemeProvider>
       </MDBox>
 

@@ -96,29 +96,8 @@ function Index() {
       }
     }
   },[file])
-  
-  // const handleFileChange = (event) => {
-  //   // setFile(event.target.files);
-  //   setFile(prevFiles => [...prevFiles, ...event.target.files]);
-  //   let previewUrls = [];
-  //   const files = file.concat(event.target.files);
-  //   console.log("Files:",files)
-  //   for (const file of files) {
-  //     const reader = new FileReader();
-  //     reader.onload = () => {
-  //       // Add the preview URL to the array
-  //       previewUrls.push(reader.result);
-  
-  //       // If all files have been processed, update the state with the array of preview URLs
-  //       if (previewUrls.length === files.length) {
-  //         setImagesPreviewUrl(previewUrls);
-  //         // console.log("Title Preview URLs:", previewUrls);
-  //       }
-  //     };
-  //     reader.readAsDataURL(file);
-  //   }
-  // };
 
+  
   const handleFileChange = (event) => {
     setFile(prevFiles => [...prevFiles, ...event.target.files]);
   

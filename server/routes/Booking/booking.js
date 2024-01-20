@@ -14,6 +14,11 @@ router.get('/confirm', Authenticate, restrictTo('Admin', 'SuperAdmin'), bookingC
 router.get('/complete', Authenticate, restrictTo('Admin', 'SuperAdmin'), bookingController.getAllCompleted);
 router.get('/reject', Authenticate, restrictTo('Admin', 'SuperAdmin'), bookingController.getAllRejected);
 
+router.patch('/approve/:id', Authenticate, restrictTo('Admin', 'SuperAdmin'), bookingController.approveBooking);
+router.patch('/reject/:id', Authenticate, restrictTo('Admin', 'SuperAdmin'), bookingController.rejectBooking);
+router.patch('/confirm/:id', Authenticate, restrictTo('Admin', 'SuperAdmin'), bookingController.confirmBooking);
+router.patch('/complete/:id', Authenticate, restrictTo('Admin', 'SuperAdmin'), bookingController.completeBooking);
+
 module.exports=router;
 
 module.exports=router;

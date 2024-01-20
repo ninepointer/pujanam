@@ -1,28 +1,30 @@
 import React, {useState, useContext, useEffect} from "react"
-import { useMediaQuery } from '@mui/material'
-import theme from '../../HomePage/utils/theme/index'; 
-import { ThemeProvider } from 'styled-components';
 import background from '../../../assets/images/mandirs.jpg'
+import { useNavigate } from "react-router-dom"; 
 // @mui material components
 import Grid from "@mui/material/Grid";
+
 
 // Material Dashboard 2 React components
 import MDBox from "../../../components/MDBox";
 import MDTypography from "../../../components/MDTypography";
 import MDButton from "../../../components/MDButton";
 import Card from '@mui/material/Card';
-// import CardActions from '@mui/material/CardActions';
 import { CardActionArea, Divider } from '@mui/material';
 import CardContent from '@mui/material/CardContent';
 import {settingContext} from '../../../settingContext';
+import ReactGA from 'react-ga'
 
 function HomeCard() {
     const setting = useContext(settingContext)
-
+    const navigate = useNavigate();
     const handlePlaystoreNavigate = () => {
-        // Open google.com in a new tab
-        window.open(`${setting.playstore_link}`, '_blank');
+        navigate(`/mandir`)
       };
+    
+    useEffect(()=>{
+    ReactGA.pageview(window.location.pathname)
+    })
 
     return(
         <Grid item xs={12} md={4} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
@@ -35,7 +37,7 @@ function HomeCard() {
                     transform: 'scale(1.10)',
                     boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)', // Adjust the box shadow as needed
                     }
-                }} onClick={() => {}}>
+                }} onClick={() => {handlePlaystoreNavigate()}}>
 
             <CardActionArea>
                 <Grid item xs={12} md={4} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
@@ -53,10 +55,12 @@ function HomeCard() {
                             Discover the City's Spiritual Gems: Explore the mandir nearby
                         </MDTypography>
                     </MDBox>
-                    <MDBox mb={-2} display='flex' justifyContent='flex-end' alignContent='center' alignItems='center' style={{ width: '100%'}}>
-                        <MDButton size='small' variant='contained' style={{fontFamily:'Itim'}}
-                        onClick={handlePlaystoreNavigate}
-                        >Discover Now</MDButton>
+                    <MDBox mt={0.5} mb={-1} display='flex' justifyContent='flex-start' alignContent='center' alignItems='center' style={{ width: '100%'}}>
+                        <Grid container xs={12} md={12} lg={12} display='flex' justifyContent='space-between' alignContent='center' alignItems='center' style={{ minWidth: '100%'}}>
+                            <Grid item xs={12} md={12} lg={12} display='flex' justifyContent='flex-end' alignContent='center' alignItems='center'>
+                                <MDTypography variant='caption' color='success'>Discover Now</MDTypography>
+                            </Grid>
+                        </Grid>
                     </MDBox>
                 </CardContent>
                 </Grid>

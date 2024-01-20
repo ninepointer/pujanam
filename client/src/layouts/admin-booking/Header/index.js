@@ -103,8 +103,8 @@ function WithdrawalHeader({ children }) {
             <TabPanel value={tabValue} index={0}><Pending/></TabPanel>
             <TabPanel value={tabValue} index={1}><Approve/></TabPanel>
             <TabPanel value={tabValue} index={2}><Confirmed/></TabPanel>
-            <TabPanel value={tabValue} index={2}><Completed/></TabPanel>
-            <TabPanel value={tabValue} index={2}><Rejected/></TabPanel>
+            <TabPanel value={tabValue} index={3}><Completed/></TabPanel>
+            <TabPanel value={tabValue} index={4}><Rejected/></TabPanel>
           </Grid>
         </Grid>
         </Card>     

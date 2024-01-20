@@ -1,5 +1,5 @@
 import { AppBar, Box, Container, IconButton, List, ListItemButton, ListItemText, Stack, Typography, useMediaQuery } from '@mui/material'
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 
 import useScrollPosition from '../../hooks/useScrollPosition'
 
@@ -16,6 +16,7 @@ import { MdOutlineTempleHindu } from "react-icons/md";
 import { LiaPrayingHandsSolid } from "react-icons/lia";
 import { GrBlog } from "react-icons/gr";
 import { CgOrganisation } from "react-icons/cg";
+import {settingContext} from './../../../../settingContext';
 
 const NAVBAR_HIEGHT = 80;
 const LinkButton = ({ children, ...props }) => (
@@ -46,6 +47,13 @@ const Navbar = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down("lg"))
 
   const[open,setOpen] = useState(false);
+
+  const setting = useContext(settingContext)
+
+  const handlePlaystoreNavigate = () => {
+      // Open google.com in a new tab
+      window.open(`${setting.playstore_link}`, '_blank');
+  };
 
   const Handle = (e)=>{
     if(isMobile){
@@ -87,33 +95,33 @@ const Navbar = () => {
             </LinkButton>
             </a>
 
-            <a href="/workshops">
+            <a onClick={() => (handlePlaystoreNavigate())}>
             <LinkButton>
               <LiaPrayingHandsSolid fontSize="small" />
               <Typography fontWeight="bold" variant="body2" style={{fontFamily:'Itim'}}>Pooja</Typography>
             </LinkButton>
             </a>
 
-            <a href="/workshops">
+            <a onClick={() => (handlePlaystoreNavigate())}>
             <LinkButton>
               <LiaPrayingHandsSolid fontSize="small" />
               <Typography fontWeight="bold" variant="body2" style={{fontFamily:'Itim'}}>Store</Typography>
             </LinkButton>
             </a>
 
-            <a href="/blogs">
+            {/* <a href="/blogs">
             <LinkButton>
               <GrBlog fontSize="small" />
               <Typography fontWeight="bold" variant="body2" style={{fontFamily:'Itim'}}>Blogs</Typography>
             </LinkButton>
-            </a>
+            </a> */}
 
-            <a href="/about">
+            {/* <a href="/about">
             <LinkButton spacing={0.5}>
               <CgOrganisation fontSize="small" />
               <Typography fontWeight="bold" variant="body2" style={{fontFamily:'Itim'}}>About Us</Typography>
             </LinkButton>
-            </a>
+            </a> */}
 
           </Stack>)}
 
@@ -146,14 +154,14 @@ const Navbar = () => {
             </LinkButton>
             </a>
 
-            <a href="/workshops">
+            <a onClick={() => (handlePlaystoreNavigate())}>
             <LinkButton>
               <MDTypography variant="body2" style={{fontFamily:'Itim', color: "#9c4722"}}>Pooja</MDTypography>
               
             </LinkButton>
             </a>
 
-            <a href="/workshops">
+            <a onClick={() => (handlePlaystoreNavigate())}>
             <LinkButton>
               <MDTypography variant="body2" style={{fontFamily:'Itim', color: "#9c4722"}}>Store</MDTypography>
               
@@ -161,25 +169,25 @@ const Navbar = () => {
             </a>
 
 
-            <a href="/blogs">
+            {/* <a href="/blogs">
             <LinkButton>
               <MDTypography variant="body2" style={{fontFamily:'Itim', color: "#9c4722"}}>Blogs</MDTypography>
               
             </LinkButton>
-            </a>
+            </a> */}
 
-            <a href="/about">
+            {/* <a href="/about">
             <LinkButton spacing={0.5}>
               <MDTypography variant="body2" style={{fontFamily:'Itim', color: "#9c4722"}}>About us</MDTypography>
             </LinkButton>
-            </a>
+            </a> */}
 
-            <a href="/about">
+            {/* <a href="/about">
             <LinkButton spacing={0.5}>
               <Language fontSize="small" />
               <MDTypography variant="body2" style={{fontFamily:'Itim', color: "#9c4722"}}>Hindi</MDTypography>
             </LinkButton>
-            </a>
+            </a> */}
 
             </Stack>
           )}
@@ -198,7 +206,7 @@ const Navbar = () => {
               <Typography variant="body2" style={{fontFamily:'Itim',}}>Hindi</Typography>
             </LinkButton>
 
-            <a href="https://play.google.com/store/apps/details?id=com.stoxhero.app" target='_blank'>
+            <a onClick={() => (handlePlaystoreNavigate())} target='_blank'>
               <LaunchButton sx={{ borderRadius: 3, color: 'light' }} />
             </a>
           </Stack>)

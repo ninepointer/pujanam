@@ -18,7 +18,7 @@ import MDSnackbar from '../../../components/MDSnackbar';
 import { userContext } from "../../../AuthContext";
 
 
-const RejectModal = ( {open, handleClose, user, action, setAction}) => {
+const RejectModal = ( {open, handleClose, data, action, setAction}) => {
     const style = {
       position: 'absolute',
       top: '50%',
@@ -85,11 +85,11 @@ const RejectModal = ( {open, handleClose, user, action, setAction}) => {
         if(!rejectionReason){
             return openErrorSB('error', 'Rejection reason is required.')
         }
-        const res = await axios.patch(`${apiUrl}KYC/reject/${user._id}`, 
+        const res = await axios.patch(`${apiUrl}booking/reject/${data._id}`, 
         {rejectionReason}, {withCredentials:true});
         console.log(res.data);
         if(res.data.status == 'success'){
-            openSuccessSB('Success', 'KYC rejected.');
+            openSuccessSB('Success', 'Booking rejected.');
             setAction(!action);
             handleClose();
         } else{
@@ -106,9 +106,9 @@ const RejectModal = ( {open, handleClose, user, action, setAction}) => {
         aria-describedby="modal-modal-description"
      >
       <Box sx={style}>
-        <MDTypography>Reject KYC</MDTypography>
+        <MDTypography>Reject Booking</MDTypography>
         <MDBox mt={1} style={{height:'85vh', display:'flex', flexDirection:'column'}}>
-          <MDTypography style={{fontSize:'14px', marginBottom:'12px'}}>Reject KYC approval request by {user.first_name} {user.last_name}?</MDTypography>  
+          <MDTypography style={{fontSize:'14px', marginBottom:'12px'}}>Reject booking request by {data.full_name}</MDTypography>  
           {/* <InputLabel id="demo-simple-select-filled-label">Payment Method</InputLabel> */}
           <TextField label='Rejection Reason' type='text' value={rejectionReason} onChange={(e)=>{setRejectionReason(e.target.value)}}  sx={{marginBottom:'12px'}} outerWidth='40%'/>
           <MDBox sx={{display:'flex', justifyContent:'flex-end', marginTop:'12px' }}>

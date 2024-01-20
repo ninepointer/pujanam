@@ -1,34 +1,36 @@
-import React, {useState, useEffect} from 'react'
+import React, { useState, useEffect } from 'react'
 import MDBox from '../../../components/MDBox';
 import MDTypography from '../../../components/MDTypography';
 import { apiUrl } from '../../../constants/constants';
 import axios from 'axios';
 import Card from './Card';
 
-const Approved = () => {
-  const [approved, setApproved] = useState([]); 
-  const [action, setAction] = useState(false); 
-  const getApprovedKYCs = async() =>{
-    const res = await axios.get(`${ apiUrl}KYC/approved`, {withCredentials: true});
+const Confirmed = () => {
+  const [confirmed, setConfirmed] = useState([]);
+  const [action, setAction] = useState(false);
+  const getConfirmed = async () => {
+    const res = await axios.get(`${apiUrl}booking/confirm`, { withCredentials: true });
     console.log(res.data.data)
-    setApproved((prev)=>res.data.data);
+    setConfirmed((prev) => res.data.data);
   }
-  useEffect(()=>{
-    getApprovedKYCs()
-  },[action])  
+  useEffect(() => {
+    getConfirmed()
+  }, [action])
   return (
-   <MDBox sx={{minHeight:'60vh'}}>
-    {approved.length>0?
-        approved.map((kyc)=><Card key={kyc._id} 
-           user={kyc}
-        />):<MDBox sx={{display:'flex', justifyContent:'center', alignItems:'center', height:'60vh'}}>
-        <MDTypography>
-            No Approved KYCs
-            </MDTypography> 
+    <MDBox sx={{ minHeight: '60vh' }}>
+      {confirmed.length > 0 ?
+        confirmed.map((elem) => <Card key={elem._id}
+          data={elem}
+          setAction={setAction}
+          action={action}
+        />) : <MDBox sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '60vh' }}>
+          <MDTypography>
+            No Confirmed Bookings
+          </MDTypography>
+        </MDBox>
+      }
     </MDBox>
-    }
-   </MDBox>
   )
 }
 
-export default Approved
+export default Confirmed

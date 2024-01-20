@@ -20,7 +20,7 @@ const Pending = () => {
    <MDBox sx={{minHeight:'60vh'}}>
     {pending.length>0?
         pending.map((doc)=><Card key={doc._id} 
-            user={doc}  action={action} setAction={setAction}
+            data={doc}  action={action} setAction={setAction}
         />):<MDBox sx={{display:'flex', justifyContent:'center', alignItems:'center', height:'60vh'}}>
         <MDTypography>
             No Pending Bookings
