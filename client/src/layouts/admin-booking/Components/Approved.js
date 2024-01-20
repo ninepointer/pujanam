@@ -8,22 +8,24 @@ import Card from './Card';
 const Approved = () => {
   const [approved, setApproved] = useState([]); 
   const [action, setAction] = useState(false); 
-  const getApprovedKYCs = async() =>{
-    const res = await axios.get(`${ apiUrl}KYC/approved`, {withCredentials: true});
+  const getApproved = async() =>{
+    const res = await axios.get(`${ apiUrl}booking/approve`, {withCredentials: true});
     console.log(res.data.data)
     setApproved((prev)=>res.data.data);
   }
   useEffect(()=>{
-    getApprovedKYCs()
+    getApproved()
   },[action])  
   return (
    <MDBox sx={{minHeight:'60vh'}}>
     {approved.length>0?
-        approved.map((kyc)=><Card key={kyc._id} 
-           user={kyc}
+        approved.map((elem)=><Card key={elem._id} 
+           data={elem}
+           setAction={setAction}
+           action={action}
         />):<MDBox sx={{display:'flex', justifyContent:'center', alignItems:'center', height:'60vh'}}>
         <MDTypography>
-            No Approved KYCs
+            No Approved Bookings
             </MDTypography> 
     </MDBox>
     }

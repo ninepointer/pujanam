@@ -83,7 +83,7 @@ exports.booking = async (req, res) => {
 
         const createBooking = await Booking.create([{
             user_id: req.user._id, booking_date, transaction_date: new Date(), address_details, full_name, mobile,
-            booking_amount, product_id: "659e81ea30fa1324fb3d2681", sub_product_id: poojaId, tier: tierId,
+            booking_amount, product_id: "659e81ea30fa1324fb3d2681", specific_product_id: poojaId, tier: tierId,
             created_by: req.user._id, paymentDetails: payment._id
         }], { session });
 

@@ -16,6 +16,13 @@ const Payment = new mongoose.Schema({
         enum: ["PAP", "Online"],
         required: true
     },
+    payment_throw: {
+        type: String,
+        enum: ["Cash", "Internal Gateway", 'External App'],
+    },
+    external_transaction_id: {
+        type: String,
+    },
     created_on: {
         type: Date,
         default: function() {

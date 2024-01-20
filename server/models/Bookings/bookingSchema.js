@@ -14,6 +14,9 @@ const Booking = new mongoose.Schema({
         type: Date,
         required: true,
     },
+    reject_message: {
+        type: String,
+    },
     address_details: {
         location: {
             type: {
@@ -51,14 +54,6 @@ const Booking = new mongoose.Schema({
             type: String,
             required: true,
             default: "Home"
-        },
-        contact_name: {
-            type: String,
-            // required: true,
-        },
-        contact_number: {
-            type: String,
-            // required: true,
         },
         pincode: {
             type: String,
