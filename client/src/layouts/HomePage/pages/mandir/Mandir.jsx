@@ -86,14 +86,14 @@ const About = () => {
 
   
     useEffect(()=>{
-        // let call1 = axios.get(`${apiUrl}mandir/user/allhome?lat=${lat}&long=${long}`,{
-        //             withCredentials: false,
-        //             headers: {
-        //                 Accept: "application/json",
-        //                 "Content-Type": "application/json",
-        //                 "Access-Control-Allow-Credentials": true
-        //               },
-        //             })
+        let call1 = axios.get(`${apiUrl}mandir/user/allhome?lat=${lat}&long=${long}`,{
+                    withCredentials: false,
+                    headers: {
+                        Accept: "application/json",
+                        "Content-Type": "application/json",
+                        "Access-Control-Allow-Credentials": true
+                      },
+                    })
         let call2 = axios.get(`${apiUrl}mandir/user/homedham?lat=${lat}&long=${long}`,{
           withCredentials: false,
           headers: {
@@ -102,20 +102,20 @@ const About = () => {
               "Access-Control-Allow-Credentials": true
             },
           })
-        // let call3 = axios.get(`${apiUrl}mandir/user/allhomepopular?lat=${lat}&long=${long}`,{
-        //   withCredentials: false,
-        //   headers: {
-        //       Accept: "application/json",
-        //       "Content-Type": "application/json",
-        //       "Access-Control-Allow-Credentials": true
-        //     },
-        //   })
-        Promise.all([call2])
-        .then(([api1Response2]) => {
+        let call3 = axios.get(`${apiUrl}mandir/user/allhomepopular?lat=${lat}&long=${long}`,{
+          withCredentials: false,
+          headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              "Access-Control-Allow-Credentials": true
+            },
+          })
+        Promise.all([call1,call2,call3])
+        .then(([api1Response1,api1Response2,api1Response3]) => {
           // Process the responses here
-          // setData(api1Response1?.data?.data)
+          setData(api1Response1?.data?.data)
           setDham(api1Response2?.data?.data)
-          // setPopular(api1Response3?.data?.data)
+          setPopular(api1Response3?.data?.data)
           setTimeout(()=>{
             setIsLoading(false)
           },500)
