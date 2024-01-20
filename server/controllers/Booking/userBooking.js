@@ -14,7 +14,7 @@ exports.getAllBooking = async (req, res) => {
             select: 'name'
         })
         .populate('tier', 'tier_name pooja_items_included post_pooja_cleanUp_included min_pandit_experience max_pandit_experience number_of_main_pandit number_of_assistant_pandit')
-        .select('-last_modified_by -created_by -created_on -last_modified_on -__v -status');
+        .select('-last_modified_by -created_by -created_on -last_modified_on -__v');
         ApiResponse.success(res, booking);
     } catch (error) {
         ApiResponse.error(res,'Something went wrong', 500, error.message);
@@ -33,7 +33,7 @@ exports.getBookingById = async (req, res) => {
             select: 'name'
         })
         .populate('tier', 'tier_name pooja_items_included post_pooja_cleanUp_included min_pandit_experience max_pandit_experience number_of_main_pandit number_of_assistant_pandit')
-        .select('-created_by -created_on -last_modified_on -last_modified_by -__v -status');
+        .select('-created_by -created_on -last_modified_on -last_modified_by -__v');
         ApiResponse.success(res, booking);
     } catch (error) {
         ApiResponse.error(res,'Something went wrong', 500, error.message);
