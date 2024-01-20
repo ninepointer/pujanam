@@ -106,33 +106,33 @@ export default function MandirData() {
     ReactGA.pageview(window.location.pathname)
   }, []);
 
-  useEffect(()=>{
-    mandirData && fetchDeviceDetail(mandirData?._id);
-  }, [mandirData])
+  // useEffect(()=>{
+  //   mandirData && fetchDeviceDetail(mandirData?._id);
+  // }, [mandirData])
 
 
-  const fetchDeviceDetail = async (id)=>{
-    const ipData = await axios.get('https://geolocation-db.com/json/');
-    console.log(ipData)
-    const ip = ipData?.data?.IPv4;
-    const country = ipData?.data?.country_name;
-    const isMobile = /Mobi/.test(navigator.userAgent);
+  // const fetchDeviceDetail = async (id)=>{
+  //   const ipData = await axios.get('https://geolocation-db.com/json/');
+  //   console.log(ipData)
+  //   const ip = ipData?.data?.IPv4;
+  //   const country = ipData?.data?.country_name;
+  //   const isMobile = /Mobi/.test(navigator.userAgent);
 
-    const res = await fetch(`${apiUrl}mandir/savereader`, {
-      method: "PATCH",
-      credentials: "include",
-      headers: {
-        "content-type": "application/json",
-        "Access-Control-Allow-Credentials": true
-      },
-      body: JSON.stringify({
-        ip, country, isMobile, mandirId: id
-      })
-    });
+  //   const res = await fetch(`${apiUrl}mandir/savereader`, {
+  //     method: "PATCH",
+  //     credentials: "include",
+  //     headers: {
+  //       "content-type": "application/json",
+  //       "Access-Control-Allow-Credentials": true
+  //     },
+  //     body: JSON.stringify({
+  //       ip, country, isMobile, mandirId: id
+  //     })
+  //   });
 
 
-    const data = await res.json();
-  }
+  //   const data = await res.json();
+  // }
 
   const handleOpenGoogleMaps = (lat,lon) => {
     // Open Google Maps in a new tab with the specified coordinates
