@@ -91,7 +91,6 @@ const ApproveModal = ({ data, withdrawalRequestDate, amount, withdrawalId, actio
     />
   );
 
-  console.log("data is", data)
   const handleSubmit = async () => {
     const { payment_mode, payment_throw, payment_status, external_transaction_id } = formstate;
 

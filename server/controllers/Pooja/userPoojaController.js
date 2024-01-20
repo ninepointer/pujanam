@@ -81,8 +81,6 @@ exports.booking = async (req, res) => {
             transaction_id: generateUniqueTransactionId(), payment_status: "UnPaid", payment_mode: "PAP", created_by: req.user._id
         }], { session });
 
-        console.log(payment)
-
         const createBooking = await Booking.create([{
             user_id: req.user._id, booking_date, transaction_date: new Date(), address_details, full_name, mobile,
             booking_amount, product_id: "659e81ea30fa1324fb3d2681", specific_product_id: poojaId, tier: tierId,
