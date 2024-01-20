@@ -115,7 +115,7 @@ const KYCCard = ({ data, action, setAction }) => {
         <MDTypography style={{ fontSize: '14px', marginBottom: '12px' }}>Pincode:{data?.address_details?.pincode}</MDTypography>
 
         <MDTypography style={{ fontSize: '14px', marginBottom: '12px' }}>Booking Status:{data?.status}</MDTypography>
-        <MDTypography style={{ fontSize: '14px', marginBottom: '12px' }}>Payment Status:{data?.paymentDetails?.payment_status}</MDTypography>
+        <MDTypography style={{ fontSize: '14px', marginBottom: '12px' }}>Payment Status:{data?.payment_details?.payment_status}</MDTypography>
         <MDTypography style={{ fontSize: '14px', marginBottom: '12px' }} >Transaction Date: {data?.transaction_date ? moment.utc(data?.transaction_date).utcOffset('+05:30').format('DD-MMM-YYYY') : "N/A"}</MDTypography>
       </MDBox>
 

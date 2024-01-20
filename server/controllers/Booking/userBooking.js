@@ -6,7 +6,7 @@ exports.getAllBooking = async (req, res) => {
     const userId = req.user._id;
     try {
         const booking = await Booking.find({user_id: new ObjectId(userId)})
-        .populate('paymentDetails', 'transaction_id payment_status payment_mode')
+        .populate('payment_details', 'transaction_id payment_status payment_mode')
         .populate('pandits', 'pandit_name experience_in_year')
         .populate({ 
             path: 'specific_product_id', 
@@ -25,7 +25,7 @@ exports.getBookingById = async (req, res) => {
     const {id} = req.params;
     try {
         const booking = await Booking.findOne({_id: new ObjectId(id)})
-        .populate('paymentDetails', 'transaction_id payment_status payment_mode')
+        .populate('payment_details', 'transaction_id payment_status payment_mode')
         .populate('pandits', 'pandit_name experience_in_year')
         .populate({ 
             path: 'specific_product_id', 

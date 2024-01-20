@@ -4,6 +4,7 @@ const router = express.Router({mergeParams: true});
 const user = require('../../routes/Booking/userBooking');
 const restrictTo = require('../../authentication/authorization');
 const bookingController = require('../../controllers/Booking/booking');
+const { uploadMulter, uploadToS3, resizePhoto } = bookingController;
 
 
 router.use('/user', user)
@@ -17,7 +18,7 @@ router.get('/reject', Authenticate, restrictTo('Admin', 'SuperAdmin'), bookingCo
 router.patch('/approve/:id', Authenticate, restrictTo('Admin', 'SuperAdmin'), bookingController.approveBooking);
 router.patch('/reject/:id', Authenticate, restrictTo('Admin', 'SuperAdmin'), bookingController.rejectBooking);
 router.patch('/confirm/:id', Authenticate, restrictTo('Admin', 'SuperAdmin'), bookingController.confirmBooking);
-router.patch('/complete/:id', Authenticate, restrictTo('Admin', 'SuperAdmin'), bookingController.completeBooking);
+router.patch('/complete/:id', Authenticate, restrictTo('Admin', 'Super Admin'), uploadMulter, uploadToS3, bookingController.completeBooking);
 
 module.exports=router;
 
