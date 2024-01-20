@@ -1,15 +1,10 @@
 import React, {useState, useContext, useEffect} from "react"
-// import { useMediaQuery } from '@mui/material'
-// import theme from '../utils/theme/index'; 
-// import { ThemeProvider } from 'styled-components';
-// import background from '../../../assets/images/poojawaste.jpg'
 // @mui material components
 import Grid from "@mui/material/Grid";
 
 // Material Dashboard 2 React components
 import MDBox from "../../../components/MDBox";
 import MDTypography from "../../../components/MDTypography";
-// import MDButton from "../../../components/MDButton";
 import Card from '@mui/material/Card';
 import { CardActionArea, Divider, Typography } from '@mui/material';
 import CardContent from '@mui/material/CardContent';

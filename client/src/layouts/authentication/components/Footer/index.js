@@ -80,8 +80,8 @@ function Footer({ light }) {
             </MDBox>
           </Grid>
 
-          <Grid item xs={12} md={12} lg={4} mt={1} display='flex' justifyContent='center'>
-            <MDBox lineHeight={1}>
+          <Grid item xs={12} md={12} lg={4} mt={1} px={2} display='flex' justifyContent='flex-end'>
+            {/* <MDBox lineHeight={1}>
               <Link href="/about" target="_blank">
                 <MDTypography
                   variant="button"
@@ -92,8 +92,8 @@ function Footer({ light }) {
                   About
                 </MDTypography>
               </Link>
-            </MDBox>
-            <MDBox pl={2} lineHeight={1}>
+            </MDBox> */}
+            {/* <MDBox pl={2} lineHeight={1}>
               <Link href="/contact" target="_blank">
                 <MDTypography
                   variant="button"
@@ -104,7 +104,7 @@ function Footer({ light }) {
                   Contact Us
                 </MDTypography>
               </Link>
-            </MDBox>
+            </MDBox> */}
             <MDBox pl={2} lineHeight={1}>
               <Link href="/privacy" target="_blank">
                 <MDTypography

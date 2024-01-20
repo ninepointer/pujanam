@@ -8,6 +8,7 @@ import playstore from '../../../assets/images/playstore.png'
 import Navbar from '../../HomePage/components/Navbars/Navbar';
 import background from '../../../assets/images/background.jpg'
 import logo from '../../../assets/images/logo.png'
+import ReactGA from "react-ga";
 
 // @mui material components
 import Grid from "@mui/material/Grid";
@@ -41,6 +42,10 @@ function Cover() {
   const [popular,setPopular] = useState([]);
   const [pooja,setPooja] = useState([]);
   const [scrollPosition, setScrollPosition] = useState(0);
+
+  useEffect(()=>{
+    ReactGA.pageview(window.location.pathname)
+  })
 
   const currentLocation = ({
     latitude: locationContextData.locationState.latitude,
@@ -102,7 +107,7 @@ function Cover() {
 
   const handlePlaystoreNavigate = () => {
     // Open google.com in a new tab
-    window.open(`${setting.playstore_link}`, '_blank');
+    window.open(`${setting?.playstore_link}`, '_blank');
   };
   
   useEffect(() => {

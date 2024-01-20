@@ -50,6 +50,10 @@ export default function MandirData() {
   };
 
   useEffect(()=>{
+    ReactGA.pageview(window.location.pathname)
+  })
+
+  useEffect(()=>{
     if(mandirData?._id){
       storeUnknownUserInfo();
     }

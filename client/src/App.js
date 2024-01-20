@@ -55,7 +55,7 @@ import ProtectedRoute from "./ProtectedRoute";
 import AdminLogin from "./layouts/authentication/sign-in/adminLogin";
 import MandirData from "./layouts/HomePage/pages/MandirData";
 
-const TRACKING_ID = "UA-264098426-2"
+const TRACKING_ID = "G-N2HM9R3W60"
 ReactGA.initialize(TRACKING_ID);
 
 function NotFound() {
