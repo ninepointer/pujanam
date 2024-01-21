@@ -6,7 +6,6 @@ import MDBox from "../../../components/MDBox";
 import MDButton from "../../../components/MDButton";
 import MDTypography from "../../../components/MDTypography";
 import { Link, useLocation } from "react-router-dom";
-import moment from 'moment';
 import { apiUrl } from '../../../constants/constants';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
@@ -14,7 +13,7 @@ import { CardActionArea } from '@mui/material';
 import DefaultPanditImage from '../../../assets/images/defaultpanditimage.png'
 import MDAvatar from '../../../components/MDAvatar';
 
-const ActivePandit = ({type}) => {
+const ActivePandit = () => {
 let [skip, setSkip] = useState(0);
 const limitSetting = 10;
 const [count, setCount] = useState(0);
@@ -22,7 +21,7 @@ const [isLoading,setIsLoading] = useState(false);
 const [data,setData] = useState([]);
 
   useEffect(()=>{
-    let call1 = axios.get(`${apiUrl}pandit/active/?skip=${skip}&limit=${limitSetting}`,{
+    let call1 = axios.get(`${apiUrl}items/active/?skip=${skip}&limit=${limitSetting}`,{
                 withCredentials: true,
                 headers: {
                     Accept: "application/json",
@@ -99,13 +98,6 @@ const [data,setData] = useState([]);
     })
   }
 
-  function limitStringWithEllipsis(inputString, maxLength) {
-    if (inputString.length > maxLength) {
-      return inputString.slice(0, maxLength) + '...';
-    }
-    return inputString;
-  }
-
   
     return (
       <>
@@ -133,13 +125,13 @@ const [data,setData] = useState([]);
                             <CardActionArea 
                               component={Link}
                               to={{
-                                pathname: `/panditdetails`,
+                                pathname: `/itemdetails`,
                               }}
                               state={{data: elem}}>
                               <Grid container lg={12} md={4} xs={12} display='flex' justifyContent='center' alignItems='center' >
                                 <Grid item xs={12} md={4} lg={4} display='flex' justifyContent='center' style={{ maxWidth: '100%', height: 'auto' }}>
                                   <MDAvatar
-                                      src={elem?.photo?.url ? elem?.photo?.url : DefaultPanditImage}
+                                      src={elem?.image?.url ? elem?.image?.url : DefaultPanditImage}
                                       alt={elem?.pandit_name}
                                       size="lg"
                                       sx={({ borders: { borderWidth }, palette: { white } }) => ({
@@ -153,18 +145,22 @@ const [data,setData] = useState([]);
                                         },
                                       })}
                                   />
-                                  {/* <img src={elem?.photo?.url ? elem?.photo?.url : DefaultPanditImage} style={{ maxWidth: '100%', height: 'auto', borderTopLeftRadius: 10, borderTopRightRadius: 10 }} /> */}
                                 </Grid>
                                 <Grid item xs={12} md={4} lg={8} display='flex' justifyContent='flex-start' style={{ maxWidth: '100%', height: 'auto' }}>
                                 <CardContent display='flex' justifyContent='flex-start' style={{ maxWidth: '100%', height: 'auto' }}>
                                     <MDBox display='flex' justifyContent='flex-start' style={{ width: '100%'}}>
                                         <MDTypography variant="h6" style={{ textAlign: 'center', fontFamily: 'Itim' }}>
-                                            {elem?.pandit_name}
+                                            {elem?.name}
                                         </MDTypography>
                                     </MDBox>
                                     <MDBox display='flex' justifyContent='flex-start' style={{ maxWidth: '100%', height: 'auto' }}>
                                         <MDTypography variant="caption" style={{ textAlign: 'justify', fontFamily: 'Itim' }}>
-                                            {elem?.address_details?.city}
+                                            MOQ: {elem?.min_order_quantity}
+                                        </MDTypography>
+                                    </MDBox>
+                                    <MDBox display='flex' justifyContent='flex-start' style={{ maxWidth: '100%', height: 'auto' }}>
+                                        <MDTypography variant="caption" style={{ textAlign: 'justify', fontFamily: 'Itim' }}>
+                                        Price: {elem?.price}
                                         </MDTypography>
                                     </MDBox>
                                     <MDBox mb={-1.5} display='flex' justifyContent='flex-start'>

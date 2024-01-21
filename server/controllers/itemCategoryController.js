@@ -105,6 +105,15 @@ exports.getAllItemCategories = async (req, res) => {
     }
 };
 
+exports.getAllActiveItemCategories = async (req, res) => {
+    try {
+        const categories = await ItemCategory.find({status: "Active"});
+        ApiResponse.success(res, categories);
+    } catch (error) {
+        ApiResponse.error(res, 'Something went wrong', 500, error.message);
+    }
+}
+
 // Get Individual Item Category
 exports.getItemCategory = async (req, res) => {
     try {

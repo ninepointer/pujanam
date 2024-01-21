@@ -8,7 +8,7 @@ import { CircularProgress } from '@mui/material';
 import MDBox from '../../../components/MDBox';
 import MDButton from '../../../components/MDButton';
 import {Link} from 'react-router-dom'
-import Active from '../data/activeItem';
+import Active from '../data/activeCategory';
 
 
 export default function LabTabs() {
@@ -31,9 +31,9 @@ export default function LabTabs() {
     color="success" 
     size="small"
     component={Link}
-    to='/itemdetails'
+    to='/categorydetails'
     >
-        Create Item
+        Create Category
     </MDButton>
     </MDBox>
       <TabContext value={value}>
