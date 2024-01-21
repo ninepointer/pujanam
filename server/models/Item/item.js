@@ -20,6 +20,10 @@ const Item = new mongoose.Schema({
         type:Number,
         required:true,
     },
+    imnage:{
+        name:String,
+        url:String
+    },
     featured:bool,
     sponsored:bool,
     description:{
@@ -27,7 +31,7 @@ const Item = new mongoose.Schema({
     },
     category:{
         type:Schema.Types.ObjectId,
-        ref:'CategoryItem'
+        ref:'item-category'
     },
     status: {
         type: String,
@@ -56,5 +60,5 @@ const Item = new mongoose.Schema({
         ref: 'user'
     }
 });
-const ItemSchema = mongoose.model('Item', Item);
+const ItemSchema = mongoose.model('item', Item);
 module.exports = ItemSchema;

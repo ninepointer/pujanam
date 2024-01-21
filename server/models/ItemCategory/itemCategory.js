@@ -42,5 +42,5 @@ const ItemCategory = new mongoose.Schema({
         ref: 'user'
     }
 });
-const ItemCategorySchema = mongoose.model('ItemCategory', ItemCategory);
+const ItemCategorySchema = mongoose.model('item-category', ItemCategory);
 module.exports = ItemCategorySchema;
