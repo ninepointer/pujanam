@@ -3,6 +3,7 @@ const Item = require('../models/Item/item'); // Replace with the actual path to 
 const AWS = require('aws-sdk');
 const sharp = require('sharp');
 const ApiResponse = require('../helpers/apiResponse'); // Update the path according to your project structure
+const {ObjectId} = require('mongodb')
 
 // Configure AWS S3
 AWS.config.update({
@@ -94,6 +95,7 @@ exports.editItem = async (req, res) => {
         ApiResponse.error(res, 'Something went wrong', 500, error.message);
     }
 };
+
 exports.getAllItems = async (req, res) => {
     try {
         const items = await Item.find().populate('category', 'name'); // Populate with category name, modify as needed
@@ -104,7 +106,7 @@ exports.getAllItems = async (req, res) => {
 };
 exports.getAllItemsByCategory = async (req, res) => {
     try {
-        const items = await Item.find({category:new mongoose.ObjectId(req.params.id)}).populate('category', 'name'); // Populate with category name, modify as needed
+        const items = await Item.find({category:new ObjectId(req.params.id)}).populate('category', 'name'); // Populate with category name, modify as needed
         ApiResponse.success(res, items);
     } catch (error) {
         ApiResponse.error(res, 'Something went wrong', 500, error.message);

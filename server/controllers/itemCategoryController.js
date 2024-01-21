@@ -1,4 +1,3 @@
-const mongoose = require('mongoose');
 const ItemCategory = require('../models/ItemCategory/itemCategory'); // Replace with the actual path to your model
 const AWS = require('aws-sdk');
 const sharp = require('sharp');
@@ -96,14 +95,13 @@ exports.editItemCategory = async (req, res) => {
     }
 };
 
-
 // Get All Item Categories
 exports.getAllItemCategories = async (req, res) => {
     try {
         const categories = await ItemCategory.find();
-        res.json(categories);
+        ApiResponse.success(res, categories);
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        ApiResponse.error(res, 'Something went wrong', 500, error.message);
     }
 };
 
@@ -114,8 +112,8 @@ exports.getItemCategory = async (req, res) => {
         if (!category) {
             return res.status(404).json({ message: 'Item Category not found' });
         }
-        res.json(category);
+        ApiResponse.success(res, category);
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        ApiResponse.error(res, 'Something went wrong', 500, error.message);
     }
 };
