@@ -20,12 +20,12 @@ const Item = new mongoose.Schema({
         type:Number,
         required:true,
     },
-    imnage:{
+    image:{
         name:String,
         url:String
     },
-    featured:bool,
-    sponsored:bool,
+    featured:Boolean,
+    sponsored:Boolean,
     description:{
         type:String
     },

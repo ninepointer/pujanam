@@ -12,7 +12,7 @@ const upload = multer({
   },
 });
 
-router.post('/', Authenticate, restrictTo('Admin', 'SuperAdmin'), upload.single("photo"), itemCategoryController.resizePhoto, itemCategoryController.createItemCategory);
+router.post('/', Authenticate, restrictTo('Admin', 'SuperAdmin'), upload.single("photo"), itemCategoryController.createItemCategory);
 router.get('/', Authenticate, itemCategoryController.getAllItemCategories);
 
 router.get('/:id', Authenticate, itemCategoryController.getItemCategory);
