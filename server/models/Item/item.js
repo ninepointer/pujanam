@@ -1,7 +1,5 @@
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
-const moment = require("moment");
-const { bool } = require("sharp");
 
 const Item = new mongoose.Schema({
     name: {
@@ -20,12 +18,12 @@ const Item = new mongoose.Schema({
         type:Number,
         required:true,
     },
-    imnage:{
+    image:{
         name:String,
         url:String
     },
-    featured:bool,
-    sponsored:bool,
+    featured:Boolean,
+    sponsored:Boolean,
     description:{
         type:String
     },
