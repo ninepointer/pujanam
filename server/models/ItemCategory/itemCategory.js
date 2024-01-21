@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
-const moment = require("moment");
 
 const ItemCategory = new mongoose.Schema({
     name: {
@@ -42,5 +41,5 @@ const ItemCategory = new mongoose.Schema({
         ref: 'user'
     }
 });
-const ItemCategorySchema = mongoose.model('ItemCategory', ItemCategory);
+const ItemCategorySchema = mongoose.model('item-category', ItemCategory);
 module.exports = ItemCategorySchema;

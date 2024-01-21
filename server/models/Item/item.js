@@ -1,7 +1,5 @@
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
-const moment = require("moment");
-const { bool } = require("sharp");
 
 const Item = new mongoose.Schema({
     name: {
@@ -20,14 +18,26 @@ const Item = new mongoose.Schema({
         type:Number,
         required:true,
     },
-    featured:bool,
-    sponsored:bool,
+    image:{
+        name:String,
+        url:String
+    },
+    featured:{
+        type: Boolean,
+        default: false,
+        required: true
+    },
+    sponsored:{
+        type: Boolean,
+        default: false,
+        required: true
+    },
     description:{
         type:String
     },
     category:{
         type:Schema.Types.ObjectId,
-        ref:'CategoryItem'
+        ref:'item-category'
     },
     status: {
         type: String,
@@ -56,5 +66,5 @@ const Item = new mongoose.Schema({
         ref: 'user'
     }
 });
-const ItemSchema = mongoose.model('Item', Item);
+const ItemSchema = mongoose.model('item', Item);
 module.exports = ItemSchema;

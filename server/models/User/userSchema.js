@@ -182,7 +182,19 @@ const userSchema = new mongoose.Schema({
     current_location: {
        latitude: {type: Number},
        longitude: {type: Number}
-    }
+    },
+    cart:[
+        {
+            itemId:{
+                type:Schema.Types.ObjectId,
+                ref:'Item'
+            },
+            quantity:Number,
+            status:{
+                type:String,
+            }
+        }
+    ]
 })
 
 userSchema.methods.generateAuthToken = async function(){

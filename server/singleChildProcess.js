@@ -63,6 +63,8 @@ async function singleProcess() {
     app.use('/api/v1/booking', require("./routes/Booking/booking"));
     app.use('/api/v1/consultation', require("./routes/Consultation/consultation"));
     app.use('/api/v1/devta', require("./routes/DeviDevta/devi-devta"));
+    app.use('/api/v1/itemcategory', require("./routes/ItemCategory/itemCategoryRoutes"));
+    app.use('/api/v1/items', require("./routes/Item/itemRoutes"));
     app.use('/api/v1/carousels', require("./routes/carousel/carouselRoutes"));
     app.use('/api/v1/mandir', require("./routes/Mandir/mandir"));
     app.use('/api/v1/usermandir', require("./routes/Mandir/userMandir"));
