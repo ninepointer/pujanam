@@ -8,22 +8,22 @@ import Card from './Card';
 const Rejected = () => {
   const [rejected, setRejected] = useState([]); 
   const [action, setAction] = useState(false); 
-  const getRejectedKYCs = async() =>{
-    const res = await axios.get(`${ apiUrl}KYC/rejected`, {withCredentials: true});
+  const getRejected = async() =>{
+    const res = await axios.get(`${ apiUrl}booking/reject`, {withCredentials: true});
     console.log(res.data.data)
     setRejected((prev)=>res.data.data);
   }
   useEffect(()=>{
-    getRejectedKYCs()
+    getRejected()
   },[action])  
   return (
    <MDBox sx={{minHeight:'60vh'}}>
     {rejected.length>0?
         rejected.map((doc)=><Card key={doc._id} 
-            user={doc} action={action} setAction={setAction}
+            data={doc} action={action} setAction={setAction}
         />):<MDBox sx={{display:'flex', justifyContent:'center', alignItems:'center', height:'60vh'}}>
         <MDTypography>
-            No Rejected KYCs
+            No Rejected Bookings
             </MDTypography> 
     </MDBox>
     }

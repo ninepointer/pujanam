@@ -26,6 +26,8 @@ import MDAvatar from '../../../../components/MDAvatar';
 import {LocationContext} from "../../../../locationContext";
 import PopularMandir from "./popularMandir";
 import MandirNearMe from "./mandirNearMe";
+import Dham from "./dham";
+
 
 function TabPanel1(props) {
   const { children, value, index, ...other } = props;
@@ -67,10 +69,7 @@ function a11yProps(index) {
 
 const About = () => {
     const [value, setValue] = React.useState(0);
-    const [scrollPosition, setScrollPosition] = useState(0);
-    const [data,setData] = useState([]);
     const [dham,setDham] = useState([]);
-    const [popular,setPopular] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const locationContextData = useContext(LocationContext);
     const lat = locationContextData.locationState.latitude;
@@ -86,14 +85,6 @@ const About = () => {
 
   
     useEffect(()=>{
-        let call1 = axios.get(`${apiUrl}mandir/user/allhome?lat=${lat}&long=${long}`,{
-                    withCredentials: false,
-                    headers: {
-                        Accept: "application/json",
-                        "Content-Type": "application/json",
-                        "Access-Control-Allow-Credentials": true
-                      },
-                    })
         let call2 = axios.get(`${apiUrl}mandir/user/homedham?lat=${lat}&long=${long}`,{
           withCredentials: false,
           headers: {
@@ -102,20 +93,9 @@ const About = () => {
               "Access-Control-Allow-Credentials": true
             },
           })
-        let call3 = axios.get(`${apiUrl}mandir/user/allhomepopular?lat=${lat}&long=${long}`,{
-          withCredentials: false,
-          headers: {
-              Accept: "application/json",
-              "Content-Type": "application/json",
-              "Access-Control-Allow-Credentials": true
-            },
-          })
-        Promise.all([call1,call2,call3])
-        .then(([api1Response1,api1Response2,api1Response3]) => {
-          // Process the responses here
-          setData(api1Response1?.data?.data)
+        Promise.all([call2])
+        .then(([api1Response2]) => {
           setDham(api1Response2?.data?.data)
-          setPopular(api1Response3?.data?.data)
           setTimeout(()=>{
             setIsLoading(false)
           },500)
@@ -129,28 +109,6 @@ const About = () => {
         ReactGA.pageview(window.location.pathname)
     })
 
-    useEffect(() => {
-        const handleScroll = () => {
-            setScrollPosition(window.scrollY);
-        };
-
-        window.addEventListener('scroll', handleScroll);
-
-        return () => {
-            window.removeEventListener('scroll', handleScroll);
-        };
-    }, []);
-
-    const handleOpenNewTab = async (elem) => {
-    
-        const newTab = window.open(`/mandir/${elem?.slug}`, '_blank');
-        // await fetchDeviceDetail(elem?._id);
-      };
-    
-    const backgroundColor = scrollPosition > 10 ? 'rgba(0, 0, 0, 0.8)' : 'transparent'
-    const backdropFilter = scrollPosition > 10 ? 'blur(5px)' : 'none'
-
-    console.log("dham", dham)
     return (
         <>
       <MDBox mt={-1} display='flex' justifyContent='center' flexDirection='column' alignContent='center' alignItems='center' style={{ minHeight:'auto', width: 'auto', minWidth:'100vW', overflow: 'visible'}}>
@@ -171,8 +129,6 @@ const About = () => {
                 position: 'fixed',
                 top: 0,
                 left: 0,
-                // filter: backdropFilter,
-                // backgroundColor: backgroundColor,
                 overflow: 'visible'
                 }}
           >
@@ -180,7 +136,6 @@ const About = () => {
           </Grid>
 
           <Grid container mt={15} mb={2} display='flex' justifyContent='center' alignContent='center' alignItems='center' xs={12} md={12} lg={12} style={{ maxWidth: '95%', height: 'auto', flexGrow: 1, overflowY: 'auto', zIndex:3, overflow: 'visible' }}>
-          {/* <Grid item display='flex' justifyContent='center' alignContent='center' alignItems='center' xs={12} md={12} lg={12}> */}
             <AppBar position="static" style={{borderBottom:'0.5px solid white',backgroundColor:"rgba(0, 0, 0, 0)", color:"red", display:'flex', justifyContent:'center', maxWidth: '100%'}}>
               <Tabs
                 value={value}
@@ -238,7 +193,6 @@ const About = () => {
               </Tabs>
             </AppBar>
             <SwipeableViews
-              // axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
               index={value}
               onChangeIndex={handleChangeIndex}
               style={{display:'flex', justifyContent:'center'}}
@@ -277,7 +231,6 @@ const About = () => {
                       </Grid>
                       :
                       <>
-                      {/* <img src={NoData} width='500px' height='500px' /> */}
                       </>
                       }
 
@@ -306,27 +259,7 @@ const About = () => {
                         </MDBox>
                       </Grid>
 
-                      {popular?.length > 0 ?
-                      <Grid item xs={12} mt={2} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
-
-                      <MDBox display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
-                          <Grid container spacing={4} xs={12} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ width: '100%', height: 'auto' }}>
-                          {popular?.map((elem) => {
-                              return (
-                              <Grid key={elem?._id} item xs={12} md={4} lg={3} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ width: '100%', height: 'auto' }}>
-                                  <MandirCard elem={elem}/>
-                              </Grid>
-                              )
-                          })}
-                          </Grid>
-                      </MDBox>
-
-                      </Grid>
-                      :
-                      <>
-                      {/* <img src={NoData} width='500px' height='500px' /> */}
-                      </>
-                      }
+                      <PopularMandir />
 
                   </Grid>
                   </Grid>
@@ -346,33 +279,12 @@ const About = () => {
                         </MDBox>
                       </Grid>
 
-                      {data?.length > 0 ?
-                      <Grid item xs={12} mt={2} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
-
-                      <MDBox display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ maxWidth: '100%', height: 'auto' }}>
-                          <Grid container spacing={4} xs={12} md={12} lg={12} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ width: '100%', height: 'auto' }}>
-                          {data?.map((elem) => {
-                              return (
-                              <Grid key={elem?._id} item xs={12} md={4} lg={3} display='flex' justifyContent='center' alignContent='center' alignItems='center' style={{ width: '100%', height: 'auto' }}>
-                                  <MandirCard elem={elem}/>
-                              </Grid>
-                              )
-                          })}
-                          </Grid>
-                      </MDBox>
-
-                      </Grid>
-                      :
-                      <>
-                      {/* <img src={NoData} width='500px' height='500px' /> */}
-                      </>
-                      }
+                      <MandirNearMe />
 
                   </Grid>
                   </Grid>
               </TabPanel1>
             </SwipeableViews>
-          {/* </Grid> */}
           </Grid>
         </ThemeProvider>
       </MDBox>
