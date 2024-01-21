@@ -23,7 +23,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { MobileDateTimePicker } from '@mui/x-date-pickers/MobileDateTimePicker';
 import DefaultPoojaUpload from "../../assets/images/defaultpanditimage.png"
-import AdditionalInfo from './data/addAdditionalInfo/additionalInfo';
+// import AdditionalInfo from './data/addAdditionalInfo/additionalInfo';
 import {apiUrl} from  '../../constants/constants';
 import MDAvatar from '../../components/MDAvatar';
 
@@ -40,38 +40,38 @@ const MenuProps = {
 
 function Index() {
   const location = useLocation();
-  const panditPrevDetail = location?.state?.data;
-  const [selectedLanguage, setSelectedLanguage] = useState(panditPrevDetail?.language ? panditPrevDetail?.language : []);
+  const itemPrevDetail = location?.state?.data;
+  const [selectedLanguage, setSelectedLanguage] = useState(itemPrevDetail?.language ? itemPrevDetail?.language : []);
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [isLoading, setIsLoading] = useState(panditPrevDetail ? true : false)
+  const [isLoading, setIsLoading] = useState(itemPrevDetail ? true : false)
   const [editing, setEditing] = useState(false)
   const [saving, setSaving] = useState(false)
   const [creating, setCreating] = useState(false)
   const navigate = useNavigate();
   const [newData, setNewData] = useState(null);
-  const [prevData, setPrevData] = useState(panditPrevDetail)
+  const [prevData, setPrevData] = useState(itemPrevDetail)
   const [updatedDocument, setUpdatedDocument] = useState([]);
   const [panditData, setPanditData] = useState([]);
   const [category, setCategory] = useState([]);
 
 
   const [formState, setFormState] = useState({
-    name: '' || panditPrevDetail?.name,
-    min_order_quantity: '' || panditPrevDetail?.min_order_quantity,
-    unit: '' || panditPrevDetail?.unit,
-    price: '' || panditPrevDetail?.price,
+    name: '' || itemPrevDetail?.name,
+    min_order_quantity: '' || itemPrevDetail?.min_order_quantity,
+    unit: '' || itemPrevDetail?.unit,
+    price: '' || itemPrevDetail?.price,
     image: {
-      url: '' || panditPrevDetail?.image?.url,
-      name: '' || panditPrevDetail?.image?.name
+      url: '' || itemPrevDetail?.image?.url,
+      name: '' || itemPrevDetail?.image?.name
     },
-    description: '' || panditPrevDetail?.description,
-    featured: '' || panditPrevDetail?.featured,
-    sponsored: '' || panditPrevDetail?.sponsored,
+    description: '' || itemPrevDetail?.description,
+    featured: '' || itemPrevDetail?.featured,
+    sponsored: '' || itemPrevDetail?.sponsored,
     category: {
-      _id: '' || panditPrevDetail?.category?._id,
-      name: '' || panditPrevDetail?.category?.name,
+      _id: '' || itemPrevDetail?.category?._id,
+      name: '' || itemPrevDetail?.category?.name,
     },
-    status: '' || panditPrevDetail?.status,
+    status: '' || itemPrevDetail?.status,
   });
 
   const [isfileSizeExceed, setIsFileExceed] = useState(false);
@@ -80,9 +80,18 @@ function Index() {
 
   useEffect(() => {
     setTimeout(() => {
-      panditPrevDetail && setUpdatedDocument(panditPrevDetail)
+      itemPrevDetail && setUpdatedDocument(itemPrevDetail)
       setIsLoading(false);
     }, 500)
+  }, [])
+
+  useEffect(() => {
+    axios.get(`${apiUrl}itemcategory`, {withCredentials: true})
+      .then((res) => {
+        setCategory(res?.data?.data);
+      }).catch((err) => {
+        return new Error(err)
+      })
   }, [])
 
   useEffect(()=>{
@@ -124,11 +133,15 @@ function Index() {
 
       for (let elem in formState) {
         if (elem !== "photo") {
+          if(elem === 'category'){
+            formData.append(`categoryId`, formState[elem]._id);
+          } else{
             formData.append(`${elem}`, formState[elem]);
+          }
         }
       }
 
-      const res = await fetch(`${apiUrl}pandit`, {
+      const res = await fetch(`${apiUrl}item`, {
         method: "POST",
         credentials: "include",
         headers: {
@@ -152,7 +165,6 @@ function Index() {
     }
   };
 
-
   const edit = async () => {
     try {
       const formData = new FormData();
@@ -160,16 +172,17 @@ function Index() {
         formData.append("photo", file[0]);
       }
 
-
       for (let elem in formState) {
         if (elem !== "photo") {
-          // if (typeof (formState[elem]) === "object") {
+          if(elem === 'category'){
+            formData.append(`categoryId`, formState[elem]._id);
+          } else{
             formData.append(`${elem}`, formState[elem]);
-        // }
-      }
+          }
+        }
       }
 
-      const res = await fetch(`${apiUrl}pandit/${prevData?._id}`, {
+      const res = await fetch(`${apiUrl}item/${prevData?._id}`, {
 
         method: "PATCH",
         credentials: "include",
@@ -290,12 +303,12 @@ function Index() {
               <Grid container spacing={2} mt={0.5} xs={12} md={12} xl={12} display="flex" justifyContent="flex-start" alignContent="center" alignItems="center">
                 <Grid item xs={12} md={6} xl={3} display="flex" justifyContent="center" alignContent="center" alignItems="center">
                   <TextField
-                    disabled={((isSubmitted || panditPrevDetail) && (!editing || saving))}
+                    disabled={((isSubmitted || itemPrevDetail) && (!editing || saving))}
                     id="outlined-required"
                     label='Name *'
                     name='name'
                     fullWidth
-                    defaultValue={editing ? formState?.name : panditPrevDetail?.name}
+                    defaultValue={editing ? formState?.name : itemPrevDetail?.name}
                     onChange={(e) => {
                       setFormState(prevState => ({
                         ...prevState,
@@ -307,13 +320,13 @@ function Index() {
                 
                 <Grid item xs={12} md={6} xl={3} display="flex" justifyContent="center" alignContent="center" alignItems="center">
                   <TextField
-                    disabled={((isSubmitted || panditPrevDetail) && (!editing || saving))}
+                    disabled={((isSubmitted || itemPrevDetail) && (!editing || saving))}
                     id="outlined-required"
                     label='Minimum Order Quantity *'
                     name='min_order_quantity'
                     fullWidth
                     type='number'
-                    defaultValue={editing ? formState?.min_order_quantity : panditPrevDetail?.min_order_quantity}
+                    defaultValue={editing ? formState?.min_order_quantity : itemPrevDetail?.min_order_quantity}
                     // onChange={handleChange}
                     onChange={(e) => {
                       setFormState(prevState => ({
@@ -331,8 +344,8 @@ function Index() {
                       labelId="demo-simple-select-autowidth-label"
                       id="demo-simple-select-autowidth"
                       name='unit'
-                      value={formState?.unit || panditPrevDetail?.unit}
-                      disabled={((isSubmitted || panditPrevDetail) && (!editing || saving))}
+                      value={formState?.unit || itemPrevDetail?.unit}
+                      disabled={((isSubmitted || itemPrevDetail) && (!editing || saving))}
                       onChange={(e) => {
                         setFormState(prevState => ({
                           ...prevState,
@@ -350,16 +363,15 @@ function Index() {
                   </FormControl>
                 </Grid>
 
-
                 <Grid item xs={12} md={6} xl={3} display="flex" justifyContent="center" alignContent="center" alignItems="center">
                   <TextField
-                    disabled={((isSubmitted || panditPrevDetail) && (!editing || saving))}
+                    disabled={((isSubmitted || itemPrevDetail) && (!editing || saving))}
                     id="outlined-required"
                     label='Price *'
                     name='price'
                     type='number'
                     fullWidth
-                    defaultValue={editing ? formState?.price : panditPrevDetail?.price}
+                    defaultValue={editing ? formState?.price : itemPrevDetail?.price}
                     onChange={(e) => {
                       setFormState(prevState => ({
                         ...prevState,
@@ -371,13 +383,13 @@ function Index() {
 
                 <Grid item xs={12} md={6} xl={3} display="flex" justifyContent="center" alignContent="center" alignItems="center">
                   <TextField
-                    disabled={((isSubmitted || panditPrevDetail) && (!editing || saving))}
+                    disabled={((isSubmitted || itemPrevDetail) && (!editing || saving))}
                     id="outlined-required"
                     label='Description *'
                     name='description'
                     fullWidth
                     multiline
-                    defaultValue={editing ? formState?.description : panditPrevDetail?.description}
+                    defaultValue={editing ? formState?.description : itemPrevDetail?.description}
                     onChange={(e) => {
                       setFormState(prevState => ({
                         ...prevState,
@@ -389,13 +401,13 @@ function Index() {
 
                 <Grid item xs={12} md={6} xl={3}>
                   <FormControl sx={{ width:'100%' }}>
-                    <InputLabel id="demo-multiple-name-label">Portfolio</InputLabel>
+                    <InputLabel id="demo-multiple-name-label">Category</InputLabel>
                     <Select
                       labelId="demo-multiple-name-label"
                       id="demo-multiple-name"
                       name='category'
-                      disabled={((isSubmitted || panditPrevDetail) && (!editing || saving))}
-                      value={formState?.category?.name || dailyContest?.category?.name}
+                      disabled={((isSubmitted || itemPrevDetail) && (!editing || saving))}
+                      value={formState?.category?.name || itemPrevDetail?.category?.name}
                       onChange={handleCategoryChange}
                       input={<OutlinedInput label="category" />}
                       sx={{ minHeight: 45 }}
@@ -412,6 +424,7 @@ function Index() {
                     </Select>
                   </FormControl>
                 </Grid>
+
                 <Grid item xs={12} md={3} xl={3} display="flex" justifyContent="center" alignContent="center" alignItems="center">
                   <FormControl sx={{ width: "100%" }}>
                     <InputLabel id="demo-simple-select-autowidth-label">Status *</InputLabel>
@@ -419,8 +432,8 @@ function Index() {
                       labelId="demo-simple-select-autowidth-label"
                       id="demo-simple-select-autowidth"
                       name='status'
-                      value={formState?.status || panditPrevDetail?.status}
-                      disabled={((isSubmitted || panditPrevDetail) && (!editing || saving))}
+                      value={formState?.status || itemPrevDetail?.status}
+                      disabled={((isSubmitted || itemPrevDetail) && (!editing || saving))}
                       onChange={(e) => {
                         setFormState(prevState => ({
                           ...prevState,
@@ -458,7 +471,7 @@ function Index() {
 
             <Grid container mt={2} xs={12} md={12} xl={12} >
               <Grid item display="flex" justifyContent="flex-end" xs={12} md={6} xl={12}>
-                {!isSubmitted && !panditPrevDetail && (
+                {!isSubmitted && !itemPrevDetail && (
                   <>
                     <MDButton
                       variant="contained"
@@ -470,22 +483,22 @@ function Index() {
                     >
                       {creating ? <CircularProgress size={20} color="inherit" /> : "Save"}
                     </MDButton>
-                    <MDButton variant="contained" color="error" size="small" disabled={creating} onClick={() => { navigate("/pandit") }}>
+                    <MDButton variant="contained" color="error" size="small" disabled={creating} onClick={() => { navigate("/item") }}>
                       Cancel
                     </MDButton>
                   </>
                 )}
-                {(isSubmitted || panditPrevDetail) && !editing && (
+                {(isSubmitted || itemPrevDetail) && !editing && (
                   <>
                     <MDButton variant="contained" color="dark" size="small" sx={{ mr: 1, ml: 2 }} onClick={() => { setEditing(true) }}>
                       Edit
                     </MDButton>
-                    <MDButton variant="contained" color="info" size="small" onClick={() => { navigate('/pandit') }}>
+                    <MDButton variant="contained" color="info" size="small" onClick={() => { navigate('/item') }}>
                       Back
                     </MDButton>
                   </>
                 )}
-                {(isSubmitted || panditPrevDetail) && editing && (
+                {(isSubmitted || itemPrevDetail) && editing && (
                   <>
                     <MDButton
                       variant="contained"
@@ -509,14 +522,7 @@ function Index() {
                   </>
                 )}
               </Grid>
-
-              {(panditPrevDetail || isSubmitted) && <Grid item xs={12} md={12} xl={12} mt={2}>
-                <MDBox>
-                <AdditionalInfo prevData={panditPrevDetail!=undefined ? panditPrevDetail : panditData}/>
-                </MDBox>
-              </Grid>}
               
-
             </Grid>
 
             {renderSuccessSB}

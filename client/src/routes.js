@@ -19,6 +19,8 @@ import Inventory2Icon from '@mui/icons-material/Inventory2';
 import TempleBuddhistIcon from '@mui/icons-material/TempleBuddhist';
 import { LiaPrayingHandsSolid } from "react-icons/lia";
 import Booking from "./layouts/admin-booking";
+import ItemDetails from './layouts/Item/itemDetails';
+import Item from './layouts/Item';
 
 const routes = [
 
@@ -134,6 +136,19 @@ const routes = [
     key: "carouselDetails",
     route: "/carouseldetails",
     component: <CarouselDetails />,
+  },
+
+  {
+    type: "collapse",
+    name: "Item",
+    icon: <ViewCarouselIcon/>,
+    key: "item",
+    route: "/item",
+    component: <Item />,
+  },
+  {
+    route: "/itemdetails",
+    component: <ItemDetails />,
   },
 
 

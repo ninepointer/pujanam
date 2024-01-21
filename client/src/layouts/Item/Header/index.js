@@ -31,9 +31,9 @@ export default function LabTabs() {
     color="success" 
     size="small"
     component={Link}
-    to='/panditdetails'
+    to='/itemdetails'
     >
-        Create Pandit
+        Create Item
     </MDButton>
     </MDBox>
       <TabContext value={value}>
