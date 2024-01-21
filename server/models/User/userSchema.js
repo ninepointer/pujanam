@@ -187,12 +187,9 @@ const userSchema = new mongoose.Schema({
         {
             itemId:{
                 type:Schema.Types.ObjectId,
-                ref:'Item'
+                ref:'item'
             },
             quantity:Number,
-            status:{
-                type:String,
-            }
         }
     ]
 })
