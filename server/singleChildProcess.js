@@ -61,6 +61,7 @@ async function singleProcess() {
     app.use('/api/v1/tier', require("./routes/Tier/tier"));
     app.use('/api/v1/pooja', require("./routes/Pooja/pooja"));
     app.use('/api/v1/booking', require("./routes/Booking/booking"));
+    app.use('/api/v1/consultation', require("./routes/Consultation/consultation"));
     app.use('/api/v1/devta', require("./routes/DeviDevta/devi-devta"));
     app.use('/api/v1/itemcategory', require("./routes/ItemCategory/itemCategoryRoutes"));
     app.use('/api/v1/items', require("./routes/Item/itemRoutes"));

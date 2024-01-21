@@ -417,6 +417,7 @@ function Index() {
                       <MenuItem value="Home">Home</MenuItem>
                       <MenuItem value="Pooja">Pooja</MenuItem>
                       <MenuItem value="Mandir">Mandir</MenuItem>
+                      <MenuItem value="Store">Store</MenuItem>
                       <MenuItem value="Dham">Dham</MenuItem>
                       <MenuItem value="Popular">Popular</MenuItem>
                       </Select>

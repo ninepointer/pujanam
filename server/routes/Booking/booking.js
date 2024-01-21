@@ -20,6 +20,5 @@ router.patch('/reject/:id', Authenticate, restrictTo('Admin', 'SuperAdmin'), boo
 router.patch('/confirm/:id', Authenticate, restrictTo('Admin', 'SuperAdmin'), bookingController.confirmBooking);
 router.patch('/complete/:id', Authenticate, restrictTo('Admin', 'Super Admin'), uploadMulter, uploadToS3, bookingController.completeBooking);
 
-module.exports=router;
 
 module.exports=router;
