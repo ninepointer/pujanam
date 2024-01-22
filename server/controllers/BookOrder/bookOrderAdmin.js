@@ -252,12 +252,12 @@ exports.acceptOrder = async (req, res) => {
 
 exports.dispatchOrder = async (req, res) => {
     const { id } = req.params;
-    const { expected_dispatch_time } = req.body;
+    const { expected_deliver_time } = req.body;
     try {
         const order = await Order.findOneAndUpdate({ _id: new ObjectId(id) }, {
             $set: {
                 status: "Dispatched",
-                expected_dispatch_time: expected_dispatch_time,
+                expected_deliver_time: expected_deliver_time,
             }
         })
         ApiResponse.success(res, order);

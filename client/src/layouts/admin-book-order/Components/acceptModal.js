@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from 'react';
 import Modal from '@mui/material/Modal';
-import { Box } from '@mui/material';
+import { Box, TextField } from '@mui/material';
 import axios from 'axios';
 import { apiUrl } from '../../../constants/constants';
 import MDTypography from '../../../components/MDTypography';
@@ -38,39 +38,24 @@ const ApproveModal = ({ data, action, setAction }) => {
     bgcolor: 'background.paper',
     borderRadius: 2,
     boxShadow: 24,
-    p: 4,
+    // paddingLeft: 4,
+    // paddingRight: 4,
+    p: "10px 15px 10px 15px"
   };
 
   const [title, setTitle] = useState('')
   const [content, setContent] = useState('')
   const [open, setOpen] = useState(false);
-  const [pandits, setPandit] = useState([]);
   const [formstate, setFormState] = useState({
-    booking_date: '' || data?.booking_date,
-    pandits: {
-      _id: "" || data?.pandits?._id,
-      pandit_name: "" || data?.pandits?.pandit_name
-    },
+    expected_deliver_time: '' || data?.expected_deliver_time,
   });
-  const lat = data?.address_details?.location?.coordinates[0];
-  const long = data?.address_details?.location?.coordinates[1];
 
   const handleClose = () => {
     setOpen(false);
   }
 
-  useEffect(() => {
-    axios.get(`${apiUrl}pandit/nearest?lat=${lat}&long=${long}`, {withCredentials: true})
-      .then((res) => {
-        setPandit(res?.data?.data);
-      }).catch((err) => {
-        return new Error(err)
-      })
-  }, [])
-
   const [successSB, setSuccessSB] = useState(false);
   const openSuccessSB = (title, content) => {
-    console.log('status success')
     setTitle(title)
     setContent(content)
     setSuccessSB(true);
@@ -112,15 +97,15 @@ const ApproveModal = ({ data, action, setAction }) => {
   );
 
   const handleSubmit = async () => {
-    const {booking_date, pandits} = formstate
-    if (!booking_date || !pandits) {
+    const {expected_deliver_time} = formstate
+    if (!expected_deliver_time ) {
       return openErrorSB('error', 'Please fill the required fields');
     }
 
     const formData = {
-      booking_date, pandits: pandits?._id
+      expected_deliver_time
     }
-    const res = await axios.patch(`${apiUrl}booking/confirm/${data?._id}`, formData, { withCredentials: true });
+    const res = await axios.patch(`${apiUrl}order/dispatch/${data?._id}`, formData, { withCredentials: true });
     console.log(res.data);
     if (res.data.status == 'success') {
       openSuccessSB('Success', 'Withdrawal approved.');
@@ -131,22 +116,7 @@ const ApproveModal = ({ data, action, setAction }) => {
     }
   }
 
-  const handlePanditChange = (event) => {
-    const {
-      target: { value },
-    } = event;
-    let data = pandits?.filter((elem) => {
-      return elem.pandit_name === value;
-    })
-    setFormState(prevState => ({
-      ...prevState,
-      pandits: {
-        ...prevState.pandits,
-        _id: data[0]?._id,
-        pandit_name: data[0]?.pandit_name
-      }
-    }));
-  };
+
   return (
     <>
       <MDButton onClick={() => { setOpen(true) }} color='success' sx={{ marginRight: '6px' }}>Confirm</MDButton>
@@ -157,57 +127,17 @@ const ApproveModal = ({ data, action, setAction }) => {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <MDTypography>Enter confirmation details</MDTypography>
+          <MDTypography>Enter Dispatch details</MDTypography>
           <MDBox mt={1} >
-            <MDTypography style={{ fontSize: '14px' }}>Confirm booking for {data?.full_name}</MDTypography>
 
-            <Grid item xs={12} md={12} xl={12} mt={1}>
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DemoContainer components={['MobileDateTimePicker']}>
-                  <DemoItem>
-                    <MobileDateTimePicker
-                      label="Booking Date"
-                      value={dayjs(formstate?.booking_date) || dayjs(data?.booking_date)}
-                      onChange={(newValue) => {
-                        if (newValue && newValue.isValid()) {
-                          setFormState(prevState => ({ ...prevState, booking_date: newValue }))
-                        }
-                      }}
-                      // minDateTime={null}
-                      minDateTime={dayjs().startOf('day')}
-                      // format="HH:mm"
-                      // ampm={true}
-                      // openTo="hours"
-                      sx={{ width: '100%' }}
-                    />
-                  </DemoItem>
-                </DemoContainer>
-              </LocalizationProvider>
-            </Grid>
-
-            <Grid item xs={12} md={12} xl={12}  mt={1}>
-              <FormControl sx={{ width: '100%' }}>
-                <InputLabel id="demo-multiple-name-label">Pandit</InputLabel>
-                <Select
-                  labelId="demo-multiple-name-label"
-                  id="demo-multiple-name"
-                  name='pandit'
-                  value={formstate?.pandits?.pandit_name || data?.pandits?.pandit_name}
-                  onChange={handlePanditChange}
-                  input={<OutlinedInput label="Pandit" />}
-                  sx={{ minHeight: 45 }}
-                  MenuProps={MenuProps}
-                >
-                  {pandits?.map((pandit) => (
-                    <MenuItem
-                      key={pandit?.pandit_name}
-                      value={pandit?.pandit_name}
-                    >
-                      {pandit.pandit_name}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
+          <Grid item xs={12} md={12} xl={12} mt={1}>
+              <TextField label='Expected Deliver Time(Minutes)'
+                value={formstate.expected_deliver_time}
+                name='expected_deliver_time'
+                onChange={(e) => setFormState(prev => ({ ...prev, expected_deliver_time: e.target.value }))}
+                sx={{ marginBottom: '12px' ,width: '100%' }}
+                // outerWidth='40%' 
+                />
             </Grid>
 
             <Grid item xs={12} md={12} xl={12} mt={3} display={'flex'} justifyContent={'flex-end'}>

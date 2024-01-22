@@ -4,7 +4,7 @@ import MDButton from '../../../components/MDButton'
 import MDTypography from '../../../components/MDTypography';
 import axios from 'axios';
 import { apiUrl } from '../../../constants/constants';
-import ApproveModal from './approveModal';
+import ApproveModal from './acceptModal';
 import RejectModal from './rejectModal';
 import MDSnackbar from '../../../components/MDSnackbar';
 import moment from 'moment';

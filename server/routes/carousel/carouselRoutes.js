@@ -3,8 +3,8 @@ const Authenticate = require('../../authentication/authentication');
 const restrictTo = require('../../authentication/authorization');
 const { getCarousels, getCarousel, editCarousel, deleteCarousel, createCarousel,
 uploadMulter, uploadToS3, resizePhoto, getActiveCarousels, getLiveCarousels, getHomePageCarousels,
-getInfinityLiveCarousels, getStoxHeroLiveCarousels, getUpcomingInfinityCarousels, 
-getUpcomingStoxHeroCarousels, getUpcomingCarousels, getDraftCarousels, getPastCarousels, saveCarouselClick } = require('../../controllers/carousalController');
+getDamCarousels, getPopularCarousels, getPoojaCarousels, 
+getStoreCarousels, getUpcomingCarousels, getDraftCarousels, getPastCarousels, saveCarouselClick } = require('../../controllers/carousalController');
 const Carousel = require('../../models/carousel/carouselSchema');
 
 const router = express.Router();
@@ -22,6 +22,10 @@ router.route('/active').get(getActiveCarousels)
 router.route('/live').get(Authenticate, getLiveCarousels)
 router.route('/upcoming').get(getUpcomingCarousels)
 router.route('/home').get(Authenticate,getHomePageCarousels)
+router.route('/dham').get(Authenticate,getDamCarousels)
+router.route('/popular').get(Authenticate,getPopularCarousels)
+router.route('/pooja').get(Authenticate,getPoojaCarousels)
+router.route('/store').get(Authenticate,getStoreCarousels)
 router.route('/draft').get(Authenticate, getDraftCarousels)
 router.route('/past').get(Authenticate, getPastCarousels)
 router.route('/carouselclick/:id').patch(Authenticate, saveCarouselClick)

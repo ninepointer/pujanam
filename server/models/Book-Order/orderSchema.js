@@ -102,6 +102,10 @@ const Order = new mongoose.Schema({
         type: String,
         // required: true,
     },
+    expected_deliver_time: {
+        type: Number,
+        // required: true,
+    },
     status: {
         type: String,
         enum: ['Pending', 'Approved', 'Confirmed', 'Completed', 'Rejected'],
