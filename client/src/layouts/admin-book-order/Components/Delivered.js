@@ -6,26 +6,24 @@ import axios from 'axios';
 import Card from './Card';
 
 const Approved = () => {
-  const [approved, setApproved] = useState([]); 
+  const [completed, setCompleted] = useState([]); 
   const [action, setAction] = useState(false); 
-  const getApproved = async() =>{
-    const res = await axios.get(`${ apiUrl}booking/approve`, {withCredentials: true});
+  const getCompleted = async() =>{
+    const res = await axios.get(`${ apiUrl}order/deliver`, {withCredentials: true});
     console.log(res.data.data)
-    setApproved((prev)=>res.data.data);
+    setCompleted((prev)=>res.data.data);
   }
   useEffect(()=>{
-    getApproved()
+    getCompleted()
   },[action])  
   return (
    <MDBox sx={{minHeight:'60vh'}}>
-    {approved.length>0?
-        approved.map((elem)=><Card key={elem._id} 
+    {completed.length>0?
+        completed.map((elem)=><Card key={elem._id} 
            data={elem}
-           setAction={setAction}
-           action={action}
         />):<MDBox sx={{display:'flex', justifyContent:'center', alignItems:'center', height:'60vh'}}>
         <MDTypography>
-            No Approved Bookings
+            No Delivered Order
             </MDTypography> 
     </MDBox>
     }

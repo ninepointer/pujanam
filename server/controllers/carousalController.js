@@ -259,32 +259,17 @@ exports.getHomePageCarousels = async (req, res, next) => {
     const count = await Carousel.countDocuments({ carouselEndDate: { $gte: new Date() }, carouselStartDate: { $lte: new Date() }, status: 'Live', visibility: roleFilter })
     let liveCarousels = [];
     try {
-        if (userRoleName.roleName === "Admin") {
-            liveCarousels = await Carousel.find(
-                {
-                    $and: [
-                        { carouselStartDate: { $lte: new Date() } },
-                        { carouselEndDate: { $gte: new Date() } }
-                    ],
-                    status: 'Live'
-                })
-                .sort({ carouselPosition: 1 })
-        }
-        else {
-            liveCarousels = await Carousel.find(
-                {
-                    status: 'Live',
-                    $or: [
-                        { visibility: roleFilter },
-                        { visibility: 'All' }
-                    ],
-                    $and: [
-                        { carouselStartDate: { $lte: new Date() } },
-                        { carouselEndDate: { $gte: new Date() } }
-                    ]
-                })
-                .sort({ carouselPosition: 1 })
-        }
+        liveCarousels = await Carousel.find(
+            {
+                status: 'Live',
+                visibility: 'All',
+                $and: [
+                    { carouselStartDate: { $lte: new Date() } },
+                    { carouselEndDate: { $gte: new Date() } }
+                ]
+        })
+        .sort({ carouselPosition: 1 })
+
         res.status(201).json({ status: 'success', data: liveCarousels, count: count });
     } catch (e) {
         console.log(e);

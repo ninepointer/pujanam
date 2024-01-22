@@ -20,9 +20,9 @@ import breakpoints from "../../../assets/theme/base/breakpoints";
 // Images
 import backgroundImage from "../../../assets/images/trading.jpg";
 import Pending from "../Components/Pending";
-import Approve from "../Components/Approved";
-import Confirmed from "../Components/Confirmed";
-import Completed from "../Components/Completed";
+import Accepeted from "../Components/Accepted";
+import Dispatched from "../Components/Dispatched";
+import Delivered from "../Components/Delivered";
 import Rejected from "../Components/Rejected";
 
 
@@ -87,13 +87,13 @@ function WithdrawalHeader({ children }) {
                   label="Pending"
                 />
                 <Tab
-                  label="Approved"
+                  label="Accepeted"
                 />           
                 <Tab
-                  label="Confirmed"
+                  label="Dispatched"
                 /> 
                 <Tab
-                  label="Completed"
+                  label="Delivered"
                 />
                 <Tab
                   label="Rejected"
@@ -101,9 +101,9 @@ function WithdrawalHeader({ children }) {
               </Tabs>
             </AppBar>
             <TabPanel value={tabValue} index={0}><Pending/></TabPanel>
-            <TabPanel value={tabValue} index={1}><Approve/></TabPanel>
-            <TabPanel value={tabValue} index={2}><Confirmed/></TabPanel>
-            <TabPanel value={tabValue} index={3}><Completed/></TabPanel>
+            <TabPanel value={tabValue} index={1}><Accepeted/></TabPanel>
+            <TabPanel value={tabValue} index={2}><Dispatched/></TabPanel>
+            <TabPanel value={tabValue} index={3}><Delivered/></TabPanel>
             <TabPanel value={tabValue} index={4}><Rejected/></TabPanel>
           </Grid>
         </Grid>

@@ -66,7 +66,7 @@ exports.myOrder = async (req, res) => {
         const booking = await Order.find({user_id: new ObjectId(req.user._id)})
         .populate('payment_details', 'transaction_id payment_status payment_mode')
         .populate('item_details.category_id', 'name')
-        .populate('item_details.item_id', 'name')
+        .populate('item_details.item_id', 'name image min_order_quantity unit')
         ApiResponse.success(res, booking);
     } catch (error) {
         ApiResponse.error(res,'Something went wrong', 500, error.message);

@@ -9,7 +9,7 @@ const Confirmed = () => {
   const [confirmed, setConfirmed] = useState([]);
   const [action, setAction] = useState(false);
   const getConfirmed = async () => {
-    const res = await axios.get(`${apiUrl}booking/confirm`, { withCredentials: true });
+    const res = await axios.get(`${apiUrl}order/confirm`, { withCredentials: true });
     console.log(res.data.data)
     setConfirmed((prev) => res.data.data);
   }
@@ -25,7 +25,7 @@ const Confirmed = () => {
           action={action}
         />) : <MDBox sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '60vh' }}>
           <MDTypography>
-            No Confirmed Bookings
+            No Dispatched Order
           </MDTypography>
         </MDBox>
       }
