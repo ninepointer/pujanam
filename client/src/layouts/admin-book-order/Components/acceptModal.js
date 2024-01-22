@@ -5,31 +5,11 @@ import axios from 'axios';
 import { apiUrl } from '../../../constants/constants';
 import MDTypography from '../../../components/MDTypography';
 import { Grid } from '@mui/material';
-import { Select } from '@mui/material';
-import { FormControl } from '@mui/material';
-import { InputLabel } from '@mui/material';
-import { OutlinedInput } from '@mui/material';
-import { MenuItem } from '@mui/material';
 import MDButton from '../../../components/MDButton';
 import MDBox from '../../../components/MDBox';
 import MDSnackbar from '../../../components/MDSnackbar';
-import dayjs from 'dayjs';
-import { DemoContainer, DemoItem } from '@mui/x-date-pickers/internals/demo';
-import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { MobileDateTimePicker } from '@mui/x-date-pickers/MobileDateTimePicker';
 
-const ITEM_HEIGHT = 30;
-const ITEM_PADDING_TOP = 10;
-const MenuProps = {
-  PaperProps: {
-    style: {
-      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-      width: 250,
-    },
-  },
-};
-const ApproveModal = ({ data, action, setAction }) => {
+const AcceptModal = ({ data, action, setAction }) => {
   const style = {
     position: 'absolute',
     top: '50%',
@@ -119,7 +99,7 @@ const ApproveModal = ({ data, action, setAction }) => {
 
   return (
     <>
-      <MDButton onClick={() => { setOpen(true) }} color='success' sx={{ marginRight: '6px' }}>Confirm</MDButton>
+      <MDButton onClick={() => { setOpen(true) }} color='success' sx={{ marginRight: '6px' }}>Dispatch</MDButton>
       <Modal
         open={open}
         onClose={handleClose}
@@ -142,7 +122,7 @@ const ApproveModal = ({ data, action, setAction }) => {
 
             <Grid item xs={12} md={12} xl={12} mt={3} display={'flex'} justifyContent={'flex-end'}>
               <MDButton onClick={() => { handleClose() }}>Cancel</MDButton>
-              <MDButton color='success' onClick={() => { handleSubmit() }}>Confirm</MDButton>
+              <MDButton color='success' onClick={() => { handleSubmit() }}>Dispatch</MDButton>
             </Grid>
 
           </MDBox>
@@ -154,4 +134,4 @@ const ApproveModal = ({ data, action, setAction }) => {
   )
 }
 
-export default ApproveModal
+export default AcceptModal

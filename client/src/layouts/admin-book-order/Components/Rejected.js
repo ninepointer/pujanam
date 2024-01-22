@@ -9,7 +9,7 @@ const Rejected = () => {
   const [rejected, setRejected] = useState([]); 
   const [action, setAction] = useState(false); 
   const getRejected = async() =>{
-    const res = await axios.get(`${ apiUrl}booking/reject`, {withCredentials: true});
+    const res = await axios.get(`${ apiUrl}order/reject`, {withCredentials: true});
     console.log(res.data.data)
     setRejected((prev)=>res.data.data);
   }

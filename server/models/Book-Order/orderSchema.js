@@ -106,6 +106,10 @@ const Order = new mongoose.Schema({
         type: Number,
         // required: true,
     },
+    order_no: {
+        type: Number,
+        // required: true,
+    },
     status: {
         type: String,
         enum: ['Pending', 'Approved', 'Confirmed', 'Completed', 'Rejected'],

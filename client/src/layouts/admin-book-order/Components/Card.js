@@ -8,8 +8,9 @@ import ApproveModal from './acceptModal';
 import RejectModal from './rejectModal';
 import MDSnackbar from '../../../components/MDSnackbar';
 import moment from 'moment';
-import ConfirmModel from "./completeModel"
-import { Divider } from '@mui/material';
+import DispatchModel from "./dispatchModel"
+// import { Divider } from '@mui/material';
+import ItemTable from './itemTable'
 
 const Card = ({ data, action, setAction }) => {
   const [openReject, setOpenReject] = useState(false);
@@ -77,6 +78,14 @@ const Card = ({ data, action, setAction }) => {
   }
 
   const headingColor = "#7B3F00";
+  const address = `
+  ${data?.address_details?.house_or_flat_no && (`House/Flat No. ${data?.address_details?.house_or_flat_no}, `)}
+  ${data?.address_details?.floor && (`Floor - ${data?.address_details?.floor}, `)}
+  ${data?.address_details?.locality && (`${data?.address_details?.locality}, `)}
+  ${data?.address_details?.landmark && (`${data?.address_details?.landmark}, `)}
+  ${data?.address_details?.city && (`${data?.address_details?.city}, `)}
+  ${data?.address_details?.state && (`${data?.address_details?.state} (${data?.address_details?.pincode})`)}
+  `
 
   return (
     <>
@@ -84,8 +93,14 @@ const Card = ({ data, action, setAction }) => {
         <MDBox sx={{ display: 'flex', flexDirection: "column" }}>
           <MDBox sx={{ display: 'flex', justifyContent: 'space-between' }}>
             <MDBox>
+            <MDTypography style={{ fontSize: '14px', marginBottom: '12px' }} >Order Number: <span style={{fontWeight: 600}}>{`${data?.order_no}`}</span></MDTypography>
               <MDTypography style={{ fontSize: '14px', marginBottom: '12px' }} >Name: <span style={{fontWeight: 600}}>{`${data?.user_id?.full_name}`}</span></MDTypography>
               <MDTypography style={{ fontSize: '14px', marginBottom: '12px' }} >Mobile: <span style={{fontWeight: 600}}>{`${data?.user_id?.mobile}`}</span></MDTypography>
+              {data?.status == 'Rejected' ?
+              <MDTypography style={{ fontSize: '14px', marginBottom: '12px' }} >Rejection Reason: <span style={{fontWeight: 600}}>{data?.reject_message}</span></MDTypography>
+              :
+              <MDTypography style={{ fontSize: '14px', marginBottom: '12px' }} >Order Date: <span style={{fontWeight: 600}}>{moment.utc(data?.order_date).utcOffset('+05:30').format('DD-MMM-YYYY') || 'N/A'}</span></MDTypography>
+              }
             </MDBox>
 
             <MDBox>
@@ -99,7 +114,7 @@ const Card = ({ data, action, setAction }) => {
               </MDBox>}
 
               {data?.status == 'Dispatched' && <MDBox>
-                <ConfirmModel data={data} action={action} setAction={setAction} />
+                <DispatchModel data={data} action={action} setAction={setAction} />
               </MDBox>}
               {openReject && <RejectModal open={openReject} handleClose={handleCloseReject} data={data} action={action} setAction={setAction} />}
 
@@ -107,39 +122,24 @@ const Card = ({ data, action, setAction }) => {
           </MDBox>
           <MDTypography style={{ fontSize: '14px', marginBottom: '12px', fontWeight: 600, color: headingColor }} >Address Details</MDTypography>
           <MDBox sx={{ display: 'flex', justifyContent: 'center', flexDirection: "column" }}>
-            <MDBox sx={{ display: 'flex', justifyContent: 'space-between' }}>
-              <MDTypography style={{ fontSize: '14px', marginBottom: '12px' }} >House/Flat No.: <span style={{fontWeight: 600}}>{`${data?.address_details?.house_or_flat_no}`}</span></MDTypography>
-              <MDTypography style={{ fontSize: '14px', marginBottom: '12px' }} >Floor: <span style={{fontWeight: 600}}>{`${data?.address_details?.floor}`}</span></MDTypography>
-              <MDTypography style={{ fontSize: '14px', marginBottom: '12px' }} >Locality: <span style={{fontWeight: 600}}>{`${data?.address_details?.locality}`}</span></MDTypography>
-              <MDTypography style={{ fontSize: '14px', marginBottom: '12px' }} >Landmark: <span style={{fontWeight: 600}}>{`${data?.address_details?.landmark}`}</span></MDTypography>
-              <MDTypography style={{ fontSize: '14px', marginBottom: '12px' }} >Pincode: <span style={{fontWeight: 600}}>{`${data?.address_details?.pincode}`}</span></MDTypography>
-              <MDTypography style={{ fontSize: '14px', marginBottom: '12px' }} >City: <span style={{fontWeight: 600}}>{`${data?.address_details?.city}`}</span></MDTypography>
-            </MDBox>
-            <MDBox sx={{ display: 'flex', justifyContent: 'space-between' }}>
-              <MDTypography style={{ fontSize: '14px', marginBottom: '12px' }} >Address: <span style={{fontWeight: 600}}>{`${data?.address_details?.address}`}</span></MDTypography>
+            <MDBox sx={{ display: 'flex', gap: 5 }}>
+              <MDTypography style={{ fontSize: '14px', marginBottom: '12px' }} >Address: <span style={{fontWeight: 600}}>{`${address}`}</span></MDTypography>
+              <MDTypography style={{ fontSize: '14px', marginBottom: '12px' }} >Mobile: <span style={{fontWeight: 600}}>{`${data?.mobile}`}</span></MDTypography>
             </MDBox>
           </MDBox>
 
           <MDTypography style={{ fontSize: '14px', marginBottom: '12px', fontWeight: 600, color: headingColor }} >Item Details</MDTypography>
           <MDBox sx={{ display: 'flex', justifyContent: 'center', flexDirection: "column" }}>
-            {data.item_details.map((elem)=>{
-              return(
-                <MDBox sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                <MDTypography style={{ fontSize: '14px', marginBottom: '12px' }} >Item: <span style={{fontWeight: 600}}>{`${elem?.item_id?.name}`}</span></MDTypography>
-                <MDTypography style={{ fontSize: '14px', marginBottom: '12px' }} >Category: <span style={{fontWeight: 600}}>{`${elem?.category_id?.name}`}</span></MDTypography>
-                <MDTypography style={{ fontSize: '14px', marginBottom: '12px' }} >Quantity: <span style={{fontWeight: 600}}>{`${elem?.order_quantity}`}</span></MDTypography>
-                <MDTypography style={{ fontSize: '14px', marginBottom: '12px' }} >Amount: <span style={{fontWeight: 600}}>{`${elem?.order_amount}`}</span></MDTypography>
-              </MDBox>
-              )
-            })}
+            <ItemTable items={data.item_details} />
           </MDBox>
 
-          <MDTypography style={{ fontSize: '14px', marginBottom: '12px', fontWeight: 600, color: headingColor }} >Payment Details</MDTypography>
+          <MDTypography style={{ fontSize: '14px', margin: '10px 0px 12px 0px', fontWeight: 600, color: headingColor }} >Payment Details</MDTypography>
           <MDBox sx={{ display: 'flex', justifyContent: 'space-between' }}>
-              <MDTypography style={{ fontSize: '14px', marginBottom: '12px' }} >TxnId: <span style={{fontWeight: 600}}>{`${data?.payment_details?.transaction_id}`}</span></MDTypography>
-              <MDTypography style={{ fontSize: '14px', marginBottom: '12px' }} >Mode: <span style={{fontWeight: 600}}>{`${data?.payment_details?.payment_status}`}</span></MDTypography>
-              <MDTypography style={{ fontSize: '14px', marginBottom: '12px' }} >Status: <span style={{fontWeight: 600}}>{`${data?.payment_details?.payment_mode}`}</span></MDTypography>
-            </MDBox>
+            <MDTypography style={{ fontSize: '14px', marginBottom: '12px' }} >TxnId: <span style={{ fontWeight: 600 }}>{`${data?.payment_details?.transaction_id}`}</span></MDTypography>
+            <MDTypography style={{ fontSize: '14px', marginBottom: '12px' }} >Mode: <span style={{ fontWeight: 600 }}>{`${data?.payment_details?.payment_status}`}</span></MDTypography>
+            <MDTypography style={{ fontSize: '14px', marginBottom: '12px' }} >Status: <span style={{ fontWeight: 600 }}>{`${data?.payment_details?.payment_mode}`}</span></MDTypography>
+            
+          </MDBox>
         </MDBox>
 
 

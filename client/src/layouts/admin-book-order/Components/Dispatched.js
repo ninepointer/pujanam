@@ -9,7 +9,7 @@ const Confirmed = () => {
   const [confirmed, setConfirmed] = useState([]);
   const [action, setAction] = useState(false);
   const getConfirmed = async () => {
-    const res = await axios.get(`${apiUrl}order/confirm`, { withCredentials: true });
+    const res = await axios.get(`${apiUrl}order/dispatch`, { withCredentials: true });
     console.log(res.data.data)
     setConfirmed((prev) => res.data.data);
   }

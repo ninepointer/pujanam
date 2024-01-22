@@ -12,7 +12,7 @@ exports.order = async (req, res) => {
     try {
         const {
             latitude, longitude, address, pincode, city, state, country,
-            mobile, order_amount, category_id, item_id,
+            mobile,
             tag, item_details,
             landmark,
             locality,
@@ -37,14 +37,15 @@ exports.order = async (req, res) => {
             floor,
         }
 
+        const count = await Order.countDocuments();
         const payment = await Payment.create([{
-            transaction_id: generateUniqueTransactionId(), payment_status: "UnPaid", payment_mode: "PAP", created_by: req.user._id
+            transaction_id: generateUniqueTransactionId(), payment_status: "UnPaid", payment_mode: "COD", created_by: req.user._id
         }], { session });
 
         const createOrder = await Order.create([{
             user_id: req.user._id, order_date: new Date() , address_details, mobile,
             // order_amount, category_id, item_id, order_quantity,
-            item_details,
+            item_details, order_no: count+1,
             created_by: req.user._id, payment_details: payment[0]._id
         }], { session });
 
