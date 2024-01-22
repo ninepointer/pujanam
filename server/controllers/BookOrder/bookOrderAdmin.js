@@ -5,84 +5,82 @@ const Payment = require("../../models/Payment/payment");
 const mongoose = require('mongoose');
 const User = require("../../models/User/userSchema")
 
-exports.order = async (req, res) => {
-    const session = await mongoose.startSession();
-    session.startTransaction();
+const multer = require('multer');
+const AWS = require('aws-sdk');
+const sharp = require('sharp');
+const storage = multer.memoryStorage();
 
-    try {
-        const {
-            latitude, longitude, address, pincode, city, state, country,
-            mobile, order_amount, category_id, item_id,
-            tag, item_details,
-            landmark,
-            locality,
-            house_or_flat_no,
-            floor
-        } = req.body;
 
-        const address_details = {
-            location: {
-                type: "Point",
-                coordinates: [latitude, longitude]
-            },
-            address: address,
-            pincode: pincode,
-            city: city,
-            state: state,
-            country: country,
-            tag,
-            landmark,
-            locality,
-            house_or_flat_no,
-            floor,
-        }
 
-        const payment = await Payment.create([{
-            transaction_id: generateUniqueTransactionId(), payment_status: "UnPaid", payment_mode: "PAP", created_by: req.user._id
-        }], { session });
-
-        const createOrder = await Order.create([{
-            user_id: req.user._id, order_date: new Date() , address_details, mobile,
-            // order_amount, category_id, item_id, order_quantity,
-            item_details,
-            created_by: req.user._id, payment_details: payment[0]._id
-        }], { session });
-
-        await session.commitTransaction();
-        session.endSession();
-
-        ApiResponse.success(res, createOrder);
-    } catch (error) {
-        await session.abortTransaction();
-        session.endSession();
-
-        ApiResponse.error(res, 'Something went wrong', 500, error.message);
+const fileFilter = (req, file, cb) => {
+    if (file.mimetype.startsWith("image/") || file.mimetype.startsWith("application/")) {
+        cb(null, true);
+    } else {
+        cb(new Error("Invalid file type"), false);
     }
-};
-
-exports.myOrder = async (req, res) => {
-    
-    try {
-        const booking = await Order.find({user_id: new ObjectId(req.user._id)})
-        .populate('payment_details', 'transaction_id payment_status payment_mode')
-        .populate('item_details.category_id', 'name')
-        .populate('item_details.item_id', 'name')
-        ApiResponse.success(res, booking);
-    } catch (error) {
-        ApiResponse.error(res,'Something went wrong', 500, error.message);
-    }
-};
-
-function generateUniqueTransactionId() {
-    const maxLength = 36;
-    const allowedCharacters = "0123456789";
-
-    const timestampPart = "MTID" + Date.now().toString();
-    const remainingLength = maxLength - timestampPart.length;
-    const randomChars = Array.from({ length: 5 }, () => allowedCharacters[Math.floor(Math.random() * allowedCharacters.length)]).join('');
-
-    return timestampPart + randomChars;
 }
+
+AWS.config.update({
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+    region: process.env.AWS_REGION
+});
+
+const upload = multer({ storage, fileFilter }).single("transactionDocument");
+const s3 = new AWS.S3({
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+});
+
+
+exports.uploadMulter = upload;
+
+exports.resizePhoto = (req, res, next) => {
+    if (!req.file) {
+        // no file uploaded, skip to next middleware
+        next();
+        return;
+    }
+    sharp(req.file.buffer).resize({ width: 500, height: 500 }).toBuffer()
+        .then((resizedImageBuffer) => {
+            req.file.buffer = resizedImageBuffer;
+            next();
+        })
+        .catch((err) => {
+            console.error(err);
+            res.status(500).send({ message: "Error resizing photo" });
+        });
+};
+
+exports.uploadToS3 = async (req, res, next) => {
+    if (!req.file) {
+        // no file uploaded, skip to next middleware
+        next();
+        return;
+    }
+
+    // create S3 upload parameters
+    const key = `withdrawals/documents/${(Date.now()) + req.file.originalname}`;
+    const params = {
+        Bucket: process.env.AWS_BUCKET_NAME,
+        Key: key,
+        Body: req.file.buffer,
+        ContentType: req.file.mimetype,
+        ACL: 'public-read',
+    };
+
+    // upload image to S3 bucket
+
+    s3.upload((params)).promise()
+        .then((s3Data) => {
+            (req).uploadUrl = s3Data.Location;
+            next();
+        })
+        .catch((err) => {
+            console.error(err);
+            res.status(500).send({ message: "Error uploading to S3" });
+        });
+};
 
 
 exports.getAllPending = async (req, res) => {

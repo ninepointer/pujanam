@@ -69,7 +69,7 @@ async function singleProcess() {
     app.use('/api/v1/mandir', require("./routes/Mandir/mandir"));
     app.use('/api/v1/usermandir', require("./routes/Mandir/userMandir"));
     app.use('/api/v1/location', require("./routes/Location/locationRoutes"));
-    app.use('/api/v1/order', require("./routes/book-order/bookOrder"));
+    app.use('/api/v1/order', require("./routes/book-order/bookOrderAdmin"));
 
     app.use('/api/v1/dailycontest', require("./routes/DailyContest/dailyContestRoutes"))
     app.use('/api/v1/user', require("./routes/user/userRoutes"));
