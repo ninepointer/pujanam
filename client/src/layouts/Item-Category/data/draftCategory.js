@@ -179,7 +179,7 @@ const [data,setData] = useState([]);
           :
          <Grid container spacing={1} xs={12} md={6} lg={12}>
           <Grid item mt={2} xs={6} md={3} lg={12} display="flex" justifyContent="center">
-            <MDTypography color="light">No Draft Categories</MDTypography>
+            <MDTypography color="dark">No Draft Categories</MDTypography>
           </Grid>
          </Grid>
          } 

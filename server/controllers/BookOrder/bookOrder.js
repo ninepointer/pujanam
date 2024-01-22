@@ -63,7 +63,7 @@ exports.order = async (req, res) => {
 exports.myOrder = async (req, res) => {
     
     try {
-        const booking = await Order.findOne({user_id: new ObjectId(req.user._id)})
+        const booking = await Order.find({user_id: new ObjectId(req.user._id)})
         .populate('payment_details', 'transaction_id payment_status payment_mode')
         .populate('item_details.category_id', 'name')
         .populate('item_details.item_id', 'name')
