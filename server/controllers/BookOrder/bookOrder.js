@@ -13,7 +13,7 @@ exports.order = async (req, res) => {
         const {
             latitude, longitude, address, pincode, city, state, country,
             mobile, order_amount, category_id, item_id,
-            tag, order_quantity,
+            tag, order_details,
             landmark,
             locality,
             house_or_flat_no,
@@ -43,7 +43,8 @@ exports.order = async (req, res) => {
 
         const createOrder = await Order.create([{
             user_id: req.user._id, order_date: new Date() , address_details, mobile,
-            order_amount, category_id, item_id, order_quantity,
+            // order_amount, category_id, item_id, order_quantity,
+            order_details,
             created_by: req.user._id, payment_details: payment[0]._id
         }], { session });
 

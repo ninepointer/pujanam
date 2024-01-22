@@ -76,22 +76,24 @@ const Order = new mongoose.Schema({
         type: String,
         required: true,
     },
-    order_amount: {
-        type: Number,
-        required: true,
-    },
-    order_quantity: {
-        type: Number,
-        required: true,
-    },
-    category_id: {
-        type: Schema.Types.ObjectId,
-        ref: 'item-category'
-    },
-    item_id: {
-        type: Schema.Types.ObjectId,
-        ref: 'item'
-    },
+    order_details: [{
+        order_amount: {
+            type: Number,
+            required: true,
+        },
+        order_quantity: {
+            type: Number,
+            required: true,
+        },
+        category_id: {
+            type: Schema.Types.ObjectId,
+            ref: 'item-category'
+        },
+        item_id: {
+            type: Schema.Types.ObjectId,
+            ref: 'item'
+        },
+    }],
     payment_details: {
         type: Schema.Types.ObjectId,
         ref: 'payment'

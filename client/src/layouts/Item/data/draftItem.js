@@ -13,7 +13,7 @@ import { CardActionArea } from '@mui/material';
 import DefaultPanditImage from '../../../assets/images/defaultpanditimage.png'
 import MDAvatar from '../../../components/MDAvatar';
 
-const ActivePandit = () => {
+const Draft = () => {
 let [skip, setSkip] = useState(0);
 const limitSetting = 10;
 const [count, setCount] = useState(0);
@@ -21,7 +21,7 @@ const [isLoading,setIsLoading] = useState(false);
 const [data,setData] = useState([]);
 
   useEffect(()=>{
-    let call1 = axios.get(`${apiUrl}items/active/?skip=${skip}&limit=${limitSetting}`,{
+    let call1 = axios.get(`${apiUrl}items/draft/?skip=${skip}&limit=${limitSetting}`,{
                 withCredentials: true,
                 headers: {
                     Accept: "application/json",
@@ -187,7 +187,7 @@ const [data,setData] = useState([]);
           :
          <Grid container spacing={1} xs={12} md={6} lg={12}>
           <Grid item mt={2} xs={6} md={3} lg={12} display="flex" justifyContent="center">
-            <MDTypography color="light">No Active Item(s)</MDTypography>
+            <MDTypography color="light">No Draft Item(s)</MDTypography>
           </Grid>
          </Grid>
          } 
@@ -197,4 +197,4 @@ const [data,setData] = useState([]);
 
 
 
-export default ActivePandit;
+export default Draft;
