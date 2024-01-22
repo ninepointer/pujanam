@@ -1,12 +1,12 @@
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
-const Booking = new mongoose.Schema({
+const Order = new mongoose.Schema({
     user_id: {
         type: Schema.Types.ObjectId,
         ref: 'user'
     },
-    booking_date: {
+    order_date: {
         type: Date,
         required: true,
     },
@@ -72,36 +72,29 @@ const Booking = new mongoose.Schema({
             // required: true,
         }
     },
-    full_name: {
-        type: String,
-        required: true,
-    },
     mobile: {
         type: String,
         required: true,
     },
-    booking_amount: {
+    order_amount: {
         type: Number,
         required: true,
     },
-    product_id: {
-        type: Schema.Types.ObjectId,
-        ref: 'product'
+    order_quantity: {
+        type: Number,
+        required: true,
     },
-    specific_product_id: {
+    category_id: {
         type: Schema.Types.ObjectId,
+        ref: 'item-category'
+    },
+    item_id: {
+        type: Schema.Types.ObjectId,
+        ref: 'item'
     },
     payment_details: {
         type: Schema.Types.ObjectId,
         ref: 'payment'
-    },
-    pandits: {
-        type: Schema.Types.ObjectId,
-        ref: 'pandit'
-    },
-    tier: {
-        type: Schema.Types.ObjectId,
-        ref: 'tier'
     },
     coupon_code: {
         type: String,
@@ -134,5 +127,5 @@ const Booking = new mongoose.Schema({
         ref: 'user'
     }
 });
-const BookingSchema = mongoose.model('booking', Booking);
-module.exports = BookingSchema;
+const OrderSchema = mongoose.model('order', Order);
+module.exports = OrderSchema;
