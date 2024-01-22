@@ -48,6 +48,9 @@ exports.order = async (req, res) => {
             item_details, order_no: count+1,
             created_by: req.user._id, payment_details: payment[0]._id
         }], { session });
+        const user = await User.findById(req.user._id);
+        user.cart = [];
+        await user.save();
 
         await session.commitTransaction();
         session.endSession();
