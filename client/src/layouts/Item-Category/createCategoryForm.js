@@ -264,7 +264,6 @@ function Index() {
               label='Description *'
               name='description'
               fullWidth
-              type='number'
               defaultValue={editing ? formState?.description : itemPrevDetail?.description}
               // onChange={handleChange}
               onChange={(e) => {

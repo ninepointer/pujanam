@@ -54,7 +54,7 @@ export default function LabTabs() {
           </MDBox>
           : 
           <MDBox style={{minWidth:'100%'}}>
-          <Inactive/>
+          <Active/>
           </MDBox>
           }
           </TabPanel>
@@ -66,7 +66,7 @@ export default function LabTabs() {
           </MDBox>
           : 
           <MDBox style={{minWidth:'100%'}}>
-          <Active/>
+          <Inactive/>
           </MDBox>
           }
           </TabPanel>

@@ -76,7 +76,7 @@ const Order = new mongoose.Schema({
         type: String,
         required: true,
     },
-    order_details: [{
+    item_details: [{
         order_amount: {
             type: Number,
             required: true,
@@ -100,6 +100,14 @@ const Order = new mongoose.Schema({
     },
     coupon_code: {
         type: String,
+        // required: true,
+    },
+    expected_deliver_time: {
+        type: Number,
+        // required: true,
+    },
+    order_no: {
+        type: Number,
         // required: true,
     },
     status: {
