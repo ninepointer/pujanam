@@ -47,6 +47,7 @@ async function commonProcess() {
     app.get('/api/v1/language', async (req, res, next) => { res.json({ status: 'success', data: await LanguageSchema.find() }) })
     app.get('/api/v1/usersetting', async (req, res, next) => { res.json({ status: 'success', data: await Setting.find() }) })
     app.use('/api/v1/unknown', require("./routes/unKnownUserRoute"));
+    app.use('/api/v1/order', require("./routes/book-order/bookOrder"));
 
     app.use('/api/v1', require("./routes/user/signedUpUser"))
     app.use('/api/v1', require("./routes/user/userLogin"));
@@ -57,6 +58,7 @@ async function commonProcess() {
     app.use('/api/v1/tier', require("./routes/Tier/tier"));
     app.use('/api/v1/pooja', require("./routes/Pooja/pooja"));
     app.use('/api/v1/booking', require("./routes/Booking/booking"));
+    app.use('/api/v1/consultation', require("./routes/Consultation/consultation"));
     app.use('/api/v1/devta', require("./routes/DeviDevta/devi-devta"));
     app.use('/api/v1/itemcategory', require("./routes/ItemCategory/itemCategoryRoutes"));
     app.use('/api/v1/items', require("./routes/Item/itemRoutes"));

@@ -19,8 +19,11 @@ import Inventory2Icon from '@mui/icons-material/Inventory2';
 import TempleBuddhistIcon from '@mui/icons-material/TempleBuddhist';
 import { LiaPrayingHandsSolid } from "react-icons/lia";
 import Booking from "./layouts/admin-booking";
+import Consultation from "./layouts/admin-consultation";
 import ItemDetails from './layouts/Item/itemDetails';
 import Item from './layouts/Item';
+import CategoryDetails from './layouts/Item-Category/categoryDetails';
+import Category from './layouts/Item-Category';
 
 const routes = [
 
@@ -126,11 +129,19 @@ const routes = [
   },
   {
     type: "collapse",
-    name: "Booking",
+    name: "Bookings",
     key: "booking",
     icon: <ViewCarouselIcon/>,
     route: "/booking",
     component: <Booking />,
+  },
+  {
+    type: "collapse",
+    name: "Consultations",
+    key: "consultation",
+    icon: <ViewCarouselIcon/>,
+    route: "/consultation",
+    component: <Consultation />,
   },
   {
     key: "carouselDetails",
@@ -149,6 +160,19 @@ const routes = [
   {
     route: "/itemdetails",
     component: <ItemDetails />,
+  },
+
+  {
+    type: "collapse",
+    name: "Category",
+    icon: <ViewCarouselIcon/>,
+    key: "category",
+    route: "/category",
+    component: <Category />,
+  },
+  {
+    route: "/categorydetails",
+    component: <CategoryDetails />,
   },
 
 

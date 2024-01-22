@@ -22,8 +22,16 @@ const Item = new mongoose.Schema({
         name:String,
         url:String
     },
-    featured:Boolean,
-    sponsored:Boolean,
+    featured:{
+        type: Boolean,
+        default: false,
+        required: true
+    },
+    sponsored:{
+        type: Boolean,
+        default: false,
+        required: true
+    },
     description:{
         type:String
     },
@@ -33,7 +41,7 @@ const Item = new mongoose.Schema({
     },
     status: {
         type: String,
-        enum: ['Active', 'Inactive'],
+        enum: ['Active', 'Inactive', 'Draft'],
         default: 'Active',
         required: true
     },

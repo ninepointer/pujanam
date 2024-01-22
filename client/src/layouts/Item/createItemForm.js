@@ -8,7 +8,7 @@ import Grid from "@mui/material/Grid";
 import MDTypography from "../../components/MDTypography";
 import MDBox from "../../components/MDBox";
 import MDButton from "../../components/MDButton"
-import { Checkbox, CircularProgress } from "@mui/material";
+import { Checkbox, CircularProgress, FormControlLabel, FormGroup } from "@mui/material";
 import MDSnackbar from "../../components/MDSnackbar";
 import MenuItem from '@mui/material/MenuItem';
 // import { Card, CardActionArea, CardContent, } from "@mui/material";
@@ -41,7 +41,6 @@ const MenuProps = {
 function Index() {
   const location = useLocation();
   const itemPrevDetail = location?.state?.data;
-  const [selectedLanguage, setSelectedLanguage] = useState(itemPrevDetail?.language ? itemPrevDetail?.language : []);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isLoading, setIsLoading] = useState(itemPrevDetail ? true : false)
   const [editing, setEditing] = useState(false)
@@ -50,10 +49,7 @@ function Index() {
   const navigate = useNavigate();
   const [newData, setNewData] = useState(null);
   const [prevData, setPrevData] = useState(itemPrevDetail)
-  const [updatedDocument, setUpdatedDocument] = useState([]);
-  const [panditData, setPanditData] = useState([]);
   const [category, setCategory] = useState([]);
-
 
   const [formState, setFormState] = useState({
     name: '' || itemPrevDetail?.name,
@@ -65,8 +61,8 @@ function Index() {
       name: '' || itemPrevDetail?.image?.name
     },
     description: '' || itemPrevDetail?.description,
-    featured: '' || itemPrevDetail?.featured,
-    sponsored: '' || itemPrevDetail?.sponsored,
+    featured: false || itemPrevDetail?.featured,
+    sponsored: false || itemPrevDetail?.sponsored,
     category: {
       _id: '' || itemPrevDetail?.category?._id,
       name: '' || itemPrevDetail?.category?.name,
@@ -78,17 +74,12 @@ function Index() {
   const [file, setFile] = useState(null);
   const [filepreview, setFilePreview] = useState(null);
 
-  useEffect(() => {
-    setTimeout(() => {
-      itemPrevDetail && setUpdatedDocument(itemPrevDetail)
-      setIsLoading(false);
-    }, 500)
-  }, [])
 
   useEffect(() => {
     axios.get(`${apiUrl}itemcategory`, {withCredentials: true})
       .then((res) => {
         setCategory(res?.data?.data);
+        setIsLoading(false)
       }).catch((err) => {
         return new Error(err)
       })
@@ -125,6 +116,12 @@ function Index() {
       return;
     }
 
+    const {name, min_order_quantity, unit, price, description, status} = formState;
+
+    if(!name || !min_order_quantity || !unit || !price || !description || !status){
+      openSuccessSB('error', 'Please fill all feilds');
+    }
+
     try {
       const formData = new FormData();
       if (file) {
@@ -132,16 +129,16 @@ function Index() {
       }
 
       for (let elem in formState) {
-        if (elem !== "photo") {
+        if (elem !== "image") {
           if(elem === 'category'){
-            formData.append(`categoryId`, formState[elem]._id);
+            formData.append(`category`, formState[elem]._id);
           } else{
             formData.append(`${elem}`, formState[elem]);
           }
         }
       }
 
-      const res = await fetch(`${apiUrl}item`, {
+      const res = await fetch(`${apiUrl}items`, {
         method: "POST",
         credentials: "include",
         headers: {
@@ -158,6 +155,7 @@ function Index() {
         setIsSubmitted(true);
         setFilePreview(null)
         setEditing(false);
+        setCreating(true)
         openSuccessSB('success', data.message);
       }
     } catch (error) {
@@ -173,16 +171,16 @@ function Index() {
       }
 
       for (let elem in formState) {
-        if (elem !== "photo") {
+        if (elem !== "image") {
           if(elem === 'category'){
-            formData.append(`categoryId`, formState[elem]._id);
+            formData.append(`category`, formState[elem]._id);
           } else{
             formData.append(`${elem}`, formState[elem]);
           }
         }
       }
 
-      const res = await fetch(`${apiUrl}item/${prevData?._id}`, {
+      const res = await fetch(`${apiUrl}items/${prevData?._id}`, {
 
         method: "PATCH",
         credentials: "include",
@@ -232,11 +230,7 @@ function Index() {
   );
 
   const [errorSB, setErrorSB] = useState(false);
-  const openErrorSB = (title, content) => {
-    setTitle(title)
-    setContent(content)
-    setErrorSB(true);
-  }
+
   const closeErrorSB = () => setErrorSB(false);
 
   const renderErrorSB = (
@@ -273,16 +267,17 @@ function Index() {
     if(filepreview){
       return filepreview
     }
-    if(newData?.photo?.url) {
-      return newData?.photo?.url
+    if(newData?.image?.url) {
+      return newData?.image?.url
     }
-    if(prevData?.photo?.url) {
-      return prevData?.photo?.url
+    if(prevData?.image?.url) {
+      return prevData?.image?.url
     }
     else {
-      return DefaultPoojaUpload
+      // return DefaultPoojaUpload
     }
   }
+
 
   return (
     <>
@@ -326,7 +321,7 @@ function Index() {
                     name='min_order_quantity'
                     fullWidth
                     type='number'
-                    defaultValue={editing ? formState?.min_order_quantity : itemPrevDetail?.min_order_quantity}
+                    defaultValue={editing ? Math.abs(formState?.min_order_quantity) : itemPrevDetail?.min_order_quantity}
                     // onChange={handleChange}
                     onChange={(e) => {
                       setFormState(prevState => ({
@@ -339,7 +334,7 @@ function Index() {
 
                 <Grid item xs={12} md={3} xl={3} display="flex" justifyContent="center" alignContent="center" alignItems="center">
                   <FormControl sx={{ width: "100%" }}>
-                    <InputLabel id="demo-simple-select-autowidth-label">Status *</InputLabel>
+                    <InputLabel id="demo-simple-select-autowidth-label">Unit *</InputLabel>
                     <Select
                       labelId="demo-simple-select-autowidth-label"
                       id="demo-simple-select-autowidth"
@@ -371,7 +366,7 @@ function Index() {
                     name='price'
                     type='number'
                     fullWidth
-                    defaultValue={editing ? formState?.price : itemPrevDetail?.price}
+                    defaultValue={editing ? Math.abs(formState?.price) : itemPrevDetail?.price}
                     onChange={(e) => {
                       setFormState(prevState => ({
                         ...prevState,
@@ -445,13 +440,47 @@ function Index() {
                     >
                       <MenuItem value="Active">Active</MenuItem>
                       <MenuItem value="Inactive">Inactive</MenuItem>
+                      <MenuItem value="Draft">Draft</MenuItem>
                     </Select>
                   </FormControl>
                 </Grid>
 
+                <Grid item xs={12} md={6} xl={3}>
+                  <FormGroup>
+                    <FormControlLabel 
+                      checked={(itemPrevDetail?.featured !== undefined && !editing && formState?.featured === undefined) ? itemPrevDetail?.featured : formState?.featured}
+                      disabled={((isSubmitted || itemPrevDetail) && (!editing || saving))}
+                      control={<Checkbox />} 
+                      onChange={(e) => {
+                        setFormState(prevState => ({
+                          ...prevState,
+                          featured: e.target.checked
+                        }))
+                      }}
+                      label="Featured" />
+                  </FormGroup>
+                </Grid>
+
+                <Grid item xs={12} md={6} xl={3}>
+                  <FormGroup>
+                    <FormControlLabel
+                      checked={(itemPrevDetail?.sponsored !== undefined && !editing && formState?.sponsored === undefined) ? itemPrevDetail?.sponsored : formState?.sponsored}
+                      disabled={((isSubmitted || itemPrevDetail) && (!editing || saving))}
+                      control={<Checkbox />} 
+                      onChange={(e) => {
+                        setFormState(prevState => ({
+                          ...prevState,
+                          sponsored: e.target.checked
+                        }))
+                      }}
+                      label="Sponsered" />
+                  </FormGroup>
+                </Grid>
+
+
                 <Grid item xs={12} md={3} xl={3} display="flex" justifyContent="center" alignContent="center" alignItems="center">
                   <MDButton variant="outlined" style={{ fontSize: 10 }} fullWidth color={((newData || prevData) && (!editing)) ? "warning" : "dark"} component="label">
-                    Upload Pandit Photo (512 X 512)
+                    Upload Item Photo (512 X 512)
                     <input
                       hidden
                       disabled={((newData || prevData) && (!editing))}
@@ -463,9 +492,9 @@ function Index() {
                   </MDButton>
                 </Grid>
 
-                <Grid item xs={12} md={12} xl={9} display="flex" justifyContent="flex-end" alignContent="center" alignItems="center">
-                  <MDAvatar src={imagetoshow()}/>
-                </Grid>
+              <Grid item xs={12} md={12} xl={12} display="flex" justifyContent="flex-end" alignContent="center" alignItems="center">
+                <img style={{ height: "100px", width: "100px" }} src={imagetoshow()} />
+              </Grid>
 
               </Grid>
 

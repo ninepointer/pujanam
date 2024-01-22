@@ -43,16 +43,19 @@ exports.createItem = async (req, res) => {
         const { name, min_order_quantity, unit, price, featured, sponsored, description, category, status, created_by } = req.body;
         const image = req.file;
 
-        const imageDetails = image && await resizeAndUploadImage(image, name);
+        console.log(req.body)
+        const featuredValue =  featured==='undefined' ? false : true;
+        const sponsoredValue = sponsored==='undefined' ? false : true;
 
+        const imageDetails = image && await resizeAndUploadImage(image, name);
         const newItem = new Item({
             name,
-            min_order_quantity,
+            min_order_quantity: Math.abs(min_order_quantity),
             unit,
-            price,
-            imnage: imageDetails,
-            featured,
-            sponsored,
+            price: Math.abs(price),
+            image: imageDetails,
+            featured: featuredValue,
+            sponsored: sponsoredValue,
             description,
             category,
             status,
@@ -62,6 +65,7 @@ exports.createItem = async (req, res) => {
         const savedItem = await newItem.save();
         ApiResponse.created(res, savedItem, 'Item created successfully');
     } catch (error) {
+        console.log(error)
         ApiResponse.error(res, 'Something went wrong', 500, error.message);
     }
 };
@@ -73,6 +77,10 @@ exports.editItem = async (req, res) => {
         const updateData = req.body;
         const image = req.file;
 
+        updateData.featured =  updateData.featured==='false' ? false : true;
+        updateData.sponsored = updateData.sponsored==='false' ? false : true;
+
+
         const existingItem = await Item.findById(itemId);
         if (!existingItem) {
             return ApiResponse.notFound(res, 'Item not found');
@@ -81,7 +89,7 @@ exports.editItem = async (req, res) => {
         let imageDetails;
         if (image) {
             imageDetails = await resizeAndUploadImage(image, updateData.name || existingItem.name);
-            updateData.imnage = imageDetails;
+            updateData.image = imageDetails;
         }
 
         const updatedItem = await Item.findByIdAndUpdate(
@@ -92,6 +100,7 @@ exports.editItem = async (req, res) => {
 
         ApiResponse.success(res, updatedItem, 'Item updated successfully');
     } catch (error) {
+        console.log(error)
         ApiResponse.error(res, 'Something went wrong', 500, error.message);
     }
 };
@@ -104,6 +113,34 @@ exports.getAllItems = async (req, res) => {
         ApiResponse.error(res, 'Something went wrong', 500, error.message);
     }
 };
+
+exports.getAllActiveItems = async (req, res) => {
+    try {
+        const items = await Item.find({status: "Active"}).populate('category', 'name'); // Populate with category name, modify as needed
+        ApiResponse.success(res, items);
+    } catch (error) {
+        ApiResponse.error(res, 'Something went wrong', 500, error.message);
+    }
+};
+
+exports.getAllInActiveItems = async (req, res) => {
+    try {
+        const items = await Item.find({status: "Inactive"}).populate('category', 'name'); // Populate with category name, modify as needed
+        ApiResponse.success(res, items);
+    } catch (error) {
+        ApiResponse.error(res, 'Something went wrong', 500, error.message);
+    }
+};
+
+exports.getAllDraftItems = async (req, res) => {
+    try {
+        const items = await Item.find({status: "Draft"}).populate('category', 'name'); // Populate with category name, modify as needed
+        ApiResponse.success(res, items);
+    } catch (error) {
+        ApiResponse.error(res, 'Something went wrong', 500, error.message);
+    }
+};
+
 exports.getAllItemsByCategory = async (req, res) => {
     try {
         const items = await Item.find({category:new ObjectId(req.params.id)}).populate('category', 'name'); // Populate with category name, modify as needed

@@ -8,7 +8,9 @@ import { CircularProgress } from '@mui/material';
 import MDBox from '../../../components/MDBox';
 import MDButton from '../../../components/MDButton';
 import {Link} from 'react-router-dom'
-import ActivePandit from '../data/activePandit';
+import Active from '../data/activeItem';
+import Inactive from '../data/inactiveItem';
+import Draft from '../data/draftItem';
 
 
 export default function LabTabs() {
@@ -52,7 +54,7 @@ export default function LabTabs() {
           </MDBox>
           : 
           <MDBox style={{minWidth:'100%'}}>
-          <ActivePandit/>
+          <Active/>
           </MDBox>
           }
           </TabPanel>
@@ -64,7 +66,7 @@ export default function LabTabs() {
           </MDBox>
           : 
           <MDBox style={{minWidth:'100%'}}>
-          <ActivePandit/>
+          <Inactive/>
           </MDBox>
           }
           </TabPanel>
@@ -76,7 +78,7 @@ export default function LabTabs() {
           </MDBox>
           : 
           <MDBox style={{minWidth:'100%'}}>
-          <ActivePandit/>
+          <Draft/>
           </MDBox>
    
           }

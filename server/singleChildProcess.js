@@ -61,6 +61,7 @@ async function singleProcess() {
     app.use('/api/v1/tier', require("./routes/Tier/tier"));
     app.use('/api/v1/pooja', require("./routes/Pooja/pooja"));
     app.use('/api/v1/booking', require("./routes/Booking/booking"));
+    app.use('/api/v1/consultation', require("./routes/Consultation/consultation"));
     app.use('/api/v1/devta', require("./routes/DeviDevta/devi-devta"));
     app.use('/api/v1/itemcategory', require("./routes/ItemCategory/itemCategoryRoutes"));
     app.use('/api/v1/items', require("./routes/Item/itemRoutes"));
@@ -68,6 +69,7 @@ async function singleProcess() {
     app.use('/api/v1/mandir', require("./routes/Mandir/mandir"));
     app.use('/api/v1/usermandir', require("./routes/Mandir/userMandir"));
     app.use('/api/v1/location', require("./routes/Location/locationRoutes"));
+    app.use('/api/v1/order', require("./routes/book-order/bookOrder"));
 
     app.use('/api/v1/dailycontest', require("./routes/DailyContest/dailyContestRoutes"))
     app.use('/api/v1/user', require("./routes/user/userRoutes"));
