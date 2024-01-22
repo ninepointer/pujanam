@@ -13,7 +13,7 @@ exports.order = async (req, res) => {
         const {
             latitude, longitude, address, pincode, city, state, country,
             mobile, order_amount, category_id, item_id,
-            tag, order_details,
+            tag, item_details,
             landmark,
             locality,
             house_or_flat_no,
@@ -44,7 +44,7 @@ exports.order = async (req, res) => {
         const createOrder = await Order.create([{
             user_id: req.user._id, order_date: new Date() , address_details, mobile,
             // order_amount, category_id, item_id, order_quantity,
-            order_details,
+            item_details,
             created_by: req.user._id, payment_details: payment[0]._id
         }], { session });
 
@@ -65,8 +65,8 @@ exports.myOrder = async (req, res) => {
     try {
         const booking = await Order.findOne({user_id: new ObjectId(req.user._id)})
         .populate('payment_details', 'transaction_id payment_status payment_mode')
-        .populate('category_id', 'name')
-        .populate('item_id', 'name')
+        .populate('item_details.category_id', 'name')
+        .populate('item_details.item_id', 'name')
         ApiResponse.success(res, booking);
     } catch (error) {
         ApiResponse.error(res,'Something went wrong', 500, error.message);

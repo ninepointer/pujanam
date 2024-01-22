@@ -76,7 +76,7 @@ const Order = new mongoose.Schema({
         type: String,
         required: true,
     },
-    order_details: [{
+    item_details: [{
         order_amount: {
             type: Number,
             required: true,
