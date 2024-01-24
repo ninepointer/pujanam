@@ -25,7 +25,7 @@ router.post("/login", async (req, res) => {
     const deactivatedUser = await UserDetail.findOne({ email: userId, status: "Inactive" })
 
     if (deactivatedUser) {
-        return res.status(422).json({ status: 'error', message: "Your account has been deactivated. Please contact StoxHero admin @ team@stoxhero.com.", error: "deactivated" });
+        return res.status(422).json({ status: 'error', message: "Your account has been deactivated. Please contact StoxHero admin @ pooja@punyam.app.", error: "deactivated" });
     }
 
     const userLogin = await UserDetail.findOne({ email: userId, status: "Active" }).select('_id role password collegeDetails');
@@ -56,7 +56,7 @@ router.post('/phonelogin', async (req, res, next) => {
         const deactivatedUser = await UserDetail.findOne({ mobile: mobile, status: "Inactive" })
 
         if (deactivatedUser) {
-            return res.status(422).json({ status: 'error', message: "Your account has been deactivated. Please contact StoxHero admin @ team@stoxhero.com.", error: "deactivated" });
+            return res.status(422).json({ status: 'error', message: "Your account has been deactivated. Please contact StoxHero admin @ pooja@punyam.app.", error: "deactivated" });
         }
 
         const user = await UserDetail.findOne({ mobile });

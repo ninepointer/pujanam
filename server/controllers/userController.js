@@ -360,7 +360,7 @@ exports.deactivateUser = async (req, res) => {
             <p>Your account is being deactivated due to the following reason:</p>
             <p>${reason}</p>
             
-            <p>If you believe your account is being deactivated wrongly due to some error or you have a valid explanation for the above deactivation reason, please reply to this mail or write to us at team@stoxhero.com</p>
+            <p>If you believe your account is being deactivated wrongly due to some error or you have a valid explanation for the above deactivation reason, please reply to this mail or write to us at pooja@punyam.app</p>
             <br/><br/>
             <p>Thanks,</p>
             <p>StoxHero Team</p>
@@ -370,7 +370,7 @@ exports.deactivateUser = async (req, res) => {
         </html>
         `);
 
-        sendMail("team@stoxhero.com", 'Account Deactivated - StoxHero', `
+        sendMail("pooja@punyam.app", 'Account Deactivated - StoxHero', `
         <!DOCTYPE html>
         <html>
         <head>
@@ -666,7 +666,7 @@ exports.varifyOtp = async (req, res) => {
             
             <p>StoxHero is your all-in-one package for Stock Market success.</p>
             
-            <p>In case you face any issues, feel free to whatsApp support at 9354010914<a href="tel:+919830994402" rel="noreferrer" target="_blank">&nbsp;</a>or drop in an email at <a href="mailto:team@stoxhero.com">team@stoxhero.com</a></p>
+            <p>In case you face any issues, feel free to whatsApp support at 9354010914<a href="tel:+919830994402" rel="noreferrer" target="_blank">&nbsp;</a>or drop in an email at <a href="mailto:pooja@punyam.app">pooja@punyam.app</a></p>
             
             <p>To get started, visit our youtube channel to learn more about the App and StoxHero: <a href="https://www.youtube.com/channel/UCgslF4zuDhDyttD9P3ZOHbg">Visit</a></p>
             

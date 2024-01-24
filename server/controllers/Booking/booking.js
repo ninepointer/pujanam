@@ -1,11 +1,14 @@
 const ApiResponse = require('../../helpers/apiResponse'); // Assuming ApiResponse class is saved in utils folder
 const { ObjectId } = require('mongodb');
 const Booking = require("../../models/Bookings/bookingSchema");
+const User = require("../../models/User/userSchema");
 const Payment = require("../../models/Payment/payment");
 const multer = require('multer');
 const AWS = require('aws-sdk');
 const sharp = require('sharp');
 const storage = multer.memoryStorage();
+const {sendMultiNotifications} = require('../../utils/fcmService');
+
 
 
 
@@ -169,6 +172,14 @@ exports.approveBooking = async (req, res) => {
                 status: "Approved"
             }
         })
+
+        const user = await User.findById(booking.user_id);
+        if (user?.fcm_tokens?.length > 0) {
+            await sendMultiNotifications('Booking Approved',
+              `Your booking has been approved by Punyam. Stay tuned.`,
+              user?.fcm_tokens?.map(item => item.token), null, { route: 'pooja' }
+            )
+          }
         ApiResponse.success(res, booking);
     } catch (error) {
         ApiResponse.error(res, 'Something went wrong', 500, error.message);
@@ -185,6 +196,14 @@ exports.rejectBooking = async (req, res) => {
                 status: "Rejected"
             }
         })
+
+        const user = await User.findById(booking.user_id);
+        if (user?.fcm_tokens?.length > 0) {
+            await sendMultiNotifications('Booking Rejected',
+                `Your booking has been rejected by Punyam due to ${rejectionReason}.`,
+                user?.fcm_tokens?.map(item => item.token), null, { route: 'pooja' }
+            )
+        }
         ApiResponse.success(res, booking);
     } catch (error) {
         ApiResponse.error(res, 'Something went wrong', 500, error.message);
@@ -202,11 +221,36 @@ exports.confirmBooking = async (req, res) => {
                 pandits: pandits
             }
         })
+
+        const user = await User.findById(booking.user_id);
+        const date = convertTime(booking_date);
+        if (user?.fcm_tokens?.length > 0) {
+            await sendMultiNotifications('Pooja Confirmed',
+                `Your pooja booking has been confirmed by pandit ji on ${date}. He will arrive on time, so please be prepared for the pooja.`,
+                user?.fcm_tokens?.map(item => item.token), null, { route: 'pooja' }
+            )
+        }
         ApiResponse.success(res, booking);
     } catch (error) {
         ApiResponse.error(res, 'Something went wrong', 500, error.message);
     }
 };
+
+function convertTime(date) {
+    const inputDateString = date;
+    const inputDate = new Date(inputDateString);
+
+    // Format date
+    const day = inputDate.getDate();
+    const month = new Intl.DateTimeFormat('en-US', { month: 'short' }).format(inputDate);
+    const hours = inputDate.getHours() % 12 || 12; // Convert to 12-hour format
+    const minutes = inputDate.getMinutes();
+    const ampm = inputDate.getHours() >= 12 ? 'PM' : 'AM';
+
+    const formattedDate = `${day} ${month} ${hours}:${minutes < 10 ? '0' : ''}${minutes} ${ampm}`;
+
+    return (formattedDate);
+}
 
 exports.completeBooking = async (req, res) => {
     const { id } = req.params;
@@ -225,6 +269,14 @@ exports.completeBooking = async (req, res) => {
                 transaction_date: new Date,
             }
         })
+
+        // const user = await User.findById(booking.user_id);
+        // if (user?.fcm_tokens?.length > 0) {
+        //     await sendMultiNotifications('Pooja completed',
+        //         `Your pooja booking has been confirmed by Pandit Ji. He will arrive on time, so please be prepared for the pooja.`,
+        //         user?.fcm_tokens?.map(item => item.token), null, { route: 'pooja' }
+        //     )
+        // }
         ApiResponse.success(res, booking);
     } catch (error) {
         ApiResponse.error(res, 'Something went wrong', 500, error.message);

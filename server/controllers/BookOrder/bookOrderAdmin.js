@@ -4,6 +4,7 @@ const Order = require("../../models/Book-Order/orderSchema");
 const Payment = require("../../models/Payment/payment");
 const mongoose = require('mongoose');
 const User = require("../../models/User/userSchema")
+const {sendMultiNotifications} = require('../../utils/fcmService');
 
 const multer = require('multer');
 const AWS = require('aws-sdk');
@@ -230,6 +231,14 @@ exports.rejectOrder = async (req, res) => {
                 status: "Rejected"
             }
         })
+
+        const user = await User.findById(booking.user_id);
+        if (user?.fcm_tokens?.length > 0) {
+            await sendMultiNotifications('Order Rejected',
+                `Your order has been rejected by Punyam due to ${rejectionReason}.`,
+                user?.fcm_tokens?.map(item => item.token), null, { route: 'store' }
+            )
+        }
         ApiResponse.success(res, booking);
     } catch (error) {
         ApiResponse.error(res, 'Something went wrong', 500, error.message);
@@ -244,6 +253,14 @@ exports.acceptOrder = async (req, res) => {
                 status: "Accepted"
             }
         })
+
+        const user = await User.findById(booking.user_id);
+        if (user?.fcm_tokens?.length > 0) {
+            await sendMultiNotifications('Order Accepted',
+                `Your order has been accepted by Punyam and ready for dispatch. Stay tuned.`,
+                user?.fcm_tokens?.map(item => item.token), null, { route: 'store' }
+            )
+        }
         ApiResponse.success(res, booking);
     } catch (error) {
         ApiResponse.error(res, 'Something went wrong', 500, error.message);
@@ -260,6 +277,14 @@ exports.dispatchOrder = async (req, res) => {
                 expected_deliver_time: expected_deliver_time,
             }
         })
+
+        const user = await User.findById(order.user_id);
+        if (user?.fcm_tokens?.length > 0) {
+            await sendMultiNotifications('Out For Delivery',
+                `Your order is out for delivery and will arrive in approximately ${expected_deliver_time} minutes.`,
+                user?.fcm_tokens?.map(item => item.token), null, { route: 'store' }
+            )
+        }
         ApiResponse.success(res, order);
     } catch (error) {
         ApiResponse.error(res, 'Something went wrong', 500, error.message);
@@ -283,6 +308,14 @@ exports.deliverOrder = async (req, res) => {
                 transaction_date: new Date,
             }
         })
+
+        const user = await User.findById(order.user_id);
+        if (user?.fcm_tokens?.length > 0) {
+            await sendMultiNotifications('Delivered',
+                `Your order has been delivered.`,
+                user?.fcm_tokens?.map(item => item.token), null, { route: 'store' }
+            )
+        }
         ApiResponse.success(res, order);
     } catch (error) {
         ApiResponse.error(res, 'Something went wrong', 500, error.message);

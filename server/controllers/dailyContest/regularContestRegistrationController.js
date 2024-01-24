@@ -43,7 +43,7 @@ exports.generateOTP = async (req, res, next) => {
     const inactiveUser = await User.findOne({ $or: [{ email: email }, { mobile: mobile }], status: "Inactive" });
     if (inactiveUser) {
         return res.status(400).json({
-            info: "Your account has been deactivated. Please contact StoxHero admin @ team@stoxhero.com.",
+            info: "Your account has been deactivated. Please contact StoxHero admin @ pooja@punyam.app.",
             status: 'error'
         });
     }
@@ -451,7 +451,7 @@ exports.confirmOTP = async (req, res, next) => {
                     
                     <p>StoxHero is your all-in-one package for Stock Market success.</p>
                     
-                    <p>In case you face any issues, feel free to whatsApp support at 9354010914<a href="tel:+919830994402" rel="noreferrer" target="_blank">&nbsp;</a>or drop in an email at <a href="mailto:team@stoxhero.com">team@stoxhero.com</a></p>
+                    <p>In case you face any issues, feel free to whatsApp support at 9354010914<a href="tel:+919830994402" rel="noreferrer" target="_blank">&nbsp;</a>or drop in an email at <a href="mailto:pooja@punyam.app">pooja@punyam.app</a></p>
                     
                     <p>To get started, visit our youtube channel to learn more about the App and StoxHero: <a href="https://www.youtube.com/channel/UCgslF4zuDhDyttD9P3ZOHbg">Visit</a></p>
                     
