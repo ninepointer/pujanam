@@ -5,6 +5,7 @@ const Booking = require("../../models/Bookings/bookingSchema");
 const Payment = require("../../models/Payment/payment");
 const mongoose = require('mongoose');
 const User = require("../../models/User/userSchema")
+const {sendMultiNotifications} = require('../../utils/fcmService');
 
 exports.getAllPooja = async (req, res) => {
     try {
@@ -96,6 +97,12 @@ exports.booking = async (req, res) => {
         await session.commitTransaction();
         session.endSession();
 
+        if (user?.fcm_tokens?.length > 0) {
+            await sendMultiNotifications('Pooja Booked',
+              `Pooja Booked`,
+              user?.fcm_tokens?.map(item => item.token), null, { route: 'pooja' }
+            )
+          }
         ApiResponse.success(res, createBooking);
     } catch (error) {
         await session.abortTransaction();

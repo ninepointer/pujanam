@@ -6,39 +6,6 @@ admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
 });
 
-
-// exports.sendIndividualNotification = async (title, body, token) => {
-//     const message = {
-//         notification: {
-//           title: title,
-//           body: body,
-//         },
-//         token: token
-//       };
-//     try {
-//         const res = await admin.messaging().send(message);
-//         console.log('Successfully sent message:', res);
-//         return res;
-//     } catch (e) {
-//         console.log('Error sending message:', e);    
-//     }  
-// }
-// exports.sendMultiNotifications = async (title, body, tokens) => {
-//     const message = {
-//         notification: {
-//           title: title,
-//           body: body,
-//         },
-//         tokens: tokens
-//       };
-//     try {
-//         const res = await admin.messaging().sendEachForMulticast(message);
-//         console.log('Successfully sent message:', res);
-//         return res;
-//     } catch (e) {
-//         console.log('Error sending message:', e);    
-//     }  
-// }
 const messaging = admin.messaging();
 exports.sendIndividualNotification = async (title, body, token, mediaUrl = null, actions = null) => {
   const message = {
@@ -104,4 +71,6 @@ exports.sendMultiNotifications = async (title, body, tokens, mediaUrl = null, ac
       console.log('Error sending message:', e);    
   }  
 };
+
+exports.admin
 
