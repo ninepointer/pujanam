@@ -10,7 +10,7 @@ const moment = require('moment');
 const ApiResponse = require('../../helpers/apiResponse');
 const { application } = require("express");
 const { ObjectId } = require("mongodb");
-const {admin} = require("../../utils/fcmService")
+const {verifyFirebaseLoginToken} = require("../../utils/fcmService")
 
 
 router.post("/login", async (req, res) => {
@@ -259,50 +259,7 @@ router.post("/addfcmtoken", authentication, async (req, res) => {
 //     credential: admin.credential.cert(serviceAccount),
 // });
 
-router.post('/verifyfirebaselogintoken', async (req, res) => {
-    const { idToken } = req.body;
-
-    try {
-        const decodedToken = await admin.auth().verifyIdToken(idToken);
-        const uid = decodedToken.uid;
-        let user;
-        // Find or create the user in your database
-        const userObj = {
-            uid,
-            email: decodedToken.email,
-            full_name: decodedToken.name,
-            joining_date: new Date(),
-            role: new ObjectId('659fdac630fa1324fb3d2688'),
-            creation_process: 'Auto SignUp',
-            status: 'Active'
-            // ... any other user fields
-        }
-        if (decodedToken?.picture) {
-            userObj.profile_picture = { url: decodedToken?.picture, name: decodedToken?.picture };
-        }
-        if (decodedToken?.phone_number) {
-            userObj.mobile = decodedToken.phone_number.replace(/^\+91/, '');
-        }
-        if (await UserDetail.findOne({ email: decodedToken?.email })) {
-            user = await UserDetail.findOneAndUpdate({ email: decodedToken?.email }, userObj, { new: true, upsert: true });
-            const token = jwt.sign({ _id: user?._id }, process.env.SECRET_KEY);
-            return res.status(200).json({ status: 'success', message: "User login successful", token: token });
-        }
-        if (await UserDetail.findOne({ mobile: decodedToken?.phone_number })) {
-            user = await UserDetail.findOneAndUpdate({ email: decodedToken?.email }, userObj, { new: true, upsert: true });
-            const token = jwt.sign({ _id: user?._id }, process.env.SECRET_KEY);
-            return res.status(200).json({ status: 'success', message: "User login successful", token: token });
-        }
-        user = await UserDetail.findOneAndUpdate({ uid }, userObj, { new: true, upsert: true });
-
-        // Create a JWT token
-        const token = jwt.sign({ _id: user?._id }, process.env.SECRET_KEY);
-        return res.status(200).json({ status: 'success', message: "User login successful", token: token });
-    } catch (error) {
-        console.log(error);
-        res.status(500).json({ status: 'error', message: `Something went wrong. Please try again.` });
-    }
-});
+router.post('/verifyfirebaselogintoken', verifyFirebaseLoginToken);
 
 
 module.exports = router;
