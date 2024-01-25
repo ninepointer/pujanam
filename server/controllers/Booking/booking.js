@@ -85,7 +85,10 @@ exports.uploadToS3 = async (req, res, next) => {
 
 
 exports.getAllPending = async (req, res) => {
+    const skip = Number(req.query.skip) || 0;
+    const limit = Number(req.query.limit) || 10;
     try {
+        const count = await Booking.countDocuments({ status: "Pending" });
         const booking = await Booking.find({ status: "Pending" })
             .sort({ booking_date: 1 })
             .populate('product_id', 'product_name')
@@ -93,15 +96,21 @@ exports.getAllPending = async (req, res) => {
             .populate('payment_details', 'transaction_id payment_status payment_mode')
             .populate('user_id', 'full_name mobile')
             .populate('tier', 'tier_name pooja_items_included post_pooja_cleanUp_included min_pandit_experience max_pandit_experience number_of_main_pandit number_of_assistant_pandit')
-            .select('-last_modified_by -created_by -created_on -last_modified_on -__v');
-        ApiResponse.success(res, booking);
+            .select('-last_modified_by -created_by -created_on -last_modified_on -__v')
+            .skip(skip)
+            .limit(limit);
+        ApiResponse.success(res, booking, count);
     } catch (error) {
         ApiResponse.error(res, 'Something went wrong', 500, error.message);
     }
 };
 
 exports.getAllApproved = async (req, res) => {
+    const skip = Number(req.query.skip) || 0;
+    const limit = Number(req.query.limit) || 10;
     try {
+        const count = await Booking.countDocuments({ status: "Approved" });
+
         const booking = await Booking.find({ status: "Approved" })
             .sort({ booking_date: 1 })
             .populate('product_id', 'product_name')
@@ -109,15 +118,22 @@ exports.getAllApproved = async (req, res) => {
             .populate('payment_details', 'transaction_id payment_status payment_mode')
             .populate('user_id', 'full_name mobile')
             .populate('tier', 'tier_name pooja_items_included post_pooja_cleanUp_included min_pandit_experience max_pandit_experience number_of_main_pandit number_of_assistant_pandit')
-            .select('-last_modified_by -created_by -created_on -last_modified_on -__v');
-        ApiResponse.success(res, booking);
+            .select('-last_modified_by -created_by -created_on -last_modified_on -__v')
+            .skip(skip)
+            .limit(limit);
+        ApiResponse.success(res, booking, count);
+
     } catch (error) {
         ApiResponse.error(res, 'Something went wrong', 500, error.message);
     }
 };
 
 exports.getAllConfirmed = async (req, res) => {
+    const skip = Number(req.query.skip) || 0;
+    const limit = Number(req.query.limit) || 10;
     try {
+        const count = await Booking.countDocuments({ status: "Confirmed" });
+
         const booking = await Booking.find({ status: "Confirmed" })
             .sort({ booking_date: 1 })
             .populate('product_id', 'product_name')
@@ -125,15 +141,22 @@ exports.getAllConfirmed = async (req, res) => {
             .populate('payment_details', 'transaction_id payment_status payment_mode')
             .populate('user_id', 'full_name mobile')
             .populate('tier', 'tier_name pooja_items_included post_pooja_cleanUp_included min_pandit_experience max_pandit_experience number_of_main_pandit number_of_assistant_pandit')
-            .select('-last_modified_by -created_by -created_on -last_modified_on -__v');
-        ApiResponse.success(res, booking);
+            .select('-last_modified_by -created_by -created_on -last_modified_on -__v')
+            .skip(skip)
+            .limit(limit);
+        ApiResponse.success(res, booking, count);
+
     } catch (error) {
         ApiResponse.error(res, 'Something went wrong', 500, error.message);
     }
 };
 
 exports.getAllCompleted = async (req, res) => {
+    const skip = Number(req.query.skip) || 0;
+    const limit = Number(req.query.limit) || 10;
     try {
+        const count = await Booking.countDocuments({ status: "Completed" });
+
         const booking = await Booking.find({ status: "Completed" })
             .sort({ booking_date: 1 })
             .populate('product_id', 'product_name')
@@ -141,15 +164,22 @@ exports.getAllCompleted = async (req, res) => {
             .populate('payment_details', 'transaction_id payment_status payment_mode')
             .populate('user_id', 'full_name mobile')
             .populate('tier', 'tier_name pooja_items_included post_pooja_cleanUp_included min_pandit_experience max_pandit_experience number_of_main_pandit number_of_assistant_pandit')
-            .select('-last_modified_by -created_by -created_on -last_modified_on -__v');
-        ApiResponse.success(res, booking);
+            .select('-last_modified_by -created_by -created_on -last_modified_on -__v')
+            .skip(skip)
+            .limit(limit);
+        ApiResponse.success(res, booking, count);
+
     } catch (error) {
         ApiResponse.error(res, 'Something went wrong', 500, error.message);
     }
 };
 
 exports.getAllRejected = async (req, res) => {
+    const skip = Number(req.query.skip) || 0;
+    const limit = Number(req.query.limit) || 10;
     try {
+        const count = await Booking.countDocuments({ status: "Rejected" });
+
         const booking = await Booking.find({ status: "Rejected" })
             .sort({ booking_date: 1 })
             .populate('product_id', 'product_name')
@@ -157,8 +187,11 @@ exports.getAllRejected = async (req, res) => {
             .populate('payment_details', 'transaction_id payment_status payment_mode')
             .populate('user_id', 'full_name mobile')
             .populate('tier', 'tier_name pooja_items_included post_pooja_cleanUp_included min_pandit_experience max_pandit_experience number_of_main_pandit number_of_assistant_pandit')
-            .select('-last_modified_by -created_by -created_on -last_modified_on -__v');
-        ApiResponse.success(res, booking);
+            .select('-last_modified_by -created_by -created_on -last_modified_on -__v')
+            .skip(skip)
+            .limit(limit);
+        ApiResponse.success(res, booking, count);
+
     } catch (error) {
         ApiResponse.error(res, 'Something went wrong', 500, error.message);
     }

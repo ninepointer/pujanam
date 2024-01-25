@@ -85,22 +85,35 @@ exports.uploadToS3 = async (req, res, next) => {
 
 
 exports.getAllPending = async (req, res) => {
+
+       const skip = Number(req.query.skip) || 0;
+    const limit = Number(req.query.limit) || 10;
     try {
+        const count = await Order.countDocuments({ status: "Pending" });
+
         const booking = await Order.find({ status: "Pending" })
             .sort({ order_date: 1 })
             .populate('item_details.category_id', 'name')
             .populate('item_details.item_id', 'name')
             .populate('payment_details', 'transaction_id payment_status payment_mode')
             .populate('user_id', 'full_name mobile')
-            .select('-last_modified_by -created_by -created_on -last_modified_on -__v');
-        ApiResponse.success(res, booking);
+            .select('-last_modified_by -created_by -created_on -last_modified_on -__v')
+            .skip(skip)
+            .limit(limit);
+        ApiResponse.success(res, booking, count);
+
     } catch (error) {
         ApiResponse.error(res, 'Something went wrong', 500, error.message);
     }
 };
 
 exports.getAllAccept = async (req, res) => {
+    const skip = Number(req.query.skip) || 0;
+    const limit = Number(req.query.limit) || 10;
     try {
+        const count = await Order.countDocuments({ status: "Accepted" });
+
+
         const booking = await Order.find({ status: "Accepted" })
             .sort({ order_date: 1 })
             .sort({ order_date: 1 })
@@ -108,15 +121,21 @@ exports.getAllAccept = async (req, res) => {
             .populate('item_details.item_id', 'name')
             .populate('payment_details', 'transaction_id payment_status payment_mode')
             .populate('user_id', 'full_name mobile')
-            .select('-last_modified_by -created_by -created_on -last_modified_on -__v');
-        ApiResponse.success(res, booking);
+            .select('-last_modified_by -created_by -created_on -last_modified_on -__v')
+            .skip(skip)
+            .limit(limit);
+        ApiResponse.success(res, booking, count);
     } catch (error) {
         ApiResponse.error(res, 'Something went wrong', 500, error.message);
     }
 };
 
 exports.getAllDispatched = async (req, res) => {
+    const skip = Number(req.query.skip) || 0;
+    const limit = Number(req.query.limit) || 10;
     try {
+        const count = await Order.countDocuments({ status: "Dispatched" });
+
         const booking = await Order.find({ status: "Dispatched" })
             .sort({ order_date: 1 })
             .sort({ order_date: 1 })
@@ -124,15 +143,21 @@ exports.getAllDispatched = async (req, res) => {
             .populate('item_details.item_id', 'name')
             .populate('payment_details', 'transaction_id payment_status payment_mode')
             .populate('user_id', 'full_name mobile')
-            .select('-last_modified_by -created_by -created_on -last_modified_on -__v');
-        ApiResponse.success(res, booking);
+            .select('-last_modified_by -created_by -created_on -last_modified_on -__v')
+            .skip(skip)
+            .limit(limit);
+        ApiResponse.success(res, booking, count);
     } catch (error) {
         ApiResponse.error(res, 'Something went wrong', 500, error.message);
     }
 };
 
 exports.getAllDelivered = async (req, res) => {
+    const skip = Number(req.query.skip) || 0;
+    const limit = Number(req.query.limit) || 10;
     try {
+        const count = await Order.countDocuments({ status: "Delivered" });
+
         const booking = await Order.find({ status: "Delivered" })
             .sort({ order_date: 1 })
             .sort({ order_date: 1 })
@@ -140,15 +165,22 @@ exports.getAllDelivered = async (req, res) => {
             .populate('item_details.item_id', 'name')
             .populate('payment_details', 'transaction_id payment_status payment_mode')
             .populate('user_id', 'full_name mobile')
-            .select('-last_modified_by -created_by -created_on -last_modified_on -__v');
-        ApiResponse.success(res, booking);
+            .select('-last_modified_by -created_by -created_on -last_modified_on -__v')
+            .skip(skip)
+            .limit(limit);
+        ApiResponse.success(res, booking, count);
     } catch (error) {
         ApiResponse.error(res, 'Something went wrong', 500, error.message);
     }
 };
 
 exports.getAllRejected = async (req, res) => {
+    const skip = Number(req.query.skip) || 0;
+    const limit = Number(req.query.limit) || 10;
     try {
+        const count = await Order.countDocuments({ status: "Rejected" });
+
+
         const booking = await Order.find({ status: "Rejected" })
             .sort({ order_date: 1 })
             .sort({ order_date: 1 })
@@ -156,8 +188,10 @@ exports.getAllRejected = async (req, res) => {
             .populate('item_details.item_id', 'name')
             .populate('payment_details', 'transaction_id payment_status payment_mode')
             .populate('user_id', 'full_name mobile')
-            .select('-last_modified_by -created_by -created_on -last_modified_on -__v');
-        ApiResponse.success(res, booking);
+            .select('-last_modified_by -created_by -created_on -last_modified_on -__v')
+            .skip(skip)
+            .limit(limit);
+        ApiResponse.success(res, booking, count);
     } catch (error) {
         ApiResponse.error(res, 'Something went wrong', 500, error.message);
     }
