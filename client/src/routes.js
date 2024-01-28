@@ -1,6 +1,10 @@
 import Dashboard from './layouts/Dashboard'
 import Pandit from "./layouts/Pandit"
 import PanditDetails from './layouts/Pandit/panditDetails'
+import Reaction from "./layouts/Reaction"
+import ReactionDetails from './layouts/Reaction/reactionDetails'
+import MandirPost from "./layouts/MandirPost"
+import MandirPostDetails from './layouts/MandirPost/mandirPostDetails'
 import Tier from './layouts/Tier'
 import Pooja from './layouts/Pooja'
 import TierDetails from './layouts/Tier/tierDetails'
@@ -38,8 +42,26 @@ const routes = [
     component: <Pandit />,
   },
   {
+    key: "reaction",
+    route: "/reaction",
+    component: <Reaction />,
+  },
+  {
+    key: "mandirpost",
+    route: "/mandirpost",
+    component: <MandirPost />,
+  },
+  {
     route: "/panditdetails",
     component: <PanditDetails />,
+  },
+  {
+    route: "/reactiondetails",
+    component: <ReactionDetails />,
+  },
+  {
+    route: "/mandirpostdetails",
+    component: <MandirPostDetails />,
   },
   {
     key: "mandir",
@@ -111,6 +133,22 @@ const routes = [
     icon: <Face5Icon/>,
     route: "/pandit",
     component: <Pandit />,
+  },
+  {
+    type: "collapse",
+    name: "Mandir Posts",
+    key: "mandirpost",
+    icon: <Face5Icon/>,
+    route: "/mandirpost",
+    component: <MandirPost />,
+  },
+  {
+    type: "collapse",
+    name: "Reactions",
+    key: "reaction",
+    icon: <Face5Icon/>,
+    route: "/reaction",
+    component: <Reaction />,
   },
   {
     type: "collapse",

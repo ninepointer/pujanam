@@ -54,6 +54,8 @@ async function commonProcess() {
     app.use('/api/v1', require('./routes/user/userDetailAuth'));
     app.use('/api/v1', require("./routes/user/everyoneRoleAuth"));
     app.use('/api/v1/pandit', require("./routes/Pandit/pandit"));
+    app.use('/api/v1/reaction', require("./routes/Reaction/reaction"));
+    app.use('/api/v1/mandirpost', require("./routes/MandirPost/mandirPost"));
     app.use('/api/v1/location', require("./routes/Location/locationRoutes"));
     app.use('/api/v1/tier', require("./routes/Tier/tier"));
     app.use('/api/v1/pooja', require("./routes/Pooja/pooja"));
