@@ -41,7 +41,7 @@ const Item = new mongoose.Schema({
     },
     status: {
         type: String,
-        enum: ['Active', 'Inactive'],
+        enum: ['Active', 'Inactive', 'Draft'],
         default: 'Active',
         required: true
     },

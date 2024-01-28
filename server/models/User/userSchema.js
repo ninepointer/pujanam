@@ -12,7 +12,7 @@ const userSchema = new mongoose.Schema({
     },
     mobile:{
         type: String,
-        required : true,
+        //required : true,
     },
     address_details: [
         {
@@ -187,12 +187,9 @@ const userSchema = new mongoose.Schema({
         {
             itemId:{
                 type:Schema.Types.ObjectId,
-                ref:'Item'
+                ref:'item'
             },
             quantity:Number,
-            status:{
-                type:String,
-            }
         }
     ]
 })

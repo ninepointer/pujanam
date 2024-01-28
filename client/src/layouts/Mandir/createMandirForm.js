@@ -58,6 +58,7 @@ function Index() {
       morning_opening_time: dayjs(prevData?.morning_opening_time) || dayjs(new Date()).set('hour', 0).set('minute', 0).set('second', 0),
       morning_closing_time: dayjs(prevData?.morning_closing_time) || dayjs(new Date()).set('hour', 0).set('minute', 0).set('second', 0),
       evening_opening_time: dayjs(prevData?.evening_opening_time) || dayjs(new Date()).set('hour', 0).set('minute', 0).set('second', 0),
+      evening_closing_time: dayjs(prevData?.evening_closing_time) || dayjs(new Date()).set('hour', 0).set('minute', 0).set('second', 0),
       morning_aarti_time: dayjs(prevData?.morning_aarti_time) || dayjs(new Date()).set('hour', 0).set('minute', 0).set('second', 0),
       evening_aarti_time: dayjs(prevData?.evening_aarti_time) || dayjs(new Date()).set('hour', 0).set('minute', 0).set('second', 0)
     }
@@ -65,7 +66,9 @@ function Index() {
       morning_opening_time: dayjs(new Date()).set('hour', 0).set('minute', 0).set('second', 0),
       morning_closing_time: dayjs(new Date()).set('hour', 0).set('minute', 0).set('second', 0),
       evening_opening_time: dayjs(new Date()).set('hour', 0).set('minute', 0).set('second', 0),
-      evening_closing_time: dayjs(new Date()).set('hour', 0).set('minute', 0).set('second', 0)
+      evening_closing_time: dayjs(new Date()).set('hour', 0).set('minute', 0).set('second', 0),
+      morning_aarti_time: dayjs(new Date()).set('hour', 0).set('minute', 0).set('second', 0),
+      evening_aarti_time: dayjs(new Date()).set('hour', 0).set('minute', 0).set('second', 0),
     }
   )
   const [isfileSizeExceed, setIsFileExceed] = useState(false);
@@ -370,7 +373,7 @@ function Index() {
                         }
                       }}
                       // minDateTime={null}
-                      minDateTime={dayjs().startOf('day')}
+                      minDateTime={dayjs(formstate?.morning_opening_time || prevData?.morning_opening_time).startOf('day')}
                       format="HH:mm"
                       ampm={true}
                       openTo="hours"
@@ -395,7 +398,7 @@ function Index() {
                         }
                       }}
                       // minDateTime={null}
-                      minDateTime={dayjs().startOf('day')}
+                      minDateTime={dayjs(formstate?.morning_closing_time || prevData?.morning_closing_time).startOf('day')}
                       format="HH:mm"
                       ampm={true}
                       openTo="hours"
@@ -420,7 +423,7 @@ function Index() {
                         }
                       }}
                       // minDateTime={null}
-                      minDateTime={dayjs().startOf('day')}
+                      minDateTime={dayjs(formstate?.evening_opening_time || prevData?.evening_opening_time).startOf('day')}
                       format="HH:mm"
                       ampm={true}
                       openTo="hours"
@@ -445,7 +448,7 @@ function Index() {
                         }
                       }}
                       // minDateTime={null}
-                      minDateTime={dayjs().startOf('day')}
+                      minDateTime={dayjs(formstate?.evening_closing_time || prevData?.evening_closing_time).startOf('day')}
                       format="HH:mm"
                       ampm={true}
                       openTo="hours"
@@ -470,7 +473,7 @@ function Index() {
                         }
                       }}
                       // minDateTime={null}
-                      minDateTime={dayjs().startOf('day')}
+                      minDateTime={dayjs(formstate?.morning_aarti_time || prevData?.morning_aarti_time).startOf('day')}
                       format="HH:mm"
                       ampm={true}
                       openTo="hours"
@@ -495,7 +498,7 @@ function Index() {
                         }
                       }}
                       // minDateTime={null}
-                      minDateTime={dayjs().startOf('day')}
+                      minDateTime={dayjs(formstate?.evening_aarti_time || prevData?.evening_aarti_time).startOf('day')}
                       format="HH:mm"
                       ampm={true}
                       openTo="hours"
@@ -629,7 +632,23 @@ function Index() {
               </FormControl>
             </Grid>
 
-            <Grid item xs={12} md={9} xl={9}>
+            <Grid item xs={12} md={3} xl={3}>
+              <TextField
+                disabled={((imageData || prevData) && (!editing))}
+                id="outlined-required"
+                label='Slug/Route *'
+                fullWidth
+                value={formstate?.slug}
+                onChange={(e) => {
+                  setFormState(prevState => ({
+                    ...prevState,
+                    slug: e.target.value
+                  }))
+                }}
+              />
+            </Grid>
+
+            <Grid item xs={12} md={6} xl={6}>
               <TextField
                 disabled={((imageData || prevData) && (!editing))}
                 id="outlined-required"

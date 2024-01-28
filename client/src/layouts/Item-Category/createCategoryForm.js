@@ -87,6 +87,12 @@ function Index() {
       return;
     }
 
+    const {name, description, status} = formState;
+
+    if(!name || !description || !status){
+      openSuccessSB('error', 'Please fill all feilds');
+    }
+
     try {
       const formData = new FormData();
       if (file) {
@@ -126,6 +132,12 @@ function Index() {
 
   const edit = async () => {
     try {
+      const {name, description, status} = formState;
+
+      if(!name || !description || !status){
+        openSuccessSB('error', 'Please fill all feilds');
+      }
+
       const formData = new FormData();
       if (file) {
         formData.append("photo", file[0]);
@@ -252,7 +264,6 @@ function Index() {
               label='Description *'
               name='description'
               fullWidth
-              type='number'
               defaultValue={editing ? formState?.description : itemPrevDetail?.description}
               // onChange={handleChange}
               onChange={(e) => {
@@ -284,6 +295,7 @@ function Index() {
               >
                 <MenuItem value="Active">Active</MenuItem>
                 <MenuItem value="Inactive">Inactive</MenuItem>
+                <MenuItem value="Draft">Draft</MenuItem>
               </Select>
             </FormControl>
           </Grid>

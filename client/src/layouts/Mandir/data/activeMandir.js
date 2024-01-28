@@ -18,86 +18,53 @@ import { CardActionArea } from '@mui/material';
 
 const ActiveMandir = () => {
   let [skip, setSkip] = useState(0);
-  const limitSetting = 10;
+  const limitSetting = 12;
   const [count, setCount] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    let call1 = axios.get(`${apiUrl}mandir/active/?skip=${skip}&limit=${limitSetting}`, {
-      withCredentials: true,
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Credentials": true
-      },
-    })
-    Promise.all([call1])
-      .then(([api1Response]) => {
-        // Process the responses here
-        setData(api1Response.data.data)
-        setCount(api1Response.data.count)
+    const fetchData = async () => {
+      setIsLoading(true);
+
+      try {
+        const response = await axios.get(`${apiUrl}mandir/active/?skip=${skip}&limit=${limitSetting}`, {
+          withCredentials: true,
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Credentials": true,
+          },
+        });
+
+        // Update state with the new data
+        setData(response.data.data)
+        setCount(response.data.count)
         setTimeout(() => {
           setIsLoading(false)
         }, 100)
-      })
-      .catch((error) => {
-        // Handle errors here
-      });
-  }, [])
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+
+      setIsLoading(false);
+    };
+
+    fetchData();
+  }, [skip]);
 
   function backHandler() {
     if (skip <= 0) {
       return;
     }
-    setSkip(prev => prev - limitSetting);
-    setData([]);
-    setIsLoading(true)
-    axios.get(`${apiUrl}mandir/active/?skip=${skip}&limit=${limitSetting}`, {
-      withCredentials: true,
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Credentials": true
-      },
-    })
-      .then((res) => {
-        setData(res.data.data)
-        setCount(res.data.count)
-        setTimeout(() => {
-          setIsLoading(false)
-        }, 500)
-      }).catch((err) => {
-        setIsLoading(false)
-        return new Error(err);
-      })
+    setSkip((prev) => prev - limitSetting);
   }
 
-  function nextHandler() {
+  async function nextHandler() {
     if (skip + limitSetting >= count) {
       return;
     }
-    setSkip(prev => prev + limitSetting);
-    setData([]);
-    setIsLoading(true)
-    axios.get(`${apiUrl}mandir/active/?skip=${skip}&limit=${limitSetting}`, {
-      withCredentials: true,
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Credentials": true
-      },
-    })
-      .then((res) => {
-        setData(res.data.data)
-        setCount(res.data.count)
-        setTimeout(() => {
-          setIsLoading(false)
-        }, 500)
-      }).catch((err) => {
-        setIsLoading(false)
-        return new Error(err);
-      })
+    setSkip((prev) => prev + limitSetting);
   }
 
   function limitStringWithEllipsis(inputString, maxLength) {
@@ -152,7 +119,7 @@ const ActiveMandir = () => {
                                   </MDBox>
                                   <MDBox display='flex' justifyContent='flex-start' style={{ maxWidth: '100%', height: 'auto' }}>
                                       <MDTypography variant="caption" style={{ textAlign: 'justify', fontFamily: 'Itim' }}>
-                                          {limitStringWithEllipsis(elem?.description,80)}
+                                          {elem?.address_details?.city}, {elem?.address_details?.state}
                                       </MDTypography>
                                   </MDBox>
                                   <MDBox display='flex' justifyContent='flex-start'>

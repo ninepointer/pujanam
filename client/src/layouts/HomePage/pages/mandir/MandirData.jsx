@@ -196,6 +196,11 @@ const renderSuccessSB = (
 
   return (
     <MDBox>
+        <Helmet>
+          <title>{mandirData?.meta_title}</title>
+          <meta name='description' content={mandirData?.meta_description} />
+          <meta name='keywords' content={mandirData?.keywords} />
+        </Helmet>
       <MDBox display='flex' justifyContent='center' alignContent='center' alignItems='flex-start' style={{ backgroundColor: 'white', height: 'auto', width: 'auto', maxWidth: '100vW' }}>
         <ThemeProvider theme={theme}>
           <PageNavbar />

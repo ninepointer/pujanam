@@ -15,6 +15,9 @@ const upload = multer({
 router.post('/', Authenticate, restrictTo('Admin', 'SuperAdmin'), upload.single("photo"), itemCategoryController.createItemCategory);
 router.get('/', Authenticate, itemCategoryController.getAllItemCategories);
 router.get('/active', Authenticate, itemCategoryController.getAllActiveItemCategories);
+router.get('/draft', Authenticate, itemCategoryController.getAllDraftItemCategories);
+router.get('/inactive', Authenticate, itemCategoryController.getAllInActiveItemCategories);
+
 router.get('/:id', Authenticate, itemCategoryController.getItemCategory);
 router.patch('/:id', Authenticate, restrictTo('Admin', 'SuperAdmin'), upload.single("photo"), itemCategoryController.editItemCategory);
 

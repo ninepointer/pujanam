@@ -43,15 +43,16 @@ exports.createItem = async (req, res) => {
         const { name, min_order_quantity, unit, price, featured, sponsored, description, category, status, created_by } = req.body;
         const image = req.file;
 
-        const featuredValue =  featured==='undefined' && false;
-        const sponsoredValue = sponsored==='undefined' && false;
+        console.log(req.body)
+        const featuredValue =  featured==='undefined' ? false : true;
+        const sponsoredValue = sponsored==='undefined' ? false : true;
 
         const imageDetails = image && await resizeAndUploadImage(image, name);
         const newItem = new Item({
             name,
-            min_order_quantity,
+            min_order_quantity: Math.abs(min_order_quantity),
             unit,
-            price,
+            price: Math.abs(price),
             image: imageDetails,
             featured: featuredValue,
             sponsored: sponsoredValue,
@@ -75,6 +76,10 @@ exports.editItem = async (req, res) => {
         const itemId = req.params.id;
         const updateData = req.body;
         const image = req.file;
+
+        updateData.featured =  updateData.featured==='false' ? false : true;
+        updateData.sponsored = updateData.sponsored==='false' ? false : true;
+
 
         const existingItem = await Item.findById(itemId);
         if (!existingItem) {
@@ -112,6 +117,24 @@ exports.getAllItems = async (req, res) => {
 exports.getAllActiveItems = async (req, res) => {
     try {
         const items = await Item.find({status: "Active"}).populate('category', 'name'); // Populate with category name, modify as needed
+        ApiResponse.success(res, items);
+    } catch (error) {
+        ApiResponse.error(res, 'Something went wrong', 500, error.message);
+    }
+};
+
+exports.getAllInActiveItems = async (req, res) => {
+    try {
+        const items = await Item.find({status: "Inactive"}).populate('category', 'name'); // Populate with category name, modify as needed
+        ApiResponse.success(res, items);
+    } catch (error) {
+        ApiResponse.error(res, 'Something went wrong', 500, error.message);
+    }
+};
+
+exports.getAllDraftItems = async (req, res) => {
+    try {
+        const items = await Item.find({status: "Draft"}).populate('category', 'name'); // Populate with category name, modify as needed
         ApiResponse.success(res, items);
     } catch (error) {
         ApiResponse.error(res, 'Something went wrong', 500, error.message);

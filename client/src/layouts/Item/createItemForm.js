@@ -116,6 +116,12 @@ function Index() {
       return;
     }
 
+    const {name, min_order_quantity, unit, price, description, status} = formState;
+
+    if(!name || !min_order_quantity || !unit || !price || !description || !status){
+      openSuccessSB('error', 'Please fill all feilds');
+    }
+
     try {
       const formData = new FormData();
       if (file) {
@@ -315,7 +321,7 @@ function Index() {
                     name='min_order_quantity'
                     fullWidth
                     type='number'
-                    defaultValue={editing ? formState?.min_order_quantity : itemPrevDetail?.min_order_quantity}
+                    defaultValue={editing ? Math.abs(formState?.min_order_quantity) : itemPrevDetail?.min_order_quantity}
                     // onChange={handleChange}
                     onChange={(e) => {
                       setFormState(prevState => ({
@@ -360,7 +366,7 @@ function Index() {
                     name='price'
                     type='number'
                     fullWidth
-                    defaultValue={editing ? formState?.price : itemPrevDetail?.price}
+                    defaultValue={editing ? Math.abs(formState?.price) : itemPrevDetail?.price}
                     onChange={(e) => {
                       setFormState(prevState => ({
                         ...prevState,
@@ -434,6 +440,7 @@ function Index() {
                     >
                       <MenuItem value="Active">Active</MenuItem>
                       <MenuItem value="Inactive">Inactive</MenuItem>
+                      <MenuItem value="Draft">Draft</MenuItem>
                     </Select>
                   </FormControl>
                 </Grid>

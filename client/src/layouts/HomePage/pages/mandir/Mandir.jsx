@@ -27,6 +27,7 @@ import {LocationContext} from "../../../../locationContext";
 import PopularMandir from "./popularMandir";
 import MandirNearMe from "./mandirNearMe";
 import Dham from "./dham";
+import { Helmet } from 'react-helmet';
 
 
 function TabPanel1(props) {
@@ -112,6 +113,11 @@ const About = () => {
     return (
         <>
       <MDBox mt={-1} display='flex' justifyContent='center' flexDirection='column' alignContent='center' alignItems='center' style={{ minHeight:'auto', width: 'auto', minWidth:'100vW', overflow: 'visible'}}>
+        <Helmet>
+          <title>Explore Sacred Temples and Mandirs | Discover Spiritual Bliss</title>
+          <meta name='description' content='Embark on a spiritual journey through our comprehensive listings of Hindu temples and mandirs. Uncover divine sanctuaries, rituals, and cultural significance. Plan your pilgrimage with ease.' />
+          <meta name='keywords' content='Hindu temples, mandirs, sacred places, pilgrimage, spiritual journey, divine sanctuaries, Hindu rituals, cultural significance, religious exploration' />
+        </Helmet>
         <ThemeProvider theme={theme}>
           <PageNavbar />
           

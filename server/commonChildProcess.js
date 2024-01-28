@@ -47,6 +47,7 @@ async function commonProcess() {
     app.get('/api/v1/language', async (req, res, next) => { res.json({ status: 'success', data: await LanguageSchema.find() }) })
     app.get('/api/v1/usersetting', async (req, res, next) => { res.json({ status: 'success', data: await Setting.find() }) })
     app.use('/api/v1/unknown', require("./routes/unKnownUserRoute"));
+    app.use('/api/v1/order', require("./routes/book-order/bookOrderAdmin"));
 
     app.use('/api/v1', require("./routes/user/signedUpUser"))
     app.use('/api/v1', require("./routes/user/userLogin"));

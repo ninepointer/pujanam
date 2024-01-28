@@ -12,7 +12,7 @@ const Booking = new mongoose.Schema({
     },
     transaction_date: {
         type: Date,
-        required: true,
+        // required: true,
     },
     reject_message: {
         type: String,

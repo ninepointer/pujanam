@@ -45,11 +45,11 @@ exports.create = (async (req, res, next) => {
             meta_description, keywords, tags, name, description, dham, popular, morning_opening_time, 
             morning_closing_time, evening_opening_time, evening_closing_time,
             devi_devta, longitude, latitude, address, locality, landmark, pincode, city, state, country,
-            construction_year, pandit_mobile_number, pandit_full_name,
+            construction_year, pandit_mobile_number, pandit_full_name, slug,
             status  } = req.body;
         
         const count = await Mandir.countDocuments();
-        const slug = name?.replace(/ /g, "-").toLowerCase() + "-" +(count+1);
+        // const slug = name?.replace(/ /g, "-").toLowerCase() + "-" +(count+1);
 
         const address_details = {
             location: {
@@ -148,15 +148,15 @@ exports.edit = (async (req, res, next) => {
         update.share = mandir?.share;
         update.uniqueCount = mandir?.uniqueCount
 
-        const splitSlug = mandir.slug.split('-');
-        update.slug = update.name?.replace(/ /g, "-").toLowerCase() + "-" +(splitSlug[splitSlug.length - 1]);
+        // const splitSlug = mandir?.slug?.split('-');
+        // update.slug = update?.name?.replace(/ /g, "-").toLowerCase() + "-" +(splitSlug[splitSlug?.length - 1]);
 
         if(uploadedFiles?.files){
-            otherImages = await Promise.all(await processUpload(uploadedFiles.files, s3, update.name));
+            otherImages = await Promise.all(await processUpload(uploadedFiles?.files, s3, update?.name));
             update.images = mandir.images.concat(otherImages);
         }
         if(uploadedFiles?.coverFiles){
-            coverImage = await Promise.all(await processUpload(uploadedFiles.coverFiles, s3, update.name, true));
+            coverImage = await Promise.all(await processUpload(uploadedFiles?.coverFiles, s3, update?.name, true));
             update.cover_image = coverImage[0];
         }
 
@@ -199,21 +199,38 @@ exports.removeImage = (async (req, res, next) => {
 });
 
 exports.getActive = async (req, res) => {
+    const skip = parseInt(req.query.skip) || 0;
+    const limit = parseInt(req.query.limit) || 12
     try {
+        const count = await Mandir.countDocuments(
+                            {
+                            status: 'Active'
+                            })
         const activeMandir = await Mandir.find({ status: 'Active' })
-        .populate('devi_devta', 'name');
-        const count = activeMandir?.length;
+        .sort({createdOn: -1})
+        .populate('devi_devta', 'name')
+        .skip(skip)
+        .limit(limit)
         ApiResponse.success(res, activeMandir, count);
+        // console.log("Mandirs:",activeMandir)
     } catch (error) {
         ApiResponse.error(res, 'Something went wrong', 500, error.message);
     }
 };
 
 exports.getInactive = async (req, res) => {
+    const skip = parseInt(req.query.skip) || 0;
+    const limit = parseInt(req.query.limit) || 12
     try {
+        const count = await Mandir.countDocuments(
+                            {
+                            status: 'Inactive'
+                            })
         const inactiveMandir = await Mandir.find({ status: 'Inactive' })
-        .populate('devi_devta', 'name');
-        const count = inactiveMandir?.length;
+        .sort({createdOn: -1})
+        .populate('devi_devta', 'name')
+        .skip(skip)
+        .limit(limit)
         ApiResponse.success(res, inactiveMandir, count);
     } catch (error) {
         ApiResponse.error(res, 'Something went wrong', 500, error.message);
@@ -221,10 +238,19 @@ exports.getInactive = async (req, res) => {
 };
 
 exports.getDraft = async (req, res) => {
+    const skip = parseInt(req.query.skip) || 0;
+    const limit = parseInt(req.query.limit) || 12
+
     try {
+        const count = await Mandir.countDocuments(
+                            {
+                            status: 'Draft'
+                            })
         const draftMandir = await Mandir.find({ status: 'Draft' })
-        .populate('devi_devta', 'name');
-        const count = draftMandir?.length;
+        .sort({createdOn: -1})
+        .populate('devi_devta', 'name')
+        .skip(skip)
+        .limit(limit)
         ApiResponse.success(res, draftMandir, count);
     } catch (error) {
         ApiResponse.error(res, 'Something went wrong', 500, error.message);

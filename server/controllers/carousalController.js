@@ -259,32 +259,121 @@ exports.getHomePageCarousels = async (req, res, next) => {
     const count = await Carousel.countDocuments({ carouselEndDate: { $gte: new Date() }, carouselStartDate: { $lte: new Date() }, status: 'Live', visibility: roleFilter })
     let liveCarousels = [];
     try {
-        if (userRoleName.roleName === "Admin") {
-            liveCarousels = await Carousel.find(
-                {
-                    $and: [
-                        { carouselStartDate: { $lte: new Date() } },
-                        { carouselEndDate: { $gte: new Date() } }
-                    ],
-                    status: 'Live'
-                })
-                .sort({ carouselPosition: 1 })
-        }
-        else {
-            liveCarousels = await Carousel.find(
-                {
-                    status: 'Live',
-                    $or: [
-                        { visibility: roleFilter },
-                        { visibility: 'All' }
-                    ],
-                    $and: [
-                        { carouselStartDate: { $lte: new Date() } },
-                        { carouselEndDate: { $gte: new Date() } }
-                    ]
-                })
-                .sort({ carouselPosition: 1 })
-        }
+        liveCarousels = await Carousel.find(
+            {
+                status: 'Live',
+                visibility: 'All',
+                $and: [
+                    { carouselStartDate: { $lte: new Date() } },
+                    { carouselEndDate: { $gte: new Date() } }
+                ]
+        })
+        .sort({ carouselPosition: 1 })
+
+        res.status(201).json({ status: 'success', data: liveCarousels, count: count });
+    } catch (e) {
+        console.log(e);
+        res.status(500).json({ status: 'error', message: 'Something went wrong' });
+    }
+};
+
+exports.getDamCarousels = async (req, res, next) => {
+    const userRoleId = req.user.role
+    const userRoleName = await UserRole.findById(userRoleId);
+    const roleFilter = userRoleName?.roleName === "User" ? "StoxHero" : userRoleName.roleName === 'Infinity Trader' ? "Infinity" : "All"
+    const count = await Carousel.countDocuments({ carouselEndDate: { $gte: new Date() }, carouselStartDate: { $lte: new Date() }, status: 'Live', visibility: roleFilter })
+    let liveCarousels = [];
+    try {
+        liveCarousels = await Carousel.find(
+            {
+                status: 'Live',
+                visibility: 'All',
+                position: "Dham",
+                $and: [
+                    { carouselStartDate: { $lte: new Date() } },
+                    { carouselEndDate: { $gte: new Date() } }
+                ]
+        })
+        .sort({ carouselPosition: 1 })
+
+        res.status(201).json({ status: 'success', data: liveCarousels, count: count });
+    } catch (e) {
+        console.log(e);
+        res.status(500).json({ status: 'error', message: 'Something went wrong' });
+    }
+};
+
+exports.getPopularCarousels = async (req, res, next) => {
+    const userRoleId = req.user.role
+    const userRoleName = await UserRole.findById(userRoleId);
+    const roleFilter = userRoleName?.roleName === "User" ? "StoxHero" : userRoleName.roleName === 'Infinity Trader' ? "Infinity" : "All"
+    const count = await Carousel.countDocuments({ carouselEndDate: { $gte: new Date() }, carouselStartDate: { $lte: new Date() }, status: 'Live', visibility: roleFilter })
+    let liveCarousels = [];
+    try {
+        liveCarousels = await Carousel.find(
+            {
+                status: 'Live',
+                visibility: 'All',
+                position: "Popular",
+                $and: [
+                    { carouselStartDate: { $lte: new Date() } },
+                    { carouselEndDate: { $gte: new Date() } }
+                ]
+        })
+        .sort({ carouselPosition: 1 })
+
+        res.status(201).json({ status: 'success', data: liveCarousels, count: count });
+    } catch (e) {
+        console.log(e);
+        res.status(500).json({ status: 'error', message: 'Something went wrong' });
+    }
+};
+
+exports.getPoojaCarousels = async (req, res, next) => {
+    const userRoleId = req.user.role
+    const userRoleName = await UserRole.findById(userRoleId);
+    const roleFilter = userRoleName?.roleName === "User" ? "StoxHero" : userRoleName.roleName === 'Infinity Trader' ? "Infinity" : "All"
+    const count = await Carousel.countDocuments({ carouselEndDate: { $gte: new Date() }, carouselStartDate: { $lte: new Date() }, status: 'Live', visibility: roleFilter })
+    let liveCarousels = [];
+    try {
+        liveCarousels = await Carousel.find(
+            {
+                status: 'Live',
+                visibility: 'All',
+                position: "Pooja",
+                $and: [
+                    { carouselStartDate: { $lte: new Date() } },
+                    { carouselEndDate: { $gte: new Date() } }
+                ]
+        })
+        .sort({ carouselPosition: 1 })
+
+        res.status(201).json({ status: 'success', data: liveCarousels, count: count });
+    } catch (e) {
+        console.log(e);
+        res.status(500).json({ status: 'error', message: 'Something went wrong' });
+    }
+};
+
+exports.getStoreCarousels = async (req, res, next) => {
+    const userRoleId = req.user.role
+    const userRoleName = await UserRole.findById(userRoleId);
+    const roleFilter = userRoleName?.roleName === "User" ? "StoxHero" : userRoleName.roleName === 'Infinity Trader' ? "Infinity" : "All"
+    const count = await Carousel.countDocuments({ carouselEndDate: { $gte: new Date() }, carouselStartDate: { $lte: new Date() }, status: 'Live', visibility: roleFilter })
+    let liveCarousels = [];
+    try {
+        liveCarousels = await Carousel.find(
+            {
+                status: 'Live',
+                visibility: 'All',
+                position: "Store",
+                $and: [
+                    { carouselStartDate: { $lte: new Date() } },
+                    { carouselEndDate: { $gte: new Date() } }
+                ]
+        })
+        .sort({ carouselPosition: 1 })
+
         res.status(201).json({ status: 'success', data: liveCarousels, count: count });
     } catch (e) {
         console.log(e);

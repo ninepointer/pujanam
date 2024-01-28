@@ -50,7 +50,7 @@ const [data,setData] = useState([]);
     setSkip(prev => prev-limitSetting);
     setData([]);
     setIsLoading(true)
-    axios.get(`${apiUrl}pandit/active/?skip=${skip}&limit=${limitSetting}`,{
+    axios.get(`${apiUrl}items/active/?skip=${skip}&limit=${limitSetting}`,{
         withCredentials: true,
         headers: {
             Accept: "application/json",
@@ -77,7 +77,7 @@ const [data,setData] = useState([]);
     setSkip(prev => prev+limitSetting);
     setData([]);
     setIsLoading(true)
-    axios.get(`${apiUrl}pandit/active/?skip=${skip}&limit=${limitSetting}`,{
+    axios.get(`${apiUrl}items/active/?skip=${skip}&limit=${limitSetting}`,{
         withCredentials: true,
         headers: {
             Accept: "application/json",
@@ -187,7 +187,7 @@ const [data,setData] = useState([]);
           :
          <Grid container spacing={1} xs={12} md={6} lg={12}>
           <Grid item mt={2} xs={6} md={3} lg={12} display="flex" justifyContent="center">
-            <MDTypography color="light">No Inactive Devi/Devta(s)</MDTypography>
+            <MDTypography color="dark">No Active Item(s)</MDTypography>
           </Grid>
          </Grid>
          } 

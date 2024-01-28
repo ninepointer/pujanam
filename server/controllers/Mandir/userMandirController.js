@@ -24,7 +24,8 @@ const projectStage = {
   slug: 1,
   morning_aarti_time: 1,
   evening_aarti_time: 1,
-  accessibility: 1
+  accessibility: 1,
+  viewCount: 1,
 }
 
 
@@ -822,6 +823,8 @@ exports.getFavouriteMandir = async (req, res) => {
   const { lat, long } = req.query;
 
   try {
+    const user = await User.findOne({ _id: new ObjectId(req.user._id) }).select('favourite_mandirs');
+
     const mandir = await Mandir.aggregate([
       {
         $geoNear: {
@@ -836,7 +839,10 @@ exports.getFavouriteMandir = async (req, res) => {
       },
       {
         $match: {
-          status: "Active",
+          _id: {
+            $in: user?.favourite_mandirs
+          },
+          status: "Active"
         }
       },
       {
@@ -866,10 +872,8 @@ exports.getFavouriteMandir = async (req, res) => {
       }
     ])
 
-    const user = await User.findOne({ _id: new ObjectId(req.user._id) }).select('favourite_mandirs');
-    console.log(user, mandir)
-    const myFavourite = mandir.filter(element => user?.favourite_mandirs?.includes(element._id));
-    ApiResponse.success(res, myFavourite);
+    // console.log( mandir)
+    ApiResponse.success(res, mandir);
   } catch (error) {
     console.log(error)
     ApiResponse.error(res, 'Something went wrong', 500, error.message);
@@ -880,6 +884,8 @@ exports.getOpenMandirs = async (req, res) => {
   const { lat, long } = req.query;
 
   try {
+    const now = new Date();
+    const currentTimeInSeconds = now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds();
     const mandir = await Mandir.aggregate([
       {
         $geoNear: {
@@ -894,7 +900,7 @@ exports.getOpenMandirs = async (req, res) => {
       },
       {
         $match: {
-          status: "Active",
+          status: "Active"
         }
       },
       {
@@ -925,11 +931,9 @@ exports.getOpenMandirs = async (req, res) => {
     ])
 
     const filteredMandirData = filterDataByTime(mandir);
-
-    console.log(filteredMandirData)
-
-    ApiResponse.success(res, mandir);
+    ApiResponse.success(res, filteredMandirData);
   } catch (error) {
+    console.log(error)
     ApiResponse.error(res, 'Something went wrong', 500, error.message);
   }
 };
@@ -968,6 +972,3 @@ const filterDataByTime = (data) => {
 
   return filteredData;
 };
-
-//in approve case --> date, pandit asign, bookingStatus,
-// complete --> bookingStatus, paymentStatus

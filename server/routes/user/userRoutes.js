@@ -5,6 +5,7 @@ const {getUsers, changePassword, editUser, deactivateUser,
     removeAddress, editAddress, saveCurrentLocation, getAddress
 } = require('../../controllers/userController');
 
+const cart = require("../../routes/Cart/cartRoutes")
 const Authenticate = require('../../authentication/authentication');
 const restrictTo = require('../../authentication/authorization');
 
@@ -13,6 +14,7 @@ const setCurrentUser = async(req,res,next) => {
     next();
 } 
 
+router.use('/cart', cart)
 
 router.route('/').patch(Authenticate, restrictTo('Admin', 'SuperAdmin'), editUser);
 router.route('/deactivate').post(Authenticate, restrictTo('Admin', 'SuperAdmin'), deactivateUser).get(Authenticate, restrictTo('Admin', 'SuperAdmin'), getdeactivateUser)
