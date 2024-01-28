@@ -4,6 +4,9 @@ const Order = require("../../models/Book-Order/orderSchema");
 const Payment = require("../../models/Payment/payment");
 const mongoose = require('mongoose');
 const User = require("../../models/User/userSchema")
+const {sendMultiNotifications} = require('../../utils/fcmService');
+const emailService = require("../../utils/emailService");
+
 
 exports.order = async (req, res) => {
     const session = await mongoose.startSession();
@@ -55,6 +58,104 @@ exports.order = async (req, res) => {
         await session.commitTransaction();
         session.endSession();
 
+        const totalOrderAmount = item_details.reduce((total, elem)=>{
+            return total + elem.order_amount
+        }, 0);
+
+        console.log(totalOrderAmount)
+        if (user?.fcm_tokens?.length > 0) {
+            await sendMultiNotifications('Order Placed',
+                `Your order has been placed successfully. Our team will contact you shortly.`,
+                user?.fcm_tokens?.map(item => item.token), null, { route: 'store' }
+            )
+        }
+
+        let recipients = ["pooja@punyam.app", 'pooja@punyam.app'];
+        let recipientString = recipients.join(",");
+        let subject = "Order Placed";
+        let message =
+          `
+            <!DOCTYPE html>
+                <html>
+                <head>
+                    <meta charset="UTF-8">
+                    <title>Order Placed</title>
+                    <style>
+                    body {
+                        font-family: Arial, sans-serif;
+                        font-size: 16px;
+                        line-height: 1.5;
+                        margin: 0;
+                        padding: 0;
+                    }
+    
+                    .container {
+                        max-width: 600px;
+                        margin: 0 auto;
+                        padding: 20px;
+                        border: 1px solid #ccc;
+                    }
+    
+                    h1 {
+                        font-size: 24px;
+                        margin-bottom: 20px;
+                    }
+    
+                    p {
+                        margin: 0 0 20px;
+                    }
+    
+                    .userid {
+                        display: inline-block;
+                        background-color: #f5f5f5;
+                        padding: 10px;
+                        font-size: 15px;
+                        font-weight: bold;
+                        border-radius: 5px;
+                        margin-right: 10px;
+                    }
+    
+                    .password {
+                        display: inline-block;
+                        background-color: #f5f5f5;
+                        padding: 10px;
+                        font-size: 15px;
+                        font-weight: bold;
+                        border-radius: 5px;
+                        margin-right: 10px;
+                    }
+    
+                    .login-button {
+                        display: inline-block;
+                        background-color: #007bff;
+                        color: #fff;
+                        padding: 10px 20px;
+                        font-size: 18px;
+                        font-weight: bold;
+                        text-decoration: none;
+                        border-radius: 5px;
+                    }
+    
+                    .login-button:hover {
+                        background-color: #0069d9;
+                    }
+                    </style>
+                </head>
+                <body>
+                    <div class="container">
+                    <p>Full Name: <span class="password">${user.full_name}</span></p>
+                    <p>Email: <span class="password">${user.email}</span></p>
+                    <p>Mobile: <span class="password">${user.mobile}</span></p>
+                    <p>Total Item: <span class="password">${item_details?.length}</span></p>
+                    <p>Total Amount: <span class="password">₹${totalOrderAmount}/-</span></p>
+                    </div>
+                </body>
+                </html>
+    
+            `
+        // if (process.env.PROD === "true") {
+          emailService(recipientString, subject, message);
+        // }
         ApiResponse.success(res, createOrder);
     } catch (error) {
         await session.abortTransaction();

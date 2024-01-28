@@ -303,6 +303,32 @@ exports.getDamCarousels = async (req, res, next) => {
     }
 };
 
+exports.getMandirCarousels = async (req, res, next) => {
+    const userRoleId = req.user.role
+    const userRoleName = await UserRole.findById(userRoleId);
+    const roleFilter = userRoleName?.roleName === "User" ? "StoxHero" : userRoleName.roleName === 'Infinity Trader' ? "Infinity" : "All"
+    const count = await Carousel.countDocuments({ carouselEndDate: { $gte: new Date() }, carouselStartDate: { $lte: new Date() }, status: 'Live', visibility: roleFilter })
+    let liveCarousels = [];
+    try {
+        liveCarousels = await Carousel.find(
+            {
+                status: 'Live',
+                visibility: 'All',
+                position: "Mandir",
+                $and: [
+                    { carouselStartDate: { $lte: new Date() } },
+                    { carouselEndDate: { $gte: new Date() } }
+                ]
+        })
+        .sort({ carouselPosition: 1 })
+
+        res.status(201).json({ status: 'success', data: liveCarousels, count: count });
+    } catch (e) {
+        console.log(e);
+        res.status(500).json({ status: 'error', message: 'Something went wrong' });
+    }
+};
+
 exports.getPopularCarousels = async (req, res, next) => {
     const userRoleId = req.user.role
     const userRoleName = await UserRole.findById(userRoleId);

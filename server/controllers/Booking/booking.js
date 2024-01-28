@@ -1,11 +1,14 @@
 const ApiResponse = require('../../helpers/apiResponse'); // Assuming ApiResponse class is saved in utils folder
 const { ObjectId } = require('mongodb');
 const Booking = require("../../models/Bookings/bookingSchema");
+const User = require("../../models/User/userSchema");
 const Payment = require("../../models/Payment/payment");
 const multer = require('multer');
 const AWS = require('aws-sdk');
 const sharp = require('sharp');
 const storage = multer.memoryStorage();
+const {sendMultiNotifications} = require('../../utils/fcmService');
+
 
 
 
@@ -82,7 +85,10 @@ exports.uploadToS3 = async (req, res, next) => {
 
 
 exports.getAllPending = async (req, res) => {
+    const skip = Number(req.query.skip) || 0;
+    const limit = Number(req.query.limit) || 10;
     try {
+        const count = await Booking.countDocuments({ status: "Pending" });
         const booking = await Booking.find({ status: "Pending" })
             .sort({ booking_date: 1 })
             .populate('product_id', 'product_name')
@@ -90,15 +96,21 @@ exports.getAllPending = async (req, res) => {
             .populate('payment_details', 'transaction_id payment_status payment_mode')
             .populate('user_id', 'full_name mobile')
             .populate('tier', 'tier_name pooja_items_included post_pooja_cleanUp_included min_pandit_experience max_pandit_experience number_of_main_pandit number_of_assistant_pandit')
-            .select('-last_modified_by -created_by -created_on -last_modified_on -__v');
-        ApiResponse.success(res, booking);
+            .select('-last_modified_by -created_by -created_on -last_modified_on -__v')
+            .skip(skip)
+            .limit(limit);
+        ApiResponse.success(res, booking, count);
     } catch (error) {
         ApiResponse.error(res, 'Something went wrong', 500, error.message);
     }
 };
 
 exports.getAllApproved = async (req, res) => {
+    const skip = Number(req.query.skip) || 0;
+    const limit = Number(req.query.limit) || 10;
     try {
+        const count = await Booking.countDocuments({ status: "Approved" });
+
         const booking = await Booking.find({ status: "Approved" })
             .sort({ booking_date: 1 })
             .populate('product_id', 'product_name')
@@ -106,15 +118,22 @@ exports.getAllApproved = async (req, res) => {
             .populate('payment_details', 'transaction_id payment_status payment_mode')
             .populate('user_id', 'full_name mobile')
             .populate('tier', 'tier_name pooja_items_included post_pooja_cleanUp_included min_pandit_experience max_pandit_experience number_of_main_pandit number_of_assistant_pandit')
-            .select('-last_modified_by -created_by -created_on -last_modified_on -__v');
-        ApiResponse.success(res, booking);
+            .select('-last_modified_by -created_by -created_on -last_modified_on -__v')
+            .skip(skip)
+            .limit(limit);
+        ApiResponse.success(res, booking, count);
+
     } catch (error) {
         ApiResponse.error(res, 'Something went wrong', 500, error.message);
     }
 };
 
 exports.getAllConfirmed = async (req, res) => {
+    const skip = Number(req.query.skip) || 0;
+    const limit = Number(req.query.limit) || 10;
     try {
+        const count = await Booking.countDocuments({ status: "Confirmed" });
+
         const booking = await Booking.find({ status: "Confirmed" })
             .sort({ booking_date: 1 })
             .populate('product_id', 'product_name')
@@ -122,15 +141,22 @@ exports.getAllConfirmed = async (req, res) => {
             .populate('payment_details', 'transaction_id payment_status payment_mode')
             .populate('user_id', 'full_name mobile')
             .populate('tier', 'tier_name pooja_items_included post_pooja_cleanUp_included min_pandit_experience max_pandit_experience number_of_main_pandit number_of_assistant_pandit')
-            .select('-last_modified_by -created_by -created_on -last_modified_on -__v');
-        ApiResponse.success(res, booking);
+            .select('-last_modified_by -created_by -created_on -last_modified_on -__v')
+            .skip(skip)
+            .limit(limit);
+        ApiResponse.success(res, booking, count);
+
     } catch (error) {
         ApiResponse.error(res, 'Something went wrong', 500, error.message);
     }
 };
 
 exports.getAllCompleted = async (req, res) => {
+    const skip = Number(req.query.skip) || 0;
+    const limit = Number(req.query.limit) || 10;
     try {
+        const count = await Booking.countDocuments({ status: "Completed" });
+
         const booking = await Booking.find({ status: "Completed" })
             .sort({ booking_date: 1 })
             .populate('product_id', 'product_name')
@@ -138,15 +164,22 @@ exports.getAllCompleted = async (req, res) => {
             .populate('payment_details', 'transaction_id payment_status payment_mode')
             .populate('user_id', 'full_name mobile')
             .populate('tier', 'tier_name pooja_items_included post_pooja_cleanUp_included min_pandit_experience max_pandit_experience number_of_main_pandit number_of_assistant_pandit')
-            .select('-last_modified_by -created_by -created_on -last_modified_on -__v');
-        ApiResponse.success(res, booking);
+            .select('-last_modified_by -created_by -created_on -last_modified_on -__v')
+            .skip(skip)
+            .limit(limit);
+        ApiResponse.success(res, booking, count);
+
     } catch (error) {
         ApiResponse.error(res, 'Something went wrong', 500, error.message);
     }
 };
 
 exports.getAllRejected = async (req, res) => {
+    const skip = Number(req.query.skip) || 0;
+    const limit = Number(req.query.limit) || 10;
     try {
+        const count = await Booking.countDocuments({ status: "Rejected" });
+
         const booking = await Booking.find({ status: "Rejected" })
             .sort({ booking_date: 1 })
             .populate('product_id', 'product_name')
@@ -154,8 +187,11 @@ exports.getAllRejected = async (req, res) => {
             .populate('payment_details', 'transaction_id payment_status payment_mode')
             .populate('user_id', 'full_name mobile')
             .populate('tier', 'tier_name pooja_items_included post_pooja_cleanUp_included min_pandit_experience max_pandit_experience number_of_main_pandit number_of_assistant_pandit')
-            .select('-last_modified_by -created_by -created_on -last_modified_on -__v');
-        ApiResponse.success(res, booking);
+            .select('-last_modified_by -created_by -created_on -last_modified_on -__v')
+            .skip(skip)
+            .limit(limit);
+        ApiResponse.success(res, booking, count);
+
     } catch (error) {
         ApiResponse.error(res, 'Something went wrong', 500, error.message);
     }
@@ -169,6 +205,14 @@ exports.approveBooking = async (req, res) => {
                 status: "Approved"
             }
         })
+
+        const user = await User.findById(booking.user_id);
+        if (user?.fcm_tokens?.length > 0) {
+            await sendMultiNotifications('Booking Approved',
+              `Your booking has been approved by Punyam. Stay tuned.`,
+              user?.fcm_tokens?.map(item => item.token), null, { route: 'pooja' }
+            )
+          }
         ApiResponse.success(res, booking);
     } catch (error) {
         ApiResponse.error(res, 'Something went wrong', 500, error.message);
@@ -185,6 +229,14 @@ exports.rejectBooking = async (req, res) => {
                 status: "Rejected"
             }
         })
+
+        const user = await User.findById(booking.user_id);
+        if (user?.fcm_tokens?.length > 0) {
+            await sendMultiNotifications('Booking Rejected',
+                `Your booking has been rejected by Punyam due to ${rejectionReason}.`,
+                user?.fcm_tokens?.map(item => item.token), null, { route: 'pooja' }
+            )
+        }
         ApiResponse.success(res, booking);
     } catch (error) {
         ApiResponse.error(res, 'Something went wrong', 500, error.message);
@@ -202,11 +254,36 @@ exports.confirmBooking = async (req, res) => {
                 pandits: pandits
             }
         })
+
+        const user = await User.findById(booking.user_id);
+        const date = convertTime(booking_date);
+        if (user?.fcm_tokens?.length > 0) {
+            await sendMultiNotifications('Pooja Confirmed',
+                `Your pooja booking has been confirmed by pandit ji on ${date}. He will arrive on time, so please be prepared for the pooja.`,
+                user?.fcm_tokens?.map(item => item.token), null, { route: 'pooja' }
+            )
+        }
         ApiResponse.success(res, booking);
     } catch (error) {
         ApiResponse.error(res, 'Something went wrong', 500, error.message);
     }
 };
+
+function convertTime(date) {
+    const inputDateString = date;
+    const inputDate = new Date(inputDateString);
+
+    // Format date
+    const day = inputDate.getDate();
+    const month = new Intl.DateTimeFormat('en-US', { month: 'short' }).format(inputDate);
+    const hours = inputDate.getHours() % 12 || 12; // Convert to 12-hour format
+    const minutes = inputDate.getMinutes();
+    const ampm = inputDate.getHours() >= 12 ? 'PM' : 'AM';
+
+    const formattedDate = `${day} ${month} ${hours}:${minutes < 10 ? '0' : ''}${minutes} ${ampm}`;
+
+    return (formattedDate);
+}
 
 exports.completeBooking = async (req, res) => {
     const { id } = req.params;
@@ -225,6 +302,14 @@ exports.completeBooking = async (req, res) => {
                 transaction_date: new Date,
             }
         })
+
+        // const user = await User.findById(booking.user_id);
+        // if (user?.fcm_tokens?.length > 0) {
+        //     await sendMultiNotifications('Pooja completed',
+        //         `Your pooja booking has been confirmed by Pandit Ji. He will arrive on time, so please be prepared for the pooja.`,
+        //         user?.fcm_tokens?.map(item => item.token), null, { route: 'pooja' }
+        //     )
+        // }
         ApiResponse.success(res, booking);
     } catch (error) {
         ApiResponse.error(res, 'Something went wrong', 500, error.message);

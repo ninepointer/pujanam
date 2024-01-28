@@ -1,52 +1,21 @@
-// const nodemailer = require('nodemailer');
-
-// function mailSender(to,subject,message){
-//     console.log("Inside Email Service")
-//     console.log("Password: ",process.env.STOXHEROEMAILPASSWORD)
-//     let transporter = nodemailer.createTransport({
-//       service: 'gmail',
-//       auth: {
-//               user: 'team@stoxhero.com',
-//               pass: process.env.STOXHEROEMAILPASSWORD              //password here
-//             }
-//     });
-//     console.log('Transporter: ',transporter)
-//     const mailOptions = { 
-//                   from: 'team@stoxhero.com',      // sender address
-//                   to: to,       // reciever address 
-//                   subject: subject,  
-//                   html: message // plain text body
-//     };
-  
-//     transporter.sendMail(mailOptions, function (err, info) {
-//       if(err) 
-//         console.log(err);
-//       else
-//         console.log("mail sent");
-//     });
-//   }
-
-// module.exports = mailSender;
-
 
 const nodemailer = require('nodemailer');
 
+let transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: 'pooja@punyam.app',
+    pass: process.env.STOXHEROEMAILPASSWORD              //password here
+  }
+});
+
 async function mailSender(to, subject, message, attachments) {
   return new Promise((resolve, reject) => {
-    // console.log("Inside Email Service")
-    // console.log("Password: ",process.env.STOXHEROEMAILPASSWORD)
-    let transporter = nodemailer.createTransport({
-      service: 'gmail',
-      auth: {
-        user: 'team@stoxhero.com',
-        pass: process.env.STOXHEROEMAILPASSWORD              //password here
-      }
-    });
-    // console.log('Transporter: ',transporter)
+
     let mailOptions;
     if(attachments){
       mailOptions = { 
-        from: 'team@stoxhero.com',      // sender address
+        from: 'pooja@punyam.app',      // sender address
         to: to,       // receiver address 
         subject: subject,  
         html: message, // plain text body
@@ -54,13 +23,12 @@ async function mailSender(to, subject, message, attachments) {
       };
     } else{
       mailOptions = { 
-        from: 'team@stoxhero.com',      // sender address
+        from: 'pooja@punyam.app',      // sender address
         to: to,       // receiver address 
         subject: subject,  
         html: message, // plain text body
       };
     }
-
 
     transporter.sendMail(mailOptions, function (err, info) {
       if(err) {

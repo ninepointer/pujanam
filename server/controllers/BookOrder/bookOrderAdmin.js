@@ -4,6 +4,7 @@ const Order = require("../../models/Book-Order/orderSchema");
 const Payment = require("../../models/Payment/payment");
 const mongoose = require('mongoose');
 const User = require("../../models/User/userSchema")
+const {sendMultiNotifications} = require('../../utils/fcmService');
 
 const multer = require('multer');
 const AWS = require('aws-sdk');
@@ -84,22 +85,35 @@ exports.uploadToS3 = async (req, res, next) => {
 
 
 exports.getAllPending = async (req, res) => {
+
+       const skip = Number(req.query.skip) || 0;
+    const limit = Number(req.query.limit) || 10;
     try {
+        const count = await Order.countDocuments({ status: "Pending" });
+
         const booking = await Order.find({ status: "Pending" })
             .sort({ order_date: 1 })
             .populate('item_details.category_id', 'name')
             .populate('item_details.item_id', 'name')
             .populate('payment_details', 'transaction_id payment_status payment_mode')
             .populate('user_id', 'full_name mobile')
-            .select('-last_modified_by -created_by -created_on -last_modified_on -__v');
-        ApiResponse.success(res, booking);
+            .select('-last_modified_by -created_by -created_on -last_modified_on -__v')
+            .skip(skip)
+            .limit(limit);
+        ApiResponse.success(res, booking, count);
+
     } catch (error) {
         ApiResponse.error(res, 'Something went wrong', 500, error.message);
     }
 };
 
 exports.getAllAccept = async (req, res) => {
+    const skip = Number(req.query.skip) || 0;
+    const limit = Number(req.query.limit) || 10;
     try {
+        const count = await Order.countDocuments({ status: "Accepted" });
+
+
         const booking = await Order.find({ status: "Accepted" })
             .sort({ order_date: 1 })
             .sort({ order_date: 1 })
@@ -107,15 +121,21 @@ exports.getAllAccept = async (req, res) => {
             .populate('item_details.item_id', 'name')
             .populate('payment_details', 'transaction_id payment_status payment_mode')
             .populate('user_id', 'full_name mobile')
-            .select('-last_modified_by -created_by -created_on -last_modified_on -__v');
-        ApiResponse.success(res, booking);
+            .select('-last_modified_by -created_by -created_on -last_modified_on -__v')
+            .skip(skip)
+            .limit(limit);
+        ApiResponse.success(res, booking, count);
     } catch (error) {
         ApiResponse.error(res, 'Something went wrong', 500, error.message);
     }
 };
 
 exports.getAllDispatched = async (req, res) => {
+    const skip = Number(req.query.skip) || 0;
+    const limit = Number(req.query.limit) || 10;
     try {
+        const count = await Order.countDocuments({ status: "Dispatched" });
+
         const booking = await Order.find({ status: "Dispatched" })
             .sort({ order_date: 1 })
             .sort({ order_date: 1 })
@@ -123,15 +143,21 @@ exports.getAllDispatched = async (req, res) => {
             .populate('item_details.item_id', 'name')
             .populate('payment_details', 'transaction_id payment_status payment_mode')
             .populate('user_id', 'full_name mobile')
-            .select('-last_modified_by -created_by -created_on -last_modified_on -__v');
-        ApiResponse.success(res, booking);
+            .select('-last_modified_by -created_by -created_on -last_modified_on -__v')
+            .skip(skip)
+            .limit(limit);
+        ApiResponse.success(res, booking, count);
     } catch (error) {
         ApiResponse.error(res, 'Something went wrong', 500, error.message);
     }
 };
 
 exports.getAllDelivered = async (req, res) => {
+    const skip = Number(req.query.skip) || 0;
+    const limit = Number(req.query.limit) || 10;
     try {
+        const count = await Order.countDocuments({ status: "Delivered" });
+
         const booking = await Order.find({ status: "Delivered" })
             .sort({ order_date: 1 })
             .sort({ order_date: 1 })
@@ -139,15 +165,22 @@ exports.getAllDelivered = async (req, res) => {
             .populate('item_details.item_id', 'name')
             .populate('payment_details', 'transaction_id payment_status payment_mode')
             .populate('user_id', 'full_name mobile')
-            .select('-last_modified_by -created_by -created_on -last_modified_on -__v');
-        ApiResponse.success(res, booking);
+            .select('-last_modified_by -created_by -created_on -last_modified_on -__v')
+            .skip(skip)
+            .limit(limit);
+        ApiResponse.success(res, booking, count);
     } catch (error) {
         ApiResponse.error(res, 'Something went wrong', 500, error.message);
     }
 };
 
 exports.getAllRejected = async (req, res) => {
+    const skip = Number(req.query.skip) || 0;
+    const limit = Number(req.query.limit) || 10;
     try {
+        const count = await Order.countDocuments({ status: "Rejected" });
+
+
         const booking = await Order.find({ status: "Rejected" })
             .sort({ order_date: 1 })
             .sort({ order_date: 1 })
@@ -155,8 +188,10 @@ exports.getAllRejected = async (req, res) => {
             .populate('item_details.item_id', 'name')
             .populate('payment_details', 'transaction_id payment_status payment_mode')
             .populate('user_id', 'full_name mobile')
-            .select('-last_modified_by -created_by -created_on -last_modified_on -__v');
-        ApiResponse.success(res, booking);
+            .select('-last_modified_by -created_by -created_on -last_modified_on -__v')
+            .skip(skip)
+            .limit(limit);
+        ApiResponse.success(res, booking, count);
     } catch (error) {
         ApiResponse.error(res, 'Something went wrong', 500, error.message);
     }
@@ -230,6 +265,14 @@ exports.rejectOrder = async (req, res) => {
                 status: "Rejected"
             }
         })
+
+        const user = await User.findById(booking.user_id);
+        if (user?.fcm_tokens?.length > 0) {
+            await sendMultiNotifications('Order Rejected',
+                `Your order has been rejected by Punyam due to ${rejectionReason}.`,
+                user?.fcm_tokens?.map(item => item.token), null, { route: 'store' }
+            )
+        }
         ApiResponse.success(res, booking);
     } catch (error) {
         ApiResponse.error(res, 'Something went wrong', 500, error.message);
@@ -244,6 +287,14 @@ exports.acceptOrder = async (req, res) => {
                 status: "Accepted"
             }
         })
+
+        const user = await User.findById(booking.user_id);
+        if (user?.fcm_tokens?.length > 0) {
+            await sendMultiNotifications('Order Accepted',
+                `Your order has been accepted by Punyam and ready for dispatch. Stay tuned.`,
+                user?.fcm_tokens?.map(item => item.token), null, { route: 'store' }
+            )
+        }
         ApiResponse.success(res, booking);
     } catch (error) {
         ApiResponse.error(res, 'Something went wrong', 500, error.message);
@@ -260,6 +311,14 @@ exports.dispatchOrder = async (req, res) => {
                 expected_deliver_time: expected_deliver_time,
             }
         })
+
+        const user = await User.findById(order.user_id);
+        if (user?.fcm_tokens?.length > 0) {
+            await sendMultiNotifications('Out For Delivery',
+                `Your order is out for delivery and will arrive in approximately ${expected_deliver_time} minutes.`,
+                user?.fcm_tokens?.map(item => item.token), null, { route: 'store' }
+            )
+        }
         ApiResponse.success(res, order);
     } catch (error) {
         ApiResponse.error(res, 'Something went wrong', 500, error.message);
@@ -283,6 +342,14 @@ exports.deliverOrder = async (req, res) => {
                 transaction_date: new Date,
             }
         })
+
+        const user = await User.findById(order.user_id);
+        if (user?.fcm_tokens?.length > 0) {
+            await sendMultiNotifications('Delivered',
+                `Your order has been delivered.`,
+                user?.fcm_tokens?.map(item => item.token), null, { route: 'store' }
+            )
+        }
         ApiResponse.success(res, order);
     } catch (error) {
         ApiResponse.error(res, 'Something went wrong', 500, error.message);

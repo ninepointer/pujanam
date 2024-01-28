@@ -294,7 +294,7 @@ router.patch("/resetpassword", async (req, res)=>{
     const deactivatedUser = await UserDetail.findOne({ email: email, status: "Inactive" })
 
     if(deactivatedUser){
-        return res.status(422).json({ status: 'error', message: "Your account has been deactivated. Please contact StoxHero admin @ team@stoxhero.com.", error: "deactivated" });
+        return res.status(422).json({ status: 'error', message: "Your account has been deactivated. Please contact StoxHero admin @ pooja@punyam.app.", error: "deactivated" });
     }
     let resetuser = await UserDetail.findOne({email : email})
     if(!resetuser)
@@ -323,7 +323,7 @@ router.patch("/generateOTP", async (req, res)=>{
     const deactivatedUser = await UserDetail.findOne({ email: email, status: "Inactive" })
 
     if(deactivatedUser){
-        return res.status(422).json({ status: 'error', message: "Your account has been deactivated. Please contact StoxHero admin @ team@stoxhero.com.", error: "deactivated" });
+        return res.status(422).json({ status: 'error', message: "Your account has been deactivated. Please contact StoxHero admin @ pooja@punyam.app.", error: "deactivated" });
     }
     
     const resetuser = await UserDetail.findOne({email: email})
