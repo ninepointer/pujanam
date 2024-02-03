@@ -18,6 +18,10 @@ const mandirPost = new mongoose.Schema({
     videoUrl: {
         type: String
     },
+    mandir:{
+        type:Schema.Types.ObjectId,
+        ref:'mandir'
+    },
     status: {
         type: String,
         enum: ['Active', 'Inactive'],
@@ -31,6 +35,14 @@ const mandirPost = new mongoose.Schema({
         comment:{type:String},
         commentedOn:{type:Date},
         commentBy:{type:Schema.Types.ObjectId, ref: 'user'}
+    }],
+    allowedReactions:[{
+        type:Schema.Types.ObjectId,
+        ref:'reaction'
+    }],
+    reactionCount:[{
+        reaction: { type: Schema.Types.ObjectId, ref: 'reaction' },
+        count: { type: Number, default: 0 }
     }],
     created_on: {
         type: Date,

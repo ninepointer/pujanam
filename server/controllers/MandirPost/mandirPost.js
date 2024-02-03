@@ -3,7 +3,10 @@ const AWS = require('aws-sdk');
 const sharp = require('sharp');
 const ApiResponse = require('../../helpers/apiResponse'); // Assuming ApiResponse class is saved in utils folder
 const {ObjectId} = require('mongodb')
+const PostUserInteraction = require('../../models/PostUserInteraction/postUserInteraction');
 
+let clients = [];
+console.log('clients init', clients);
 AWS.config.update({
     accessKeyId: process.env.AWS_ACCESS_KEY_ID,
     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
@@ -88,7 +91,7 @@ exports.createMandirPost = async (req, res) => {
 // Get all Pandits
 exports.getAllMandirPosts = async (req, res) => {
     try {
-        const mandirPost = await MandirPost.find();
+        const mandirPost = await MandirPost.find().populate('allowedReactions').populate('mandir', 'name');
         ApiResponse.success(res, mandirPost);
     } catch (error) {
         ApiResponse.error(res,'Something went wrong', 500, error.message);
@@ -96,7 +99,7 @@ exports.getAllMandirPosts = async (req, res) => {
 };
 exports.getActiveMandirPosts = async (req, res) => {
     try {
-        const mandirPost = await MandirPost.find({status:'Active'})
+        const mandirPost = await MandirPost.find({status:'Active'}).populate('allowedReactions').populate('mandir', 'name')
         // .populate('language', 'language_name');
         ApiResponse.success(res, mandirPost);
     } catch (error) {
@@ -127,7 +130,7 @@ exports.getDraftMandirPosts = async (req, res) => {
 // Get a Pandit by ID
 exports.getMandirPostById = async (req, res) => {
     try {
-        const mandirPost = await MandirPost.findById(req.params.id);
+        const mandirPost = await MandirPost.findById(req.params.id).populate('allowedReactions');
         if (!mandirPost) {
             return ApiResponse.notFound(res, 'Mandir Post not found');
         }
@@ -138,6 +141,7 @@ exports.getMandirPostById = async (req, res) => {
 };
 
 // Edit a Pandit
+ // This holds the connections
 exports.editMandirPost = async (req, res) => {
     try {
         const {id} = req.params;
@@ -157,7 +161,7 @@ exports.editMandirPost = async (req, res) => {
 
         update.last_modified_by = req?.user?._id;
         update.last_modified_on = new Date();
-
+        
         const mandirPostUpdate = await MandirPost.findOneAndUpdate({_id: new ObjectId(id)}, update, {new: true})
         ApiResponse.success(res, mandirPostUpdate, 'Mandir Post updated successfully');
     } catch (error) {
@@ -166,3 +170,135 @@ exports.editMandirPost = async (req, res) => {
 };
  
 // Edit a Pandit additional_information
+
+
+exports.addReaction = async(req,res) => {
+    const{postId, reactionId} = req.params;
+    //update the reaction count in the post
+    try {
+        // Find the post by ID
+        const post = await MandirPost.findById(postId);
+    
+        if (!post) {
+            return ApiResponse.notFound(res, 'Mandir Post not found');
+        }
+    
+        // Check if the reaction already exists in the reactionCount
+        const reactionIndex = post.reactionCount.findIndex(r => r.reaction.toString() === reactionId);
+    
+        if (reactionIndex > -1) {
+          // If the reaction exists, increment the count
+          post.reactionCount[reactionIndex].count += 1;
+        } else {
+          // If the reaction does not exist, add it to the array
+          post.reactionCount.push({ reaction: reactionId, count: 1 });
+        }
+    
+        // Save the updated post
+        await post.save();
+
+        const userReaction  = PostUserInteraction.create({
+            interaction_type:'Reaction',
+            mandir_post:postId,
+            user: req.user._id,
+            reaction:reactionId,
+            created_by:req.user._id,
+            lastModified_by:req.user._id
+        });
+        console.log('clients here', clients);
+        broadcastReactionUpdate(postId);
+        ApiResponse.success(res, post, null, 'Added Reaction');
+    
+      } catch (error) {
+        console.error('Error adding reaction:', error);
+        ApiResponse.error(res,'Something went wrong', 500, error.message);
+      }
+    //add a user interactiom
+
+    //return the mandir post
+
+}
+
+
+exports.getReactionCounts = async (req, res) => {
+    const { postId } = req.params; // Assuming postId is passed as a URL parameter
+
+    try {
+        const post = await MandirPost.findById(postId);
+        if (!post) {
+            return res.status(404).send('Post not found');
+        }
+
+        // Mapping to simplify the reaction counts data
+        const reactionCounts = post.reactionCount.map(r => ({
+            reaction: r.reaction,
+            count: r.count
+        }));
+
+        ApiResponse.success(res, reactionCounts, null, 'Reaction counts fetched');
+    } catch (error) {
+        console.error('Error getting reaction counts:', error);
+        ApiResponse.error(res,'Something went wrong', 500, error.message);
+    }
+};
+
+
+// Middleware to inject headers for SSE
+exports.setupSSE = (req, res, next) => {
+    res.setHeader('Content-Type', 'text/event-stream');
+    res.setHeader('Cache-Control', 'no-cache');
+    res.setHeader('Connection', 'keep-alive');
+
+    // Pings to keep the connection alive
+    const pingInterval = setInterval(() => {
+        res.write(':\n\n');
+        console.log(clients);
+    }, 30000);
+
+    // Cleanup on close
+    req.on('close', () => {
+        console.log('clearing');
+        clearInterval(pingInterval);
+        clients = clients.filter(client => client !== res);
+    });
+
+    next();
+}
+
+// SSE endpoint
+exports.sendReactionUpdates = (req, res, next) => {
+    const { postId } = req.params;
+
+    // Function to send data to a client
+    const sendData = (data) => {
+        res.write(`data: ${JSON.stringify(data)}\n\n`);
+    };
+
+    // Add this response to the list of clients
+    clients.push({ postId, res: sendData });
+    console.log(clients, clients[0].res);
+
+    // Send initial data
+    sendData({ message: 'Connected to reaction updates' });
+    next();
+};
+
+// Function to broadcast updates to all clients interested in a specific postId
+function broadcastReactionUpdate(postId) {
+    console.log('clients', clients);
+    const postClients = clients.filter(client => client.postId.toString() === postId.toString());
+    console.log(postClients, clients);
+    postClients.forEach(client => {
+        // Fetch the latest reaction counts for the post
+        MandirPost.findById(postId).then(post => {
+            if (post) {
+                const reactionCounts = post.reactionCount.map(r => ({
+                    reaction: r.reaction,
+                    count: r.count
+                }));
+                client.res(reactionCounts);
+            }
+        }).catch(err => console.error('Error fetching post for broadcast:', err));
+    });
+}
+

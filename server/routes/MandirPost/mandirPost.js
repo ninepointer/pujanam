@@ -13,11 +13,13 @@ const upload = multer({
 });
 
 router.post('/', Authenticate, restrictTo('Admin', 'SuperAdmin'), upload.single("photo"), mandirPostController.resizePhoto, mandirPostController.createMandirPost);
-router.get('/', Authenticate, restrictTo('Admin', 'SuperAdmin'), mandirPostController.getAllMandirPosts);
-router.get('/active', Authenticate, restrictTo('Admin', 'SuperAdmin'), mandirPostController.getActiveMandirPosts);
-router.get('in/active', Authenticate, restrictTo('Admin', 'SuperAdmin'), mandirPostController.getInactiveMandirPosts);
+router.get('/', Authenticate, mandirPostController.getAllMandirPosts);
+router.get('/active', Authenticate, mandirPostController.getActiveMandirPosts);
+router.get('inactive', Authenticate, restrictTo('Admin', 'SuperAdmin'), mandirPostController.getInactiveMandirPosts);
 router.get('/draft', Authenticate, restrictTo('Admin', 'SuperAdmin'), mandirPostController.getDraftMandirPosts);
-router.get('/:id', Authenticate, restrictTo('Admin', 'SuperAdmin'), mandirPostController.getMandirPostById);
+router.get('/:id', Authenticate, mandirPostController.getMandirPostById);
 router.patch('/:id', Authenticate, restrictTo('Admin', 'SuperAdmin'), upload.single("photo"), mandirPostController.resizePhoto, mandirPostController.editMandirPost);
+router.get('/reactionupdates/:postId', Authenticate, mandirPostController.setupSSE, mandirPostController.sendReactionUpdates);
+router.patch('/:postId/:reactionId/addreaction', Authenticate, mandirPostController.addReaction);
 
 module.exports=router;
